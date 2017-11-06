@@ -8,7 +8,11 @@ import android.webkit.WebView
 @SuppressLint("SetJavaScriptEnabled")
 class WebViewActivity : Activity() {
 
-    private var webView: WebView? = null
+    var webView: WebView? = null
+
+    var accessToken:String? = null
+
+    var roles:String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -18,9 +22,14 @@ class WebViewActivity : Activity() {
         webView?.settings?.javaScriptEnabled = true
         webView?.settings?.domStorageEnabled = true
 
+        val intent = intent
+
+        accessToken = intent.getStringExtra("accessToken")
+
         webView?.addJavascriptInterface(WebAppInterface(this), "stmAndroid")
 
-        webView?.loadUrl("http://10.0.1.2:3000")
+
+        webView?.loadUrl("http://192.168.0.103:3000")
 
 
     }

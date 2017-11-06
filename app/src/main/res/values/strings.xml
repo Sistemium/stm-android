@@ -1,3 +1,10 @@
 <resources>
     <string name="app_name">SisSales</string>
+    <string name="auth_toolbar_title">Enter to Sistemium</string>
+    <string name="enter_code_from_sms">Enter code from SMS</string>
+    <string name="send">Send</string>
+    <string name="_8xxxxxxxxxx">8XXXXXXXXXX</string>
+    <string name="title_activity_code_confirm">CodeConfirmActivity</string>
+    <string name="enter_phone_number">Enter phone number</string>
+    <string name="passwordHint">******</string>
 </resources>
