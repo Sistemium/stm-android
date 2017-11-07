@@ -377,7 +377,7 @@ class WebAppInterface internal constructor(internal var webViewActivity: WebView
 
         }
 
-        val jsFunction = "${this.javascriptCallback}.apply(null, ${(arguments)})"
+        val jsFunction = "${this.javascriptCallback}.apply(null, ${this.gson.toJson(arguments)})"
 
         webViewActivity.webView?.post {
 
