@@ -9,6 +9,7 @@ import android.support.v7.app.AppCompatActivity
 import kotlinx.android.synthetic.main.activity_code_confirm.*
 import android.content.Intent
 import android.os.Build
+import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.EditText
@@ -71,7 +72,7 @@ class CodeConfirmActivity : AppCompatActivity() {
 
         if (error is Error){
 
-            print(error)
+            Log.d("ERROR", error.toString())
 
         }
 
@@ -80,6 +81,7 @@ class CodeConfirmActivity : AppCompatActivity() {
         } else {
             AlertDialog.Builder(this)
         }
+
         builder.setTitle("Error")
                 .setMessage("Wrong sms code")
                 .setPositiveButton(android.R.string.ok, { _, _ -> })

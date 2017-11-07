@@ -7,6 +7,7 @@ import android.webkit.WebView
 import com.google.gson.Gson
 import nl.komponents.kovenant.*
 import android.os.Build
+import android.util.Log
 import com.github.kittinunf.fuel.Fuel
 import com.github.kittinunf.fuel.android.extension.responseJson
 import com.github.kittinunf.result.Result
@@ -349,7 +350,9 @@ class WebAppInterface internal constructor(internal var webViewActivity: WebView
         webViewActivity.webView?.post {
 
             webViewActivity.webView?.evaluateJavascript(jsFunction){
-                result -> print(result)
+                result ->
+                Log.d("EvaluateJavascript", result)
+                Log.d("ARGUMENTS", this.gson.toJson(arguments))
             }
 
         }
@@ -379,7 +382,9 @@ class WebAppInterface internal constructor(internal var webViewActivity: WebView
         webViewActivity.webView?.post {
 
             webViewActivity.webView?.evaluateJavascript(jsFunction){
-                result -> print(result)
+                result ->
+                Log.d("EvaluateJavascript", result)
+                Log.d("ARGUMENTS", this.gson.toJson(arguments))
             }
 
         }

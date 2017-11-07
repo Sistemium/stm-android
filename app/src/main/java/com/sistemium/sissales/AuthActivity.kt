@@ -20,8 +20,7 @@ import com.github.kittinunf.fuel.android.extension.responseJson
 import com.google.gson.Gson
 import org.json.JSONObject
 import android.app.ActivityOptions
-
-
+import android.util.Log
 
 
 class AuthActivity : AppCompatActivity() {
@@ -30,6 +29,7 @@ class AuthActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_auth)
         setSupportActionBar(toolbar)
+        Log.d("DEBUG", "create")
 
         val phoneNumberEdit: EditText = findViewById(R.id.editText)
         val sendButton: Button = findViewById(R.id.button)
@@ -96,7 +96,7 @@ class AuthActivity : AppCompatActivity() {
 
         if (error is Error){
 
-            print(error)
+            Log.d("ERROR", error.toString())
 
         }
 
