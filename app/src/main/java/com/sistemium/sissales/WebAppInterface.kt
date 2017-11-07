@@ -166,7 +166,11 @@ class WebAppInterface internal constructor(internal var webViewActivity: WebView
 
         // TODO implement handleTabbarMessage
 
-        return javascriptCallback(arrayOf("tabbar show success"), mapParameters)
+        if (mapParameters.get("action")?.equals("show") == true){
+            return javascriptCallback(arrayOf("tabbar show success"), mapParameters)
+        }else{
+            return javascriptCallback(arrayOf("tabbar hide success"), mapParameters)
+        }
 
     }
 
