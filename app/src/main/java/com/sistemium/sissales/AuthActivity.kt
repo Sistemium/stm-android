@@ -29,6 +29,7 @@ class AuthActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_auth)
         setSupportActionBar(toolbar)
+        supportActionBar?.setDisplayShowTitleEnabled(false)
         Log.d("DEBUG", "create")
 
         val phoneNumberEdit: EditText = findViewById(R.id.editText)
