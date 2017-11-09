@@ -12,16 +12,12 @@ import kotlinx.android.synthetic.main.activity_auth.*
 import android.widget.EditText
 import com.github.kittinunf.fuel.*
 import com.github.kittinunf.result.*
-import android.content.DialogInterface
 import android.os.Build
-import android.support.v4.content.ContextCompat.startActivity
 import android.content.Intent
 import com.github.kittinunf.fuel.android.extension.responseJson
-import com.google.gson.Gson
-import org.json.JSONObject
 import android.app.ActivityOptions
 import android.util.Log
-
+import android.view.KeyEvent
 
 class AuthActivity : AppCompatActivity() {
 
@@ -30,10 +26,31 @@ class AuthActivity : AppCompatActivity() {
         setContentView(R.layout.activity_auth)
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayShowTitleEnabled(false)
-        Log.d("DEBUG", "create")
-
         val phoneNumberEdit: EditText = findViewById(R.id.editText)
         val sendButton: Button = findViewById(R.id.button)
+        val intent = intent
+        val mobileNumber = intent.getStringExtra("mobileNumber")
+        phoneNumberEdit.setText(mobileNumber)
+        phoneNumberEdit.setSelection(phoneNumberEdit.text.length)
+
+        phoneNumberEdit.setOnKeyListener(View.OnKeyListener { _, keyCode, event ->
+
+            if (event.action !=KeyEvent.ACTION_DOWN){
+
+                return@OnKeyListener true
+
+            }
+
+            if(keyCode == KeyEvent.KEYCODE_ENTER){
+
+                sendButton.performClick()
+
+                return@OnKeyListener true
+
+            }
+
+            false
+        })
 
         sendButton.isEnabled = phoneNumberEdit.text.length == 11
 
@@ -77,9 +94,9 @@ class AuthActivity : AppCompatActivity() {
 
                                 val myIntent = Intent(this@AuthActivity, CodeConfirmActivity::class.java)
                                 myIntent.putExtra("ID", data.get("ID") as String)
+                                myIntent.putExtra("mobileNumber", phoneNumberEdit.text.toString())
 
                                 val options = ActivityOptions.makeCustomAnimation(this, R.anim.abc_fade_in, R.anim.abc_fade_out)
-
 
                                 this@AuthActivity.startActivity(myIntent, options.toBundle())
 

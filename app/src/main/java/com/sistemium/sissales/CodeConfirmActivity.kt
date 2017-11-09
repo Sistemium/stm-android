@@ -3,13 +3,13 @@ package com.sistemium.sissales
 import android.app.ActivityOptions
 import android.app.AlertDialog
 import android.os.Bundle
-import android.support.design.widget.Snackbar
 import android.support.v7.app.AppCompatActivity
-
 import kotlinx.android.synthetic.main.activity_code_confirm.*
 import android.content.Intent
 import android.os.Build
 import android.util.Log
+import android.view.KeyEvent
+import android.view.MenuItem
 import android.view.View
 import android.widget.Button
 import android.widget.EditText
@@ -21,6 +21,8 @@ import com.github.kittinunf.result.getAs
 
 class CodeConfirmActivity : AppCompatActivity() {
 
+    private var mobileNumber:String? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_code_confirm)
@@ -30,11 +32,32 @@ class CodeConfirmActivity : AppCompatActivity() {
         val intent = intent
 
         val id = intent.getStringExtra("ID")
+        mobileNumber = intent.getStringExtra("mobileNumber")
 
-        val clickButton: Button = findViewById(R.id.button)
+        val sendButton: Button = findViewById(R.id.button)
+        val smsCodeEdit: EditText = findViewById(R.id.editText)
+
+        smsCodeEdit.setOnKeyListener(View.OnKeyListener { _, keyCode, event ->
+
+            if (event.action !=KeyEvent.ACTION_DOWN){
+
+                return@OnKeyListener true
+
+            }
+
+            if(keyCode == KeyEvent.KEYCODE_ENTER){
+
+                sendButton.performClick()
+
+                return@OnKeyListener true
+
+            }
+
+            false
+        })
+
+
         val onClickListener = View.OnClickListener {
-
-            val smsCodeEdit: EditText = findViewById(R.id.editText)
 
             Fuel.get("https://api.sistemium.com/pha/auth", listOf("ID" to id, "smsCode" to smsCodeEdit.text))
                     .responseJson { _, _, result ->
@@ -65,7 +88,7 @@ class CodeConfirmActivity : AppCompatActivity() {
 
         }
 
-        clickButton.setOnClickListener( onClickListener )
+        sendButton.setOnClickListener( onClickListener )
 
     }
 
@@ -89,6 +112,20 @@ class CodeConfirmActivity : AppCompatActivity() {
                 .setIcon(android.R.drawable.ic_dialog_alert)
                 .show()
 
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.getItemId()) {
+            android.R.id.home -> {
+                val intent = Intent(this@CodeConfirmActivity, AuthActivity::class.java)
+                intent.putExtra("mobileNumber", mobileNumber)
+                finish()
+                startActivity(intent)
+                return true
+            }
+
+            else -> super.onOptionsItemSelected(item)
+        }
     }
 
 }
