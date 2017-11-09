@@ -1,4 +1,4 @@
-package com.sistemium.sissales
+package com.sistemium.sissales.activities
 
 import android.app.AlertDialog
 import android.os.Bundle
@@ -18,6 +18,7 @@ import com.github.kittinunf.fuel.android.extension.responseJson
 import android.app.ActivityOptions
 import android.util.Log
 import android.view.KeyEvent
+import com.sistemium.sissales.R
 
 class AuthActivity : AppCompatActivity() {
 

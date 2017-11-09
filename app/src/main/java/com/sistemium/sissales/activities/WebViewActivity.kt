@@ -1,9 +1,10 @@
-package com.sistemium.sissales
+package com.sistemium.sissales.activities
 
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.os.Bundle
 import android.webkit.WebView
+import com.sistemium.sissales.R
 
 @SuppressLint("SetJavaScriptEnabled")
 class WebViewActivity : Activity() {

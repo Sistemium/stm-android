@@ -1,15 +1,10 @@
-package com.sistemium.sissales
+package com.sistemium.sissales.activities
 
-import android.app.ActivityOptions
-import android.content.Intent
 import android.webkit.JavascriptInterface
-import android.webkit.WebView
 import com.google.gson.Gson
 import nl.komponents.kovenant.*
-import android.os.Build
 import android.util.Log
 import com.github.kittinunf.fuel.Fuel
-import com.github.kittinunf.fuel.android.extension.responseJson
 import com.github.kittinunf.result.Result
 import com.github.kittinunf.result.getAs
 

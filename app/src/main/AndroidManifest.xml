@@ -15,9 +15,9 @@
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning"
         android:fullBackupContent="@xml/backup_descriptor">
-        <activity android:name=".WebViewActivity" />
+        <activity android:name=".activities.WebViewActivity" />
         <activity
-            android:name=".AuthActivity"
+            android:name=".activities.AuthActivity"
             android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="stateVisible">
             <intent-filter>
@@ -26,14 +26,14 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".CodeConfirmActivity"
+            android:name=".activities.CodeConfirmActivity"
             android:label=""
             android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="stateVisible">
 
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".AuthActivity" />
+                android:value=".activities.AuthActivity" />
 
         </activity >
     </application>

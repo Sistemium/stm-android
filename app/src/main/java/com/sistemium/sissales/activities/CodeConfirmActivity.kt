@@ -1,4 +1,4 @@
-package com.sistemium.sissales
+package com.sistemium.sissales.activities
 
 import android.app.ActivityOptions
 import android.app.AlertDialog
@@ -17,6 +17,7 @@ import com.github.kittinunf.fuel.Fuel
 import com.github.kittinunf.fuel.android.extension.responseJson
 import com.github.kittinunf.result.Result
 import com.github.kittinunf.result.getAs
+import com.sistemium.sissales.R
 
 
 class CodeConfirmActivity : AppCompatActivity() {
