@@ -1,4 +1,4 @@
-package com.sistemium.sissales.DataModel
+package com.sistemium.sissales.model
 
 /**
  * Created by edgarjanvuicik on 09/11/2017.

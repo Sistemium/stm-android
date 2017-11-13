@@ -1,22 +1,22 @@
-package com.sistemium.sissales.DataModel
+package com.sistemium.sissales.model
 
+import android.content.Context
 import com.sistemium.sissales.enums.STMStorageType
 import com.sistemium.sissales.interfaces.STMModelling
-import java.io.BufferedReader
-import java.io.File
+import java.util.*
 
 /**
  * Created by edgarjanvuicik on 10/11/2017.
  */
 
-class STMModeller(modelName:String) : STMModelling{
+class STMModeller(context: Context, modelName:String) : STMModelling {
 
     override val managedObjectModel: STMManagedObjectModel
 
     override val concreteEntities: Map<String, STMEntityDescription>
 
     init {
-        managedObjectModel = modelWithName(modelName)
+        managedObjectModel = createModel(context, modelName)
         concreteEntities = hashMapOf()
     }
 
@@ -56,13 +56,20 @@ class STMModeller(modelName:String) : STMModelling{
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
-    private fun modelWithName(modelName:String): STMManagedObjectModel{
+    private fun createModel(context: Context, modelName:String): STMManagedObjectModel {
 
-        val bufferedReader: BufferedReader = File("$modelName.xml").bufferedReader()
+        val assetManager = context.assets
+        val stream = assetManager.open("model/$modelName.json")
 
-        val xmlModelString = bufferedReader.use { it.readText() }
+        val scanner = Scanner(stream)
 
-        return STMManagedObjectModel(xmlModelString)
+        val jsonModelString = StringBuilder()
+
+        while (scanner.hasNext()) {
+            jsonModelString.append(scanner.nextLine())
+        }
+
+        return STMManagedObjectModel(jsonModelString.toString())
 
     }
 

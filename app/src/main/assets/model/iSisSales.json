@@ -1,0 +1,3907 @@
+{
+    "model": {
+        "type": "com.apple.IDECoreDataModeler.DataModel",
+        "documentVersion": "1.0",
+        "lastSavedToolsVersion": "13241",
+        "systemVersion": "16G29",
+        "minimumToolsVersion": "Xcode 7.3",
+        "sourceLanguage": "Objective-C",
+        "entity": [
+            {
+                "name": "STMAbstract",
+                "isAbstract": "YES",
+                "parentEntity": "STMDatum",
+                "syncable": "YES",
+                "attribute": [
+                    {
+                        "name": "commentText",
+                        "optional": "YES",
+                        "attributeType": "String",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "ownerXid",
+                        "optional": "YES",
+                        "attributeType": "Binary",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "source",
+                        "optional": "YES",
+                        "attributeType": "String",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "target",
+                        "optional": "YES",
+                        "attributeType": "String",
+                        "syncable": "YES"
+                    }
+                ]
+            },
+            {
+                "name": "STMAccount",
+                "parentEntity": "STMAbstract",
+                "syncable": "YES",
+                "attribute": [
+                    {
+                        "name": "email",
+                        "optional": "YES",
+                        "attributeType": "String",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "emailCC",
+                        "optional": "YES",
+                        "attributeType": "String",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "isCoordinator",
+                        "optional": "YES",
+                        "attributeType": "Boolean",
+                        "usesScalarValueType": "NO",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "mobileNumber",
+                        "optional": "YES",
+                        "attributeType": "String",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "name",
+                        "optional": "YES",
+                        "attributeType": "String",
+                        "syncable": "YES"
+                    }
+                ],
+                "relationship": [
+                    {
+                        "name": "cashings",
+                        "optional": "YES",
+                        "toMany": "YES",
+                        "deletionRule": "Cascade",
+                        "destinationEntity": "STMCashing",
+                        "inverseName": "creator",
+                        "inverseEntity": "STMCashing",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "uncashings",
+                        "optional": "YES",
+                        "toMany": "YES",
+                        "deletionRule": "Cascade",
+                        "destinationEntity": "STMUncashing",
+                        "inverseName": "creator",
+                        "inverseEntity": "STMUncashing",
+                        "syncable": "YES"
+                    }
+                ]
+            },
+            {
+                "name": "STMArticle",
+                "representedClassName": "STMArticle",
+                "parentEntity": "STMAbstract",
+                "syncable": "YES",
+                "attribute": [
+                    {
+                        "name": "barcode",
+                        "optional": "YES",
+                        "attributeType": "String",
+                        "indexed": "YES",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "code",
+                        "optional": "YES",
+                        "attributeType": "String",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "extraLabel",
+                        "optional": "YES",
+                        "attributeType": "String",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "factor",
+                        "optional": "YES",
+                        "attributeType": "Integer 64",
+                        "defaultValueString": "0",
+                        "usesScalarValueType": "NO",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "hasAction",
+                        "optional": "YES",
+                        "attributeType": "Boolean",
+                        "usesScalarValueType": "NO",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "isMML",
+                        "optional": "YES",
+                        "attributeType": "Boolean",
+                        "usesScalarValueType": "NO",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "name",
+                        "optional": "YES",
+                        "attributeType": "String",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "packageRel",
+                        "optional": "YES",
+                        "attributeType": "Integer 64",
+                        "defaultValueString": "0",
+                        "usesScalarValueType": "NO",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "pieceVolume",
+                        "optional": "YES",
+                        "attributeType": "Decimal",
+                        "defaultValueString": "0.0",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "pieceWeight",
+                        "optional": "YES",
+                        "attributeType": "Decimal",
+                        "defaultValueString": "0.0",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "price",
+                        "optional": "YES",
+                        "attributeType": "Decimal",
+                        "defaultValueString": "0.0",
+                        "syncable": "YES"
+                    }
+                ],
+                "relationship": [
+                    {
+                        "name": "articleGroup",
+                        "optional": "YES",
+                        "maxCount": "1",
+                        "deletionRule": "Nullify",
+                        "destinationEntity": "STMArticleGroup",
+                        "inverseName": "articles",
+                        "inverseEntity": "STMArticleGroup",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "avatarPicture",
+                        "optional": "YES",
+                        "maxCount": "1",
+                        "deletionRule": "Nullify",
+                        "destinationEntity": "STMArticlePicture",
+                        "inverseName": "avatarArticles",
+                        "inverseEntity": "STMArticlePicture",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "contractArticles",
+                        "optional": "YES",
+                        "toMany": "YES",
+                        "deletionRule": "Cascade",
+                        "destinationEntity": "STMContractArticle",
+                        "inverseName": "article",
+                        "inverseEntity": "STMContractArticle",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "partnerArticles",
+                        "optional": "YES",
+                        "toMany": "YES",
+                        "deletionRule": "Cascade",
+                        "destinationEntity": "STMPartnerArticle",
+                        "inverseName": "article",
+                        "inverseEntity": "STMPartnerArticle",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "pictures",
+                        "optional": "YES",
+                        "toMany": "YES",
+                        "deletionRule": "Cascade",
+                        "destinationEntity": "STMArticlePictureArticle",
+                        "inverseName": "article",
+                        "inverseEntity": "STMArticlePictureArticle",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "priceGroup",
+                        "optional": "YES",
+                        "maxCount": "1",
+                        "deletionRule": "Nullify",
+                        "destinationEntity": "STMPriceGroup",
+                        "inverseName": "articles",
+                        "inverseEntity": "STMPriceGroup",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "prices",
+                        "optional": "YES",
+                        "toMany": "YES",
+                        "deletionRule": "Cascade",
+                        "destinationEntity": "STMPrice",
+                        "inverseName": "article",
+                        "inverseEntity": "STMPrice",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "restrictionArticles",
+                        "optional": "YES",
+                        "toMany": "YES",
+                        "deletionRule": "Cascade",
+                        "destinationEntity": "STMRestrictionArticle",
+                        "inverseName": "article",
+                        "inverseEntity": "STMRestrictionArticle",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "saleOrderPositions",
+                        "optional": "YES",
+                        "toMany": "YES",
+                        "deletionRule": "Cascade",
+                        "destinationEntity": "STMSaleOrderPosition",
+                        "inverseName": "article",
+                        "inverseEntity": "STMSaleOrderPosition",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "shipmentPositions",
+                        "optional": "YES",
+                        "toMany": "YES",
+                        "deletionRule": "Cascade",
+                        "destinationEntity": "STMShipmentPosition",
+                        "inverseName": "article",
+                        "inverseEntity": "STMShipmentPosition",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "stocks",
+                        "optional": "YES",
+                        "toMany": "YES",
+                        "deletionRule": "Cascade",
+                        "destinationEntity": "STMStock",
+                        "inverseName": "article",
+                        "inverseEntity": "STMStock",
+                        "syncable": "YES"
+                    }
+                ]
+            },
+            {
+                "name": "STMArticleGroup",
+                "representedClassName": "STMArticleGroup",
+                "parentEntity": "STMAbstract",
+                "syncable": "YES",
+                "attribute": {
+                    "name": "name",
+                    "optional": "YES",
+                    "attributeType": "String",
+                    "syncable": "YES"
+                },
+                "relationship": [
+                    {
+                        "name": "articleGroup",
+                        "optional": "YES",
+                        "maxCount": "1",
+                        "deletionRule": "Nullify",
+                        "destinationEntity": "STMArticleGroup",
+                        "inverseName": "articleGroups",
+                        "inverseEntity": "STMArticleGroup",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "articleGroups",
+                        "optional": "YES",
+                        "toMany": "YES",
+                        "deletionRule": "Cascade",
+                        "destinationEntity": "STMArticleGroup",
+                        "inverseName": "articleGroup",
+                        "inverseEntity": "STMArticleGroup",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "articles",
+                        "optional": "YES",
+                        "toMany": "YES",
+                        "deletionRule": "Cascade",
+                        "destinationEntity": "STMArticle",
+                        "inverseName": "articleGroup",
+                        "inverseEntity": "STMArticle",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "catalogueAlerts",
+                        "optional": "YES",
+                        "toMany": "YES",
+                        "deletionRule": "Cascade",
+                        "destinationEntity": "STMCatalogueAlert",
+                        "inverseName": "articleGroup",
+                        "inverseEntity": "STMCatalogueAlert",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "children",
+                        "optional": "YES",
+                        "toMany": "YES",
+                        "deletionRule": "Nullify",
+                        "destinationEntity": "STMArticleGroup",
+                        "inverseName": "parents",
+                        "inverseEntity": "STMArticleGroup",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "parents",
+                        "optional": "YES",
+                        "toMany": "YES",
+                        "deletionRule": "Nullify",
+                        "destinationEntity": "STMArticleGroup",
+                        "inverseName": "children",
+                        "inverseEntity": "STMArticleGroup",
+                        "syncable": "YES"
+                    }
+                ]
+            },
+            {
+                "name": "STMArticlePicture",
+                "representedClassName": "STMArticlePicture",
+                "parentEntity": "STMCorePicture",
+                "syncable": "YES",
+                "relationship": [
+                    {
+                        "name": "articles",
+                        "optional": "YES",
+                        "toMany": "YES",
+                        "deletionRule": "Cascade",
+                        "destinationEntity": "STMArticlePictureArticle",
+                        "inverseName": "picture",
+                        "inverseEntity": "STMArticlePictureArticle",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "avatarArticles",
+                        "optional": "YES",
+                        "toMany": "YES",
+                        "deletionRule": "Nullify",
+                        "destinationEntity": "STMArticle",
+                        "inverseName": "avatarPicture",
+                        "inverseEntity": "STMArticle",
+                        "syncable": "YES"
+                    }
+                ]
+            },
+            {
+                "name": "STMArticlePictureArticle",
+                "parentEntity": "STMAbstract",
+                "syncable": "YES",
+                "relationship": [
+                    {
+                        "name": "article",
+                        "optional": "YES",
+                        "maxCount": "1",
+                        "deletionRule": "Nullify",
+                        "destinationEntity": "STMArticle",
+                        "inverseName": "pictures",
+                        "inverseEntity": "STMArticle",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "picture",
+                        "optional": "YES",
+                        "maxCount": "1",
+                        "deletionRule": "Nullify",
+                        "destinationEntity": "STMArticlePicture",
+                        "inverseName": "articles",
+                        "inverseEntity": "STMArticlePicture",
+                        "syncable": "YES"
+                    }
+                ]
+            },
+            {
+                "name": "STMBarCodeScan",
+                "representedClassName": "STMBarCodeScan",
+                "parentEntity": "STMAbstract",
+                "syncable": "YES",
+                "attribute": [
+                    {
+                        "name": "code",
+                        "optional": "YES",
+                        "attributeType": "String",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "destinationEntity",
+                        "optional": "YES",
+                        "attributeType": "String",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "destinationXid",
+                        "optional": "YES",
+                        "attributeType": "Binary",
+                        "syncable": "YES"
+                    }
+                ]
+            },
+            {
+                "name": "STMBarCodeType",
+                "representedClassName": "STMBarCodeType",
+                "parentEntity": "STMAbstract",
+                "syncable": "YES",
+                "attribute": [
+                    {
+                        "name": "mask",
+                        "optional": "YES",
+                        "attributeType": "String",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "name",
+                        "optional": "YES",
+                        "attributeType": "String",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "symbology",
+                        "optional": "YES",
+                        "attributeType": "String",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "type",
+                        "optional": "YES",
+                        "attributeType": "String",
+                        "syncable": "YES"
+                    }
+                ]
+            },
+            {
+                "name": "STMBatteryStatus",
+                "representedClassName": "STMBatteryStatus",
+                "parentEntity": "STMAbstract",
+                "syncable": "YES",
+                "attribute": [
+                    {
+                        "name": "batteryLevel",
+                        "optional": "YES",
+                        "attributeType": "Decimal",
+                        "defaultValueString": "0.0",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "batteryState",
+                        "optional": "YES",
+                        "attributeType": "String",
+                        "syncable": "YES"
+                    }
+                ]
+            },
+            {
+                "name": "STMCampaign",
+                "parentEntity": "STMAbstract",
+                "syncable": "YES",
+                "attribute": [
+                    {
+                        "name": "dateB",
+                        "optional": "YES",
+                        "attributeType": "String",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "dateE",
+                        "optional": "YES",
+                        "attributeType": "String",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "isActive",
+                        "optional": "YES",
+                        "attributeType": "Boolean",
+                        "usesScalarValueType": "NO",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "name",
+                        "optional": "YES",
+                        "attributeType": "String",
+                        "syncable": "YES"
+                    }
+                ],
+                "relationship": [
+                    {
+                        "name": "campaignGroup",
+                        "optional": "YES",
+                        "maxCount": "1",
+                        "deletionRule": "Nullify",
+                        "destinationEntity": "STMCampaignGroup",
+                        "inverseName": "campaigns",
+                        "inverseEntity": "STMCampaignGroup",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "photoReports",
+                        "optional": "YES",
+                        "toMany": "YES",
+                        "deletionRule": "Cascade",
+                        "destinationEntity": "STMPhotoReport",
+                        "inverseName": "campaign",
+                        "inverseEntity": "STMPhotoReport",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "pictures",
+                        "optional": "YES",
+                        "toMany": "YES",
+                        "deletionRule": "Cascade",
+                        "destinationEntity": "STMCampaignPicture",
+                        "inverseName": "campaign",
+                        "inverseEntity": "STMCampaignPicture",
+                        "syncable": "YES"
+                    }
+                ]
+            },
+            {
+                "name": "STMCampaignGroup",
+                "parentEntity": "STMAbstract",
+                "syncable": "YES",
+                "attribute": [
+                    {
+                        "name": "dateB",
+                        "optional": "YES",
+                        "attributeType": "String",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "dateE",
+                        "optional": "YES",
+                        "attributeType": "String",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "name",
+                        "optional": "YES",
+                        "attributeType": "String",
+                        "syncable": "YES"
+                    }
+                ],
+                "relationship": {
+                    "name": "campaigns",
+                    "optional": "YES",
+                    "toMany": "YES",
+                    "deletionRule": "Cascade",
+                    "destinationEntity": "STMCampaign",
+                    "inverseName": "campaignGroup",
+                    "inverseEntity": "STMCampaign",
+                    "syncable": "YES"
+                }
+            },
+            {
+                "name": "STMCampaignPicture",
+                "parentEntity": "STMCorePicture",
+                "syncable": "YES",
+                "relationship": {
+                    "name": "campaign",
+                    "optional": "YES",
+                    "maxCount": "1",
+                    "deletionRule": "Nullify",
+                    "destinationEntity": "STMCampaign",
+                    "inverseName": "pictures",
+                    "inverseEntity": "STMCampaign",
+                    "syncable": "YES"
+                }
+            },
+            {
+                "name": "STMCashing",
+                "parentEntity": "STMAbstract",
+                "syncable": "YES",
+                "attribute": [
+                    {
+                        "name": "date",
+                        "optional": "YES",
+                        "attributeType": "String",
+                        "indexed": "YES",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "isProcessed",
+                        "optional": "YES",
+                        "attributeType": "Boolean",
+                        "usesScalarValueType": "NO",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "ndoc",
+                        "optional": "YES",
+                        "attributeType": "String",
+                        "indexed": "YES",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "summ",
+                        "optional": "YES",
+                        "attributeType": "Decimal",
+                        "defaultValueString": "0.0",
+                        "syncable": "YES"
+                    }
+                ],
+                "relationship": [
+                    {
+                        "name": "creator",
+                        "optional": "YES",
+                        "maxCount": "1",
+                        "deletionRule": "Nullify",
+                        "destinationEntity": "STMAccount",
+                        "inverseName": "cashings",
+                        "inverseEntity": "STMAccount",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "debt",
+                        "optional": "YES",
+                        "maxCount": "1",
+                        "deletionRule": "Nullify",
+                        "destinationEntity": "STMDebt",
+                        "inverseName": "cashings",
+                        "inverseEntity": "STMDebt",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "outlet",
+                        "optional": "YES",
+                        "maxCount": "1",
+                        "deletionRule": "Nullify",
+                        "destinationEntity": "STMOutlet",
+                        "inverseName": "cashings",
+                        "inverseEntity": "STMOutlet",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "uncashing",
+                        "optional": "YES",
+                        "maxCount": "1",
+                        "deletionRule": "Nullify",
+                        "destinationEntity": "STMUncashing",
+                        "inverseName": "cashings",
+                        "inverseEntity": "STMUncashing",
+                        "syncable": "YES"
+                    }
+                ]
+            },
+            {
+                "name": "STMCatalogueAlert",
+                "parentEntity": "STMAbstract",
+                "syncable": "YES",
+                "attribute": [
+                    {
+                        "name": "dateB",
+                        "optional": "YES",
+                        "attributeType": "String",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "dateE",
+                        "optional": "YES",
+                        "attributeType": "String",
+                        "syncable": "YES",
+                        "userInfo": {
+                            "entry": {
+                                "key": "type",
+                                "value": "date"
+                            }
+                        }
+                    },
+                    {
+                        "name": "options",
+                        "optional": "YES",
+                        "attributeType": "Transformable",
+                        "syncable": "YES",
+                        "userInfo": {
+                            "entry": {
+                                "key": "type",
+                                "value": "json"
+                            }
+                        }
+                    },
+                    {
+                        "name": "style",
+                        "optional": "YES",
+                        "attributeType": "String",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "text",
+                        "optional": "YES",
+                        "attributeType": "String",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "title",
+                        "optional": "YES",
+                        "attributeType": "String",
+                        "syncable": "YES"
+                    }
+                ],
+                "relationship": {
+                    "name": "articleGroup",
+                    "optional": "YES",
+                    "maxCount": "1",
+                    "deletionRule": "Nullify",
+                    "destinationEntity": "STMArticleGroup",
+                    "inverseName": "catalogueAlerts",
+                    "inverseEntity": "STMArticleGroup",
+                    "syncable": "YES"
+                },
+                "userInfo": {
+                    "entry": {
+                        "key": "type",
+                        "value": "date"
+                    }
+                }
+            },
+            {
+                "name": "STMClientData",
+                "representedClassName": "STMClientData",
+                "parentEntity": "STMAbstract",
+                "syncable": "YES",
+                "attribute": [
+                    {
+                        "name": "appVersion",
+                        "optional": "YES",
+                        "attributeType": "String",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "buildType",
+                        "optional": "YES",
+                        "attributeType": "String",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "bundleIdentifier",
+                        "optional": "YES",
+                        "attributeType": "String",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "bundleVersion",
+                        "optional": "YES",
+                        "attributeType": "String",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "deviceName",
+                        "optional": "YES",
+                        "attributeType": "String",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "devicePlatform",
+                        "optional": "YES",
+                        "attributeType": "String",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "deviceToken",
+                        "optional": "YES",
+                        "attributeType": "String",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "deviceTokenError",
+                        "optional": "YES",
+                        "attributeType": "String",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "deviceUUID",
+                        "optional": "YES",
+                        "attributeType": "String",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "freeDiskSpace",
+                        "optional": "YES",
+                        "attributeType": "Integer 64",
+                        "defaultValueString": "0",
+                        "usesScalarValueType": "NO",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "lastAuth",
+                        "optional": "YES",
+                        "attributeType": "Date",
+                        "usesScalarValueType": "NO",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "locationServiceStatus",
+                        "optional": "YES",
+                        "attributeType": "String",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "notificationTypes",
+                        "optional": "YES",
+                        "attributeType": "String",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "systemVersion",
+                        "optional": "YES",
+                        "attributeType": "String",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "tokenHash",
+                        "optional": "YES",
+                        "attributeType": "String",
+                        "syncable": "YES"
+                    }
+                ],
+                "userInfo": {
+                    "entry": {
+                        "key": "STORE",
+                        "value": "FMDB"
+                    }
+                }
+            },
+            {
+                "name": "STMClientEntity",
+                "representedClassName": "STMClientEntity",
+                "parentEntity": "STMAbstract",
+                "syncable": "YES",
+                "attribute": [
+                    {
+                        "name": "eTag",
+                        "optional": "YES",
+                        "attributeType": "String",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "name",
+                        "optional": "YES",
+                        "attributeType": "String",
+                        "syncable": "YES",
+                        "userInfo": {
+                            "entry": {
+                                "key": "UNIQUE",
+                                "value": "REPLACE"
+                            }
+                        }
+                    }
+                ],
+                "userInfo": {
+                    "entry": {
+                        "key": "STORE",
+                        "value": "FMDB"
+                    }
+                }
+            },
+            {
+                "name": "STMContract",
+                "representedClassName": "STMContract",
+                "parentEntity": "STMAbstract",
+                "syncable": "YES",
+                "attribute": [
+                    {
+                        "name": "creditLimit",
+                        "optional": "YES",
+                        "attributeType": "Decimal",
+                        "defaultValueString": "0.0",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "creditRemains",
+                        "optional": "YES",
+                        "attributeType": "Decimal",
+                        "defaultValueString": "0.0",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "dateE",
+                        "optional": "YES",
+                        "attributeType": "Date",
+                        "usesScalarValueType": "NO",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "name",
+                        "optional": "YES",
+                        "attributeType": "String",
+                        "syncable": "YES"
+                    }
+                ],
+                "relationship": [
+                    {
+                        "name": "contractArticles",
+                        "optional": "YES",
+                        "toMany": "YES",
+                        "deletionRule": "Cascade",
+                        "destinationEntity": "STMContractArticle",
+                        "inverseName": "contract",
+                        "inverseEntity": "STMContractArticle",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "contractPriceGroups",
+                        "optional": "YES",
+                        "toMany": "YES",
+                        "deletionRule": "Cascade",
+                        "destinationEntity": "STMContractPriceGroup",
+                        "inverseName": "contract",
+                        "inverseEntity": "STMContractPriceGroup",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "legalEntity",
+                        "optional": "YES",
+                        "maxCount": "1",
+                        "deletionRule": "Nullify",
+                        "destinationEntity": "STMLegalEntity",
+                        "inverseName": "contracts",
+                        "inverseEntity": "STMLegalEntity",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "outletSalesmanContracts",
+                        "optional": "YES",
+                        "toMany": "YES",
+                        "deletionRule": "Cascade",
+                        "destinationEntity": "STMOutletSalesmanContract",
+                        "inverseName": "contract",
+                        "inverseEntity": "STMOutletSalesmanContract",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "partner",
+                        "optional": "YES",
+                        "maxCount": "1",
+                        "deletionRule": "Nullify",
+                        "destinationEntity": "STMPartner",
+                        "inverseName": "contracts",
+                        "inverseEntity": "STMPartner",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "saleOrders",
+                        "optional": "YES",
+                        "toMany": "YES",
+                        "deletionRule": "Cascade",
+                        "destinationEntity": "STMSaleOrder",
+                        "inverseName": "contract",
+                        "inverseEntity": "STMSaleOrder",
+                        "syncable": "YES"
+                    }
+                ]
+            },
+            {
+                "name": "STMContractArticle",
+                "parentEntity": "STMAbstract",
+                "syncable": "YES",
+                "attribute": {
+                    "name": "discount",
+                    "optional": "YES",
+                    "attributeType": "Decimal",
+                    "defaultValueString": "0.0",
+                    "syncable": "YES"
+                },
+                "relationship": [
+                    {
+                        "name": "article",
+                        "optional": "YES",
+                        "maxCount": "1",
+                        "deletionRule": "Nullify",
+                        "destinationEntity": "STMArticle",
+                        "inverseName": "contractArticles",
+                        "inverseEntity": "STMArticle",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "contract",
+                        "optional": "YES",
+                        "maxCount": "1",
+                        "deletionRule": "Nullify",
+                        "destinationEntity": "STMContract",
+                        "inverseName": "contractArticles",
+                        "inverseEntity": "STMContract",
+                        "syncable": "YES"
+                    }
+                ]
+            },
+            {
+                "name": "STMContractPriceGroup",
+                "parentEntity": "STMAbstract",
+                "syncable": "YES",
+                "attribute": {
+                    "name": "discount",
+                    "optional": "YES",
+                    "attributeType": "Decimal",
+                    "defaultValueString": "0.0",
+                    "syncable": "YES"
+                },
+                "relationship": [
+                    {
+                        "name": "contract",
+                        "optional": "YES",
+                        "maxCount": "1",
+                        "deletionRule": "Nullify",
+                        "destinationEntity": "STMContract",
+                        "inverseName": "contractPriceGroups",
+                        "inverseEntity": "STMContract",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "priceGroup",
+                        "optional": "YES",
+                        "maxCount": "1",
+                        "deletionRule": "Nullify",
+                        "destinationEntity": "STMPriceGroup",
+                        "inverseName": "contractPriceGroups",
+                        "inverseEntity": "STMPriceGroup",
+                        "syncable": "YES"
+                    }
+                ]
+            },
+            {
+                "name": "STMCoreLocation",
+                "representedClassName": "STMCoreLocation",
+                "isAbstract": "YES",
+                "parentEntity": "STMAbstract",
+                "syncable": "YES",
+                "attribute": [
+                    {
+                        "name": "altitude",
+                        "optional": "YES",
+                        "attributeType": "Decimal",
+                        "defaultValueString": "0.0",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "course",
+                        "optional": "YES",
+                        "attributeType": "Decimal",
+                        "defaultValueString": "0.0",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "horizontalAccuracy",
+                        "optional": "YES",
+                        "attributeType": "Decimal",
+                        "defaultValueString": "0.0",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "lastSeenAt",
+                        "optional": "YES",
+                        "attributeType": "Date",
+                        "usesScalarValueType": "NO",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "latitude",
+                        "optional": "YES",
+                        "attributeType": "Decimal",
+                        "defaultValueString": "0.0",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "longitude",
+                        "optional": "YES",
+                        "attributeType": "Decimal",
+                        "defaultValueString": "0.0",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "speed",
+                        "optional": "YES",
+                        "attributeType": "Decimal",
+                        "defaultValueString": "0.0",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "timestamp",
+                        "optional": "YES",
+                        "attributeType": "Date",
+                        "usesScalarValueType": "NO",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "verticalAccuracy",
+                        "optional": "YES",
+                        "attributeType": "Decimal",
+                        "defaultValueString": "0.0",
+                        "syncable": "YES"
+                    }
+                ],
+                "relationship": {
+                    "name": "photos",
+                    "optional": "YES",
+                    "toMany": "YES",
+                    "deletionRule": "Nullify",
+                    "destinationEntity": "STMCorePhoto",
+                    "inverseName": "location",
+                    "inverseEntity": "STMCorePhoto",
+                    "syncable": "YES"
+                }
+            },
+            {
+                "name": "STMCorePhoto",
+                "representedClassName": "STMCorePhoto",
+                "isAbstract": "YES",
+                "parentEntity": "STMCorePicture",
+                "elementID": "photo",
+                "syncable": "YES",
+                "relationship": {
+                    "name": "location",
+                    "optional": "YES",
+                    "maxCount": "1",
+                    "deletionRule": "Nullify",
+                    "destinationEntity": "STMLocation",
+                    "inverseName": "photos",
+                    "inverseEntity": "STMCoreLocation",
+                    "syncable": "YES"
+                }
+            },
+            {
+                "name": "STMCorePicture",
+                "representedClassName": "STMCorePicture",
+                "isAbstract": "YES",
+                "parentEntity": "STMAbstract",
+                "syncable": "YES",
+                "attribute": [
+                    {
+                        "name": "deviceAts",
+                        "optional": "YES",
+                        "attributeType": "Date",
+                        "usesScalarValueType": "NO",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "href",
+                        "optional": "YES",
+                        "attributeType": "String",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "imageFormat",
+                        "optional": "YES",
+                        "attributeType": "String",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "imagePath",
+                        "optional": "YES",
+                        "attributeType": "String",
+                        "allowsExternalBinaryDataStorage": "YES",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "name",
+                        "optional": "YES",
+                        "attributeType": "String",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "picturesInfo",
+                        "optional": "YES",
+                        "attributeType": "Transformable",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "resizedImagePath",
+                        "optional": "YES",
+                        "attributeType": "String",
+                        "allowsExternalBinaryDataStorage": "YES",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "thumbnailHref",
+                        "optional": "YES",
+                        "attributeType": "String",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "thumbnailPath",
+                        "optional": "YES",
+                        "attributeType": "String",
+                        "allowsExternalBinaryDataStorage": "YES",
+                        "storedInTruthFile": "YES",
+                        "syncable": "YES"
+                    }
+                ]
+            },
+            {
+                "name": "STMDatum",
+                "representedClassName": "STMDatum",
+                "syncable": "YES",
+                "attribute": [
+                    {
+                        "name": "deviceCts",
+                        "optional": "YES",
+                        "attributeType": "Date",
+                        "usesScalarValueType": "NO",
+                        "indexed": "YES",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "deviceTs",
+                        "optional": "YES",
+                        "attributeType": "Date",
+                        "usesScalarValueType": "NO",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "id",
+                        "optional": "YES",
+                        "attributeType": "Integer 64",
+                        "defaultValueString": "0",
+                        "usesScalarValueType": "NO",
+                        "indexed": "YES",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "isFantom",
+                        "optional": "YES",
+                        "attributeType": "Boolean",
+                        "defaultValueString": "YES",
+                        "usesScalarValueType": "NO",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "lts",
+                        "optional": "YES",
+                        "attributeType": "Date",
+                        "usesScalarValueType": "NO",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "xid",
+                        "optional": "YES",
+                        "attributeType": "Binary",
+                        "indexed": "YES",
+                        "syncable": "YES"
+                    }
+                ],
+                "userInfo": {
+                    "entry": {
+                        "key": "STORE",
+                        "value": "NONE"
+                    }
+                }
+            },
+            {
+                "name": "STMDebt",
+                "parentEntity": "STMAbstract",
+                "syncable": "YES",
+                "attribute": [
+                    {
+                        "name": "date",
+                        "optional": "YES",
+                        "attributeType": "String",
+                        "indexed": "YES",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "dateE",
+                        "optional": "YES",
+                        "attributeType": "String",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "ndoc",
+                        "optional": "YES",
+                        "attributeType": "String",
+                        "indexed": "YES",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "responsibility",
+                        "optional": "YES",
+                        "attributeType": "String",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "summ",
+                        "optional": "YES",
+                        "attributeType": "Decimal",
+                        "defaultValueString": "0.0",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "summDoc",
+                        "optional": "YES",
+                        "attributeType": "Decimal",
+                        "defaultValueString": "0.0",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "summOrigin",
+                        "optional": "YES",
+                        "attributeType": "Decimal",
+                        "defaultValueString": "0.0",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "summOriginDoc",
+                        "optional": "YES",
+                        "attributeType": "Decimal",
+                        "defaultValueString": "0.0",
+                        "syncable": "YES"
+                    }
+                ],
+                "relationship": [
+                    {
+                        "name": "cashings",
+                        "optional": "YES",
+                        "toMany": "YES",
+                        "deletionRule": "Cascade",
+                        "destinationEntity": "STMCashing",
+                        "inverseName": "debt",
+                        "inverseEntity": "STMCashing",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "outlet",
+                        "optional": "YES",
+                        "maxCount": "1",
+                        "deletionRule": "Nullify",
+                        "destinationEntity": "STMOutlet",
+                        "inverseName": "debts",
+                        "inverseEntity": "STMOutlet",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "salesman",
+                        "optional": "YES",
+                        "maxCount": "1",
+                        "deletionRule": "Nullify",
+                        "destinationEntity": "STMSalesman",
+                        "inverseName": "debts",
+                        "inverseEntity": "STMSalesman",
+                        "syncable": "YES"
+                    }
+                ]
+            },
+            {
+                "name": "STMDriver",
+                "parentEntity": "STMAbstract",
+                "syncable": "YES",
+                "attribute": [
+                    {
+                        "name": "name",
+                        "optional": "YES",
+                        "attributeType": "String",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "phone",
+                        "optional": "YES",
+                        "attributeType": "String",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "truckBrand",
+                        "optional": "YES",
+                        "attributeType": "String",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "truckNumber",
+                        "optional": "YES",
+                        "attributeType": "String",
+                        "syncable": "YES"
+                    }
+                ],
+                "relationship": {
+                    "name": "shipments",
+                    "optional": "YES",
+                    "toMany": "YES",
+                    "deletionRule": "Cascade",
+                    "destinationEntity": "STMShipment",
+                    "inverseName": "driver",
+                    "inverseEntity": "STMShipment",
+                    "syncable": "YES"
+                }
+            },
+            {
+                "name": "STMEntity",
+                "representedClassName": "STMEntity",
+                "parentEntity": "STMAbstract",
+                "syncable": "YES",
+                "attribute": [
+                    {
+                        "name": "eTag",
+                        "optional": "YES",
+                        "attributeType": "String",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "isResolveFantoms",
+                        "optional": "YES",
+                        "attributeType": "Boolean",
+                        "usesScalarValueType": "NO",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "isUploadable",
+                        "optional": "YES",
+                        "attributeType": "Boolean",
+                        "usesScalarValueType": "NO",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "lifeTime",
+                        "optional": "YES",
+                        "attributeType": "Double",
+                        "defaultValueString": "0.0",
+                        "usesScalarValueType": "NO",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "lifeTimeDateField",
+                        "optional": "YES",
+                        "attributeType": "String",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "maxPictureScale",
+                        "optional": "YES",
+                        "attributeType": "Double",
+                        "defaultValueString": "0.0",
+                        "usesScalarValueType": "NO",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "name",
+                        "optional": "YES",
+                        "attributeType": "String",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "pictureLifeTime",
+                        "optional": "YES",
+                        "attributeType": "Double",
+                        "defaultValueString": "0.0",
+                        "usesScalarValueType": "NO",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "roleName",
+                        "optional": "YES",
+                        "attributeType": "String",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "roleOwner",
+                        "optional": "YES",
+                        "attributeType": "String",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "url",
+                        "optional": "YES",
+                        "attributeType": "String",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "workflow",
+                        "optional": "YES",
+                        "attributeType": "String",
+                        "syncable": "YES"
+                    }
+                ],
+                "relationship": {
+                    "name": "wf",
+                    "optional": "YES",
+                    "maxCount": "1",
+                    "deletionRule": "Nullify",
+                    "destinationEntity": "STMWorkflow",
+                    "inverseName": "entities",
+                    "inverseEntity": "STMWorkflow",
+                    "syncable": "YES"
+                },
+                "userInfo": {
+                    "entry": {
+                        "key": "STORE",
+                        "value": "FMDB"
+                    }
+                }
+            },
+            {
+                "name": "STMJson",
+                "representedClassName": "STMJson",
+                "parentEntity": "STMAbstract",
+                "syncable": "YES",
+                "attribute": [
+                    {
+                        "name": "code",
+                        "optional": "YES",
+                        "attributeType": "String",
+                        "indexed": "YES",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "data",
+                        "optional": "YES",
+                        "attributeType": "String",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "name",
+                        "optional": "YES",
+                        "attributeType": "String",
+                        "indexed": "YES",
+                        "syncable": "YES"
+                    }
+                ]
+            },
+            {
+                "name": "STMLegalEntity",
+                "parentEntity": "STMAbstract",
+                "syncable": "YES",
+                "attribute": {
+                    "name": "name",
+                    "optional": "YES",
+                    "attributeType": "String",
+                    "syncable": "YES"
+                },
+                "relationship": {
+                    "name": "contracts",
+                    "optional": "YES",
+                    "toMany": "YES",
+                    "deletionRule": "Cascade",
+                    "destinationEntity": "STMContract",
+                    "inverseName": "legalEntity",
+                    "inverseEntity": "STMContract",
+                    "syncable": "YES"
+                }
+            },
+            {
+                "name": "STMLegalForm",
+                "representedClassName": "STMLegalForm",
+                "parentEntity": "STMAbstract",
+                "syncable": "YES",
+                "attribute": [
+                    {
+                        "name": "fullName",
+                        "optional": "YES",
+                        "attributeType": "String",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "name",
+                        "optional": "YES",
+                        "attributeType": "String",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "ord",
+                        "optional": "YES",
+                        "attributeType": "Integer 64",
+                        "defaultValueString": "0",
+                        "usesScalarValueType": "NO",
+                        "syncable": "YES"
+                    }
+                ],
+                "relationship": {
+                    "name": "partners",
+                    "optional": "YES",
+                    "toMany": "YES",
+                    "deletionRule": "Nullify",
+                    "destinationEntity": "STMPartner",
+                    "inverseName": "legalForm",
+                    "inverseEntity": "STMPartner",
+                    "syncable": "YES"
+                }
+            },
+            {
+                "name": "STMLocation",
+                "representedClassName": "STMLocation",
+                "parentEntity": "STMCoreLocation",
+                "syncable": "YES",
+                "relationship": [
+                    {
+                        "name": "outlets",
+                        "optional": "YES",
+                        "toMany": "YES",
+                        "deletionRule": "Nullify",
+                        "destinationEntity": "STMOutlet",
+                        "inverseName": "location",
+                        "inverseEntity": "STMOutlet",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "visitIns",
+                        "optional": "YES",
+                        "toMany": "YES",
+                        "deletionRule": "Nullify",
+                        "destinationEntity": "STMVisit",
+                        "inverseName": "checkInLocation",
+                        "inverseEntity": "STMVisit",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "visitOuts",
+                        "optional": "YES",
+                        "toMany": "YES",
+                        "deletionRule": "Nullify",
+                        "destinationEntity": "STMVisit",
+                        "inverseName": "checkOutLocation",
+                        "inverseEntity": "STMVisit",
+                        "syncable": "YES"
+                    }
+                ]
+            },
+            {
+                "name": "STMLogMessage",
+                "representedClassName": "STMLogMessage",
+                "parentEntity": "STMAbstract",
+                "syncable": "YES",
+                "attribute": [
+                    {
+                        "name": "text",
+                        "optional": "YES",
+                        "attributeType": "String",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "type",
+                        "optional": "YES",
+                        "attributeType": "String",
+                        "syncable": "YES"
+                    }
+                ]
+            },
+            {
+                "name": "STMMessage",
+                "representedClassName": "STMMessage",
+                "parentEntity": "STMAbstract",
+                "syncable": "YES",
+                "attribute": [
+                    {
+                        "name": "body",
+                        "optional": "YES",
+                        "attributeType": "String",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "cts",
+                        "optional": "YES",
+                        "attributeType": "Date",
+                        "usesScalarValueType": "NO",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "processing",
+                        "optional": "YES",
+                        "attributeType": "String",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "processingMessage",
+                        "optional": "YES",
+                        "attributeType": "String",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "schedule",
+                        "optional": "YES",
+                        "attributeType": "String",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "showOnEnterForeground",
+                        "optional": "YES",
+                        "attributeType": "Boolean",
+                        "usesScalarValueType": "NO",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "subject",
+                        "optional": "YES",
+                        "attributeType": "String",
+                        "syncable": "YES"
+                    }
+                ],
+                "relationship": [
+                    {
+                        "name": "pictures",
+                        "optional": "YES",
+                        "toMany": "YES",
+                        "deletionRule": "Cascade",
+                        "destinationEntity": "STMMessagePicture",
+                        "inverseName": "message",
+                        "inverseEntity": "STMMessagePicture",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "workflow",
+                        "optional": "YES",
+                        "maxCount": "1",
+                        "deletionRule": "Nullify",
+                        "destinationEntity": "STMWorkflow",
+                        "inverseName": "messages",
+                        "inverseEntity": "STMWorkflow",
+                        "syncable": "YES"
+                    }
+                ]
+            },
+            {
+                "name": "STMMessagePicture",
+                "representedClassName": "STMMessagePicture",
+                "parentEntity": "STMCorePicture",
+                "syncable": "YES",
+                "attribute": {
+                    "name": "ord",
+                    "optional": "YES",
+                    "attributeType": "Integer 64",
+                    "defaultValueString": "0.0",
+                    "usesScalarValueType": "NO",
+                    "syncable": "YES"
+                },
+                "relationship": {
+                    "name": "message",
+                    "optional": "YES",
+                    "maxCount": "1",
+                    "deletionRule": "Nullify",
+                    "destinationEntity": "STMMessage",
+                    "inverseName": "pictures",
+                    "inverseEntity": "STMMessage",
+                    "syncable": "YES"
+                }
+            },
+            {
+                "name": "STMNewsMessage",
+                "representedClassName": "STMNewsMessage",
+                "parentEntity": "STMAbstract",
+                "syncable": "YES",
+                "attribute": [
+                    {
+                        "name": "appVersion",
+                        "optional": "YES",
+                        "attributeType": "String",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "authId",
+                        "optional": "YES",
+                        "attributeType": "String",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "body",
+                        "optional": "YES",
+                        "attributeType": "String",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "dateB",
+                        "optional": "YES",
+                        "attributeType": "String",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "dateE",
+                        "optional": "YES",
+                        "attributeType": "String",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "ratingsCount",
+                        "optional": "YES",
+                        "attributeType": "Integer 64",
+                        "defaultValueString": "0",
+                        "usesScalarValueType": "NO",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "ratingsTotal",
+                        "optional": "YES",
+                        "attributeType": "Integer 64",
+                        "defaultValueString": "0",
+                        "usesScalarValueType": "NO",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "subject",
+                        "optional": "YES",
+                        "attributeType": "String",
+                        "syncable": "YES"
+                    }
+                ],
+                "relationship": {
+                    "name": "userNewsMessages",
+                    "optional": "YES",
+                    "toMany": "YES",
+                    "deletionRule": "Cascade",
+                    "destinationEntity": "STMUserNewsMessage",
+                    "inverseName": "newsMessage",
+                    "inverseEntity": "STMUserNewsMessage",
+                    "syncable": "YES"
+                }
+            },
+            {
+                "name": "STMOutlet",
+                "representedClassName": "STMOutlet",
+                "parentEntity": "STMAbstract",
+                "syncable": "YES",
+                "attribute": [
+                    {
+                        "name": "address",
+                        "optional": "YES",
+                        "attributeType": "String",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "egaisCode",
+                        "optional": "YES",
+                        "attributeType": "String",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "isActive",
+                        "optional": "YES",
+                        "attributeType": "Boolean",
+                        "defaultValueString": "YES",
+                        "usesScalarValueType": "NO",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "licenseInfo",
+                        "optional": "YES",
+                        "attributeType": "String",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "name",
+                        "optional": "YES",
+                        "attributeType": "String",
+                        "indexed": "YES",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "saleOrderComment",
+                        "optional": "YES",
+                        "attributeType": "String",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "shortName",
+                        "optional": "YES",
+                        "attributeType": "String",
+                        "syncable": "YES"
+                    }
+                ],
+                "relationship": [
+                    {
+                        "name": "avatarPicture",
+                        "optional": "YES",
+                        "maxCount": "1",
+                        "deletionRule": "Nullify",
+                        "destinationEntity": "STMOutletPhoto",
+                        "inverseName": "avatarOutlets",
+                        "inverseEntity": "STMOutletPhoto",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "cashings",
+                        "optional": "YES",
+                        "toMany": "YES",
+                        "deletionRule": "Cascade",
+                        "destinationEntity": "STMCashing",
+                        "inverseName": "outlet",
+                        "inverseEntity": "STMCashing",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "debts",
+                        "optional": "YES",
+                        "toMany": "YES",
+                        "deletionRule": "Cascade",
+                        "destinationEntity": "STMDebt",
+                        "inverseName": "outlet",
+                        "inverseEntity": "STMDebt",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "location",
+                        "optional": "YES",
+                        "maxCount": "1",
+                        "deletionRule": "Nullify",
+                        "destinationEntity": "STMLocation",
+                        "inverseName": "outlets",
+                        "inverseEntity": "STMLocation",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "outletRestrictions",
+                        "optional": "YES",
+                        "toMany": "YES",
+                        "deletionRule": "Cascade",
+                        "destinationEntity": "STMOutletRestriction",
+                        "inverseName": "outlet",
+                        "inverseEntity": "STMOutletRestriction",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "outletSalesmanContracts",
+                        "optional": "YES",
+                        "toMany": "YES",
+                        "deletionRule": "Cascade",
+                        "destinationEntity": "STMOutletSalesmanContract",
+                        "inverseName": "outlet",
+                        "inverseEntity": "STMOutletSalesmanContract",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "partner",
+                        "optional": "YES",
+                        "maxCount": "1",
+                        "deletionRule": "Nullify",
+                        "destinationEntity": "STMPartner",
+                        "inverseName": "outlets",
+                        "inverseEntity": "STMPartner",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "photoReports",
+                        "optional": "YES",
+                        "toMany": "YES",
+                        "deletionRule": "Cascade",
+                        "destinationEntity": "STMPhotoReport",
+                        "inverseName": "outlet",
+                        "inverseEntity": "STMPhotoReport",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "photos",
+                        "optional": "YES",
+                        "toMany": "YES",
+                        "deletionRule": "Cascade",
+                        "destinationEntity": "STMOutletPhoto",
+                        "inverseName": "outlet",
+                        "inverseEntity": "STMOutletPhoto",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "saleOrders",
+                        "optional": "YES",
+                        "toMany": "YES",
+                        "deletionRule": "Cascade",
+                        "destinationEntity": "STMSaleOrder",
+                        "inverseName": "outlet",
+                        "inverseEntity": "STMSaleOrder",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "salesmanOutletRestrictions",
+                        "optional": "YES",
+                        "toMany": "YES",
+                        "deletionRule": "Cascade",
+                        "destinationEntity": "STMSalesmanOutletRestriction",
+                        "inverseName": "outlet",
+                        "inverseEntity": "STMSalesmanOutletRestriction",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "scheduledEvents",
+                        "optional": "YES",
+                        "toMany": "YES",
+                        "deletionRule": "Cascade",
+                        "destinationEntity": "STMScheduledEvent",
+                        "inverseName": "outlet",
+                        "inverseEntity": "STMScheduledEvent",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "shipments",
+                        "optional": "YES",
+                        "toMany": "YES",
+                        "deletionRule": "Cascade",
+                        "destinationEntity": "STMShipment",
+                        "inverseName": "outlet",
+                        "inverseEntity": "STMShipment",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "visits",
+                        "optional": "YES",
+                        "toMany": "YES",
+                        "deletionRule": "Cascade",
+                        "destinationEntity": "STMVisit",
+                        "inverseName": "outlet",
+                        "inverseEntity": "STMVisit",
+                        "syncable": "YES"
+                    }
+                ]
+            },
+            {
+                "name": "STMOutletPhoto",
+                "representedClassName": "STMOutletPhoto",
+                "parentEntity": "STMCorePhoto",
+                "syncable": "YES",
+                "relationship": [
+                    {
+                        "name": "avatarOutlets",
+                        "optional": "YES",
+                        "toMany": "YES",
+                        "deletionRule": "Nullify",
+                        "destinationEntity": "STMOutlet",
+                        "inverseName": "avatarPicture",
+                        "inverseEntity": "STMOutlet",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "outlet",
+                        "optional": "YES",
+                        "maxCount": "1",
+                        "deletionRule": "Nullify",
+                        "destinationEntity": "STMOutlet",
+                        "inverseName": "photos",
+                        "inverseEntity": "STMOutlet",
+                        "syncable": "YES"
+                    }
+                ]
+            },
+            {
+                "name": "STMOutletRestriction",
+                "parentEntity": "STMAbstract",
+                "syncable": "YES",
+                "relationship": [
+                    {
+                        "name": "outlet",
+                        "optional": "YES",
+                        "maxCount": "1",
+                        "deletionRule": "Nullify",
+                        "destinationEntity": "STMOutlet",
+                        "inverseName": "outletRestrictions",
+                        "inverseEntity": "STMOutlet",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "restriction",
+                        "optional": "YES",
+                        "maxCount": "1",
+                        "deletionRule": "Nullify",
+                        "destinationEntity": "STMRestriction",
+                        "inverseName": "outletRestrictions",
+                        "inverseEntity": "STMRestriction",
+                        "syncable": "YES"
+                    }
+                ]
+            },
+            {
+                "name": "STMOutletSalesmanContract",
+                "representedClassName": "STMOutletSalesmanContract",
+                "parentEntity": "STMAbstract",
+                "syncable": "YES",
+                "attribute": {
+                    "name": "isDisabled",
+                    "optional": "YES",
+                    "attributeType": "Boolean",
+                    "usesScalarValueType": "NO",
+                    "syncable": "YES"
+                },
+                "relationship": [
+                    {
+                        "name": "contract",
+                        "optional": "YES",
+                        "maxCount": "1",
+                        "deletionRule": "Nullify",
+                        "destinationEntity": "STMContract",
+                        "inverseName": "outletSalesmanContracts",
+                        "inverseEntity": "STMContract",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "outlet",
+                        "optional": "YES",
+                        "maxCount": "1",
+                        "deletionRule": "Nullify",
+                        "destinationEntity": "STMOutlet",
+                        "inverseName": "outletSalesmanContracts",
+                        "inverseEntity": "STMOutlet",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "priceType",
+                        "optional": "YES",
+                        "maxCount": "1",
+                        "deletionRule": "Nullify",
+                        "destinationEntity": "STMPriceType",
+                        "inverseName": "outletSalesmanContracts",
+                        "inverseEntity": "STMPriceType",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "salesman",
+                        "optional": "YES",
+                        "maxCount": "1",
+                        "deletionRule": "Nullify",
+                        "destinationEntity": "STMSalesman",
+                        "inverseName": "outletSalesmanContracts",
+                        "inverseEntity": "STMSalesman",
+                        "syncable": "YES"
+                    }
+                ]
+            },
+            {
+                "name": "STMPartner",
+                "representedClassName": "STMPartner",
+                "parentEntity": "STMAbstract",
+                "syncable": "YES",
+                "attribute": [
+                    {
+                        "name": "allowAnyTotal",
+                        "optional": "YES",
+                        "attributeType": "Boolean",
+                        "usesScalarValueType": "NO",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "allowAnyVolume",
+                        "optional": "YES",
+                        "attributeType": "Boolean",
+                        "usesScalarValueType": "NO",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "allowLowTotal",
+                        "optional": "YES",
+                        "attributeType": "Boolean",
+                        "usesScalarValueType": "NO",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "allowNoCharges",
+                        "optional": "YES",
+                        "attributeType": "Boolean",
+                        "usesScalarValueType": "NO",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "allowNoDocDiscounts",
+                        "optional": "YES",
+                        "attributeType": "Boolean",
+                        "usesScalarValueType": "NO",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "inn",
+                        "optional": "YES",
+                        "attributeType": "String",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "name",
+                        "optional": "YES",
+                        "attributeType": "String",
+                        "syncable": "YES"
+                    }
+                ],
+                "relationship": [
+                    {
+                        "name": "contracts",
+                        "optional": "YES",
+                        "toMany": "YES",
+                        "deletionRule": "Cascade",
+                        "destinationEntity": "STMContract",
+                        "inverseName": "partner",
+                        "inverseEntity": "STMContract",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "legalForm",
+                        "optional": "YES",
+                        "maxCount": "1",
+                        "deletionRule": "Nullify",
+                        "destinationEntity": "STMLegalForm",
+                        "inverseName": "partners",
+                        "inverseEntity": "STMLegalForm",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "outlets",
+                        "optional": "YES",
+                        "toMany": "YES",
+                        "deletionRule": "Cascade",
+                        "destinationEntity": "STMOutlet",
+                        "inverseName": "partner",
+                        "inverseEntity": "STMOutlet",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "partnerArticles",
+                        "optional": "YES",
+                        "toMany": "YES",
+                        "deletionRule": "Cascade",
+                        "destinationEntity": "STMPartnerArticle",
+                        "inverseName": "partner",
+                        "inverseEntity": "STMPartnerArticle",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "partnerPriceGroups",
+                        "optional": "YES",
+                        "toMany": "YES",
+                        "deletionRule": "Cascade",
+                        "destinationEntity": "STMPartnerPriceGroup",
+                        "inverseName": "partner",
+                        "inverseEntity": "STMPartnerPriceGroup",
+                        "syncable": "YES"
+                    }
+                ]
+            },
+            {
+                "name": "STMPartnerArticle",
+                "parentEntity": "STMAbstract",
+                "syncable": "YES",
+                "attribute": {
+                    "name": "discount",
+                    "optional": "YES",
+                    "attributeType": "Decimal",
+                    "defaultValueString": "0.0",
+                    "syncable": "YES"
+                },
+                "relationship": [
+                    {
+                        "name": "article",
+                        "optional": "YES",
+                        "maxCount": "1",
+                        "deletionRule": "Nullify",
+                        "destinationEntity": "STMArticle",
+                        "inverseName": "partnerArticles",
+                        "inverseEntity": "STMArticle",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "partner",
+                        "optional": "YES",
+                        "maxCount": "1",
+                        "deletionRule": "Nullify",
+                        "destinationEntity": "STMPartner",
+                        "inverseName": "partnerArticles",
+                        "inverseEntity": "STMPartner",
+                        "syncable": "YES"
+                    }
+                ]
+            },
+            {
+                "name": "STMPartnerPriceGroup",
+                "parentEntity": "STMAbstract",
+                "syncable": "YES",
+                "attribute": {
+                    "name": "discount",
+                    "optional": "YES",
+                    "attributeType": "Decimal",
+                    "defaultValueString": "0.0",
+                    "syncable": "YES"
+                },
+                "relationship": [
+                    {
+                        "name": "partner",
+                        "optional": "YES",
+                        "maxCount": "1",
+                        "deletionRule": "Nullify",
+                        "destinationEntity": "STMPartner",
+                        "inverseName": "partnerPriceGroups",
+                        "inverseEntity": "STMPartner",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "priceGroup",
+                        "optional": "YES",
+                        "maxCount": "1",
+                        "deletionRule": "Nullify",
+                        "destinationEntity": "STMPriceGroup",
+                        "inverseName": "partnerPriceGroups",
+                        "inverseEntity": "STMPriceGroup",
+                        "syncable": "YES"
+                    }
+                ]
+            },
+            {
+                "name": "STMPhotoReport",
+                "representedClassName": "STMPhotoReport",
+                "parentEntity": "STMCorePhoto",
+                "syncable": "YES",
+                "relationship": [
+                    {
+                        "name": "campaign",
+                        "optional": "YES",
+                        "maxCount": "1",
+                        "deletionRule": "Nullify",
+                        "destinationEntity": "STMCampaign",
+                        "inverseName": "photoReports",
+                        "inverseEntity": "STMCampaign",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "outlet",
+                        "optional": "YES",
+                        "maxCount": "1",
+                        "deletionRule": "Nullify",
+                        "destinationEntity": "STMOutlet",
+                        "inverseName": "photoReports",
+                        "inverseEntity": "STMOutlet",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "salesman",
+                        "optional": "YES",
+                        "maxCount": "1",
+                        "deletionRule": "Nullify",
+                        "destinationEntity": "STMSalesman",
+                        "inverseName": "photoReports",
+                        "inverseEntity": "STMSalesman",
+                        "syncable": "YES"
+                    }
+                ]
+            },
+            {
+                "name": "STMPrice",
+                "representedClassName": "STMPrice",
+                "parentEntity": "STMAbstract",
+                "syncable": "YES",
+                "attribute": {
+                    "name": "price",
+                    "optional": "YES",
+                    "attributeType": "Decimal",
+                    "defaultValueString": "0",
+                    "syncable": "YES"
+                },
+                "relationship": [
+                    {
+                        "name": "article",
+                        "optional": "YES",
+                        "maxCount": "1",
+                        "deletionRule": "Nullify",
+                        "destinationEntity": "STMArticle",
+                        "inverseName": "prices",
+                        "inverseEntity": "STMArticle",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "priceType",
+                        "optional": "YES",
+                        "maxCount": "1",
+                        "deletionRule": "Nullify",
+                        "destinationEntity": "STMPriceType",
+                        "inverseName": "prices",
+                        "inverseEntity": "STMPriceType",
+                        "syncable": "YES"
+                    }
+                ]
+            },
+            {
+                "name": "STMPriceGroup",
+                "parentEntity": "STMAbstract",
+                "syncable": "YES",
+                "attribute": {
+                    "name": "name",
+                    "optional": "YES",
+                    "attributeType": "String",
+                    "syncable": "YES"
+                },
+                "relationship": [
+                    {
+                        "name": "articles",
+                        "optional": "YES",
+                        "toMany": "YES",
+                        "deletionRule": "Nullify",
+                        "destinationEntity": "STMArticle",
+                        "inverseName": "priceGroup",
+                        "inverseEntity": "STMArticle",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "contractPriceGroups",
+                        "optional": "YES",
+                        "toMany": "YES",
+                        "deletionRule": "Cascade",
+                        "destinationEntity": "STMContractPriceGroup",
+                        "inverseName": "priceGroup",
+                        "inverseEntity": "STMContractPriceGroup",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "partnerPriceGroups",
+                        "optional": "YES",
+                        "toMany": "YES",
+                        "deletionRule": "Cascade",
+                        "destinationEntity": "STMPartnerPriceGroup",
+                        "inverseName": "priceGroup",
+                        "inverseEntity": "STMPartnerPriceGroup",
+                        "syncable": "YES"
+                    }
+                ]
+            },
+            {
+                "name": "STMPriceType",
+                "representedClassName": "STMPriceType",
+                "parentEntity": "STMAbstract",
+                "syncable": "YES",
+                "attribute": [
+                    {
+                        "name": "discountPercent",
+                        "optional": "YES",
+                        "attributeType": "Decimal",
+                        "defaultValueString": "0.0",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "name",
+                        "optional": "YES",
+                        "attributeType": "String",
+                        "syncable": "YES"
+                    }
+                ],
+                "relationship": [
+                    {
+                        "name": "children",
+                        "optional": "YES",
+                        "toMany": "YES",
+                        "deletionRule": "Nullify",
+                        "destinationEntity": "STMPriceType",
+                        "inverseName": "parent",
+                        "inverseEntity": "STMPriceType",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "outletSalesmanContracts",
+                        "optional": "YES",
+                        "toMany": "YES",
+                        "deletionRule": "Nullify",
+                        "destinationEntity": "STMOutletSalesmanContract",
+                        "inverseName": "priceType",
+                        "inverseEntity": "STMOutletSalesmanContract",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "parent",
+                        "optional": "YES",
+                        "maxCount": "1",
+                        "deletionRule": "Nullify",
+                        "destinationEntity": "STMPriceType",
+                        "inverseName": "children",
+                        "inverseEntity": "STMPriceType",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "prices",
+                        "optional": "YES",
+                        "toMany": "YES",
+                        "deletionRule": "Cascade",
+                        "destinationEntity": "STMPrice",
+                        "inverseName": "priceType",
+                        "inverseEntity": "STMPrice",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "saleOrders",
+                        "optional": "YES",
+                        "toMany": "YES",
+                        "deletionRule": "Nullify",
+                        "destinationEntity": "STMSaleOrder",
+                        "inverseName": "priceType",
+                        "inverseEntity": "STMSaleOrder",
+                        "syncable": "YES"
+                    }
+                ]
+            },
+            {
+                "name": "STMRecordStatus",
+                "representedClassName": "STMRecordStatus",
+                "parentEntity": "STMAbstract",
+                "syncable": "YES",
+                "attribute": [
+                    {
+                        "name": "isRead",
+                        "optional": "YES",
+                        "attributeType": "Boolean",
+                        "usesScalarValueType": "NO",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "isRemoved",
+                        "optional": "YES",
+                        "attributeType": "Boolean",
+                        "usesScalarValueType": "NO",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "isTemporary",
+                        "optional": "YES",
+                        "attributeType": "Boolean",
+                        "usesScalarValueType": "NO",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "name",
+                        "optional": "YES",
+                        "attributeType": "String",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "objectXid",
+                        "optional": "YES",
+                        "attributeType": "Binary",
+                        "indexed": "YES",
+                        "syncable": "YES"
+                    }
+                ]
+            },
+            {
+                "name": "STMRestriction",
+                "parentEntity": "STMAbstract",
+                "syncable": "YES",
+                "attribute": [
+                    {
+                        "name": "name",
+                        "optional": "YES",
+                        "attributeType": "String",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "shortName",
+                        "optional": "YES",
+                        "attributeType": "String",
+                        "syncable": "YES"
+                    }
+                ],
+                "relationship": [
+                    {
+                        "name": "outletRestrictions",
+                        "optional": "YES",
+                        "toMany": "YES",
+                        "deletionRule": "Cascade",
+                        "destinationEntity": "STMOutletRestriction",
+                        "inverseName": "restriction",
+                        "inverseEntity": "STMOutletRestriction",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "restrictionArticles",
+                        "optional": "YES",
+                        "toMany": "YES",
+                        "deletionRule": "Cascade",
+                        "destinationEntity": "STMRestrictionArticle",
+                        "inverseName": "restriction",
+                        "inverseEntity": "STMRestrictionArticle",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "salesmanOutletRestrictions",
+                        "optional": "YES",
+                        "toMany": "YES",
+                        "deletionRule": "Cascade",
+                        "destinationEntity": "STMSalesmanOutletRestriction",
+                        "inverseName": "restriction",
+                        "inverseEntity": "STMSalesmanOutletRestriction",
+                        "syncable": "YES"
+                    }
+                ]
+            },
+            {
+                "name": "STMRestrictionArticle",
+                "parentEntity": "STMAbstract",
+                "syncable": "YES",
+                "relationship": [
+                    {
+                        "name": "article",
+                        "optional": "YES",
+                        "maxCount": "1",
+                        "deletionRule": "Nullify",
+                        "destinationEntity": "STMArticle",
+                        "inverseName": "restrictionArticles",
+                        "inverseEntity": "STMArticle",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "restriction",
+                        "optional": "YES",
+                        "maxCount": "1",
+                        "deletionRule": "Nullify",
+                        "destinationEntity": "STMRestriction",
+                        "inverseName": "restrictionArticles",
+                        "inverseEntity": "STMRestriction",
+                        "syncable": "YES"
+                    }
+                ]
+            },
+            {
+                "name": "STMSaleOrder",
+                "representedClassName": "STMSaleOrder",
+                "parentEntity": "STMAbstract",
+                "syncable": "YES",
+                "attribute": [
+                    {
+                        "name": "authId",
+                        "optional": "YES",
+                        "attributeType": "String",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "cashOnShipment",
+                        "optional": "YES",
+                        "attributeType": "Boolean",
+                        "usesScalarValueType": "NO",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "commentExpeditor",
+                        "optional": "YES",
+                        "attributeType": "String",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "date",
+                        "optional": "YES",
+                        "attributeType": "String",
+                        "indexed": "YES",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "deviceAts",
+                        "optional": "YES",
+                        "attributeType": "Date",
+                        "usesScalarValueType": "NO",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "docDiscounts",
+                        "optional": "YES",
+                        "attributeType": "Boolean",
+                        "usesScalarValueType": "NO",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "markupDoc",
+                        "optional": "YES",
+                        "attributeType": "Decimal",
+                        "defaultValueString": "0.0",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "processing",
+                        "optional": "YES",
+                        "attributeType": "String",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "processingMessage",
+                        "optional": "YES",
+                        "attributeType": "String",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "spoilerNotNeeded",
+                        "optional": "YES",
+                        "attributeType": "Boolean",
+                        "usesScalarValueType": "NO",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "totalCost",
+                        "optional": "YES",
+                        "attributeType": "Decimal",
+                        "defaultValueString": "0.0",
+                        "indexed": "YES",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "totalCostDoc",
+                        "optional": "YES",
+                        "attributeType": "Decimal",
+                        "defaultValueString": "0.0",
+                        "syncable": "YES"
+                    }
+                ],
+                "relationship": [
+                    {
+                        "name": "contract",
+                        "optional": "YES",
+                        "maxCount": "1",
+                        "deletionRule": "Nullify",
+                        "destinationEntity": "STMContract",
+                        "inverseName": "saleOrders",
+                        "inverseEntity": "STMContract",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "outlet",
+                        "optional": "YES",
+                        "maxCount": "1",
+                        "deletionRule": "Nullify",
+                        "destinationEntity": "STMOutlet",
+                        "inverseName": "saleOrders",
+                        "inverseEntity": "STMOutlet",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "priceType",
+                        "optional": "YES",
+                        "maxCount": "1",
+                        "deletionRule": "Nullify",
+                        "destinationEntity": "STMPriceType",
+                        "inverseName": "saleOrders",
+                        "inverseEntity": "STMPriceType",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "saleOrderPositions",
+                        "optional": "YES",
+                        "toMany": "YES",
+                        "deletionRule": "Cascade",
+                        "destinationEntity": "STMSaleOrderPosition",
+                        "inverseName": "saleOrder",
+                        "inverseEntity": "STMSaleOrderPosition",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "salesman",
+                        "optional": "YES",
+                        "maxCount": "1",
+                        "deletionRule": "Nullify",
+                        "destinationEntity": "STMSalesman",
+                        "inverseName": "saleOrders",
+                        "inverseEntity": "STMSalesman",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "shipments",
+                        "optional": "YES",
+                        "toMany": "YES",
+                        "deletionRule": "Nullify",
+                        "destinationEntity": "STMShipment",
+                        "inverseName": "saleOrder",
+                        "inverseEntity": "STMShipment",
+                        "syncable": "YES"
+                    }
+                ]
+            },
+            {
+                "name": "STMSaleOrderPosition",
+                "representedClassName": "STMSaleOrderPosition",
+                "parentEntity": "STMAbstract",
+                "syncable": "YES",
+                "attribute": [
+                    {
+                        "name": "backVolume",
+                        "optional": "YES",
+                        "attributeType": "Integer 64",
+                        "defaultValueString": "0",
+                        "usesScalarValueType": "NO",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "cost",
+                        "optional": "YES",
+                        "attributeType": "Decimal",
+                        "defaultValueString": "0.0",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "deviceAts",
+                        "optional": "YES",
+                        "attributeType": "Date",
+                        "usesScalarValueType": "NO",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "isCompDiscount",
+                        "optional": "YES",
+                        "attributeType": "Boolean",
+                        "usesScalarValueType": "NO",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "markupDoc",
+                        "optional": "YES",
+                        "attributeType": "Decimal",
+                        "defaultValueString": "0.0",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "price",
+                        "optional": "YES",
+                        "attributeType": "Decimal",
+                        "defaultValueString": "0.0",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "priceDoc",
+                        "optional": "YES",
+                        "attributeType": "Decimal",
+                        "defaultValueString": "0.0",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "priceOrigin",
+                        "optional": "YES",
+                        "attributeType": "Decimal",
+                        "defaultValueString": "0.0",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "volume",
+                        "optional": "YES",
+                        "attributeType": "Integer 64",
+                        "defaultValueString": "0.0",
+                        "usesScalarValueType": "NO",
+                        "syncable": "YES"
+                    }
+                ],
+                "relationship": [
+                    {
+                        "name": "article",
+                        "optional": "YES",
+                        "maxCount": "1",
+                        "deletionRule": "Nullify",
+                        "destinationEntity": "STMArticle",
+                        "inverseName": "saleOrderPositions",
+                        "inverseEntity": "STMArticle",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "saleOrder",
+                        "optional": "YES",
+                        "maxCount": "1",
+                        "deletionRule": "Nullify",
+                        "destinationEntity": "STMSaleOrder",
+                        "inverseName": "saleOrderPositions",
+                        "inverseEntity": "STMSaleOrder",
+                        "syncable": "YES"
+                    }
+                ]
+            },
+            {
+                "name": "STMSalesman",
+                "representedClassName": "STMSalesman",
+                "parentEntity": "STMAbstract",
+                "syncable": "YES",
+                "attribute": [
+                    {
+                        "name": "name",
+                        "optional": "YES",
+                        "attributeType": "String",
+                        "indexed": "YES",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "responsibility",
+                        "optional": "YES",
+                        "attributeType": "String",
+                        "syncable": "YES"
+                    }
+                ],
+                "relationship": [
+                    {
+                        "name": "debts",
+                        "optional": "YES",
+                        "toMany": "YES",
+                        "deletionRule": "Nullify",
+                        "destinationEntity": "STMDebt",
+                        "inverseName": "salesman",
+                        "inverseEntity": "STMDebt",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "outletSalesmanContracts",
+                        "optional": "YES",
+                        "toMany": "YES",
+                        "deletionRule": "Cascade",
+                        "destinationEntity": "STMOutletSalesmanContract",
+                        "inverseName": "salesman",
+                        "inverseEntity": "STMOutletSalesmanContract",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "photoReports",
+                        "optional": "YES",
+                        "toMany": "YES",
+                        "deletionRule": "Cascade",
+                        "destinationEntity": "STMPhotoReport",
+                        "inverseName": "salesman",
+                        "inverseEntity": "STMPhotoReport",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "saleOrders",
+                        "optional": "YES",
+                        "toMany": "YES",
+                        "deletionRule": "Cascade",
+                        "destinationEntity": "STMSaleOrder",
+                        "inverseName": "salesman",
+                        "inverseEntity": "STMSaleOrder",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "salesmanOutletRestrictions",
+                        "optional": "YES",
+                        "toMany": "YES",
+                        "deletionRule": "Cascade",
+                        "destinationEntity": "STMSalesmanOutletRestriction",
+                        "inverseName": "salesman",
+                        "inverseEntity": "STMSalesmanOutletRestriction",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "scheduledEvents",
+                        "optional": "YES",
+                        "toMany": "YES",
+                        "deletionRule": "Cascade",
+                        "destinationEntity": "STMScheduledEvent",
+                        "inverseName": "salesman",
+                        "inverseEntity": "STMScheduledEvent",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "shipments",
+                        "optional": "YES",
+                        "toMany": "YES",
+                        "deletionRule": "Cascade",
+                        "destinationEntity": "STMShipment",
+                        "inverseName": "salesman",
+                        "inverseEntity": "STMShipment",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "visits",
+                        "optional": "YES",
+                        "toMany": "YES",
+                        "deletionRule": "Cascade",
+                        "destinationEntity": "STMVisit",
+                        "inverseName": "salesman",
+                        "inverseEntity": "STMVisit",
+                        "syncable": "YES"
+                    }
+                ]
+            },
+            {
+                "name": "STMSalesmanOutletRestriction",
+                "parentEntity": "STMAbstract",
+                "syncable": "YES",
+                "relationship": [
+                    {
+                        "name": "outlet",
+                        "optional": "YES",
+                        "maxCount": "1",
+                        "deletionRule": "Nullify",
+                        "destinationEntity": "STMOutlet",
+                        "inverseName": "salesmanOutletRestrictions",
+                        "inverseEntity": "STMOutlet",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "restriction",
+                        "optional": "YES",
+                        "maxCount": "1",
+                        "deletionRule": "Nullify",
+                        "destinationEntity": "STMRestriction",
+                        "inverseName": "salesmanOutletRestrictions",
+                        "inverseEntity": "STMRestriction",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "salesman",
+                        "optional": "YES",
+                        "maxCount": "1",
+                        "deletionRule": "Nullify",
+                        "destinationEntity": "STMSalesman",
+                        "inverseName": "salesmanOutletRestrictions",
+                        "inverseEntity": "STMSalesman",
+                        "syncable": "YES"
+                    }
+                ]
+            },
+            {
+                "name": "STMSchedule",
+                "representedClassName": "STMSchedule",
+                "parentEntity": "STMAbstract",
+                "syncable": "YES",
+                "attribute": [
+                    {
+                        "name": "code",
+                        "optional": "YES",
+                        "attributeType": "String",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "name",
+                        "optional": "YES",
+                        "attributeType": "String",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "ord",
+                        "optional": "YES",
+                        "attributeType": "Integer 64",
+                        "defaultValueString": "0",
+                        "usesScalarValueType": "NO",
+                        "syncable": "YES"
+                    }
+                ],
+                "relationship": {
+                    "name": "scheduledEvents",
+                    "optional": "YES",
+                    "toMany": "YES",
+                    "deletionRule": "Cascade",
+                    "destinationEntity": "STMScheduledEvent",
+                    "inverseName": "schedule",
+                    "inverseEntity": "STMScheduledEvent",
+                    "syncable": "YES"
+                }
+            },
+            {
+                "name": "STMScheduledEvent",
+                "representedClassName": "STMScheduledEvent",
+                "parentEntity": "STMAbstract",
+                "syncable": "YES",
+                "attribute": [
+                    {
+                        "name": "dateEnd",
+                        "optional": "YES",
+                        "attributeType": "Date",
+                        "usesScalarValueType": "NO",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "dateStart",
+                        "optional": "YES",
+                        "attributeType": "Date",
+                        "usesScalarValueType": "NO",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "ord",
+                        "optional": "YES",
+                        "attributeType": "Integer 64",
+                        "defaultValueString": "0",
+                        "usesScalarValueType": "NO",
+                        "syncable": "YES"
+                    }
+                ],
+                "relationship": [
+                    {
+                        "name": "outlet",
+                        "optional": "YES",
+                        "maxCount": "1",
+                        "deletionRule": "Nullify",
+                        "destinationEntity": "STMOutlet",
+                        "inverseName": "scheduledEvents",
+                        "inverseEntity": "STMOutlet",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "salesman",
+                        "optional": "YES",
+                        "maxCount": "1",
+                        "deletionRule": "Nullify",
+                        "destinationEntity": "STMSalesman",
+                        "inverseName": "scheduledEvents",
+                        "inverseEntity": "STMSalesman",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "schedule",
+                        "optional": "YES",
+                        "maxCount": "1",
+                        "deletionRule": "Nullify",
+                        "destinationEntity": "STMSchedule",
+                        "inverseName": "scheduledEvents",
+                        "inverseEntity": "STMSchedule",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "schedulePurpose",
+                        "optional": "YES",
+                        "maxCount": "1",
+                        "deletionRule": "Nullify",
+                        "destinationEntity": "STMSchedulePurpose",
+                        "inverseName": "scheduledEvents",
+                        "inverseEntity": "STMSchedulePurpose",
+                        "syncable": "YES"
+                    }
+                ]
+            },
+            {
+                "name": "STMSchedulePurpose",
+                "representedClassName": "STMSchedulePurpose",
+                "parentEntity": "STMAbstract",
+                "syncable": "YES",
+                "attribute": [
+                    {
+                        "name": "code",
+                        "optional": "YES",
+                        "attributeType": "String",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "name",
+                        "optional": "YES",
+                        "attributeType": "String",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "ord",
+                        "optional": "YES",
+                        "attributeType": "Integer 64",
+                        "defaultValueString": "0",
+                        "usesScalarValueType": "NO",
+                        "syncable": "YES"
+                    }
+                ],
+                "relationship": {
+                    "name": "scheduledEvents",
+                    "optional": "YES",
+                    "toMany": "YES",
+                    "deletionRule": "Cascade",
+                    "destinationEntity": "STMScheduledEvent",
+                    "inverseName": "schedulePurpose",
+                    "inverseEntity": "STMScheduledEvent",
+                    "syncable": "YES"
+                }
+            },
+            {
+                "name": "STMSetting",
+                "representedClassName": "STMSetting",
+                "parentEntity": "STMAbstract",
+                "syncable": "YES",
+                "attribute": [
+                    {
+                        "name": "group",
+                        "optional": "YES",
+                        "attributeType": "String",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "name",
+                        "optional": "YES",
+                        "attributeType": "String",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "value",
+                        "optional": "YES",
+                        "attributeType": "String",
+                        "syncable": "YES"
+                    }
+                ],
+                "userInfo": {
+                    "entry": {
+                        "key": "STORE",
+                        "value": "FMDB"
+                    }
+                }
+            },
+            {
+                "name": "STMShipment",
+                "parentEntity": "STMAbstract",
+                "syncable": "YES",
+                "attribute": [
+                    {
+                        "name": "date",
+                        "optional": "YES",
+                        "attributeType": "String",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "ndoc",
+                        "optional": "YES",
+                        "attributeType": "String",
+                        "syncable": "YES"
+                    }
+                ],
+                "relationship": [
+                    {
+                        "name": "driver",
+                        "optional": "YES",
+                        "maxCount": "1",
+                        "deletionRule": "Nullify",
+                        "destinationEntity": "STMDriver",
+                        "inverseName": "shipments",
+                        "inverseEntity": "STMDriver",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "outlet",
+                        "optional": "YES",
+                        "maxCount": "1",
+                        "deletionRule": "Nullify",
+                        "destinationEntity": "STMOutlet",
+                        "inverseName": "shipments",
+                        "inverseEntity": "STMOutlet",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "positions",
+                        "optional": "YES",
+                        "toMany": "YES",
+                        "deletionRule": "Cascade",
+                        "destinationEntity": "STMShipmentPosition",
+                        "inverseName": "shipment",
+                        "inverseEntity": "STMShipmentPosition",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "saleOrder",
+                        "optional": "YES",
+                        "maxCount": "1",
+                        "deletionRule": "Nullify",
+                        "destinationEntity": "STMSaleOrder",
+                        "inverseName": "shipments",
+                        "inverseEntity": "STMSaleOrder",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "salesman",
+                        "optional": "YES",
+                        "maxCount": "1",
+                        "deletionRule": "Nullify",
+                        "destinationEntity": "STMSalesman",
+                        "inverseName": "shipments",
+                        "inverseEntity": "STMSalesman",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "shipmentEgaiss",
+                        "optional": "YES",
+                        "toMany": "YES",
+                        "deletionRule": "Cascade",
+                        "destinationEntity": "STMShipmentEgais",
+                        "inverseName": "shipment",
+                        "inverseEntity": "STMShipmentEgais",
+                        "syncable": "YES"
+                    }
+                ]
+            },
+            {
+                "name": "STMShipmentEgais",
+                "parentEntity": "STMAbstract",
+                "syncable": "YES",
+                "attribute": [
+                    {
+                        "name": "egaisActCls",
+                        "optional": "YES",
+                        "attributeType": "String",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "egaisActStatus",
+                        "optional": "YES",
+                        "attributeType": "String",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "egaisActTs",
+                        "optional": "YES",
+                        "attributeType": "Date",
+                        "usesScalarValueType": "NO",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "egaisTtnCls",
+                        "optional": "YES",
+                        "attributeType": "String",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "egaisTtnNdoc",
+                        "optional": "YES",
+                        "attributeType": "String",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "egaisTtnStatus",
+                        "optional": "YES",
+                        "attributeType": "String",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "egaisTtnStatusTs",
+                        "optional": "YES",
+                        "attributeType": "Date",
+                        "usesScalarValueType": "NO",
+                        "syncable": "YES"
+                    }
+                ],
+                "relationship": {
+                    "name": "shipment",
+                    "optional": "YES",
+                    "maxCount": "1",
+                    "deletionRule": "Nullify",
+                    "destinationEntity": "STMShipment",
+                    "inverseName": "shipmentEgaiss",
+                    "inverseEntity": "STMShipment",
+                    "syncable": "YES"
+                }
+            },
+            {
+                "name": "STMShipmentPosition",
+                "parentEntity": "STMAbstract",
+                "syncable": "YES",
+                "attribute": [
+                    {
+                        "name": "price",
+                        "optional": "YES",
+                        "attributeType": "Decimal",
+                        "defaultValueString": "0.0",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "priceDoc",
+                        "optional": "YES",
+                        "attributeType": "Decimal",
+                        "defaultValueString": "0.0",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "volume",
+                        "optional": "YES",
+                        "attributeType": "Decimal",
+                        "defaultValueString": "0.0",
+                        "syncable": "YES"
+                    }
+                ],
+                "relationship": [
+                    {
+                        "name": "article",
+                        "optional": "YES",
+                        "maxCount": "1",
+                        "deletionRule": "Nullify",
+                        "destinationEntity": "STMArticle",
+                        "inverseName": "shipmentPositions",
+                        "inverseEntity": "STMArticle",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "shipment",
+                        "optional": "YES",
+                        "maxCount": "1",
+                        "deletionRule": "Nullify",
+                        "destinationEntity": "STMShipment",
+                        "inverseName": "positions",
+                        "inverseEntity": "STMShipment",
+                        "syncable": "YES"
+                    }
+                ]
+            },
+            {
+                "name": "STMStock",
+                "representedClassName": "STMStock",
+                "parentEntity": "STMAbstract",
+                "syncable": "YES",
+                "attribute": [
+                    {
+                        "name": "displayVolume",
+                        "optional": "YES",
+                        "attributeType": "String",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "volume",
+                        "optional": "YES",
+                        "attributeType": "Integer 64",
+                        "defaultValueString": "0",
+                        "usesScalarValueType": "NO",
+                        "syncable": "YES"
+                    }
+                ],
+                "relationship": {
+                    "name": "article",
+                    "optional": "YES",
+                    "maxCount": "1",
+                    "deletionRule": "Nullify",
+                    "destinationEntity": "STMArticle",
+                    "inverseName": "stocks",
+                    "inverseEntity": "STMArticle",
+                    "syncable": "YES"
+                }
+            },
+            {
+                "name": "STMUncashing",
+                "parentEntity": "STMAbstract",
+                "syncable": "YES",
+                "attribute": [
+                    {
+                        "name": "authId",
+                        "optional": "YES",
+                        "attributeType": "String",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "date",
+                        "optional": "YES",
+                        "attributeType": "String",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "processing",
+                        "optional": "YES",
+                        "attributeType": "String",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "summ",
+                        "optional": "YES",
+                        "attributeType": "Decimal",
+                        "defaultValueString": "0.0",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "summOrigin",
+                        "optional": "YES",
+                        "attributeType": "Decimal",
+                        "defaultValueString": "0.0",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "type",
+                        "optional": "YES",
+                        "attributeType": "String",
+                        "syncable": "YES"
+                    }
+                ],
+                "relationship": [
+                    {
+                        "name": "cashings",
+                        "optional": "YES",
+                        "toMany": "YES",
+                        "deletionRule": "Nullify",
+                        "destinationEntity": "STMCashing",
+                        "inverseName": "uncashing",
+                        "inverseEntity": "STMCashing",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "creator",
+                        "optional": "YES",
+                        "maxCount": "1",
+                        "deletionRule": "Nullify",
+                        "destinationEntity": "STMAccount",
+                        "inverseName": "uncashings",
+                        "inverseEntity": "STMAccount",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "pictures",
+                        "optional": "YES",
+                        "toMany": "YES",
+                        "deletionRule": "Cascade",
+                        "destinationEntity": "STMUncashingPicture",
+                        "inverseName": "uncashing",
+                        "inverseEntity": "STMUncashingPicture",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "uncashingPlace",
+                        "optional": "YES",
+                        "maxCount": "1",
+                        "deletionRule": "Nullify",
+                        "destinationEntity": "STMUncashingPlace",
+                        "inverseName": "uncashings",
+                        "inverseEntity": "STMUncashingPlace",
+                        "syncable": "YES"
+                    }
+                ]
+            },
+            {
+                "name": "STMUncashingPicture",
+                "parentEntity": "STMCorePhoto",
+                "syncable": "YES",
+                "relationship": {
+                    "name": "uncashing",
+                    "optional": "YES",
+                    "maxCount": "1",
+                    "deletionRule": "Nullify",
+                    "destinationEntity": "STMUncashing",
+                    "inverseName": "pictures",
+                    "inverseEntity": "STMUncashing",
+                    "syncable": "YES"
+                }
+            },
+            {
+                "name": "STMUncashingPlace",
+                "parentEntity": "STMAbstract",
+                "syncable": "YES",
+                "attribute": [
+                    {
+                        "name": "email",
+                        "optional": "YES",
+                        "attributeType": "String",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "name",
+                        "optional": "YES",
+                        "attributeType": "String",
+                        "syncable": "YES"
+                    }
+                ],
+                "relationship": {
+                    "name": "uncashings",
+                    "optional": "YES",
+                    "toMany": "YES",
+                    "deletionRule": "Cascade",
+                    "destinationEntity": "STMUncashing",
+                    "inverseName": "uncashingPlace",
+                    "inverseEntity": "STMUncashing",
+                    "syncable": "YES"
+                }
+            },
+            {
+                "name": "STMUserNewsMessage",
+                "representedClassName": "STMUserNewsMessage",
+                "parentEntity": "STMAbstract",
+                "syncable": "YES",
+                "attribute": [
+                    {
+                        "name": "authId",
+                        "optional": "YES",
+                        "attributeType": "String",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "rating",
+                        "optional": "YES",
+                        "attributeType": "Integer 64",
+                        "defaultValueString": "0",
+                        "usesScalarValueType": "NO",
+                        "syncable": "YES"
+                    }
+                ],
+                "relationship": {
+                    "name": "newsMessage",
+                    "optional": "YES",
+                    "maxCount": "1",
+                    "deletionRule": "Nullify",
+                    "destinationEntity": "STMNewsMessage",
+                    "inverseName": "userNewsMessages",
+                    "inverseEntity": "STMNewsMessage",
+                    "syncable": "YES"
+                }
+            },
+            {
+                "name": "STMVisit",
+                "representedClassName": "STMVisit",
+                "parentEntity": "STMAbstract",
+                "syncable": "YES",
+                "attribute": {
+                    "name": "date",
+                    "optional": "YES",
+                    "attributeType": "String",
+                    "syncable": "YES"
+                },
+                "relationship": [
+                    {
+                        "name": "checkInLocation",
+                        "optional": "YES",
+                        "maxCount": "1",
+                        "deletionRule": "Nullify",
+                        "destinationEntity": "STMLocation",
+                        "inverseName": "visitIns",
+                        "inverseEntity": "STMLocation",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "checkOutLocation",
+                        "optional": "YES",
+                        "maxCount": "1",
+                        "deletionRule": "Nullify",
+                        "destinationEntity": "STMLocation",
+                        "inverseName": "visitOuts",
+                        "inverseEntity": "STMLocation",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "outlet",
+                        "optional": "YES",
+                        "maxCount": "1",
+                        "deletionRule": "Nullify",
+                        "destinationEntity": "STMOutlet",
+                        "inverseName": "visits",
+                        "inverseEntity": "STMOutlet",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "salesman",
+                        "optional": "YES",
+                        "maxCount": "1",
+                        "deletionRule": "Nullify",
+                        "destinationEntity": "STMSalesman",
+                        "inverseName": "visits",
+                        "inverseEntity": "STMSalesman",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "visitAnswers",
+                        "optional": "YES",
+                        "toMany": "YES",
+                        "deletionRule": "Cascade",
+                        "destinationEntity": "STMVisitAnswer",
+                        "inverseName": "visit",
+                        "inverseEntity": "STMVisitAnswer",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "visitPhotos",
+                        "optional": "YES",
+                        "toMany": "YES",
+                        "deletionRule": "Cascade",
+                        "destinationEntity": "STMVisitPhoto",
+                        "inverseName": "visit",
+                        "inverseEntity": "STMVisitPhoto",
+                        "syncable": "YES"
+                    }
+                ]
+            },
+            {
+                "name": "STMVisitAnswer",
+                "representedClassName": "STMVisitAnswer",
+                "parentEntity": "STMAbstract",
+                "syncable": "YES",
+                "attribute": {
+                    "name": "data",
+                    "optional": "YES",
+                    "attributeType": "String",
+                    "syncable": "YES"
+                },
+                "relationship": [
+                    {
+                        "name": "question",
+                        "optional": "YES",
+                        "maxCount": "1",
+                        "deletionRule": "Nullify",
+                        "destinationEntity": "STMVisitQuestion",
+                        "inverseName": "visitAnswers",
+                        "inverseEntity": "STMVisitQuestion",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "visit",
+                        "optional": "YES",
+                        "maxCount": "1",
+                        "deletionRule": "Nullify",
+                        "destinationEntity": "STMVisit",
+                        "inverseName": "visitAnswers",
+                        "inverseEntity": "STMVisit",
+                        "syncable": "YES"
+                    }
+                ]
+            },
+            {
+                "name": "STMVisitPhoto",
+                "representedClassName": "STMVisitPhoto",
+                "parentEntity": "STMCorePhoto",
+                "syncable": "YES",
+                "relationship": {
+                    "name": "visit",
+                    "optional": "YES",
+                    "maxCount": "1",
+                    "deletionRule": "Nullify",
+                    "destinationEntity": "STMVisit",
+                    "inverseName": "visitPhotos",
+                    "inverseEntity": "STMVisit",
+                    "syncable": "YES"
+                }
+            },
+            {
+                "name": "STMVisitQuestion",
+                "representedClassName": "STMVisitQuestion",
+                "parentEntity": "STMAbstract",
+                "syncable": "YES",
+                "attribute": {
+                    "name": "name",
+                    "optional": "YES",
+                    "attributeType": "String",
+                    "syncable": "YES"
+                },
+                "relationship": [
+                    {
+                        "name": "visitAnswers",
+                        "optional": "YES",
+                        "toMany": "YES",
+                        "deletionRule": "Cascade",
+                        "destinationEntity": "STMVisitAnswer",
+                        "inverseName": "question",
+                        "inverseEntity": "STMVisitAnswer",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "visitQuestionDataType",
+                        "optional": "YES",
+                        "maxCount": "1",
+                        "deletionRule": "Nullify",
+                        "destinationEntity": "STMVisitQuestionDataType",
+                        "inverseName": "visitQuestions",
+                        "inverseEntity": "STMVisitQuestionDataType",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "visitQuestionGroup",
+                        "optional": "YES",
+                        "maxCount": "1",
+                        "deletionRule": "Nullify",
+                        "destinationEntity": "STMVisitQuestionGroup",
+                        "inverseName": "visitQuestions",
+                        "inverseEntity": "STMVisitQuestionGroup",
+                        "syncable": "YES"
+                    }
+                ]
+            },
+            {
+                "name": "STMVisitQuestionDataType",
+                "representedClassName": "STMVisitQuestionDataType",
+                "parentEntity": "STMAbstract",
+                "syncable": "YES",
+                "attribute": [
+                    {
+                        "name": "code",
+                        "optional": "YES",
+                        "attributeType": "String",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "name",
+                        "optional": "YES",
+                        "attributeType": "String",
+                        "syncable": "YES"
+                    }
+                ],
+                "relationship": {
+                    "name": "visitQuestions",
+                    "optional": "YES",
+                    "toMany": "YES",
+                    "deletionRule": "Cascade",
+                    "destinationEntity": "STMVisitQuestion",
+                    "inverseName": "visitQuestionDataType",
+                    "inverseEntity": "STMVisitQuestion",
+                    "syncable": "YES"
+                }
+            },
+            {
+                "name": "STMVisitQuestionGroup",
+                "representedClassName": "STMVisitQuestionGroup",
+                "parentEntity": "STMAbstract",
+                "syncable": "YES",
+                "attribute": {
+                    "name": "name",
+                    "optional": "YES",
+                    "attributeType": "String",
+                    "syncable": "YES"
+                },
+                "relationship": [
+                    {
+                        "name": "visitQuestions",
+                        "optional": "YES",
+                        "toMany": "YES",
+                        "deletionRule": "Cascade",
+                        "destinationEntity": "STMVisitQuestion",
+                        "inverseName": "visitQuestionGroup",
+                        "inverseEntity": "STMVisitQuestion",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "visitQuestionSet",
+                        "optional": "YES",
+                        "maxCount": "1",
+                        "deletionRule": "Cascade",
+                        "destinationEntity": "STMVisitQuestionSet",
+                        "inverseName": "visitQuestionGroups",
+                        "inverseEntity": "STMVisitQuestionSet",
+                        "syncable": "YES"
+                    }
+                ]
+            },
+            {
+                "name": "STMVisitQuestionSet",
+                "representedClassName": "STMVisitQuestionSet",
+                "parentEntity": "STMAbstract",
+                "syncable": "YES",
+                "attribute": [
+                    {
+                        "name": "isEnabled",
+                        "optional": "YES",
+                        "attributeType": "Boolean",
+                        "usesScalarValueType": "NO",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "name",
+                        "optional": "YES",
+                        "attributeType": "String",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "ord",
+                        "optional": "YES",
+                        "attributeType": "Integer 64",
+                        "defaultValueString": "0",
+                        "usesScalarValueType": "NO",
+                        "syncable": "YES"
+                    }
+                ],
+                "relationship": {
+                    "name": "visitQuestionGroups",
+                    "optional": "YES",
+                    "toMany": "YES",
+                    "deletionRule": "Cascade",
+                    "destinationEntity": "STMVisitQuestionGroup",
+                    "inverseName": "visitQuestionSet",
+                    "inverseEntity": "STMVisitQuestionGroup",
+                    "syncable": "YES"
+                }
+            },
+            {
+                "name": "STMWorkflow",
+                "representedClassName": "STMWorkflow",
+                "parentEntity": "STMAbstract",
+                "syncable": "YES",
+                "attribute": [
+                    {
+                        "name": "code",
+                        "optional": "YES",
+                        "attributeType": "String",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "workflow",
+                        "optional": "YES",
+                        "attributeType": "Transformable",
+                        "syncable": "YES"
+                    }
+                ],
+                "relationship": [
+                    {
+                        "name": "entities",
+                        "optional": "YES",
+                        "toMany": "YES",
+                        "deletionRule": "Nullify",
+                        "destinationEntity": "STMEntity",
+                        "inverseName": "wf",
+                        "inverseEntity": "STMEntity",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "messages",
+                        "optional": "YES",
+                        "maxCount": "1",
+                        "deletionRule": "Nullify",
+                        "destinationEntity": "STMMessage",
+                        "inverseName": "workflow",
+                        "inverseEntity": "STMMessage",
+                        "syncable": "YES"
+                    }
+                ]
+            }
+        ]
+    }
+}

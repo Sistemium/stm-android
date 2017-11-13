@@ -1,10 +1,10 @@
 package com.sistemium.sissales.interfaces
 
 import com.sistemium.sissales.enums.STMStorageType
-import com.sistemium.sissales.DataModel.STMAttributeDescription
-import com.sistemium.sissales.DataModel.STMEntityDescription
-import com.sistemium.sissales.DataModel.STMManagedObjectModel
-import com.sistemium.sissales.DataModel.STMRelationshipDescription
+import com.sistemium.sissales.model.STMAttributeDescription
+import com.sistemium.sissales.model.STMEntityDescription
+import com.sistemium.sissales.model.STMManagedObjectModel
+import com.sistemium.sissales.model.STMRelationshipDescription
 
 /**
  * Created by edgarjanvuicik on 09/11/2017.
