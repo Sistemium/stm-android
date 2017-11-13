@@ -19,11 +19,31 @@ import android.app.ActivityOptions
 import android.util.Log
 import android.view.KeyEvent
 import com.sistemium.sissales.R
+import java.security.KeyStore
+import devliving.online.securedpreferencestore.DefaultRecoveryHandler
+import devliving.online.securedpreferencestore.SecuredPreferenceStore
 
 class AuthActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        SecuredPreferenceStore.init(applicationContext, DefaultRecoveryHandler())
+        val prefStore = SecuredPreferenceStore.getSharedInstance()
+        val accessToken = prefStore.getString("accessToken", null)
+
+        if (accessToken != null){
+
+            val myIntent = Intent(this@AuthActivity, WebViewActivity::class.java)
+
+            myIntent.putExtra("accessToken", accessToken)
+
+            val options = ActivityOptions.makeCustomAnimation(this, R.anim.abc_fade_in, R.anim.abc_fade_out)
+
+            this@AuthActivity.startActivity(myIntent, options.toBundle())
+
+        }
+
         setContentView(R.layout.activity_auth)
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayShowTitleEnabled(false)

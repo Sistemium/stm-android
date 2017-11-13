@@ -18,7 +18,7 @@ import com.github.kittinunf.fuel.android.extension.responseJson
 import com.github.kittinunf.result.Result
 import com.github.kittinunf.result.getAs
 import com.sistemium.sissales.R
-
+import devliving.online.securedpreferencestore.SecuredPreferenceStore
 
 class CodeConfirmActivity : AppCompatActivity() {
 
@@ -74,6 +74,10 @@ class CodeConfirmActivity : AppCompatActivity() {
                             is Result.Success -> {
 
                                 val data = result.get().obj()
+
+                                val prefStore = SecuredPreferenceStore.getSharedInstance()
+
+                                prefStore.edit().putString("accessToken", data.get("accessToken") as? String).apply()
 
                                 val myIntent = Intent(this@CodeConfirmActivity, WebViewActivity::class.java)
                                 myIntent.putExtra("accessToken", data.get("accessToken") as String)
