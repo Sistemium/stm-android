@@ -16,11 +16,11 @@ interface STMModelling {
 
     val concreteEntities: Map <String, STMEntityDescription>
 
+    val entitiesByName:Map<String, STMEntityDescription>
+
     fun storageForEntityName(entityName:String): STMStorageType
 
     fun isConcreteEntityName(entityName:String): Boolean
-
-    fun entitiesByName(entityName:String): Map<String, STMEntityDescription>
 
     fun fieldsForEntityName(entityName:String):Map<String, STMAttributeDescription>
 

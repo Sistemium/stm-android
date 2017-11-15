@@ -1,6 +1,5 @@
 package com.sistemium.sissales.model
 
-import android.util.Log
 import com.google.gson.Gson
 
 /**
@@ -11,13 +10,15 @@ class STMManagedObjectModel(model: String){
 
     private val gson = Gson()
 
+    var entitiesByName:MutableMap<String, STMEntityDescription> = hashMapOf()
+
     init {
 
         val mapModel = gson.fromJson(model, Map::class.java)
 
-        Log.d("DEBUG", "")
+        val entityArray = (mapModel["model"] as? Map<* , *>)?.get("entity") as? Array<*>
 
+        entityArray?.map { STMEntityDescription(it as Map<*, *>) }?.forEach { entitiesByName[it.entityName] = it }
     }
-
 
 }

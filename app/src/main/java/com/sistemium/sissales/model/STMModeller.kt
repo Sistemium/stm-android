@@ -1,6 +1,7 @@
 package com.sistemium.sissales.model
 
 import android.content.Context
+import com.sistemium.sissales.base.STMFunctions
 import com.sistemium.sissales.enums.STMStorageType
 import com.sistemium.sissales.interfaces.STMModelling
 import java.util.*
@@ -15,21 +16,38 @@ class STMModeller(context: Context, modelName:String) : STMModelling {
 
     override val concreteEntities: Map<String, STMEntityDescription>
 
+    override val entitiesByName: Map<String, STMEntityDescription>
+
     init {
         managedObjectModel = createModel(context, modelName)
         concreteEntities = hashMapOf()
+        entitiesByName = managedObjectModel.entitiesByName
     }
 
     override fun storageForEntityName(entityName: String): STMStorageType {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+
+        val prefixedEntityName = STMFunctions.addPrefixToEntityName(entityName)
+
+        val entity = entitiesByName[prefixedEntityName] ?: return STMStorageType.STMStorageTypeNone
+
+        val storeOption = entity.userInfo["STORE"]
+
+        if (entity.abstract) return STMStorageType.STMStorageTypeAbstract
+
+        if (storeOption == null || storeOption == "FMDB" || storeOption == "ANKO"){
+            return STMStorageType.STMStorageTypeAnko
+        }
+
+        return STMStorageType.STMStorageTypeNone
+
     }
 
     override fun isConcreteEntityName(entityName: String): Boolean {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
 
-    override fun entitiesByName(entityName: String): Map<String, STMEntityDescription> {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        val type = storageForEntityName(entityName)
+
+        return type != STMStorageType.STMStorageTypeNone && type != STMStorageType.STMStorageTypeAbstract
+
     }
 
     override fun fieldsForEntityName(entityName: String): Map<String, STMAttributeDescription> {

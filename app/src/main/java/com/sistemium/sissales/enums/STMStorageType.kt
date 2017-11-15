@@ -5,6 +5,6 @@ package com.sistemium.sissales.enums
  */
 enum class STMStorageType {
 
-    STMStorageTypeAnko
+    STMStorageTypeAnko,STMStorageTypeNone,STMStorageTypeAbstract
 
 }

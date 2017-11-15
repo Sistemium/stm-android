@@ -7,6 +7,7 @@ import android.util.Log
 import com.github.kittinunf.fuel.Fuel
 import com.github.kittinunf.result.Result
 import com.github.kittinunf.result.getAs
+import com.sistemium.sissales.interfaces.STMModelling
 
 
 /**
@@ -67,9 +68,7 @@ class WebAppInterface internal constructor(internal var webViewActivity: WebView
 
         task {
 
-            // TODO implement arrayOfObjectsRequestedByScriptMessage
-
-            arrayOf<Map<*, *>>()
+            arrayOfObjectsRequestedByScriptMessage(mapParameters)
 
         } then {
 
@@ -296,7 +295,8 @@ class WebAppInterface internal constructor(internal var webViewActivity: WebView
     @JavascriptInterface
     fun loadImage(parameters: String?){
 
-        var mapParameters = gson.fromJson(parameters, Map::class.java)
+
+        val mapParameters = gson.fromJson(parameters, Map::class.java)
 
         // TODO implement loadImageForPrimaryKey
 
@@ -331,6 +331,45 @@ class WebAppInterface internal constructor(internal var webViewActivity: WebView
         return javascriptCallback(arrayOf<Any>(), mapParameters, callback as String)
 
     }
+
+    // interface handling helpers
+
+    fun arrayOfObjectsRequestedByScriptMessage(parameters: Map<*, *>):Array<Map<*, *>>{
+
+        val entityName = parameters["entity"] as? String ?: throw Exception("entity is not specified")
+
+        if (webViewActivity.modellingDelegate?.isConcreteEntityName(entityName) == true) {
+            throw Exception(entityName + ": not found in data model")
+        }
+
+        return arrayOf()
+
+//        if ([scriptMessage.name isEqualToString:WK_MESSAGE_FIND]) {
+//
+//            NSString *xidString = parameters[@"id"];
+//
+//            if (!xidString || [xidString isKindOfClass:NSNull.class]) {
+//                return [self rejectWithErrorMessage:@"empty xid"];
+//            }
+//
+//            return [self findEntityName:entityName xidString:xidString];
+//
+//        }
+//
+//        NSError *error;
+//        NSPredicate *predicate = [self predicateForScriptMessage:scriptMessage error:&error];
+//
+//        if (error) return [AnyPromise promiseWithValue:error];
+//
+//        NSDictionary *options = parameters[@"options"];
+//
+//        return [self.persistenceDelegate findAll:entityName
+//                predicate:predicate
+//        options:options];
+
+    }
+
+    // callbacks
 
     private fun javascriptCallback(data:Any, parameters: Map<*, *>?, jsCallbackFunction: String){
 
