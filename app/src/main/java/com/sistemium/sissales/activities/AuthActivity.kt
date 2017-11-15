@@ -7,7 +7,6 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
 import android.widget.Button
-
 import kotlinx.android.synthetic.main.activity_auth.*
 import android.widget.EditText
 import com.github.kittinunf.fuel.*
@@ -19,7 +18,6 @@ import android.app.ActivityOptions
 import android.util.Log
 import android.view.KeyEvent
 import com.sistemium.sissales.R
-import java.security.KeyStore
 import devliving.online.securedpreferencestore.DefaultRecoveryHandler
 import devliving.online.securedpreferencestore.SecuredPreferenceStore
 

@@ -10,6 +10,7 @@ class STMPredicate(predicate:String) {
         fun primaryKeyPredicateEntityName(entityName:String, values:Array<*>):STMPredicate {
 
             return STMPredicate("")
+
         }
     }
 
