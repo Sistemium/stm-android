@@ -9,14 +9,18 @@ import nl.komponents.kovenant.task
 /**
  * Created by edgarjanvuicik on 20/11/2017.
  */
-class STMPersister(val runner:STMPersistingRunning):STMPersistingSync,STMPersistingPromised {
+class STMPersister(private val runner:STMPersistingRunning):STMPersistingSync,STMPersistingPromised {
 
     override fun findSync(entityName: String, identifier: String, options: Map<*, *>?): Map<*, *> {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
     override fun findAllSync(entityName: String, predicate: STMPredicate?, options: Map<*, *>?): Array<Map<*, *>> {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+
+        return runner.readOnly {
+            return@readOnly it.findAllSync(entityName, predicate, options)
+        }
+
     }
 
     override fun find(entityName: String, identifier: String, options: Map<*, *>?): Promise<Map<*, *>, Exception> {

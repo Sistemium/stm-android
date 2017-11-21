@@ -7,10 +7,8 @@ import com.sistemium.sissales.interfaces.STMModelling
 /**
  * Created by edgarjanvuicik on 15/11/2017.
  */
-class STMAnkoAdapter(model:STMModelling) :STMAdapting {
+class SQLiteDatabaseAdapter(override var model: STMModelling) :STMAdapting {
 
-    override var storageType = STMStorageType.STMStorageTypeAnko
-
-    override var model = model
+    override var storageType = STMStorageType.STMStorageTypeSQLiteDatabase
 
 }

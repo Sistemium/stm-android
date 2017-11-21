@@ -6,7 +6,7 @@ import android.os.Bundle
 import android.webkit.WebView
 import com.sistemium.sissales.R
 import com.sistemium.sissales.enums.STMStorageType
-import com.sistemium.sissales.model.STMAnkoAdapter
+import com.sistemium.sissales.model.SQLiteDatabaseAdapter
 import com.sistemium.sissales.model.STMModeller
 import com.sistemium.sissales.persisting.STMPersister
 import com.sistemium.sissales.persisting.STMPersisterRunner
@@ -28,9 +28,9 @@ class WebViewActivity : Activity() {
 
         val modeler = STMModeller(this, "iSisSales")
 
-        val adapter = STMAnkoAdapter(modeler)
+        val adapter = SQLiteDatabaseAdapter(modeler)
 
-        val runner = STMPersisterRunner(hashMapOf(STMStorageType.STMStorageTypeAnko to adapter))
+        val runner = STMPersisterRunner(hashMapOf(STMStorageType.STMStorageTypeSQLiteDatabase to adapter))
 
         persistenceDelegate = STMPersister(runner)
 

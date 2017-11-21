@@ -34,8 +34,8 @@ class STMModeller(context: Context, modelName:String) : STMModelling {
 
         if (entity.abstract) return STMStorageType.STMStorageTypeAbstract
 
-        if (storeOption == null || storeOption == "FMDB" || storeOption == "ANKO"){
-            return STMStorageType.STMStorageTypeAnko
+        if (storeOption == null || storeOption == "FMDB" || storeOption == "SQLiteDatabase"){
+            return STMStorageType.STMStorageTypeSQLiteDatabase
         }
 
         return STMStorageType.STMStorageTypeNone

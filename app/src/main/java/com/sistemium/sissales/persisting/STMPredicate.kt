@@ -13,9 +13,9 @@ class STMPredicate(private val predicate: String) {
         @JvmStatic
         fun primaryKeyPredicateEntityName(values:Array<*>):STMPredicate {
 
-            if (values.size == 1) return STMPredicate("${STMConstants.ANKO_PRIMARY_KEY} = \"${values.first().toString()}\"")
+            if (values.size == 1) return STMPredicate("${STMConstants.DEFAULT_PERSISTING_PRIMARY_KEY} = \"${values.first().toString()}\"")
 
-            return STMPredicate("${STMConstants.ANKO_PRIMARY_KEY} IN (${values.joinToString(", ") { value -> "\"${value.toString()}\"" }})")
+            return STMPredicate("${STMConstants.DEFAULT_PERSISTING_PRIMARY_KEY} IN (${values.joinToString(", ") { value -> "\"${value.toString()}\"" }})")
 
         }
 
