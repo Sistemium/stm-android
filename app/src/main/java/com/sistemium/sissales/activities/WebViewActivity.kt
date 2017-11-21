@@ -5,8 +5,11 @@ import android.app.Activity
 import android.os.Bundle
 import android.webkit.WebView
 import com.sistemium.sissales.R
-import com.sistemium.sissales.interfaces.STMModelling
+import com.sistemium.sissales.enums.STMStorageType
+import com.sistemium.sissales.model.STMAnkoAdapter
 import com.sistemium.sissales.model.STMModeller
+import com.sistemium.sissales.persisting.STMPersister
+import com.sistemium.sissales.persisting.STMPersisterRunner
 
 @SuppressLint("SetJavaScriptEnabled")
 class WebViewActivity : Activity() {
@@ -17,13 +20,19 @@ class WebViewActivity : Activity() {
 
     var roles:String? = null
 
-    var modellingDelegate: STMModelling? = null
+    var persistenceDelegate: STMPersister? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.webview)
-        modellingDelegate = STMModeller(this, "iSisSales")
 
+        val modeler = STMModeller(this, "iSisSales")
+
+        val adapter = STMAnkoAdapter(modeler)
+
+        val runner = STMPersisterRunner(hashMapOf(STMStorageType.STMStorageTypeAnko to adapter))
+
+        persistenceDelegate = STMPersister(runner)
 
         webView = findViewById(R.id.webView1)
         webView?.settings?.javaScriptEnabled = true

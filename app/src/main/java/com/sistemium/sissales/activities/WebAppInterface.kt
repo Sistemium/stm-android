@@ -7,7 +7,8 @@ import android.util.Log
 import com.github.kittinunf.fuel.Fuel
 import com.github.kittinunf.result.Result
 import com.github.kittinunf.result.getAs
-import com.sistemium.sissales.interfaces.STMModelling
+import com.sistemium.sissales.base.STMConstants
+import com.sistemium.sissales.persisting.STMPredicate
 
 
 /**
@@ -76,11 +77,7 @@ class WebAppInterface internal constructor(private var webViewActivity: WebViewA
 
         val mapParameters = gson.fromJson(parameters, Map::class.java)
 
-        task {
-
-            arrayOfObjectsRequestedByScriptMessage(mapParameters)
-
-        } then {
+        arrayOfObjectsRequestedByScriptMessage(mapParameters) then {
 
             result -> javascriptCallback(result, mapParameters)
 
@@ -182,10 +179,10 @@ class WebAppInterface internal constructor(private var webViewActivity: WebViewA
 
         // TODO implement handleTabbarMessage
 
-        if (mapParameters.get("action")?.equals("show") == true){
-            return javascriptCallback(arrayOf("tabbar show success"), mapParameters)
+        return if (mapParameters["action"]?.equals("show") == true){
+            javascriptCallback(arrayOf("tabbar show success"), mapParameters)
         }else{
-            return javascriptCallback(arrayOf("tabbar hide success"), mapParameters)
+            javascriptCallback(arrayOf("tabbar hide success"), mapParameters)
         }
 
     }
@@ -377,38 +374,39 @@ class WebAppInterface internal constructor(private var webViewActivity: WebViewA
 
     // interface handling helpers
 
-    fun arrayOfObjectsRequestedByScriptMessage(parameters: Map<*, *>):Array<Map<*, *>>{
+    private fun arrayOfObjectsRequestedByScriptMessage(parameters: Map<*, *>):Promise<Array<Map<*, *>>, Exception>{
+
+        // TODO needs to be separated for two methods
 
         val entityName = parameters["entity"] as? String ?: throw Exception("entity is not specified")
 
-        if (webViewActivity.modellingDelegate?.isConcreteEntityName(entityName) == true) {
-            throw Exception(entityName + ": not found in data model")
+        val xidString = parameters[STMConstants.DEFAULT_PERSISTING_PRIMARY_KEY] as? String
+
+        val options = parameters["options"] as? Map<*,*>
+
+        if (xidString != null){
+            return webViewActivity.persistenceDelegate?.find(entityName, xidString, options)?.then {
+
+                result ->
+
+                return@then arrayOf(result)
+
+            } ?: throw Exception("Missing persistenceDelegate")
         }
 
-        return arrayOf()
+        val filter = parameters["filter"] as? Map<*, *>
 
-//        if ([scriptMessage.name isEqualToString:WK_MESSAGE_FIND]) {
-//
-//            NSString *xidString = parameters[@"id"];
-//
-//            if (!xidString || [xidString isKindOfClass:NSNull.class]) {
-//                return [self rejectWithErrorMessage:@"empty xid"];
-//            }
-//
-//            return [self findEntityName:entityName xidString:xidString];
-//
-//        }
-//
-//        NSError *error;
-//        NSPredicate *predicate = [self predicateForScriptMessage:scriptMessage error:&error];
-//
-//        if (error) return [AnyPromise promiseWithValue:error];
-//
-//        NSDictionary *options = parameters[@"options"];
-//
-//        return [self.persistenceDelegate findAll:entityName
-//                predicate:predicate
-//        options:options];
+        val where = parameters["where"] as? Map<*, *>
+
+        val predicate = STMPredicate.filterPredicate(filter, where)
+
+        return webViewActivity.persistenceDelegate?.findAll(entityName, predicate, options) ?: throw Exception("Missing persistenceDelegate")
+
+    }
+
+    private fun findEntityName(entityName:String, xidString:String):Array<Map<*, *>>{
+
+        TODO("not implemented")
 
     }
 
