@@ -16,9 +16,14 @@ class STMManagedObjectModel(model: String){
 
         val mapModel = gson.fromJson(model, Map::class.java)
 
-        val entityArray = (mapModel["model"] as? Map<* , *>)?.get("entity") as? Array<*>
+        val entityArray = (mapModel["model"] as? Map<* , *>)?.get("entity") as? ArrayList<*>
 
-        entityArray?.map { STMEntityDescription(it as Map<*, *>) }?.forEach { entitiesByName[it.entityName] = it }
+        entityArray?.forEach {
+
+            val entityDesc = STMEntityDescription(it as Map<*, *>)
+
+            entitiesByName[entityDesc.entityName] = entityDesc
+        }
     }
 
 }

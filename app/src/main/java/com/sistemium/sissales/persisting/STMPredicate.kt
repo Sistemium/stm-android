@@ -58,9 +58,33 @@ class STMPredicate(private val predicate: String) {
 
             }
 
-            return STMPredicate("(${subPredicates.joinToString(") AND (")})")
+            return combinePredicates(subPredicates)
 
         }
+
+        @JvmStatic
+        fun predicateWithOptions(options:Map<*,*>?, predicate: STMPredicate?):STMPredicate?{
+
+            if (options?.get(STMConstants.STMPersistingOptionFantoms) as? String != null){
+
+                val phantomPredicate = STMPredicate("isFantom = ${(options!![STMConstants.STMPersistingOptionFantoms] as String).toBoolean()}")
+
+                return STMPredicate.combinePredicates(arrayListOf(predicate, phantomPredicate))
+
+            }
+
+            return predicate
+
+        }
+
+        @JvmStatic
+
+        private fun combinePredicates(subPredicates:ArrayList<*>):STMPredicate =
+                STMPredicate("(${subPredicates.joinToString(") AND (")})")
+
+        @JvmStatic
+        fun predicateWithOptions(options:Map<*,*>):STMPredicate? = predicateWithOptions(options, null)
+
     }
 
     fun predicateForAdapter(adapter:STMAdapting):String?{

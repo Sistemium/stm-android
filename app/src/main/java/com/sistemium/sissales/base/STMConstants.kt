@@ -10,6 +10,8 @@ class STMConstants{
 
         val ISISTEMIUM_PREFIX = "STM"
         val DEFAULT_PERSISTING_PRIMARY_KEY = "id"
+        val STMPersistingOptionFantoms = "fantoms"
+        val STMPersistingOptionForceStorage = "forceStorage"
 
     }
 
