@@ -35,7 +35,7 @@ class STMPersisterTransactionCoordinator(private val adapters:HashMap<STMStorage
         var transaction = transactions[storageType]
 
         if (transaction == null && adapters.keys.contains(storageType)){
-            transactions[storageType] = adapters[storageType]!!.beginTransactionReadOnly()
+            transactions[storageType] = adapters[storageType]!!.beginTransaction(false)
             transaction = transactions[storageType]
         }
 

@@ -10,19 +10,13 @@ import java.util.*
  * Created by edgarjanvuicik on 10/11/2017.
  */
 
-class STMModeller(context: Context, modelName:String) : STMModelling {
+class STMModeller(modelJSON:String) : STMModelling {
 
-    override val managedObjectModel: STMManagedObjectModel
+    override val managedObjectModel: STMManagedObjectModel = STMManagedObjectModel(modelJSON)
 
-    override val concreteEntities: Map<String, STMEntityDescription>
+    override val concreteEntities: Map<String, STMEntityDescription> = hashMapOf()
 
-    override val entitiesByName: Map<String, STMEntityDescription>
-
-    init {
-        managedObjectModel = createModel(context, modelName)
-        concreteEntities = hashMapOf()
-        entitiesByName = managedObjectModel.entitiesByName
-    }
+    override val entitiesByName: Map<String, STMEntityDescription> = managedObjectModel.entitiesByName
 
     override fun storageForEntityName(entityName: String): STMStorageType {
 
@@ -34,7 +28,7 @@ class STMModeller(context: Context, modelName:String) : STMModelling {
 
         if (entity.abstract) return STMStorageType.STMStorageTypeAbstract
 
-        if (storeOption == null || storeOption == "FMDB" || storeOption == "SQLiteDatabase"){
+        if (storeOption == null || storeOption == "FMDB" || storeOption == "STMSQLiteDatabaseOperation"){
             return STMStorageType.STMStorageTypeSQLiteDatabase
         }
 
@@ -72,23 +66,6 @@ class STMModeller(context: Context, modelName:String) : STMModelling {
 
     override fun hierarchyForEntityName(entityName: String): Set<String> {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
-
-    private fun createModel(context: Context, modelName:String): STMManagedObjectModel {
-
-        val assetManager = context.assets
-        val stream = assetManager.open("model/$modelName.json")
-
-        val scanner = Scanner(stream)
-
-        val jsonModelString = StringBuilder()
-
-        while (scanner.hasNext()) {
-            jsonModelString.append(scanner.nextLine())
-        }
-
-        return STMManagedObjectModel(jsonModelString.toString())
-
     }
 
 }

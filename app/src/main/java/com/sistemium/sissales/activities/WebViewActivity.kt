@@ -5,8 +5,10 @@ import android.app.Activity
 import android.os.Bundle
 import android.webkit.WebView
 import com.sistemium.sissales.R
+import com.sistemium.sissales.base.STMConstants
+import com.sistemium.sissales.base.STMCoreSessionFiler
 import com.sistemium.sissales.enums.STMStorageType
-import com.sistemium.sissales.model.SQLiteDatabaseAdapter
+import com.sistemium.sissales.model.STMSQLiteDatabaseAdapter
 import com.sistemium.sissales.model.STMModeller
 import com.sistemium.sissales.persisting.STMPersister
 import com.sistemium.sissales.persisting.STMPersisterRunner
@@ -26,9 +28,17 @@ class WebViewActivity : Activity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.webview)
 
-        val modeler = STMModeller(this, "iSisSales")
+        //TODO modelName needs to be received from settings
 
-        val adapter = SQLiteDatabaseAdapter(modeler)
+        val modelName = "iSisSales"
+
+        val filing = STMCoreSessionFiler(this)
+
+        val modeler = STMModeller(filing.bundledModelJSON(modelName))
+
+        val dbPath = filing.persistencePath(STMConstants.SQL_LITE_PATH, modelName)
+
+        val adapter = STMSQLiteDatabaseAdapter(modeler, dbPath)
 
         val runner = STMPersisterRunner(hashMapOf(STMStorageType.STMStorageTypeSQLiteDatabase to adapter))
 

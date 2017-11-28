@@ -11,10 +11,6 @@ interface STMAdapting {
     var model:STMModelling
     var storageType:STMStorageType
 
-    fun beginTransactionReadOnly():STMPersistingTransaction{
-
-        TODO("not implemented")
-
-    }
+    fun beginTransaction(readOnly:Boolean = false):STMPersistingTransaction
 
 }

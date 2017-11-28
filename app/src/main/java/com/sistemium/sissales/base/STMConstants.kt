@@ -12,6 +12,8 @@ class STMConstants{
         val DEFAULT_PERSISTING_PRIMARY_KEY = "id"
         val STMPersistingOptionFantoms = "fantoms"
         val STMPersistingOptionForceStorage = "forceStorage"
+        val POOL_SIZE = 3
+        val SQL_LITE_PATH = "sqllitepath"
 
     }
 
