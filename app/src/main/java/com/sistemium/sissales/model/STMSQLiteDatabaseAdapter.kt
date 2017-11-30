@@ -7,12 +7,14 @@ import com.sistemium.sissales.interfaces.STMAdapting
 import com.sistemium.sissales.interfaces.STMModelling
 import com.sistemium.sissales.interfaces.STMPersistingTransaction
 import com.sistemium.sissales.persisting.STMSQLiteDatabaseOperation
+import java.io.File
+import java.util.*
 import java.util.concurrent.Executors
 
 /**
  * Created by edgarjanvuicik on 15/11/2017.
  */
-class STMSQLiteDatabaseAdapter(override var model: STMModelling, dbPath:String) :STMAdapting {
+class STMSQLiteDatabaseAdapter(override var model: STMModelling, private var dbPath:String) :STMAdapting {
 
     val operationPoolQueue = Executors.newFixedThreadPool(STMConstants.POOL_SIZE)
 
@@ -58,17 +60,47 @@ class STMSQLiteDatabaseAdapter(override var model: STMModelling, dbPath:String) 
 
         }
 
-        operation.waitUntilTransactionIsReady()
-
-        TODO("not implemented")
-
-//        return operation.transaction
+        return operation.transaction
 
     }
 
     private fun checkModelMapping(){
 
-        TODO("not implemented")
+        val schema = STMSQLIteSchema()
+
+        val savedModelPath = dbPath.replace(".db", ".json")
+
+        val destinationModel = model.managedObjectModel
+
+        var savedModel:STMManagedObjectModel? = null
+
+        val file = File(savedModelPath)
+
+        if (file.exists()) {
+
+            val stream = file.inputStream()
+
+            val scanner = Scanner(stream)
+
+            val jsonModelString = StringBuilder()
+
+            while (scanner.hasNext()) {
+                jsonModelString.append(scanner.nextLine())
+            }
+
+            savedModel = STMManagedObjectModel(jsonModelString.toString())
+
+        }
+
+        val modelMapper = STMModelMapper(savedModel, destinationModel)
+
+        if (modelMapper.needToMigrate) {
+
+            schema.createTablesWithModelMapping(modelMapper)
+
+            modelMapper.destinationModel.saveToFile(savedModelPath)
+
+        }
 
     }
 

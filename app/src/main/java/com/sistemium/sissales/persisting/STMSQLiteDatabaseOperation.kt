@@ -15,41 +15,47 @@ class STMSQLiteDatabaseOperation(private val readOnly:Boolean, private var adapt
 
     private var database:SQLiteDatabase? = null
 
-    override fun run() {
+    private var _transaction: STMSQLiteDatabaseTransaction? = null
 
-        TODO("not implemented")
+    val transaction:STMSQLiteDatabaseTransaction by lazy {
+
+        if (_transaction != null) return@lazy _transaction!!
 
         synchronized(lock1){
 
-            if (readOnly){
+            lock1.wait()
 
-//                database = adapter.poolDatabases
-
-            }else{
-
-    //            self.database = self.stmFMDB.database;
-
-    //            [self.database beginTransaction];
-
-            }
-
-    //        self.transaction = [[STMFmdbTransaction alloc] initWithFMDatabase:self.database stmFMDB:self.stmFMDB]
-
-    //        self.transaction.operation = self
-
-            lock1.notify()
-
-            lock2.wait()
+            return@lazy _transaction!!
 
         }
 
     }
 
-    fun waitUntilTransactionIsReady(){
+    override fun run() {
 
-        synchronized(lock1){
+        synchronized(lock2){
 
-            lock1.wait()
+            if (readOnly){
+
+                database = adapter.poolDatabases.removeAt(0)
+
+            }else{
+
+                database = adapter.database
+
+                database!!.beginTransaction()
+
+            }
+
+            _transaction = STMSQLiteDatabaseTransaction(database!!, adapter)
+
+            _transaction?.operation = this
+
+            synchronized(lock1){
+                lock1.notify()
+            }
+
+            lock2.wait()
 
         }
 
@@ -77,7 +83,7 @@ class STMSQLiteDatabaseOperation(private val readOnly:Boolean, private var adapt
 
         }
 
-        lock2.notify()
+        lock2.notify() //sync nizabud
 
     }
 

@@ -10,7 +10,7 @@ class STMEntityDescription(entity: Map<*,*>){
 
     val abstract = entity["isAbstract"] == "YES"
 
-    private val attributesByName:MutableMap<String, STMAttributeDescription> = hashMapOf()
+    val attributesByName:MutableMap<String, STMAttributeDescription> = hashMapOf()
 
     val userInfo:Map<*, *>
         get() = attributesByName["userInfo"] as? Map<*, *> ?: hashMapOf<Any, Any>()
@@ -21,6 +21,26 @@ class STMEntityDescription(entity: Map<*,*>){
 
         array?.filterIsInstance<Map<*, *>>()?.map { STMAttributeDescription(it) }?.forEach { attributesByName[it.attributeName] = it }
 
+    }
+
+    override fun equals(other: Any?): Boolean {
+
+        if (other !is STMEntityDescription){
+
+            return false
+
+        }
+
+        return entityName == other.entityName && abstract == other.abstract && attributesByName == other.attributesByName && userInfo == other.userInfo
+
+    }
+
+    override fun hashCode(): Int {
+        var result = entityName.hashCode()
+        result = 31 * result + abstract.hashCode()
+        result = 31 * result + attributesByName.hashCode()
+        result = 31 * result + userInfo.hashCode()
+        return result
     }
 
 }

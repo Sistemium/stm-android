@@ -37,8 +37,14 @@ class STMCoreSessionFiler(private val context:Context): STMFiling{
         return try {
 
             val assetManager = context.assets
-            val stream = assetManager.open("iSisSales.db")
-            val file = File(context.filesDir.absolutePath+"/sqllitepath/iSisSales.db")
+            var stream = assetManager.open("model/iSisSales.json")
+            var file = File(context.filesDir.absolutePath+"/sqllitepath/iSisSales.json")
+            file.parentFile.mkdirs()
+            file.createNewFile()
+            file.writeBytes(stream.readBytes())
+
+            stream = assetManager.open("iSisSales.db")
+            file = File(context.filesDir.absolutePath+"/sqllitepath/iSisSales.db")
             file.parentFile.mkdirs()
             file.createNewFile()
             file.writeBytes(stream.readBytes())
