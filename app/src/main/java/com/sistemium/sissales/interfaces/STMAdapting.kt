@@ -10,6 +10,8 @@ interface STMAdapting {
 
     var model:STMModelling
     var storageType:STMStorageType
+    var ignoredAttributeNames:Array<String>
+    var builtInAttributeNames:Array<String>
 
     fun beginTransaction(readOnly:Boolean = false):STMPersistingTransaction
 

@@ -26,6 +26,16 @@ class STMSQLiteDatabaseAdapter(override var model: STMModelling, private var dbP
 
     override var storageType = STMStorageType.STMStorageTypeSQLiteDatabase
 
+    override var builtInAttributeNames: Array<String> = arrayOf(
+    STMConstants.DEFAULT_PERSISTING_PRIMARY_KEY,
+    STMConstants.STMPersistingKeyCreationTimestamp,
+    STMConstants.STMPersistingKeyVersion,
+    STMConstants.STMPersistingOptionLts,
+    STMConstants.STMPersistingKeyPhantom
+    )
+
+    override var ignoredAttributeNames: Array<String> = builtInAttributeNames.plus("xid")
+
     init {
 
         val flags = SQLiteDatabase.OPEN_READWRITE or SQLiteDatabase.CREATE_IF_NECESSARY or SQLiteDatabase.ENABLE_WRITE_AHEAD_LOGGING

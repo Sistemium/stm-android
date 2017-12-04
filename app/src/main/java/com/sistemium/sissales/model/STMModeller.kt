@@ -1,10 +1,8 @@
 package com.sistemium.sissales.model
 
-import android.content.Context
 import com.sistemium.sissales.base.STMFunctions
 import com.sistemium.sissales.enums.STMStorageType
 import com.sistemium.sissales.interfaces.STMModelling
-import java.util.*
 
 /**
  * Created by edgarjanvuicik on 10/11/2017.

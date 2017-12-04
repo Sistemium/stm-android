@@ -17,6 +17,17 @@ class STMFunctions{
             return _entityName
 
         }
+
+        fun removePrefixFromEntityName(entityName:String):String {
+
+            var _entityName = entityName
+
+            if (entityName.startsWith(STMConstants.ISISTEMIUM_PREFIX)) {
+                _entityName = entityName.removePrefix(STMConstants.ISISTEMIUM_PREFIX)
+            }
+            return _entityName
+
+        }
     }
 
 }
