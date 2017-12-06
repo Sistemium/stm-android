@@ -14,5 +14,6 @@ interface STMAdapting {
     var builtInAttributeNames:Array<String>
 
     fun beginTransaction(readOnly:Boolean = false):STMPersistingTransaction
+    fun endTransactionWithSuccess(transaction:STMPersistingTransaction, success:Boolean = false)
 
 }

@@ -46,13 +46,26 @@ class STMPredicate(private val predicate: String) {
 
                     subPredicates.add("$key.${STMPredicate.filterPredicate(null, value).toString()}")
 
-                } else {
+                }  else {
 
                     var comparator = value.keys.first()
 
                     if (comparator == "==") comparator = "="
 
-                    subPredicates.add("$key $comparator \"${value[value.keys.first()]}\"")
+                    if (key.endsWith(STMConstants.RELATIONSHIP_SUFFIX)){
+
+                        val table = key.removeSuffix(STMConstants.RELATIONSHIP_SUFFIX).capitalize()
+                        val xid = value.values.first() as String
+
+                        subPredicates.add("exists ( select * from $table where [id] = '$xid' and id = $key )")
+
+                        //( select * from Salesman where [id] = '5c92596b-0374-11e0-bcb9-00237deee66e' and id = salesmanId )
+
+                    }else{
+
+                        subPredicates.add("$key $comparator \"${value[value.keys.first()]}\"")
+
+                    }
 
                 }
 
@@ -89,8 +102,8 @@ class STMPredicate(private val predicate: String) {
 
     fun predicateForAdapter(adapter:STMAdapting):String?{
 
-        // need to use adapters modeling
-        TODO("not implemented")
+        // TODO use adapters modeling to fix some predicates
+        return predicate
 
     }
 

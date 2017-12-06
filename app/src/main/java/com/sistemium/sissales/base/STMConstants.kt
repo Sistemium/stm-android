@@ -23,6 +23,7 @@ class STMConstants{
         val STMPersistingKeyVersion = "deviceTs"
         val STMPersistingOptionLts = "lts"
         val STMPersistingKeyPhantom = "isFantom"
+        val RELATIONSHIP_SUFFIX = "Id"
 
     }
 

@@ -17,6 +17,8 @@ class STMSQLiteDatabaseOperation(private val readOnly:Boolean, private var adapt
 
     private var _transaction: STMSQLiteDatabaseTransaction? = null
 
+    var success = false
+
     val transaction:STMSQLiteDatabaseTransaction by lazy {
 
         if (_transaction != null) return@lazy _transaction!!
@@ -63,27 +65,27 @@ class STMSQLiteDatabaseOperation(private val readOnly:Boolean, private var adapt
 
     fun finish(){
 
-        TODO("not implemented")
-
         if (!readOnly){
 
-//            if (self.success){
-//
-//                [self.database commit]
-//
-//            }else{
-//
-//                [self.database rollback]
-//
-//            }
+            if (this.success){
+
+                database!!.setTransactionSuccessful()
+
+            }
+
+            database!!.endTransaction()
 
         }else{
 
-//            [STMFunctions pushArray:self.stmFMDB.poolDatabases object:self.database];
+            adapter.poolDatabases.add(database!!)
 
         }
 
-        lock2.notify() //sync nizabud
+        synchronized(lock2){
+
+            lock2.notify()
+
+        }
 
     }
 

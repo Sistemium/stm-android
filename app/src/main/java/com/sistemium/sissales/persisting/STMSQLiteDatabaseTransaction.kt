@@ -9,7 +9,7 @@ import com.sistemium.sissales.model.STMSQLiteDatabaseAdapter
 /**
  * Created by edgarjanvuicik on 30/11/2017.
  */
-class STMSQLiteDatabaseTransaction(database: SQLiteDatabase, private var adapter:STMSQLiteDatabaseAdapter):STMPersistingTransaction {
+class STMSQLiteDatabaseTransaction(private var database: SQLiteDatabase, private var adapter:STMSQLiteDatabaseAdapter):STMPersistingTransaction {
 
     var operation:STMSQLiteDatabaseOperation? = null
 
@@ -118,9 +118,79 @@ class STMSQLiteDatabaseTransaction(database: SQLiteDatabase, private var adapter
 
     }
 
-    private fun selectFrom(entityName:String, columns:String, where:String, _orderBy:String?):Array<Map<*, *>> {
+    private fun selectFrom(tableName:String, columns:String, where:String, orderBy:String?):Array<Map<*, *>> {
 
-        TODO("Not implemented")
+        var rez = arrayOf<Map<*, *>>()
+
+        var _where = where
+
+        var _orderBy = orderBy
+
+        if (_where.isNotEmpty()) {
+            _where = " WHERE " + _where
+        }
+
+        if (_orderBy != null) _orderBy = ""
+
+        val query = "SELECT $columns FROM [$tableName]$_where $_orderBy"
+
+        val c = this.database.rawQuery(query,null)
+
+        if (c.moveToFirst()) {
+            do {
+
+                val dict = hashMapOf<String, Any>()
+
+                for (columnName in c.columnNames){
+
+                    val index = c.getColumnIndex(columnName)
+
+                    //TODO non string types
+                    val data = c.getString(index)
+
+                    if (data != null){
+
+                        dict.put(columnName, data)
+
+                    }
+
+                }
+
+                rez = rez.plus(dict)
+
+            } while (c.moveToNext())
+        }
+        c.close()
+
+        return rez
+
+//        FMResultSet *s = [self.database executeQuery:query];
+//
+//        NSArray *booleanKeys = [self.stmFMDB.columnsByTable[tableName] allKeysForObject:[NSNumber numberWithUnsignedInteger:NSBooleanAttributeType]];
+//
+//        NSArray *jsonKeys = [self.stmFMDB.columnsByTable[tableName] allKeysForObject:[NSNumber numberWithUnsignedInteger:NSTransformableAttributeType]];
+//
+//        while ([s next]) {
+//
+//            NSMutableDictionary *dict = (NSMutableDictionary*)s.resultDictionary;
+//
+//            for (NSString *key in booleanKeys){
+//                if ([STMFunctions isNotNull:[dict valueForKey:key]]){
+//                    dict[key] = (__bridge id _Nullable)([dict[key] boolValue] ? kCFBooleanTrue : kCFBooleanFalse);
+//                }
+//            }
+//
+//            for (NSString *key in jsonKeys){
+//                if ([STMFunctions isNotNull:[dict valueForKey:key]]){
+//                    dict[key] = [STMFunctions jsonObjectFromString:dict[key]];
+//                }
+//            }
+//
+//            [rez addObject:dict.copy];
+//        }
+//
+//        // there will be memory warnings loading catalogue on an old device if no copy
+//        return rez.copy;
 
     }
 

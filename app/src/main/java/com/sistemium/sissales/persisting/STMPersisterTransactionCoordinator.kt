@@ -24,7 +24,12 @@ class STMPersisterTransactionCoordinator(private val adapters:HashMap<STMStorage
 
     fun endTransactionWithSuccess(success:Boolean){
 
-        TODO("not implemented")
+        for (key in transactions.keys){
+            val transaction = transactions[key]
+            adapters[key]?.endTransactionWithSuccess(transaction!!, success)
+        }
+
+        transactions.clear()
 
     }
 
@@ -35,7 +40,7 @@ class STMPersisterTransactionCoordinator(private val adapters:HashMap<STMStorage
         var transaction = transactions[storageType]
 
         if (transaction == null && adapters.keys.contains(storageType)){
-            transactions[storageType] = adapters[storageType]!!.beginTransaction(false)
+            transactions[storageType] = adapters[storageType]!!.beginTransaction(readOnly)
             transaction = transactions[storageType]
         }
 

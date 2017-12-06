@@ -7,6 +7,7 @@ import com.sistemium.sissales.interfaces.STMAdapting
 import com.sistemium.sissales.interfaces.STMModelling
 import com.sistemium.sissales.interfaces.STMPersistingTransaction
 import com.sistemium.sissales.persisting.STMSQLiteDatabaseOperation
+import com.sistemium.sissales.persisting.STMSQLiteDatabaseTransaction
 import java.io.File
 import java.util.*
 import java.util.concurrent.Executors
@@ -71,6 +72,16 @@ class STMSQLiteDatabaseAdapter(override var model: STMModelling, private var dbP
         }
 
         return operation.transaction
+
+    }
+
+    override fun endTransactionWithSuccess(transaction: STMPersistingTransaction, success: Boolean) {
+
+        val operation = (transaction as STMSQLiteDatabaseTransaction).operation
+
+        operation!!.success = success
+
+        operation.finish()
 
     }
 
