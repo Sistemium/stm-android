@@ -12,14 +12,34 @@ class STMEntityDescription(entity: Map<*,*>){
 
     val attributesByName:MutableMap<String, STMAttributeDescription> = hashMapOf()
 
+    val relationshipsByName:MutableMap<String, STMRelationshipDescription> = hashMapOf()
+
     val userInfo:Map<*, *>
         get() = attributesByName["userInfo"] as? Map<*, *> ?: hashMapOf<Any, Any>()
 
+    val parentEntity = entity["parentEntity"] as? String
+
     init {
 
-        val array =  entity["attribute"] as? Array<*>
+        var array = entity["attribute"] as? ArrayList<*>
+
+        if (entity["attribute"] is Map<*,*>){
+
+            array = arrayListOf(entity["attribute"] as Map<*,*>)
+
+        }
 
         array?.filterIsInstance<Map<*, *>>()?.map { STMAttributeDescription(it) }?.forEach { attributesByName[it.attributeName] = it }
+
+        array = entity["relationship"] as? ArrayList<*>
+
+        if (entity["relationship"] is Map<*,*>){
+
+            array = arrayListOf(entity["relationship"] as Map<*,*>)
+
+        }
+
+        array?.filterIsInstance<Map<*, *>>()?.map { STMRelationshipDescription(it) }?.forEach { relationshipsByName[it.relationshipName] = it }
 
     }
 

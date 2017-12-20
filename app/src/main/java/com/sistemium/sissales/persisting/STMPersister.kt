@@ -12,7 +12,13 @@ import nl.komponents.kovenant.task
 class STMPersister(private val runner:STMPersistingRunning):STMPersistingSync,STMPersistingPromised {
 
     override fun findSync(entityName: String, identifier: String, options: Map<*, *>?): Map<*, *> {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+
+        val predicate = STMPredicate.primaryKeyPredicate(arrayOf(identifier))
+
+        val results = findAllSync(entityName, predicate, options)
+
+        return results.first()
+
     }
 
     override fun findAllSync(entityName: String, predicate: STMPredicate?, options: Map<*, *>?): Array<Map<*, *>> {

@@ -1,21 +1,88 @@
 package com.sistemium.sissales.persisting
 
 import com.sistemium.sissales.base.STMConstants
+import com.sistemium.sissales.base.STMFunctions
 import com.sistemium.sissales.interfaces.STMAdapting
 
 /**
  * Created by edgarjanvuicik on 10/11/2017.
  */
-class STMPredicate(private val predicate: String) {
+
+class STMPredicate {
+
+    enum class PredicateType{
+        Value, PredicateArray, Comparison
+    }
+
+    constructor(relation: String, value:String){
+        this.relation = relation
+        this.value = value
+        this.type = PredicateType.Value
+    }
+
+    constructor(value:String){
+        this.relation = relation
+        this.value = value
+        this.type = PredicateType.Value
+    }
+
+    constructor(relation:String, predicateArray:List<STMPredicate>){
+        this.relation = relation
+        this.predicateArray = predicateArray
+        this.type = PredicateType.PredicateArray
+    }
+
+    constructor(relation:String, leftPredicate:STMPredicate, rightPredicate:STMPredicate){
+        this.relation = relation
+        this.leftPredicate = leftPredicate
+        this.rightPredicate = rightPredicate
+        this.type = PredicateType.Comparison
+    }
+
+    private var value:String? = null
+    private var predicateArray:List<STMPredicate>? = null
+    private var leftPredicate:STMPredicate? = null
+    private var rightPredicate:STMPredicate? = null
+    private var relation:String? = null
+    private var type:PredicateType
 
     companion object {
 
         @JvmStatic
-        fun primaryKeyPredicateEntityName(values:Array<*>):STMPredicate {
+        fun primaryKeyPredicate(values:Array<*>):STMPredicate {
 
-            if (values.size == 1) return STMPredicate("${STMConstants.DEFAULT_PERSISTING_PRIMARY_KEY} = \"${values.first().toString()}\"")
+            return if (values.size == 1) {
 
-            return STMPredicate("${STMConstants.DEFAULT_PERSISTING_PRIMARY_KEY} IN (${values.joinToString(", ") { value -> "\"${value.toString()}\"" }})")
+                STMPredicate("=", STMPredicate(STMConstants.DEFAULT_PERSISTING_PRIMARY_KEY), STMPredicate("\"${values.first().toString()}\""))
+
+            }else {
+
+                val valueArray = values.map { value -> STMPredicate("\"${value.toString()}\"") }
+
+                STMPredicate(" IN ", STMPredicate(STMConstants.DEFAULT_PERSISTING_PRIMARY_KEY), STMPredicate(", " ,valueArray))
+
+            }
+
+        }
+
+        @JvmStatic
+        fun comparatorPredicate(map: Map<*,*>):STMPredicate{
+
+            val key = map.keys.first() as String
+
+            val value = map[key] as Map<*,*>
+
+            var comparator = value.keys.first()
+
+            if (comparator == "==") comparator = "="
+
+            var rightPredicateString = "\"${value[value.keys.first()]}\""
+
+            if (value[value.keys.first()] is Boolean || value[value.keys.first()] is Number) rightPredicateString = "${value[value.keys.first()]}"
+
+            val predicate = STMPredicate(comparator.toString(), STMPredicate(key), STMPredicate(rightPredicateString))
+
+            return predicate
 
         }
 
@@ -38,32 +105,49 @@ class STMPredicate(private val predicate: String) {
 
             if (filterMap.isEmpty()) return null
 
-            val subPredicates = arrayListOf<String>()
+            val subPredicates = arrayListOf<STMPredicate>()
 
             for ((key,value) in filterMap){
 
                 if (key.startsWith("ANY")) {
 
-                    subPredicates.add("$key.${STMPredicate.filterPredicate(null, value).toString()}")
+                    val anyValue = key.split(" ").last()
+
+                    val whereVal = STMPredicate(comparatorPredicate(value).predicateForAdapter(null, null)!!)
+
+                    val predicate = STMPredicate("", arrayListOf(STMPredicate("exists ( select * from "),
+                            STMPredicate("?", anyValue),
+                            STMPredicate(" where "),
+                            whereVal,
+                            STMPredicate(" and "),
+                            STMPredicate("?", "uncapitalizedTableName"),
+                            STMPredicate("Id = "),
+                            STMPredicate("?", "capitalizedTableName"),
+                            STMPredicate(".id )")
+                    ))
+
+                    subPredicates.add(predicate)
 
                 }  else {
 
-                    var comparator = value.keys.first()
-
-                    if (comparator == "==") comparator = "="
-
                     if (key.endsWith(STMConstants.RELATIONSHIP_SUFFIX)){
 
-                        val table = key.removeSuffix(STMConstants.RELATIONSHIP_SUFFIX).capitalize()
                         val xid = value.values.first() as String
 
-                        subPredicates.add("exists ( select * from $table where [id] = '$xid' and id = $key )")
+                        val predicate = STMPredicate("nonNull", arrayListOf(STMPredicate("exists ( select * from "),
+                                STMPredicate("?", key),
+                                STMPredicate(" where [id] = '$xid' and id = "),
+                                STMPredicate("relation", key),
+                                STMPredicate(")")
+                        ))
 
-                        //( select * from Salesman where [id] = '5c92596b-0374-11e0-bcb9-00237deee66e' and id = salesmanId )
+                        subPredicates.add(predicate)
 
                     }else{
 
-                        subPredicates.add("$key $comparator \"${value[value.keys.first()]}\"")
+                        val predicate = comparatorPredicate(hashMapOf(key to value))
+
+                        subPredicates.add(predicate)
 
                     }
 
@@ -78,35 +162,139 @@ class STMPredicate(private val predicate: String) {
         @JvmStatic
         fun predicateWithOptions(options:Map<*,*>?, predicate: STMPredicate?):STMPredicate?{
 
-            if (options?.get(STMConstants.STMPersistingOptionFantoms) as? String != null){
+            val isFantom = options?.get(STMConstants.STMPersistingOptionFantoms) as? Boolean ?: false
 
-                val phantomPredicate = STMPredicate("isFantom = ${(options!![STMConstants.STMPersistingOptionFantoms] as String).toBoolean()}")
+            val phantomPredicate = STMPredicate("=", STMPredicate("isFantom"), STMPredicate("${if (isFantom) 1 else 0}"))
 
-                return STMPredicate.combinePredicates(arrayListOf(predicate, phantomPredicate))
+            if (predicate == null) return phantomPredicate
 
-            }
+            return STMPredicate.combinePredicates(arrayListOf(predicate, phantomPredicate))
 
-            return predicate
 
         }
 
         @JvmStatic
+        private fun combinePredicates(subPredicates:ArrayList<STMPredicate>):STMPredicate{
 
-        private fun combinePredicates(subPredicates:ArrayList<*>):STMPredicate =
-                STMPredicate("(${subPredicates.joinToString(") AND (")})")
+            if (subPredicates.size == 1){
 
-        @JvmStatic
-        fun predicateWithOptions(options:Map<*,*>):STMPredicate? = predicateWithOptions(options, null)
+                return subPredicates.first()
 
-    }
+            }
 
-    fun predicateForAdapter(adapter:STMAdapting):String?{
+            return STMPredicate(") AND (", subPredicates)
 
-        // TODO use adapters modeling to fix some predicates
-        return predicate
+        }
 
     }
 
-    override fun toString(): String = predicate
+    fun predicateForAdapter(adapter:STMAdapting?, entityName:String?):String?{
+
+        when(type){
+
+            STMPredicate.PredicateType.Value -> {
+
+                if (relation == "?" && adapter != null && entityName != null){
+
+                    if (value == "uncapitalizedTableName") return STMFunctions.removePrefixFromEntityName(entityName).decapitalize()
+
+                    if (value == "capitalizedTableName") return STMFunctions.removePrefixFromEntityName(entityName).capitalize()
+
+                    val relationships = adapter.model.entitiesByName[STMFunctions.addPrefixToEntityName(entityName)]?.relationshipsByName
+
+                    return if (relationships?.containsKey(value) == true) {
+
+                        STMFunctions.removePrefixFromEntityName(relationships[value]?.destinationEntityName!!)
+
+                    } else {
+
+                        value?.removeSuffix(STMConstants.RELATIONSHIP_SUFFIX)?.capitalize()
+
+                    }
+
+                }
+
+                if (relation == "relation"  && adapter != null && entityName != null) {
+
+                    val relationships = adapter.model.entitiesByName[STMFunctions.addPrefixToEntityName(entityName)]?.relationshipsByName
+
+                    return if (relationships?.containsKey(value?.removeSuffix(STMConstants.RELATIONSHIP_SUFFIX)) == true) {
+
+                        value
+
+                    } else {
+
+                        null
+
+                    }
+
+
+                }
+
+                if (value == "false"){
+
+                    return "0"
+
+                }
+
+                if (value == "true"){
+
+                    return "1"
+
+                }
+
+
+                return value
+
+            }
+
+            STMPredicate.PredicateType.PredicateArray -> {
+
+                val array = predicateArray!!.mapNotNull {
+
+                    it.predicateForAdapter(adapter, entityName)
+
+                }
+
+                if (relation == "nonNull"){
+
+                    return if (predicateArray!!.size == array.size){
+
+                        "(${array.joinToString("")})"
+
+                    }else{
+
+                        null
+
+                    }
+
+                }
+
+                return "(${array.joinToString(relation!!)})"
+
+            }
+
+            STMPredicate.PredicateType.Comparison -> {
+
+                val left = leftPredicate?.predicateForAdapter(adapter, entityName)
+
+                val right = rightPredicate?.predicateForAdapter(adapter, entityName)
+
+                val valid = entityName == null || adapter == null || adapter.model.fieldsForEntityName(entityName).containsKey(left)
+
+                if (left != null && right != null && valid){
+
+                    return "$left $relation $right"
+
+                }
+
+                return null
+
+            }
+        }
+
+    }
+
+    override fun toString(): String = throw Exception("should not, use predicateForAdapter instead")
 
 }

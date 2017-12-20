@@ -1,6 +1,7 @@
 package com.sistemium.sissales.persisting
 
 import android.database.sqlite.SQLiteDatabase
+import android.util.Log
 import com.sistemium.sissales.base.STMConstants
 import com.sistemium.sissales.base.STMFunctions
 import com.sistemium.sissales.interfaces.STMPersistingTransaction
@@ -85,14 +86,12 @@ class STMSQLiteDatabaseTransaction(private var database: SQLiteDatabase, private
         var where = ""
 
         if (predicate != null){
-            where = predicate.predicateForAdapter(adapter) ?: throw Exception("wrong predicate")
-            where = where
-                    .replace(" AND ()", "")
-                    .replace("?uncapitalizedTableName?", tableName.toLowerCase())
-                    .replace("?capitalizedTableName?", tableName.capitalize())
+            where = predicate.predicateForAdapter(adapter, entityName) ?: ""
+            Log.d("DEBUG:EntityName", entityName)
+            Log.d("DEBUG:PREDICATE", where)
         }
 
-        return selectFrom(entityName, columns, where, _orderBy)
+        return selectFrom(tableName, columns, where, _orderBy)
 
     }
 

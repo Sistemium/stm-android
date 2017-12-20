@@ -1,6 +1,7 @@
 package com.sistemium.sissales.persisting
 
 import android.database.sqlite.SQLiteDatabase
+import android.util.Log
 import com.sistemium.sissales.model.STMSQLiteDatabaseAdapter
 
 /**
@@ -35,27 +36,32 @@ class STMSQLiteDatabaseOperation(private val readOnly:Boolean, private var adapt
 
     override fun run() {
 
-        synchronized(lock2){
+        if (readOnly){
 
-            if (readOnly){
+            Log.d("DEBUG", "removing pool database from array")
+            Log.d("DEBUG", "pool database count before remove: ${adapter.poolDatabases.size}")
 
+            synchronized(adapter.poolDatabases){
                 database = adapter.poolDatabases.removeAt(0)
-
-            }else{
-
-                database = adapter.database
-
-                database!!.beginTransaction()
-
             }
 
-            _transaction = STMSQLiteDatabaseTransaction(database!!, adapter)
+        }else{
 
-            _transaction?.operation = this
+            database = adapter.database
 
-            synchronized(lock1){
-                lock1.notify()
-            }
+            database!!.beginTransaction()
+
+        }
+
+        _transaction = STMSQLiteDatabaseTransaction(database!!, adapter)
+
+        _transaction?.operation = this
+
+        synchronized(lock1){
+            lock1.notify()
+        }
+
+        synchronized(lock2){
 
             lock2.wait()
 
@@ -77,7 +83,12 @@ class STMSQLiteDatabaseOperation(private val readOnly:Boolean, private var adapt
 
         }else{
 
-            adapter.poolDatabases.add(database!!)
+            Log.d("Debug", "returning pool database to array")
+            Log.d("DEBUG", "pool database count before append: ${adapter.poolDatabases.size}")
+
+            synchronized(adapter.poolDatabases){
+                adapter.poolDatabases.add(database!!)
+            }
 
         }
 

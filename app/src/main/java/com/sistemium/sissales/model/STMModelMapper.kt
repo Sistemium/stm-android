@@ -9,7 +9,6 @@ class STMModelMapper(var savedModel:STMManagedObjectModel?, var destinationModel
 
     init {
 
-        // ugly pyramidal code, but it seems that kotlin doesn't allow use return in init
         if (savedModel == null) {
             needToMigrate = true
         }else{

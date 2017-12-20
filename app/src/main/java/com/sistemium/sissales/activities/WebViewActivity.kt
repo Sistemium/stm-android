@@ -56,7 +56,7 @@ class WebViewActivity : Activity() {
 
         webView?.addJavascriptInterface(webInterface, "stmAndroid")
 
-        webView?.loadUrl("http://10.0.1.2:3000")
+        webView?.loadUrl("http://10.0.1.5:3002")
 
 
     }

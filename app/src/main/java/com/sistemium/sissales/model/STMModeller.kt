@@ -43,7 +43,19 @@ class STMModeller(modelJSON:String) : STMModelling {
     }
 
     override fun fieldsForEntityName(entityName: String): Map<String, STMAttributeDescription> {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+
+        val _entityName = STMFunctions.addPrefixToEntityName(entityName)
+
+        val current = entitiesByName[_entityName]?.attributesByName ?: hashMapOf()
+
+        if (entitiesByName[_entityName]?.parentEntity != null){
+            // TODO cashing
+            return current.plus(fieldsForEntityName(entitiesByName[_entityName]?.parentEntity!!))
+
+        }
+
+        return current
+
     }
 
     override fun objectRelationshipsForEntityName(entityName: String, isToMany: Boolean, cascade: Boolean): Map<String, STMRelationshipDescription> {
