@@ -24,13 +24,11 @@ interface STMModelling {
 
     fun fieldsForEntityName(entityName:String):Map<String, STMAttributeDescription>
 
-    fun objectRelationshipsForEntityName(entityName:String, isToMany:Boolean, cascade:Boolean):Map<String, STMRelationshipDescription>
-
-    fun objectRelationshipsForEntityName(entityName:String, isToMany:Boolean, cascade:Boolean, optional:Boolean):Map<String, STMRelationshipDescription>
+    fun objectRelationshipsForEntityName(entityName:String, isToMany:Boolean? = null, cascade:Boolean? = null, optional:Boolean? = null):Map<String, STMRelationshipDescription>
 
     fun toOneRelationshipsForEntityName(entityName:String):Map<String, String>
 
-    fun objectRelationshipsForEntityName(entityName:String, isToMany:Boolean):Map<String, String>
+    fun objectRelationshipsForEntityName(entityName:String, isToMany:Boolean?):Map<String, String>
 
     fun hierarchyForEntityName(entityName:String):Set<String>
 

@@ -2,10 +2,10 @@
     "model": {
         "type": "com.apple.IDECoreDataModeler.DataModel",
         "documentVersion": "1.0",
-        "lastSavedToolsVersion": "13241",
-        "systemVersion": "16G29",
+        "lastSavedToolsVersion": "13772",
+        "systemVersion": "17C88",
         "minimumToolsVersion": "Xcode 7.3",
-        "sourceLanguage": "Objective-C",
+        "sourceLanguage": "ObjectiveC",
         "entity": [
             {
                 "name": "STMAbstract",
@@ -85,6 +85,16 @@
                         "destinationEntity": "STMCashing",
                         "inverseName": "creator",
                         "inverseEntity": "STMCashing",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "commentarys",
+                        "optional": "YES",
+                        "toMany": "YES",
+                        "deletionRule": "Cascade",
+                        "destinationEntity": "STMCommentary",
+                        "inverseName": "author",
+                        "inverseEntity": "STMCommentary",
                         "syncable": "YES"
                     },
                     {
@@ -902,6 +912,42 @@
                         "key": "STORE",
                         "value": "FMDB"
                     }
+                }
+            },
+            {
+                "name": "STMCommentary",
+                "parentEntity": "STMAbstract",
+                "syncable": "YES",
+                "attribute": [
+                    {
+                        "name": "authId",
+                        "optional": "YES",
+                        "attributeType": "String",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "body",
+                        "optional": "YES",
+                        "attributeType": "String",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "timestamp",
+                        "optional": "YES",
+                        "attributeType": "Date",
+                        "usesScalarValueType": "NO",
+                        "syncable": "YES"
+                    }
+                ],
+                "relationship": {
+                    "name": "author",
+                    "optional": "YES",
+                    "maxCount": "1",
+                    "deletionRule": "Nullify",
+                    "destinationEntity": "STMAccount",
+                    "inverseName": "commentarys",
+                    "inverseEntity": "STMAccount",
+                    "syncable": "YES"
                 }
             },
             {
@@ -1814,6 +1860,13 @@
                         "syncable": "YES"
                     },
                     {
+                        "name": "forceShow",
+                        "optional": "YES",
+                        "attributeType": "Boolean",
+                        "usesScalarValueType": "NO",
+                        "syncable": "YES"
+                    },
+                    {
                         "name": "ratingsCount",
                         "optional": "YES",
                         "attributeType": "Integer 64",
@@ -1836,14 +1889,41 @@
                         "syncable": "YES"
                     }
                 ],
+                "relationship": [
+                    {
+                        "name": "newsMessagePictures",
+                        "optional": "YES",
+                        "toMany": "YES",
+                        "deletionRule": "Cascade",
+                        "destinationEntity": "STMNewsMessagePicture",
+                        "inverseName": "newsMessage",
+                        "inverseEntity": "STMNewsMessagePicture",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "userNewsMessages",
+                        "optional": "YES",
+                        "toMany": "YES",
+                        "deletionRule": "Cascade",
+                        "destinationEntity": "STMUserNewsMessage",
+                        "inverseName": "newsMessage",
+                        "inverseEntity": "STMUserNewsMessage",
+                        "syncable": "YES"
+                    }
+                ]
+            },
+            {
+                "name": "STMNewsMessagePicture",
+                "parentEntity": "STMCorePicture",
+                "syncable": "YES",
                 "relationship": {
-                    "name": "userNewsMessages",
+                    "name": "newsMessage",
                     "optional": "YES",
-                    "toMany": "YES",
-                    "deletionRule": "Cascade",
-                    "destinationEntity": "STMUserNewsMessage",
-                    "inverseName": "newsMessage",
-                    "inverseEntity": "STMUserNewsMessage",
+                    "maxCount": "1",
+                    "deletionRule": "Nullify",
+                    "destinationEntity": "STMNewsMessage",
+                    "inverseName": "newsMessagePictures",
+                    "inverseEntity": "STMNewsMessage",
                     "syncable": "YES"
                 }
             },
@@ -2713,7 +2793,6 @@
                         "optional": "YES",
                         "attributeType": "Decimal",
                         "defaultValueString": "0.0",
-                        "indexed": "YES",
                         "syncable": "YES"
                     },
                     {
@@ -3211,6 +3290,7 @@
                         "name": "date",
                         "optional": "YES",
                         "attributeType": "String",
+                        "indexed": "YES",
                         "syncable": "YES"
                     },
                     {
@@ -3390,6 +3470,40 @@
                         "destinationEntity": "STMShipment",
                         "inverseName": "positions",
                         "inverseEntity": "STMShipment",
+                        "syncable": "YES"
+                    }
+                ]
+            },
+            {
+                "name": "STMSQLPatch",
+                "parentEntity": "STMAbstract",
+                "syncable": "YES",
+                "attribute": [
+                    {
+                        "name": "condition",
+                        "optional": "YES",
+                        "attributeType": "String",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "isProcessed",
+                        "optional": "YES",
+                        "attributeType": "Boolean",
+                        "usesScalarValueType": "NO",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "ord",
+                        "optional": "YES",
+                        "attributeType": "Integer 64",
+                        "defaultValueString": "0",
+                        "usesScalarValueType": "NO",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "patch",
+                        "optional": "YES",
+                        "attributeType": "String",
                         "syncable": "YES"
                     }
                 ]
@@ -3598,6 +3712,7 @@
                     "name": "date",
                     "optional": "YES",
                     "attributeType": "String",
+                    "indexed": "YES",
                     "syncable": "YES"
                 },
                 "relationship": [
@@ -3902,6 +4017,535 @@
                     }
                 ]
             }
-        ]
+        ],
+        "elements": {
+            "element": [
+                {
+                    "name": "STMAbstract",
+                    "positionX": "1341",
+                    "positionY": "2106",
+                    "width": "128",
+                    "height": "105"
+                },
+                {
+                    "name": "STMAccount",
+                    "positionX": "1323",
+                    "positionY": "2088",
+                    "width": "128",
+                    "height": "165"
+                },
+                {
+                    "name": "STMArticle",
+                    "positionX": "1163",
+                    "positionY": "619",
+                    "width": "128",
+                    "height": "375"
+                },
+                {
+                    "name": "STMArticleGroup",
+                    "positionX": "1386",
+                    "positionY": "918",
+                    "width": "128",
+                    "height": "150"
+                },
+                {
+                    "name": "STMArticlePicture",
+                    "positionX": "38",
+                    "positionY": "792",
+                    "width": "128",
+                    "height": "73"
+                },
+                {
+                    "name": "STMArticlePictureArticle",
+                    "positionX": "407",
+                    "positionY": "349",
+                    "width": "128",
+                    "height": "75"
+                },
+                {
+                    "name": "STMBarCodeScan",
+                    "positionX": "72",
+                    "positionY": "2286",
+                    "width": "128",
+                    "height": "90"
+                },
+                {
+                    "name": "STMBarCodeType",
+                    "positionX": "218",
+                    "positionY": "2286",
+                    "width": "128",
+                    "height": "105"
+                },
+                {
+                    "name": "STMBatteryStatus",
+                    "positionX": "648",
+                    "positionY": "2286",
+                    "width": "128",
+                    "height": "75"
+                },
+                {
+                    "name": "STMCampaign",
+                    "positionX": "1206",
+                    "positionY": "2016",
+                    "width": "128",
+                    "height": "150"
+                },
+                {
+                    "name": "STMCampaignGroup",
+                    "positionX": "1215",
+                    "positionY": "2025",
+                    "width": "128",
+                    "height": "105"
+                },
+                {
+                    "name": "STMCampaignPicture",
+                    "positionX": "1197",
+                    "positionY": "2007",
+                    "width": "128",
+                    "height": "60"
+                },
+                {
+                    "name": "STMCashing",
+                    "positionX": "1368",
+                    "positionY": "2133",
+                    "width": "128",
+                    "height": "165"
+                },
+                {
+                    "name": "STMCatalogueAlert",
+                    "positionX": "1314",
+                    "positionY": "2079",
+                    "width": "128",
+                    "height": "150"
+                },
+                {
+                    "name": "STMClientData",
+                    "positionX": "936",
+                    "positionY": "2286",
+                    "width": "128",
+                    "height": "270"
+                },
+                {
+                    "name": "STMClientEntity",
+                    "positionX": "70",
+                    "positionY": "2286",
+                    "width": "128",
+                    "height": "75"
+                },
+                {
+                    "name": "STMCommentary",
+                    "positionX": "1359",
+                    "positionY": "2124",
+                    "width": "128",
+                    "height": "105"
+                },
+                {
+                    "name": "STMContract",
+                    "positionX": "1388",
+                    "positionY": "1261",
+                    "width": "128",
+                    "height": "195"
+                },
+                {
+                    "name": "STMContractArticle",
+                    "positionX": "1350",
+                    "positionY": "2115",
+                    "width": "128",
+                    "height": "90"
+                },
+                {
+                    "name": "STMContractPriceGroup",
+                    "positionX": "1359",
+                    "positionY": "2124",
+                    "width": "128",
+                    "height": "90"
+                },
+                {
+                    "name": "STMCoreLocation",
+                    "positionX": "495",
+                    "positionY": "1179",
+                    "width": "128",
+                    "height": "195"
+                },
+                {
+                    "name": "STMCorePhoto",
+                    "positionX": "272",
+                    "positionY": "1147",
+                    "width": "128",
+                    "height": "60"
+                },
+                {
+                    "name": "STMCorePicture",
+                    "positionX": "92",
+                    "positionY": "1188",
+                    "width": "128",
+                    "height": "180"
+                },
+                {
+                    "name": "STMDatum",
+                    "positionX": "1224",
+                    "positionY": "2286",
+                    "width": "128",
+                    "height": "135"
+                },
+                {
+                    "name": "STMDebt",
+                    "positionX": "1359",
+                    "positionY": "2124",
+                    "width": "128",
+                    "height": "210"
+                },
+                {
+                    "name": "STMDriver",
+                    "positionX": "1323",
+                    "positionY": "2088",
+                    "width": "128",
+                    "height": "120"
+                },
+                {
+                    "name": "STMEntity",
+                    "positionX": "232",
+                    "positionY": "681",
+                    "width": "128",
+                    "height": "240"
+                },
+                {
+                    "name": "STMJson",
+                    "positionX": "504",
+                    "positionY": "2286",
+                    "width": "128",
+                    "height": "90"
+                },
+                {
+                    "name": "STMLegalEntity",
+                    "positionX": "1368",
+                    "positionY": "2133",
+                    "width": "128",
+                    "height": "75"
+                },
+                {
+                    "name": "STMLegalForm",
+                    "positionX": "1368",
+                    "positionY": "1546",
+                    "width": "128",
+                    "height": "105"
+                },
+                {
+                    "name": "STMLocation",
+                    "positionX": "720",
+                    "positionY": "1135",
+                    "width": "128",
+                    "height": "88"
+                },
+                {
+                    "name": "STMLogMessage",
+                    "positionX": "792",
+                    "positionY": "2286",
+                    "width": "128",
+                    "height": "75"
+                },
+                {
+                    "name": "STMMessage",
+                    "positionX": "252",
+                    "positionY": "1083",
+                    "width": "128",
+                    "height": "180"
+                },
+                {
+                    "name": "STMMessagePicture",
+                    "positionX": "72",
+                    "positionY": "999",
+                    "width": "128",
+                    "height": "73"
+                },
+                {
+                    "name": "STMNewsMessage",
+                    "positionX": "1368",
+                    "positionY": "2133",
+                    "width": "128",
+                    "height": "210"
+                },
+                {
+                    "name": "STMNewsMessagePicture",
+                    "positionX": "1368",
+                    "positionY": "2133",
+                    "width": "128",
+                    "height": "60"
+                },
+                {
+                    "name": "STMOutlet",
+                    "positionX": "954",
+                    "positionY": "1620",
+                    "width": "128",
+                    "height": "360"
+                },
+                {
+                    "name": "STMOutletPhoto",
+                    "positionX": "513",
+                    "positionY": "1278",
+                    "width": "128",
+                    "height": "73"
+                },
+                {
+                    "name": "STMOutletRestriction",
+                    "positionX": "1332",
+                    "positionY": "2097",
+                    "width": "128",
+                    "height": "75"
+                },
+                {
+                    "name": "STMOutletSalesmanContract",
+                    "positionX": "1152",
+                    "positionY": "1287",
+                    "width": "128",
+                    "height": "120"
+                },
+                {
+                    "name": "STMPartner",
+                    "positionX": "1170",
+                    "positionY": "1594",
+                    "width": "128",
+                    "height": "225"
+                },
+                {
+                    "name": "STMPartnerArticle",
+                    "positionX": "1359",
+                    "positionY": "2124",
+                    "width": "128",
+                    "height": "90"
+                },
+                {
+                    "name": "STMPartnerPriceGroup",
+                    "positionX": "1368",
+                    "positionY": "2133",
+                    "width": "128",
+                    "height": "90"
+                },
+                {
+                    "name": "STMPhotoReport",
+                    "positionX": "1314",
+                    "positionY": "2079",
+                    "width": "128",
+                    "height": "90"
+                },
+                {
+                    "name": "STMPrice",
+                    "positionX": "1575",
+                    "positionY": "517",
+                    "width": "128",
+                    "height": "90"
+                },
+                {
+                    "name": "STMPriceGroup",
+                    "positionX": "1368",
+                    "positionY": "2133",
+                    "width": "128",
+                    "height": "105"
+                },
+                {
+                    "name": "STMPriceType",
+                    "positionX": "1377",
+                    "positionY": "262",
+                    "width": "128",
+                    "height": "150"
+                },
+                {
+                    "name": "STMRecordStatus",
+                    "positionX": "360",
+                    "positionY": "2286",
+                    "width": "128",
+                    "height": "120"
+                },
+                {
+                    "name": "STMRestriction",
+                    "positionX": "1350",
+                    "positionY": "2115",
+                    "width": "128",
+                    "height": "120"
+                },
+                {
+                    "name": "STMRestrictionArticle",
+                    "positionX": "1341",
+                    "positionY": "2106",
+                    "width": "128",
+                    "height": "75"
+                },
+                {
+                    "name": "STMSaleOrder",
+                    "positionX": "945",
+                    "positionY": "901",
+                    "width": "128",
+                    "height": "315"
+                },
+                {
+                    "name": "STMSaleOrderPosition",
+                    "positionX": "1134",
+                    "positionY": "999",
+                    "width": "128",
+                    "height": "210"
+                },
+                {
+                    "name": "STMSalesman",
+                    "positionX": "974",
+                    "positionY": "1242",
+                    "width": "128",
+                    "height": "195"
+                },
+                {
+                    "name": "STMSalesmanOutletRestriction",
+                    "positionX": "1323",
+                    "positionY": "2088",
+                    "width": "128",
+                    "height": "90"
+                },
+                {
+                    "name": "STMSchedule",
+                    "positionX": "504",
+                    "positionY": "810",
+                    "width": "128",
+                    "height": "105"
+                },
+                {
+                    "name": "STMScheduledEvent",
+                    "positionX": "686",
+                    "positionY": "747",
+                    "width": "128",
+                    "height": "150"
+                },
+                {
+                    "name": "STMSchedulePurpose",
+                    "positionX": "342",
+                    "positionY": "765",
+                    "width": "128",
+                    "height": "105"
+                },
+                {
+                    "name": "STMSetting",
+                    "positionX": "1080",
+                    "positionY": "2286",
+                    "width": "128",
+                    "height": "90"
+                },
+                {
+                    "name": "STMShipment",
+                    "positionX": "1341",
+                    "positionY": "2106",
+                    "width": "128",
+                    "height": "165"
+                },
+                {
+                    "name": "STMShipmentEgais",
+                    "positionX": "1368",
+                    "positionY": "2133",
+                    "width": "128",
+                    "height": "165"
+                },
+                {
+                    "name": "STMShipmentPosition",
+                    "positionX": "1332",
+                    "positionY": "2097",
+                    "width": "128",
+                    "height": "120"
+                },
+                {
+                    "name": "STMStock",
+                    "positionX": "947",
+                    "positionY": "540",
+                    "width": "128",
+                    "height": "90"
+                },
+                {
+                    "name": "STMUncashing",
+                    "positionX": "1350",
+                    "positionY": "2115",
+                    "width": "128",
+                    "height": "195"
+                },
+                {
+                    "name": "STMUncashingPicture",
+                    "positionX": "1341",
+                    "positionY": "2106",
+                    "width": "128",
+                    "height": "60"
+                },
+                {
+                    "name": "STMUncashingPlace",
+                    "positionX": "1332",
+                    "positionY": "2097",
+                    "width": "128",
+                    "height": "90"
+                },
+                {
+                    "name": "STMUserNewsMessage",
+                    "positionX": "1359",
+                    "positionY": "2124",
+                    "width": "128",
+                    "height": "90"
+                },
+                {
+                    "name": "STMVisit",
+                    "positionX": "729",
+                    "positionY": "1756",
+                    "width": "128",
+                    "height": "150"
+                },
+                {
+                    "name": "STMVisitAnswer",
+                    "positionX": "540",
+                    "positionY": "1746",
+                    "width": "128",
+                    "height": "90"
+                },
+                {
+                    "name": "STMVisitPhoto",
+                    "positionX": "396",
+                    "positionY": "1359",
+                    "width": "128",
+                    "height": "58"
+                },
+                {
+                    "name": "STMVisitQuestion",
+                    "positionX": "362",
+                    "positionY": "1665",
+                    "width": "128",
+                    "height": "105"
+                },
+                {
+                    "name": "STMVisitQuestionDataType",
+                    "positionX": "171",
+                    "positionY": "1710",
+                    "width": "128",
+                    "height": "90"
+                },
+                {
+                    "name": "STMVisitQuestionGroup",
+                    "positionX": "171",
+                    "positionY": "1458",
+                    "width": "128",
+                    "height": "90"
+                },
+                {
+                    "name": "STMVisitQuestionSet",
+                    "positionX": "7",
+                    "positionY": "1566",
+                    "width": "128",
+                    "height": "105"
+                },
+                {
+                    "name": "STMWorkflow",
+                    "positionX": "45",
+                    "positionY": "675",
+                    "width": "128",
+                    "height": "105"
+                },
+                {
+                    "name": "STMSQLPatch",
+                    "positionX": "1368",
+                    "positionY": "2133",
+                    "width": "128",
+                    "height": "105"
+                }
+            ]
+        }
     }
 }

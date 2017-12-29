@@ -49,7 +49,6 @@ class STMModeller(modelJSON:String) : STMModelling {
         val current = entitiesByName[_entityName]?.attributesByName ?: hashMapOf()
 
         if (entitiesByName[_entityName]?.parentEntity != null){
-            // TODO cashing
             return current.plus(fieldsForEntityName(entitiesByName[_entityName]?.parentEntity!!))
 
         }
@@ -58,19 +57,26 @@ class STMModeller(modelJSON:String) : STMModelling {
 
     }
 
-    override fun objectRelationshipsForEntityName(entityName: String, isToMany: Boolean, cascade: Boolean): Map<String, STMRelationshipDescription> {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
+    override fun objectRelationshipsForEntityName(entityName: String, isToMany: Boolean?, cascade: Boolean?, optional: Boolean?): Map<String, STMRelationshipDescription> {
 
-    override fun objectRelationshipsForEntityName(entityName: String, isToMany: Boolean, cascade: Boolean, optional: Boolean): Map<String, STMRelationshipDescription> {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        val _entityName = STMFunctions.addPrefixToEntityName(entityName)
+
+        val current = entitiesByName[_entityName]?.relationshipsByName ?: hashMapOf()
+
+        if (entitiesByName[_entityName]?.parentEntity != null){
+            return current.plus(objectRelationshipsForEntityName(entitiesByName[_entityName]?.parentEntity!!))
+
+        }
+
+        return current
+
     }
 
     override fun toOneRelationshipsForEntityName(entityName: String): Map<String, String> {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
-    override fun objectRelationshipsForEntityName(entityName: String, isToMany: Boolean): Map<String, String> {
+    override fun objectRelationshipsForEntityName(entityName: String, isToMany: Boolean?): Map<String, String> {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 

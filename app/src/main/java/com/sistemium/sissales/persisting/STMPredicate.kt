@@ -70,7 +70,13 @@ class STMPredicate {
 
             val key = map.keys.first() as String
 
-            val value = map[key] as Map<*,*>
+            var value = map[key] as Map<*,*>
+
+            if (value[value.keys.first()] == null){
+
+                value = hashMapOf("IS" to "NULL")
+
+            }
 
             var comparator = value.keys.first()
 
@@ -78,11 +84,17 @@ class STMPredicate {
 
             var rightPredicateString = "\"${value[value.keys.first()]}\""
 
-            if (value[value.keys.first()] is Boolean || value[value.keys.first()] is Number) rightPredicateString = "${value[value.keys.first()]}"
+            if (value[value.keys.first()] is Boolean || value[value.keys.first()] is Number || value[value.keys.first()] == "NULL") rightPredicateString = "${value[value.keys.first()]}"
 
-            val predicate = STMPredicate(comparator.toString(), STMPredicate(key), STMPredicate(rightPredicateString))
+            if (value[value.keys.first()] is ArrayList<*>) {
 
-            return predicate
+                val valueArray = (value[value.keys.first()] as ArrayList<*>).map { v -> STMPredicate("\"$v\"") }
+
+                return STMPredicate("IN", STMPredicate(key), STMPredicate(", ", valueArray))
+
+            }
+
+            return STMPredicate(comparator.toString(), STMPredicate(key), STMPredicate(rightPredicateString))
 
         }
 
@@ -130,13 +142,13 @@ class STMPredicate {
 
                 }  else {
 
-                    if (key.endsWith(STMConstants.RELATIONSHIP_SUFFIX)){
+                    if (key.endsWith(STMConstants.RELATIONSHIP_SUFFIX) && value.values.first() != null){
 
-                        val xid = value.values.first() as String
+                        val xid = value.values.first() as String?
 
                         val predicate = STMPredicate("nonNull", arrayListOf(STMPredicate("exists ( select * from "),
                                 STMPredicate("?", key),
-                                STMPredicate(" where [id] = '$xid' and id = "),
+                                if (xid != null) STMPredicate(" where [id] = '$xid' and id = ") else STMPredicate(" where [id] IS NULL and id = "),
                                 STMPredicate("relation", key),
                                 STMPredicate(")")
                         ))
@@ -280,7 +292,7 @@ class STMPredicate {
 
                 val right = rightPredicate?.predicateForAdapter(adapter, entityName)
 
-                val valid = entityName == null || adapter == null || adapter.model.fieldsForEntityName(entityName).containsKey(left)
+                val valid = entityName == null || adapter == null || adapter.model.fieldsForEntityName(entityName).containsKey(left) || adapter.model.objectRelationshipsForEntityName(entityName).containsKey(left?.removeSuffix(STMConstants.RELATIONSHIP_SUFFIX))
 
                 if (left != null && right != null && valid){
 

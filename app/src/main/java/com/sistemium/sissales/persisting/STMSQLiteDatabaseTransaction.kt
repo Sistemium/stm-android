@@ -144,7 +144,6 @@ class STMSQLiteDatabaseTransaction(private var database: SQLiteDatabase, private
 
                     val index = c.getColumnIndex(columnName)
 
-                    //TODO non string types
                     val data = c.getString(index)
 
                     if (data != null){
