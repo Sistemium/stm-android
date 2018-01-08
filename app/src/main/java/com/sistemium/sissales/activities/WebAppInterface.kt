@@ -7,6 +7,7 @@ import android.util.Log
 import com.github.kittinunf.fuel.Fuel
 import com.github.kittinunf.result.Result
 import com.github.kittinunf.result.getAs
+import com.google.gson.GsonBuilder
 import com.sistemium.sissales.base.STMConstants
 import com.sistemium.sissales.persisting.STMPredicate
 
@@ -17,7 +18,7 @@ import com.sistemium.sissales.persisting.STMPredicate
 
 class WebAppInterface internal constructor(private var webViewActivity: WebViewActivity) {
 
-    private val gson = Gson()
+    private val gson = GsonBuilder().serializeNulls().create()
 
     private val javascriptCallback = "iSistemiumIOSCallback"
 
@@ -107,9 +108,7 @@ class WebAppInterface internal constructor(private var webViewActivity: WebViewA
 
         task {
 
-            // TODO implement updateObjectsFromScriptMessage
-
-            arrayOf<Map<*, *>>()
+            updateObjectsFromScriptMessage(mapParameters)
 
         } then {
 
@@ -376,8 +375,6 @@ class WebAppInterface internal constructor(private var webViewActivity: WebViewA
 
     private fun arrayOfObjectsRequestedByScriptMessage(parameters: Map<*, *>):Promise<Array<Map<*, *>>, Exception>{
 
-        // TODO needs to be separated for two methods
-
         val entityName = parameters["entity"] as? String ?: throw Exception("entity is not specified")
 
         val xidString = parameters[STMConstants.DEFAULT_PERSISTING_PRIMARY_KEY] as? String
@@ -404,9 +401,29 @@ class WebAppInterface internal constructor(private var webViewActivity: WebViewA
 
     }
 
-    private fun findEntityName(entityName:String, xidString:String):Array<Map<*, *>>{
+    private fun updateObjectsFromScriptMessage(parameters: Map<*, *>):Promise<Array<Map<*, *>>, Exception>{
 
-        TODO("not implemented")
+        val entityName = parameters["entity"] as? String ?: throw Exception("entity is not specified")
+
+        var parametersData = parameters["data"] as? ArrayList<*>
+
+        if (parametersData == null){
+
+            val map = parameters["data"] as? Map<*,*>
+
+            if (map != null){
+
+                parametersData = arrayListOf(map)
+
+            }else{
+
+                throw Exception("entity is not specified")
+
+            }
+
+        }
+
+        return webViewActivity.persistenceDelegate?.mergeMany(entityName, parametersData, null) ?: throw Exception("Missing persistenceDelegate")
 
     }
 

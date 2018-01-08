@@ -49,4 +49,20 @@ class STMPersister(private val runner:STMPersistingRunning):STMPersistingSync,ST
 
     }
 
+    override fun mergeSync(entityName: String, attributes: Map<*, *>, options: Map<*, *>?): Map<*, *> {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override fun mergeManySync(entityName: String, attributeArray: ArrayList<*>, options: Map<*, *>?): Array<Map<*, *>> {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override fun merge(entityName: String, attributes: Map<*, *>, options: Map<*, *>?): Promise<Map<*, *>, Exception> {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override fun mergeMany(entityName: String, attributeArray: ArrayList<*>, options: Map<*, *>?): Promise<Array<Map<*, *>>, Exception> {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
 }

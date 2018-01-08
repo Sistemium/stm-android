@@ -162,7 +162,7 @@ class STMSQLiteDatabaseTransaction(private var database: SQLiteDatabase, private
 
                     val index = c.getColumnIndex(columnName)
 
-                    val attributeType = adapter.model.entitiesByName.get(STMFunctions.addPrefixToEntityName(tableName))?.attributesByName?.get(columnName)?.attributeType
+                    val attributeType = adapter.model.fieldsForEntityName(STMFunctions.addPrefixToEntityName(tableName)).get(columnName)?.attributeType
 
                     if (c.isNull(index)){
 
@@ -217,34 +217,6 @@ class STMSQLiteDatabaseTransaction(private var database: SQLiteDatabase, private
         c.close()
 
         return rez
-
-//        FMResultSet *s = [self.database executeQuery:query];
-//
-//        NSArray *booleanKeys = [self.stmFMDB.columnsByTable[tableName] allKeysForObject:[NSNumber numberWithUnsignedInteger:NSBooleanAttributeType]];
-//
-//        NSArray *jsonKeys = [self.stmFMDB.columnsByTable[tableName] allKeysForObject:[NSNumber numberWithUnsignedInteger:NSTransformableAttributeType]];
-//
-//        while ([s next]) {
-//
-//            NSMutableDictionary *dict = (NSMutableDictionary*)s.resultDictionary;
-//
-//            for (NSString *key in booleanKeys){
-//                if ([STMFunctions isNotNull:[dict valueForKey:key]]){
-//                    dict[key] = (__bridge id _Nullable)([dict[key] boolValue] ? kCFBooleanTrue : kCFBooleanFalse);
-//                }
-//            }
-//
-//            for (NSString *key in jsonKeys){
-//                if ([STMFunctions isNotNull:[dict valueForKey:key]]){
-//                    dict[key] = [STMFunctions jsonObjectFromString:dict[key]];
-//                }
-//            }
-//
-//            [rez addObject:dict.copy];
-//        }
-//
-//        // there will be memory warnings loading catalogue on an old device if no copy
-//        return rez.copy;
 
     }
 
