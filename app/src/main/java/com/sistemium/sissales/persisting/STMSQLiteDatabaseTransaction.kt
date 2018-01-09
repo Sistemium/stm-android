@@ -16,11 +16,11 @@ class STMSQLiteDatabaseTransaction(private var database: SQLiteDatabase, private
 
     var operation:STMSQLiteDatabaseOperation? = null
 
-    override fun findAllSync(entityName: String, predicate: STMPredicate?, options: Map<*, *>?): Array<Map<*, *>> {
+    override fun findAllSync(entityName: String, predicate: STMPredicate?, options: Map<*, *>?): ArrayList<Map<*, *>> {
 
-        val pageSize:Int? = (options?.get(STMConstants.STMPersistingOptionPageSize) as? Double)?.toInt()
-        var offset:Int? = (options?.get(STMConstants.STMPersistingOptionStartPage) as? Double)?.toInt()
-        val groupBy:Array<*>? = (options?.get(STMConstants.STMPersistingOptionGroupBy) as? ArrayList<*>)?.toArray()
+        val pageSize = (options?.get(STMConstants.STMPersistingOptionPageSize) as? Double)?.toInt()
+        var offset = (options?.get(STMConstants.STMPersistingOptionStartPage) as? Double)?.toInt()
+        val groupBy= options?.get(STMConstants.STMPersistingOptionGroupBy) as? ArrayList<*>
 
         if (offset != null && pageSize != null) {
             offset -= 1
@@ -41,24 +41,22 @@ class STMSQLiteDatabaseTransaction(private var database: SQLiteDatabase, private
     }
 
     private fun findAllSync(entityName: String, predicate: STMPredicate?, orderBy:String?, ascending:Boolean,
-                            fetchLimit:Int?, fetchOffset:Int?, groupBy:Array<*>?):Array<Map<*, *>> {
+                            fetchLimit:Int?, fetchOffset:Int?, groupBy:ArrayList<*>?):ArrayList<Map<*, *>> {
 
         var options = ""
         var columns = ""
 
-        var columnKeys = groupBy
+        if (groupBy?.count() != null && groupBy.count() != 0) {
 
-        if (columnKeys?.count() != null && columnKeys.count() != 0) {
-
-            columnKeys = columnKeys.map {
+            val columnKeys = ArrayList(groupBy.map {
                 "[$it]"
-            }.toTypedArray()
+            })
 
             options = " GROUP BY " + columnKeys.joinToString(", ")
 
-            columnKeys = columnKeys.plus(sumKeysForEntityName(entityName))
+            columnKeys += sumKeysForEntityName(entityName)
 
-            columnKeys = columnKeys.plus("count(*) [count()]")
+            columnKeys += "count(*) [count()]"
 
             columns = columnKeys.joinToString(", ")
 
@@ -98,7 +96,7 @@ class STMSQLiteDatabaseTransaction(private var database: SQLiteDatabase, private
 
     }
 
-    private fun sumKeysForEntityName(entityName:String):Array<String>{
+    private fun sumKeysForEntityName(entityName:String):ArrayList<String>{
 
         val numericTypes = arrayOf("Integer 16", "Integer 32", "Integer 64", "Decimal", "Double", "Float")
 
@@ -106,7 +104,7 @@ class STMSQLiteDatabaseTransaction(private var database: SQLiteDatabase, private
 
         val tableColumns = adapter.model.fieldsForEntityName(entityName)
 
-        var sumKeys = arrayOf<String>()
+        val sumKeys = arrayListOf<String>()
 
         tableColumns.map {
 
@@ -121,10 +119,10 @@ class STMSQLiteDatabaseTransaction(private var database: SQLiteDatabase, private
             val minMaxField = minMaxTypes.contains(it.value.attributeType)
 
             if (valueIsNumeric) {
-                sumKeys = sumKeys.plus("sum([${(it.value.attributeName)}]) [sum(${(it.value.attributeName)})]")
+                sumKeys += "sum([${(it.value.attributeName)}]) [sum(${(it.value.attributeName)})]"
             } else if (minMaxField || it.value.attributeName == "date") {
-                sumKeys = sumKeys.plus("max([${(it.value.attributeName)}]) [max(${(it.value.attributeName)})]")
-                sumKeys = sumKeys.plus("min([${(it.value.attributeName)}]) [min(${(it.value.attributeName)})]")
+                sumKeys += "max([${(it.value.attributeName)}]) [max(${(it.value.attributeName)})]"
+                sumKeys += "min([${(it.value.attributeName)}]) [min(${(it.value.attributeName)})]"
             }
 
         }
@@ -133,9 +131,9 @@ class STMSQLiteDatabaseTransaction(private var database: SQLiteDatabase, private
 
     }
 
-    private fun selectFrom(tableName:String, columns:String, where:String, orderBy:String?):Array<Map<*, *>> {
+    private fun selectFrom(tableName:String, columns:String, where:String, orderBy:String?):ArrayList<Map<*, *>> {
 
-        var rez = arrayOf<Map<*, *>>()
+        val rez = arrayListOf<Map<*, *>>()
 
         var _where = where
 
@@ -210,7 +208,7 @@ class STMSQLiteDatabaseTransaction(private var database: SQLiteDatabase, private
 
                 }
 
-                rez = rez.plus(dict)
+                rez += dict
 
             } while (c.moveToNext())
         }

@@ -7,6 +7,6 @@ import com.sistemium.sissales.persisting.STMPredicate
  */
 interface STMPersistingTransaction {
 
-    fun findAllSync(entityName:String, predicate: STMPredicate?, options:Map<*,*>?):Array<Map<*,*>>
+    fun findAllSync(entityName:String, predicate: STMPredicate?, options:Map<*,*>?):ArrayList<Map<*,*>>
 
 }

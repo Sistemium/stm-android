@@ -106,11 +106,7 @@ class WebAppInterface internal constructor(private var webViewActivity: WebViewA
 
         val mapParameters = gson.fromJson(parameters, Map::class.java)
 
-        task {
-
-            updateObjectsFromScriptMessage(mapParameters)
-
-        } then {
+        updateObjectsFromScriptMessage(mapParameters) then {
 
             result -> javascriptCallback(result, mapParameters)
 
@@ -373,7 +369,7 @@ class WebAppInterface internal constructor(private var webViewActivity: WebViewA
 
     // interface handling helpers
 
-    private fun arrayOfObjectsRequestedByScriptMessage(parameters: Map<*, *>):Promise<Array<Map<*, *>>, Exception>{
+    private fun arrayOfObjectsRequestedByScriptMessage(parameters: Map<*, *>):Promise<ArrayList<Map<*, *>>, Exception>{
 
         val entityName = parameters["entity"] as? String ?: throw Exception("entity is not specified")
 
@@ -386,7 +382,7 @@ class WebAppInterface internal constructor(private var webViewActivity: WebViewA
 
                 result ->
 
-                return@then arrayOf(result)
+                return@then arrayListOf(result)
 
             } ?: throw Exception("Missing persistenceDelegate")
         }
@@ -401,7 +397,7 @@ class WebAppInterface internal constructor(private var webViewActivity: WebViewA
 
     }
 
-    private fun updateObjectsFromScriptMessage(parameters: Map<*, *>):Promise<Array<Map<*, *>>, Exception>{
+    private fun updateObjectsFromScriptMessage(parameters: Map<*, *>):Promise<ArrayList<Map<*, *>>, Exception>{
 
         val entityName = parameters["entity"] as? String ?: throw Exception("entity is not specified")
 

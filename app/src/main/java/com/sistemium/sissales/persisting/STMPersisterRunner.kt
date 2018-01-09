@@ -11,7 +11,7 @@ import com.sistemium.sissales.interfaces.STMPersistingTransaction
 
 class STMPersisterRunner(private val adapters:HashMap<STMStorageType, STMAdapting>):STMPersistingRunning {
 
-    override fun readOnly(block: (persistingTransaction: STMPersistingTransaction) -> Array<Map<*, *>>):Array<Map<*, *>> {
+    override fun readOnly(block: (persistingTransaction: STMPersistingTransaction) -> ArrayList<Map<*, *>>):ArrayList<Map<*, *>> {
 
         val readOnlyTransactionCoordinator = STMPersisterTransactionCoordinator(adapters, true)
 

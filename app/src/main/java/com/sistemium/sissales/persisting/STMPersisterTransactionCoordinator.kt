@@ -12,7 +12,7 @@ class STMPersisterTransactionCoordinator(private val adapters:HashMap<STMStorage
 
     private val transactions = hashMapOf<STMStorageType,STMPersistingTransaction>()
 
-    override fun findAllSync(entityName: String, predicate: STMPredicate?, options: Map<*, *>?): Array<Map<*, *>> {
+    override fun findAllSync(entityName: String, predicate: STMPredicate?, options: Map<*, *>?): ArrayList<Map<*, *>> {
 
         val predicateWithOptions = STMPredicate.predicateWithOptions(options, predicate)
 
