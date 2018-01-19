@@ -24,6 +24,7 @@ class STMConstants{
         val STMPersistingOptionLts = "lts"
         val STMPersistingKeyPhantom = "isFantom"
         val RELATIONSHIP_SUFFIX = "Id"
+        val STMPersistingOptionReturnSaved = "returnSaved"
 
     }
 

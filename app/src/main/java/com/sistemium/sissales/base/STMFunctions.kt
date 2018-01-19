@@ -1,5 +1,8 @@
 package com.sistemium.sissales.base
 
+import java.text.SimpleDateFormat
+import java.util.*
+
 /**
  * Created by edgarjanvuicik on 14/11/2017.
  */
@@ -28,6 +31,30 @@ class STMFunctions{
             return _entityName
 
         }
+
+        fun stringFromNow():String{
+
+            val sdf = SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS", Locale.US)
+
+            sdf.timeZone = TimeZone.getTimeZone("GMT")
+
+            return sdf.format(Date())
+
+
+        }
+
+        fun uuidString():String{
+
+            return UUID.randomUUID().toString()
+
+        }
+
+        fun jsonStringFromObject(value:Any):String{
+
+            TODO("not implemented")
+
+        }
+
     }
 
 }

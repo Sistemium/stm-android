@@ -2,6 +2,7 @@ package com.sistemium.sissales.model
 
 import android.database.sqlite.SQLiteDatabase
 import com.sistemium.sissales.base.STMConstants
+import com.sistemium.sissales.base.STMFunctions
 import com.sistemium.sissales.enums.STMStorageType
 import com.sistemium.sissales.interfaces.STMAdapting
 import com.sistemium.sissales.interfaces.STMModelling
@@ -11,15 +12,16 @@ import com.sistemium.sissales.persisting.STMSQLiteDatabaseTransaction
 import java.io.File
 import java.util.*
 import java.util.concurrent.Executors
+import kotlin.collections.ArrayList
 
 /**
  * Created by edgarjanvuicik on 15/11/2017.
  */
 class STMSQLiteDatabaseAdapter(override var model: STMModelling, private var dbPath:String) :STMAdapting {
 
-    val operationPoolQueue = Executors.newFixedThreadPool(STMConstants.POOL_SIZE)
+    private val operationPoolQueue = Executors.newFixedThreadPool(STMConstants.POOL_SIZE)
 
-    val operationQueue = Executors.newFixedThreadPool(1)
+    private val operationQueue = Executors.newFixedThreadPool(1)
 
     var database: SQLiteDatabase? = null
 
@@ -34,6 +36,8 @@ class STMSQLiteDatabaseAdapter(override var model: STMModelling, private var dbP
     STMConstants.STMPersistingOptionLts,
     STMConstants.STMPersistingKeyPhantom
     )
+
+    override var columnsByTable: Map<String, Map<String, String>>? = null
 
     override var ignoredAttributeNames: Array<String> = builtInAttributeNames.plus("xid")
 
@@ -69,6 +73,8 @@ class STMSQLiteDatabaseAdapter(override var model: STMModelling, private var dbP
 
             operationQueue.execute(operation)
 
+            database!!.beginTransaction()
+
         }
 
         return operation.transaction
@@ -81,19 +87,35 @@ class STMSQLiteDatabaseAdapter(override var model: STMModelling, private var dbP
 
         operation!!.success = success
 
+        if (!operation.readOnly){
+
+            if (operation.success){
+
+                database!!.setTransactionSuccessful()
+
+            }
+
+            database!!.endTransaction()
+
+        }
+
         operation.finish()
+
+
 
     }
 
     private fun checkModelMapping(){
 
-        val schema = STMSQLIteSchema()
+        val _columnsByTable: Map<String, ArrayList<String>>?
 
-        val savedModelPath = dbPath.replace(".db", ".json")
+        val schema = STMSQLIteSchema(database!!)
 
         val destinationModel = model.managedObjectModel
 
         var savedModel:STMManagedObjectModel? = null
+
+        val savedModelPath = dbPath.replace(".db", ".json")
 
         val file = File(savedModelPath)
 
@@ -117,11 +139,43 @@ class STMSQLiteDatabaseAdapter(override var model: STMModelling, private var dbP
 
         if (modelMapper.needToMigrate) {
 
-            schema.createTablesWithModelMapping(modelMapper)
+            _columnsByTable = schema.createTablesWithModelMapping(modelMapper)
 
-            modelMapper.destinationModel.saveToFile(savedModelPath)
+            if (columnsByTable != null){
+
+                modelMapper.destinationModel.saveToFile(savedModelPath)
+
+            }else{
+
+                throw Exception("columnsByTable is null")
+
+            }
+
+        }else{
+
+            _columnsByTable = schema.currentDBScheme()
 
         }
+
+        val columnsByTableWithTypes = hashMapOf<String, Map<String, String>>()
+
+        for (tablename in _columnsByTable.keys) {
+
+            val columns = hashMapOf<String,String>()
+
+            for (columnname in _columnsByTable[tablename]!!){
+
+                val attributeType = model.fieldsForEntityName(STMFunctions.addPrefixToEntityName(tablename))[columnname]?.attributeType
+
+                columns[columnname] = attributeType ?: "Undefined"
+
+            }
+
+            columnsByTableWithTypes[tablename] = columns
+
+        }
+
+        columnsByTable = columnsByTableWithTypes
 
     }
 

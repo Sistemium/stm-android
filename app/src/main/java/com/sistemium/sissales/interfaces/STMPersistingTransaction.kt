@@ -9,4 +9,6 @@ interface STMPersistingTransaction {
 
     fun findAllSync(entityName:String, predicate: STMPredicate?, options:Map<*,*>?):ArrayList<Map<*,*>>
 
+    fun mergeWithoutSave(entityName:String, attributes:Map<*,*>, options:Map<*,*>?): Map<*,*>?
+
 }

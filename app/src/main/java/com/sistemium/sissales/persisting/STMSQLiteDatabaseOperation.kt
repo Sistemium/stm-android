@@ -8,7 +8,7 @@ import com.sistemium.sissales.model.STMSQLiteDatabaseAdapter
  * Created by edgarjanvuicik on 24/11/2017.
  */
 
-class STMSQLiteDatabaseOperation(private val readOnly:Boolean, private var adapter: STMSQLiteDatabaseAdapter) :Runnable {
+class STMSQLiteDatabaseOperation(val readOnly:Boolean, private var adapter: STMSQLiteDatabaseAdapter) :Runnable {
 
     private val lock1 = Object()
 
@@ -49,8 +49,6 @@ class STMSQLiteDatabaseOperation(private val readOnly:Boolean, private var adapt
 
             database = adapter.database
 
-            database!!.beginTransaction()
-
         }
 
         _transaction = STMSQLiteDatabaseTransaction(database!!, adapter)
@@ -71,17 +69,7 @@ class STMSQLiteDatabaseOperation(private val readOnly:Boolean, private var adapt
 
     fun finish(){
 
-        if (!readOnly){
-
-            if (this.success){
-
-                database!!.setTransactionSuccessful()
-
-            }
-
-            database!!.endTransaction()
-
-        }else{
+        if (readOnly){
 
             Log.d("Debug", "returning pool database to array")
             Log.d("DEBUG", "pool database count before append: ${adapter.poolDatabases.size}")

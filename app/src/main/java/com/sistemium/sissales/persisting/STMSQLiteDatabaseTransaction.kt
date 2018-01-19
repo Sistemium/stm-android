@@ -1,5 +1,6 @@
 package com.sistemium.sissales.persisting
 
+import android.content.ContentValues
 import android.database.Cursor.FIELD_TYPE_FLOAT
 import android.database.Cursor.FIELD_TYPE_INTEGER
 import android.database.sqlite.SQLiteDatabase
@@ -8,6 +9,8 @@ import com.sistemium.sissales.base.STMConstants
 import com.sistemium.sissales.base.STMFunctions
 import com.sistemium.sissales.interfaces.STMPersistingTransaction
 import com.sistemium.sissales.model.STMSQLiteDatabaseAdapter
+import java.util.*
+import kotlin.collections.ArrayList
 
 /**
  * Created by edgarjanvuicik on 30/11/2017.
@@ -96,6 +99,133 @@ class STMSQLiteDatabaseTransaction(private var database: SQLiteDatabase, private
 
     }
 
+    override fun mergeWithoutSave(entityName: String, attributes: Map<*, *>, options: Map<*, *>?): Map<*, *>? {
+
+        val now = STMFunctions.stringFromNow()
+
+        var returnSaved = true
+
+        val savingAttributes = HashMap(attributes)
+
+        if (options?.get(STMConstants.STMPersistingOptionReturnSaved) == false){
+
+            returnSaved = false
+
+        }
+
+        if (options?.get(STMConstants.STMPersistingOptionLts) != null){
+
+            savingAttributes[STMConstants.STMPersistingOptionLts] = options[STMConstants.STMPersistingOptionLts]
+            savingAttributes.remove(STMConstants.STMPersistingKeyVersion)
+
+        } else {
+
+            savingAttributes[STMConstants.STMPersistingKeyVersion] = now
+            savingAttributes.remove(STMConstants.STMPersistingOptionLts)
+
+        }
+
+        savingAttributes["deviceAts"] = now
+
+        if (savingAttributes[STMConstants.STMPersistingKeyCreationTimestamp] == null){
+
+            savingAttributes[STMConstants.STMPersistingKeyCreationTimestamp] = now
+
+        }
+
+        val tableName = STMFunctions.removePrefixFromEntityName(entityName)
+
+        val pk = mergeInto(tableName, savingAttributes)
+
+        if (pk == null || !returnSaved){
+
+            return null
+
+        }
+
+        return selectFrom(tableName, "id = '$pk'", null).first()
+
+    }
+
+    private fun mergeInto(tableName:String, dictionary:Map<*,*>):String?{
+
+        val pk = if (dictionary[STMConstants.DEFAULT_PERSISTING_PRIMARY_KEY] != null) dictionary[STMConstants.DEFAULT_PERSISTING_PRIMARY_KEY] as String else STMFunctions.uuidString()
+
+        val (keys, values) = updateTablename(tableName, dictionary)
+
+        val cv = ContentValues()
+
+        for (index in 0 until keys.size){
+
+            cv.put(keys[index], values[index])
+
+        }
+
+        try {
+
+            val changes = database.update(tableName, cv, "[id] = ?", arrayOf(pk))
+
+            if (changes == 0) {
+
+                database.insert(tableName, null, cv)
+
+            }
+
+        } catch (e:Exception) {
+
+            if (e.toString() == "ignored") {
+
+                return pk
+
+            }
+
+            return null
+
+        }
+
+        return pk
+
+    }
+
+    private fun updateTablename(tableName:String, dictionary:Map<*,*>): Pair<ArrayList<String>, ArrayList<String>>{
+
+        val keys = arrayListOf<String>()
+        val values = arrayListOf<String>()
+
+        val columns = adapter.columnsByTable!![tableName]!!.keys
+
+        val jsonColumns = adapter.columnsByTable!![tableName]?.filterValues {
+
+            return@filterValues it == "Transformable"
+
+        }?.keys
+
+        for (key in dictionary.keys){
+
+            if (columns.contains(key) && arrayListOf(STMConstants.DEFAULT_PERSISTING_PRIMARY_KEY, STMConstants.STMPersistingKeyPhantom, STMConstants.STMPersistingKeyCreationTimestamp).contains(key)){
+
+                keys.add("[$key]")
+
+                val value = dictionary[key]
+
+                if (jsonColumns?.contains(key) == true){
+
+                    values.add(STMFunctions.jsonStringFromObject(value!!))
+
+                } else {
+
+                    values.add(value.toString())
+
+                }
+
+            }
+
+        }
+
+        return Pair(keys,values)
+
+    }
+
     private fun sumKeysForEntityName(entityName:String):ArrayList<String>{
 
         val numericTypes = arrayOf("Integer 16", "Integer 32", "Integer 64", "Decimal", "Double", "Float")
@@ -131,6 +261,12 @@ class STMSQLiteDatabaseTransaction(private var database: SQLiteDatabase, private
 
     }
 
+    private fun selectFrom(tableName:String, where:String, orderBy:String?):ArrayList<Map<*, *>> {
+
+        return selectFrom(tableName, "*", where, orderBy)
+
+    }
+
     private fun selectFrom(tableName:String, columns:String, where:String, orderBy:String?):ArrayList<Map<*, *>> {
 
         val rez = arrayListOf<Map<*, *>>()
@@ -160,11 +296,11 @@ class STMSQLiteDatabaseTransaction(private var database: SQLiteDatabase, private
 
                     val index = c.getColumnIndex(columnName)
 
-                    val attributeType = adapter.model.fieldsForEntityName(STMFunctions.addPrefixToEntityName(tableName)).get(columnName)?.attributeType
+                    val attributeType = adapter.model.fieldsForEntityName(STMFunctions.addPrefixToEntityName(tableName))[columnName]?.attributeType
 
                     if (c.isNull(index)){
 
-                        dict.put(columnName, null)
+                        dict[columnName] = null
 
                         continue
 
@@ -174,15 +310,7 @@ class STMSQLiteDatabaseTransaction(private var database: SQLiteDatabase, private
 
                         val data = c.getInt(index)
 
-                        if (data == 0){
-
-                            dict.put(columnName, false)
-
-                        }else{
-
-                            dict.put(columnName, true)
-
-                        }
+                        dict[columnName] = data != 0
 
                         continue
 
@@ -190,7 +318,7 @@ class STMSQLiteDatabaseTransaction(private var database: SQLiteDatabase, private
 
                     if (c.getType(index) == FIELD_TYPE_INTEGER){
 
-                        dict.put(columnName, c.getInt(index))
+                        dict[columnName] = c.getInt(index)
 
                         continue
 
@@ -198,13 +326,13 @@ class STMSQLiteDatabaseTransaction(private var database: SQLiteDatabase, private
 
                     if (c.getType(index) == FIELD_TYPE_FLOAT){
 
-                        dict.put(columnName, c.getDouble(index))
+                        dict[columnName] = c.getDouble(index)
 
                         continue
 
                     }
 
-                    dict.put(columnName, c.getString(index))
+                    dict[columnName] = c.getString(index)
 
                 }
 

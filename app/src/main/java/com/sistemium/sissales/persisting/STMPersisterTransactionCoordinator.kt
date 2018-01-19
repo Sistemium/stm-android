@@ -22,6 +22,14 @@ class STMPersisterTransactionCoordinator(private val adapters:HashMap<STMStorage
 
     }
 
+    override fun mergeWithoutSave(entityName: String, attributes: Map<*, *>, options: Map<*, *>?): Map<*, *>? {
+
+        val transaction = transactionForEntityName(entityName, options)
+
+        return transaction.mergeWithoutSave(entityName, attributes, options)
+
+    }
+
     fun endTransactionWithSuccess(success:Boolean){
 
         for (key in transactions.keys){
@@ -52,7 +60,7 @@ class STMPersisterTransactionCoordinator(private val adapters:HashMap<STMStorage
 
         if (options?.get(STMConstants.STMPersistingOptionForceStorage) as? STMStorageType != null){
 
-            return options!![STMConstants.STMPersistingOptionForceStorage] as STMStorageType
+            return options[STMConstants.STMPersistingOptionForceStorage] as STMStorageType
 
         }
 

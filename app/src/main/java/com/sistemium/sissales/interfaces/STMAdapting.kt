@@ -12,6 +12,7 @@ interface STMAdapting {
     var storageType:STMStorageType
     var ignoredAttributeNames:Array<String>
     var builtInAttributeNames:Array<String>
+    var columnsByTable:Map<String, Map<String, String>>?
 
     fun beginTransaction(readOnly:Boolean = false):STMPersistingTransaction
     fun endTransactionWithSuccess(transaction:STMPersistingTransaction, success:Boolean = false)
