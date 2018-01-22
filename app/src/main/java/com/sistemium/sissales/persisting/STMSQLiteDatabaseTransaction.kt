@@ -143,7 +143,7 @@ class STMSQLiteDatabaseTransaction(private var database: SQLiteDatabase, private
 
         }
 
-        return selectFrom(tableName, "id = '$pk'", null).first()
+        return selectFrom(tableName, "id = '$pk'", null).firstOrNull()
 
     }
 
@@ -157,7 +157,15 @@ class STMSQLiteDatabaseTransaction(private var database: SQLiteDatabase, private
 
         for (index in 0 until keys.size){
 
-            cv.put(keys[index], values[index])
+            if (values[index] == "null"){
+
+                cv.putNull(keys[index])
+
+            }else{
+
+                cv.put(keys[index], values[index])
+
+            }
 
         }
 
@@ -166,6 +174,10 @@ class STMSQLiteDatabaseTransaction(private var database: SQLiteDatabase, private
             val changes = database.update(tableName, cv, "[id] = ?", arrayOf(pk))
 
             if (changes == 0) {
+
+                cv.put("id", pk)
+
+                cv.put("[isFantom]", 0)
 
                 database.insert(tableName, null, cv)
 
@@ -202,7 +214,7 @@ class STMSQLiteDatabaseTransaction(private var database: SQLiteDatabase, private
 
         for (key in dictionary.keys){
 
-            if (columns.contains(key) && arrayListOf(STMConstants.DEFAULT_PERSISTING_PRIMARY_KEY, STMConstants.STMPersistingKeyPhantom, STMConstants.STMPersistingKeyCreationTimestamp).contains(key)){
+            if (columns.contains(key) && !arrayListOf(STMConstants.DEFAULT_PERSISTING_PRIMARY_KEY, STMConstants.STMPersistingKeyPhantom, STMConstants.STMPersistingKeyCreationTimestamp).contains(key)){
 
                 keys.add("[$key]")
 
