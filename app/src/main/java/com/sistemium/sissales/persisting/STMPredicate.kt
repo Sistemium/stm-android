@@ -21,7 +21,6 @@ class STMPredicate {
     }
 
     constructor(value:String){
-        this.relation = relation
         this.value = value
         this.type = PredicateType.Value
     }

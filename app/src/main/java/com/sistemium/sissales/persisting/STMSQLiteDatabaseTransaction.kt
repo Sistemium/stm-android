@@ -7,6 +7,7 @@ import android.database.sqlite.SQLiteDatabase
 import android.util.Log
 import com.sistemium.sissales.base.STMConstants
 import com.sistemium.sissales.base.STMFunctions
+import com.sistemium.sissales.interfaces.STMModelling
 import com.sistemium.sissales.interfaces.STMPersistingTransaction
 import com.sistemium.sissales.model.STMSQLiteDatabaseAdapter
 import java.util.*
@@ -16,6 +17,8 @@ import kotlin.collections.ArrayList
  * Created by edgarjanvuicik on 30/11/2017.
  */
 class STMSQLiteDatabaseTransaction(private var database: SQLiteDatabase, private var adapter:STMSQLiteDatabaseAdapter):STMPersistingTransaction {
+
+    override var modellingDelegate: STMModelling? = adapter.model
 
     var operation:STMSQLiteDatabaseOperation? = null
 
@@ -145,6 +148,10 @@ class STMSQLiteDatabaseTransaction(private var database: SQLiteDatabase, private
 
         return selectFrom(tableName, "id = '$pk'", null).firstOrNull()
 
+    }
+
+    override fun destroyWithoutSave(entityName: String, predicate: STMPredicate?, options: Map<*, *>?):Int {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
     private fun mergeInto(tableName:String, dictionary:Map<*,*>):String?{

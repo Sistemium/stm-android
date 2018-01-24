@@ -1,7 +1,5 @@
 package com.sistemium.sissales.persisting
 
-import android.util.Log
-import com.sistemium.sissales.base.STMFunctions
 import com.sistemium.sissales.interfaces.*
 import nl.komponents.kovenant.Promise
 import nl.komponents.kovenant.task
@@ -9,7 +7,7 @@ import nl.komponents.kovenant.task
 /**
  * Created by edgarjanvuicik on 20/11/2017.
  */
-class STMPersister(private val runner:STMPersistingRunning):STMPersistingSync,STMPersistingPromised {
+class STMPersister(private val runner:STMPersistingRunning):STMPersistingSync,STMPersistingPromised, STMPersistingIntercepting {
 
     override fun findSync(entityName: String, identifier: String, options: Map<*, *>?): Map<*, *> {
 
@@ -57,15 +55,11 @@ class STMPersister(private val runner:STMPersistingRunning):STMPersistingSync,ST
 
         val result = arrayListOf<Map<*, *>>()
 
-        val _attributeArray = applyMergeInterceptors(entityName, attributeArray, options)
-
-        if (_attributeArray.count() == 0) return _attributeArray
-
         this.runner.execute {
 
-            for (attributes in _attributeArray) {
+            for (attributes in attributeArray) {
 
-                var merged: Map<*, *>? = applyMergeInterceptors(entityName, attributes, options, it) ?: continue
+                var merged: Map<*, *>? = applyMergeInterceptors(entityName, attributes as Map<*, *>, options, it) ?: continue
 
                 merged = it.mergeWithoutSave(entityName, merged!!, options)
 
@@ -106,47 +100,29 @@ class STMPersister(private val runner:STMPersistingRunning):STMPersistingSync,ST
 
     }
 
-    //Interceptable
+    //STMPersistingIntercepting
 
-    private val beforeMergeInterceptors = hashMapOf<String, STMPersistingMergeInterceptor>()
+    override val beforeMergeInterceptors = hashMapOf<String, STMPersistingMergeInterceptor>()
 
-    fun applyMergeInterceptors(entityName:String, attributeArray:ArrayList<*>, options:Map<*,*>?): ArrayList<Map<*, *>>{
+    override fun beforeMergeEntityName(entityName: String, interceptor: STMPersistingMergeInterceptor?) {
 
-        val _attributeArray:ArrayList<Map<*, *>> = ArrayList(attributeArray.map {
-            return@map it as Map<*,*>
-        })
+        if (interceptor != null){
 
-        val interceptor = beforeMergeInterceptors[entityName] ?: return _attributeArray
+            beforeMergeInterceptors[entityName] = interceptor
 
-//        if ([interceptor respondsToSelector:@selector(interceptedAttributeArray:options:error:)]) {
-//
-//            return [interceptor interceptedAttributeArray:attributeArray options:options error:error];
-//
-//        } else if ([interceptor respondsToSelector:@selector(interceptedAttributes:options:error:)]) {
-//
-//            return [STMFunctions mapArray:attributeArray withBlock:^id(NSDictionary *attributes) {
-//            return *error ? nil : [interceptor interceptedAttributes:attributes options:options error:error];
-//        }];
-//
-//        }
-//
-//        return attributeArray;
+        }else{
 
-        TODO("not implemented")
+            beforeMergeInterceptors.remove(entityName)
+
+        }
 
     }
 
-    fun applyMergeInterceptors(entityName:String, attributes:Map<*,*>, options:Map<*,*>?, persistingTransaction: STMPersistingTransaction): Map<*, *>?{
+    override fun applyMergeInterceptors(entityName:String, attributes:Map<*,*>, options:Map<*,*>?, persistingTransaction: STMPersistingTransaction?): Map<*, *>?{
 
         val interceptor = beforeMergeInterceptors[entityName] ?: return attributes
 
-//        if ([interceptor respondsToSelector:@selector(interceptedAttributes:options:error:inTransaction:)]) {
-//            return [interceptor interceptedAttributes:attributes options:options error:error inTransaction:transaction];
-//        }
-//
-//        return attributes;
-
-        TODO("not implemented")
+        return interceptor.interceptedAttributes(attributes,options,persistingTransaction)
 
     }
 

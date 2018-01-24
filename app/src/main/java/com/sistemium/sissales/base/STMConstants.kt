@@ -8,23 +8,27 @@ class STMConstants{
 
     companion object {
 
-        val ISISTEMIUM_PREFIX = "STM"
-        val DEFAULT_PERSISTING_PRIMARY_KEY = "id"
-        val STMPersistingOptionFantoms = "fantoms"
-        val STMPersistingOptionForceStorage = "forceStorage"
-        val POOL_SIZE = 3
-        val SQL_LITE_PATH = "sqllitepath"
-        val STMPersistingOptionPageSize = "pageSize"
-        val STMPersistingOptionStartPage = "startPage"
-        val STMPersistingOptionGroupBy = "groupBy"
-        val STMPersistingOptionOrder = "sortBy"
-        val STMPersistingOptionOrderDirection = "direction"
-        val STMPersistingKeyCreationTimestamp = "deviceCts"
-        val STMPersistingKeyVersion = "deviceTs"
-        val STMPersistingOptionLts = "lts"
-        val STMPersistingKeyPhantom = "isFantom"
-        val RELATIONSHIP_SUFFIX = "Id"
-        val STMPersistingOptionReturnSaved = "returnSaved"
+        const val ISISTEMIUM_PREFIX = "STM"
+        const val DEFAULT_PERSISTING_PRIMARY_KEY = "id"
+        const val STMPersistingOptionFantoms = "fantoms"
+        const val STMPersistingOptionForceStorage = "forceStorage"
+        const val POOL_SIZE = 3
+        const val SQL_LITE_PATH = "sqllitepath"
+        const val STMPersistingOptionPageSize = "pageSize"
+        const val STMPersistingOptionStartPage = "startPage"
+        const val STMPersistingOptionGroupBy = "groupBy"
+        const val STMPersistingOptionOrder = "sortBy"
+        const val STMPersistingOptionOrderDirection = "direction"
+        const val STMPersistingKeyCreationTimestamp = "deviceCts"
+        const val STMPersistingKeyVersion = "deviceTs"
+        const val STMPersistingOptionLts = "lts"
+        const val STMPersistingKeyPhantom = "isFantom"
+        const val RELATIONSHIP_SUFFIX = "Id"
+        const val STMPersistingOptionReturnSaved = "returnSaved"
+        const val STM_ENTITY_NAME = "STMEntity"
+        const val STM_SETTING_NAME = "STMSetting"
+        const val STM_RECORDSTATUS_NAME = "STMRecordStatus"
+        const val STMPersistingOptionRecordstatuses = "createRecordStatuses"
 
     }
 

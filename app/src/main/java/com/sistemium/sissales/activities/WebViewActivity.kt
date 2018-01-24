@@ -10,8 +10,7 @@ import com.sistemium.sissales.base.STMCoreSessionFiler
 import com.sistemium.sissales.enums.STMStorageType
 import com.sistemium.sissales.model.STMSQLiteDatabaseAdapter
 import com.sistemium.sissales.model.STMModeller
-import com.sistemium.sissales.persisting.STMPersister
-import com.sistemium.sissales.persisting.STMPersisterRunner
+import com.sistemium.sissales.persisting.*
 
 @SuppressLint("SetJavaScriptEnabled")
 class WebViewActivity : Activity() {
@@ -42,7 +41,23 @@ class WebViewActivity : Activity() {
 
         val runner = STMPersisterRunner(hashMapOf(STMStorageType.STMStorageTypeSQLiteDatabase to adapter))
 
-        persistenceDelegate = STMPersister(runner)
+        val persister = STMPersister(runner)
+
+        val entityNameInterceptor = STMPersistingInterceptorUniqueProperty()
+        entityNameInterceptor.entityName = STMConstants.STM_ENTITY_NAME
+        entityNameInterceptor.propertyName = "name"
+
+        persister.beforeMergeEntityName(entityNameInterceptor.entityName!!, entityNameInterceptor)
+
+        val settingsInterceptor = STMSettingsController()
+
+        persister.beforeMergeEntityName(STMConstants.STM_SETTING_NAME, settingsInterceptor)
+
+        val recordStatusInterceptor = STMRecordStatusController()
+
+        persister.beforeMergeEntityName(STMConstants.STM_RECORDSTATUS_NAME, recordStatusInterceptor)
+
+        persistenceDelegate = persister
 
         webView = findViewById(R.id.webView1)
         webView?.settings?.javaScriptEnabled = true

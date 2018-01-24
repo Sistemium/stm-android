@@ -3,12 +3,15 @@ package com.sistemium.sissales.persisting
 import com.sistemium.sissales.base.STMConstants
 import com.sistemium.sissales.enums.STMStorageType
 import com.sistemium.sissales.interfaces.STMAdapting
+import com.sistemium.sissales.interfaces.STMModelling
 import com.sistemium.sissales.interfaces.STMPersistingTransaction
 
 /**
  * Created by edgarjanvuicik on 22/11/2017.
  */
 class STMPersisterTransactionCoordinator(private val adapters:HashMap<STMStorageType, STMAdapting>, private val readOnly:Boolean):STMPersistingTransaction {
+
+    override var modellingDelegate: STMModelling? = null
 
     private val transactions = hashMapOf<STMStorageType,STMPersistingTransaction>()
 
@@ -28,6 +31,10 @@ class STMPersisterTransactionCoordinator(private val adapters:HashMap<STMStorage
 
         return transaction.mergeWithoutSave(entityName, attributes, options)
 
+    }
+
+    override fun destroyWithoutSave(entityName: String, predicate: STMPredicate?, options: Map<*, *>?):Int {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
     fun endTransactionWithSuccess(success:Boolean){
