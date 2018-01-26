@@ -29,6 +29,7 @@ class STMConstants{
         const val STM_SETTING_NAME = "STMSetting"
         const val STM_RECORDSTATUS_NAME = "STMRecordStatus"
         const val STMPersistingOptionRecordstatuses = "createRecordStatuses"
+        const val STMPersistingOptionOrderDirectionDescValue = "DESC"
 
     }
 

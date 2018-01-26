@@ -8,7 +8,9 @@ import com.github.kittinunf.fuel.Fuel
 import com.github.kittinunf.result.Result
 import com.github.kittinunf.result.getAs
 import com.google.gson.GsonBuilder
+import com.sistemium.sissales.WebInterface.STMWebAppInterfaceSubscription
 import com.sistemium.sissales.base.STMConstants
+import com.sistemium.sissales.base.STMFunctions
 import com.sistemium.sissales.persisting.STMPredicate
 
 
@@ -189,11 +191,45 @@ class WebAppInterface internal constructor(private var webViewActivity: WebViewA
 
         val mapParameters = gson.fromJson(parameters, Map::class.java)
 
-        // TODO implement receiveSubscribeMessage
+        val entities = mapParameters["entities"] as? ArrayList<*>
 
-        val callback = mapParameters["callback"]
+        var errorMessage:String? = null
 
-        return javascriptCallback(arrayOf("subscribe to entities success"), mapParameters, callback as String)
+        val dataCallback = mapParameters["dataCallback"] as? String
+
+        val callback = mapParameters["callback"] as? String
+
+        if (dataCallback == null) {
+            errorMessage = "No dataCallback specified"
+        }
+
+        if (callback == null) {
+            errorMessage = "No callback specified"
+        }
+
+        if (entities == null){
+
+            errorMessage = "No entities specified"
+
+        }
+
+        if (errorMessage != null){
+
+            return javascriptCallback(errorMessage, mapParameters)
+
+        }
+
+        try {
+
+            subscribeToEntities(entities!!, dataCallback!!)
+
+        }catch (e:Exception){
+
+            return javascriptCallback(e.toString(), mapParameters)
+
+        }
+
+        javascriptCallback(arrayOf("subscribe to entities success"), mapParameters, callback!!)
 
     }
 
@@ -420,6 +456,107 @@ class WebAppInterface internal constructor(private var webViewActivity: WebViewA
         }
 
         return webViewActivity.persistenceDelegate?.mergeMany(entityName, parametersData, null) ?: throw Exception("Missing persistenceDelegate")
+
+    }
+
+    private val subscriptions = hashMapOf<String, STMWebAppInterfaceSubscription>()
+
+    private fun subscribeToEntities(entities:ArrayList<*>, callbackName:String){
+
+        var subscription = subscriptions[callbackName]
+
+        if (subscription == null){
+
+            subscription = STMWebAppInterfaceSubscription(callbackName)
+
+        }
+
+        for (entityName in entities){
+
+            val prfixedEntityName = STMFunctions.addPrefixToEntityName(entityName as String)
+
+            subscription.entityNames.add(prfixedEntityName)
+
+            updateLtsOffsetForEntityName(entityName, subscription)
+
+        }
+
+        for (subscriptionID in subscription.persisterSubscriptions){
+
+            webViewActivity.persistenceDelegate?.cancelSubscription(subscriptionID)
+
+        }
+
+        val persisterSubscriptions = hashSetOf<String>()
+
+        val options = hashMapOf(STMConstants.STMPersistingOptionLts to true)
+
+        for (entityName in subscription.entityNames){
+
+            persisterSubscriptions.add(webViewActivity.persistenceDelegate!!.observeEntity(entityName, null, options){
+
+                sendSubscribedBunchOfObjects(it, entityName)
+
+                var lts:String? = null
+
+                for (obj in it){
+
+                    val objLts = (obj as? Map<*,*>)?.get(STMConstants.STMPersistingOptionLts) as? String
+
+                    if (objLts != null){
+
+                        if (lts == null){
+
+                            lts = objLts
+
+                        }else{
+
+                            if (objLts > lts) {
+
+                                lts = objLts
+
+                            }
+
+                        }
+
+                    }
+
+                }
+
+            if (lts != null) {
+
+                subscription.ltsOffset[entityName] = lts
+
+            }
+
+            })
+
+        }
+
+        subscription.persisterSubscriptions = persisterSubscriptions
+        subscriptions[callbackName] = subscription
+
+    }
+
+    private fun sendSubscribedBunchOfObjects(objectsArray:ArrayList<*>, entityName:String){
+
+
+
+    }
+
+    private fun updateLtsOffsetForEntityName(entityName:String, subscription:STMWebAppInterfaceSubscription){
+
+        val options = hashMapOf(STMConstants.STMPersistingOptionPageSize to 1,
+                                STMConstants.STMPersistingOptionOrder to STMConstants.STMPersistingOptionLts,
+                                STMConstants.STMPersistingOptionOrderDirection to STMConstants.STMPersistingOptionOrderDirectionDescValue)
+
+        val objects = webViewActivity.persistenceDelegate?.findAllSync(entityName, null, options)
+
+        if (objects?.firstOrNull() != null){
+
+            subscription.ltsOffset[entityName] = objects.first()[STMConstants.STMPersistingOptionLts] as String
+
+        }
 
     }
 

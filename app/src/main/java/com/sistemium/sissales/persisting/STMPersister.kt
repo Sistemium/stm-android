@@ -1,5 +1,6 @@
 package com.sistemium.sissales.persisting
 
+import com.sistemium.sissales.base.STMFunctions
 import com.sistemium.sissales.interfaces.*
 import nl.komponents.kovenant.Promise
 import nl.komponents.kovenant.task
@@ -7,7 +8,7 @@ import nl.komponents.kovenant.task
 /**
  * Created by edgarjanvuicik on 20/11/2017.
  */
-class STMPersister(private val runner:STMPersistingRunning):STMPersistingSync,STMPersistingPromised, STMPersistingIntercepting {
+class STMPersister(private val runner:STMPersistingRunning): STMFullStackPersisting, STMPersistingIntercepting {
 
     override fun findSync(entityName: String, identifier: String, options: Map<*, *>?): Map<*, *> {
 
@@ -74,7 +75,7 @@ class STMPersister(private val runner:STMPersistingRunning):STMPersistingSync,ST
 
         }
 
-//        notifyObservingEntityName(STMFunctions.addPrefixToEntityName(entityName), if (result.count() != 0)  result else _attributeArray, options)
+        notifyObservingEntityName(STMFunctions.addPrefixToEntityName(entityName), if (result.count() != 0)  result else attributeArray, options)
 
         return result
 
@@ -102,7 +103,7 @@ class STMPersister(private val runner:STMPersistingRunning):STMPersistingSync,ST
 
     //STMPersistingIntercepting
 
-    override val beforeMergeInterceptors = hashMapOf<String, STMPersistingMergeInterceptor>()
+    private val beforeMergeInterceptors = hashMapOf<String, STMPersistingMergeInterceptor>()
 
     override fun beforeMergeEntityName(entityName: String, interceptor: STMPersistingMergeInterceptor?) {
 
@@ -130,48 +131,77 @@ class STMPersister(private val runner:STMPersistingRunning):STMPersistingSync,ST
 
     private val subscriptions = hashMapOf<String, STMPersistingObservingSubscription>()
 
-    fun notifyObservingEntityName(entityName:String, items: ArrayList<Map<*,*>>, options:Map<*,*>?){
+    override fun notifyObservingEntityName(entityName:String, items: ArrayList<*>, options:Map<*,*>?){
 
         for (key in this.subscriptions.keys) {
 
             val subscription = this.subscriptions[key] ?: continue
 
-            if (subscription.entityName == entityName) continue
+            if (subscription.entityName != entityName) continue
 
-//            NSSet *unmatchedOptions = [subscription.options keysOfEntriesPassingTest:^BOOL(NSString *optionName, id optionValue, BOOL *stop) {
-//            if ([optionValue isKindOfClass:NSNumber.class]) {
-//            //                if (![optionValue respondsToSelector:@selector(boolValue)] || ![options[optionName] respondsToSelector:@selector(boolValue)]) {
-////                    return [optionValue isEqual:options[optionName]];
-////                }
-//            return [optionValue boolValue] != [(NSNumber *)options[optionName] boolValue];
-//        }
-//            return [optionValue isEqual:options[optionName]];
-//        }];
-//
-//            if (unmatchedOptions.count) continue;
-//
-//            NSArray *itemsFiltered = items;
-//
-//            if (subscription.predicate) {
-//                @try {
-//                    itemsFiltered = [items filteredArrayUsingPredicate:subscription.predicate];
-//                } @catch (NSException *exception) {
-//                    NSLog(@"notifyObservingEntityName catch: %@", exception);
-//                    itemsFiltered = nil;
-//                }
-//            }
-//
-//            if (!itemsFiltered.count) continue;
-//
-//            if (subscription.entityName) {
-//                if (subscription.callback) subscription.callback(itemsFiltered);
-//            } else {
-//                if (subscription.callbackWithEntityName) subscription.callbackWithEntityName(entityName, itemsFiltered);
-//            }
+            val unmatchedOptions = subscription.options?.filter {
+
+                if (it.value is Boolean){
+
+                    return@filter it.value != (options?.get(it.key) != null)
+
+                }
+
+                return@filter it.value == options?.get(it.key)
+
+            }
+
+            if (unmatchedOptions?.count() != null && unmatchedOptions.count() != 0){
+
+                continue
+
+            }
+
+            if (subscription.predicate != null){
+
+                items.filter(subscription.predicate!!)
+
+            }
+
+            if (items.count() == 0) continue
+
+            if (subscription.entityName != null){
+
+                subscription.callback?.invoke(items)
+
+            }else{
+
+                subscription.callbackWithEntityName?.invoke(entityName, items)
+
+            }
 
         }
 
-        TODO("not implemented")
+    }
+
+    override fun observeEntity(entityName: String, predicate: ((Any) -> Boolean)?, options: Map<*, *>, callback: (ArrayList<*>) -> Unit): String {
+
+        val subscription = STMPersistingObservingSubscription(entityName, options, predicate)
+
+        subscription.callback = callback
+
+        subscriptions[subscription.identifier.toString()] = subscription
+
+        return subscription.identifier.toString()
+
+    }
+
+    override fun cancelSubscription(subscriptionId: String): Boolean {
+
+        val result = subscriptions[subscriptionId] != null
+
+        if (result){
+
+            subscriptions.remove(subscriptionId)
+
+        }
+
+        return result
 
     }
 
