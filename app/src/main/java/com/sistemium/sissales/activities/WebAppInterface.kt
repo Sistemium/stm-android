@@ -1,9 +1,7 @@
 package com.sistemium.sissales.activities
 
 import android.webkit.JavascriptInterface
-import com.google.gson.Gson
 import nl.komponents.kovenant.*
-import android.util.Log
 import com.github.kittinunf.fuel.Fuel
 import com.github.kittinunf.result.Result
 import com.github.kittinunf.result.getAs
@@ -82,15 +80,13 @@ class WebAppInterface internal constructor(private var webViewActivity: WebViewA
 
         arrayOfObjectsRequestedByScriptMessage(mapParameters) then {
 
-            result ->
-
             STMFunctions.debugLog("FINDALL", "arrayOfObjectsRequestedByScriptMessage finished executing callback")
 
-            javascriptCallback(result, mapParameters)
+            javascriptCallback(it, mapParameters)
 
         } fail {
 
-            error -> javascriptCallback("$error", mapParameters)
+            javascriptCallback("$it", mapParameters)
 
         }
 
@@ -114,11 +110,11 @@ class WebAppInterface internal constructor(private var webViewActivity: WebViewA
 
         updateObjectsFromScriptMessage(mapParameters) then {
 
-            result -> javascriptCallback(result, mapParameters)
+            javascriptCallback(it, mapParameters)
 
         } fail {
 
-            error -> javascriptCallback("$error", mapParameters)
+            javascriptCallback("$it", mapParameters)
 
         }
 
@@ -148,11 +144,11 @@ class WebAppInterface internal constructor(private var webViewActivity: WebViewA
 
         } then {
 
-            result -> javascriptCallback(result, mapParameters)
+            javascriptCallback(it, mapParameters)
 
         } fail {
 
-            error -> javascriptCallback("$error", mapParameters)
+            javascriptCallback("$it", mapParameters)
 
         }
 
@@ -420,9 +416,7 @@ class WebAppInterface internal constructor(private var webViewActivity: WebViewA
         if (xidString != null){
             return webViewActivity.persistenceDelegate?.find(entityName, xidString, options)?.then {
 
-                result ->
-
-                return@then arrayListOf(result)
+                return@then arrayListOf(it)
 
             } ?: throw Exception("Missing persistenceDelegate")
         }
