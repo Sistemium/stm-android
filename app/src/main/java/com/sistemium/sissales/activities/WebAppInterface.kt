@@ -82,7 +82,11 @@ class WebAppInterface internal constructor(private var webViewActivity: WebViewA
 
         arrayOfObjectsRequestedByScriptMessage(mapParameters) then {
 
-            result -> javascriptCallback(result, mapParameters)
+            result ->
+
+            STMFunctions.debugLog("FINDALL", "arrayOfObjectsRequestedByScriptMessage finished executing callback")
+
+            javascriptCallback(result, mapParameters)
 
         } fail {
 
@@ -578,12 +582,12 @@ class WebAppInterface internal constructor(private var webViewActivity: WebViewA
 
         webViewActivity.webView?.post {
 
+            STMFunctions.debugLog("DEBUG", "EvaluateJS")
+            STMFunctions.debugLog("JSFUNCTION", jsFunction)
+
             webViewActivity.webView?.evaluateJavascript(jsFunction){
-                result ->
-                STMFunctions.debugLog("DEBUG", "EvaluateJS")
-                STMFunctions.debugLog("DEBUG", jsCallbackFunction)
-                STMFunctions.debugLog("DEBUG", this.gson.toJson(arguments))
-                STMFunctions.debugLog("DEBUG", result)
+
+                STMFunctions.debugLog("DEBUG", "Evaluate finish")
 
             }
 
@@ -610,12 +614,12 @@ class WebAppInterface internal constructor(private var webViewActivity: WebViewA
 
         webViewActivity.webView?.post {
 
-            webViewActivity.webView?.evaluateJavascript(jsFunction){
-                result ->
+            STMFunctions.debugLog("DEBUG", "EvaluateErrorJS")
+            STMFunctions.debugLog("JSFUNCTION", jsFunction)
 
-                STMFunctions.debugLog("DEBUG", "EvaluateErrorJS")
-                STMFunctions.debugLog("DEBUG", this.gson.toJson(arguments))
-                STMFunctions.debugLog("DEBUG", result)
+            webViewActivity.webView?.evaluateJavascript(jsFunction){
+
+                STMFunctions.debugLog("DEBUG", "Evaluate finish")
 
             }
 

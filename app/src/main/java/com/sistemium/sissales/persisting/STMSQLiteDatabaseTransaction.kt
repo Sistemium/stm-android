@@ -306,7 +306,20 @@ class STMSQLiteDatabaseTransaction(private var database: SQLiteDatabase, private
 
         val c = this.database.rawQuery(query,null)
 
+        STMFunctions.debugLog("QUERY", "execute finished")
+
         if (c.moveToFirst()) {
+
+            val atributeTypes = hashMapOf<String, String?>()
+
+            c.columnNames.forEach {
+
+                atributeTypes[it] = adapter.model.fieldsForEntityName(STMFunctions.addPrefixToEntityName(tableName))[it]?.attributeType
+
+            }
+
+            STMFunctions.debugLog("QUERY", "result reading preparations finished")
+
             do {
 
                 val dict = hashMapOf<String, Any?>()
@@ -315,7 +328,7 @@ class STMSQLiteDatabaseTransaction(private var database: SQLiteDatabase, private
 
                     val index = c.getColumnIndex(columnName)
 
-                    val attributeType = adapter.model.fieldsForEntityName(STMFunctions.addPrefixToEntityName(tableName))[columnName]?.attributeType
+                    val attributeType = atributeTypes[columnName]
 
                     if (c.isNull(index)){
 
@@ -358,6 +371,8 @@ class STMSQLiteDatabaseTransaction(private var database: SQLiteDatabase, private
                 rez += dict
 
             } while (c.moveToNext())
+
+            STMFunctions.debugLog("QUERY", "result reading finished")
         }
         c.close()
 

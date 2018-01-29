@@ -71,12 +71,14 @@ class STMSQLiteDatabaseOperation(val readOnly:Boolean, private var adapter: STMS
 
         if (readOnly){
 
-            STMFunctions.debugLog("DEBUG", "returning pool database to array")
-            STMFunctions.debugLog("DEBUG", "pool database count before append: ${adapter.poolDatabases.size}")
+            STMFunctions.debugLog("SQLite", "returning pool database to array")
 
             synchronized(adapter.poolDatabases){
                 adapter.poolDatabases.add(database!!)
             }
+
+            STMFunctions.debugLog("SQLite", "Returned pooldatabase, pools size: ${adapter.poolDatabases.size}")
+
 
         }
 
@@ -85,6 +87,8 @@ class STMSQLiteDatabaseOperation(val readOnly:Boolean, private var adapter: STMS
             lock2.notify()
 
         }
+
+        STMFunctions.debugLog("SQLite", "Finished operation")
 
     }
 
