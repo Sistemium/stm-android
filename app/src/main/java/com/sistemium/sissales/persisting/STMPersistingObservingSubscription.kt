@@ -1,5 +1,6 @@
 package com.sistemium.sissales.persisting
 
+import com.sistemium.sissales.base.STMFunctions
 import java.util.*
 
 /**
@@ -9,6 +10,6 @@ class STMPersistingObservingSubscription(var entityName:String? = null, var opti
 
     var callback: ((ArrayList<*>) -> (Unit))? = null
     var callbackWithEntityName: ((String, ArrayList<*>) -> (Unit))? = null
-    val identifier = UUID.randomUUID()!!
+    val identifier = STMFunctions.uuidString()
 
 }

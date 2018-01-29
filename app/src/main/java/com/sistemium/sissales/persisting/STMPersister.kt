@@ -185,9 +185,9 @@ class STMPersister(private val runner:STMPersistingRunning): STMFullStackPersist
 
         subscription.callback = callback
 
-        subscriptions[subscription.identifier.toString()] = subscription
+        subscriptions[subscription.identifier] = subscription
 
-        return subscription.identifier.toString()
+        return subscription.identifier
 
     }
 

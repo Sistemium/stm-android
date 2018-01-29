@@ -2,6 +2,7 @@ package com.sistemium.sissales.persisting
 
 import android.database.sqlite.SQLiteDatabase
 import android.util.Log
+import com.sistemium.sissales.base.STMFunctions
 import com.sistemium.sissales.model.STMSQLiteDatabaseAdapter
 
 /**
@@ -37,9 +38,8 @@ class STMSQLiteDatabaseOperation(val readOnly:Boolean, private var adapter: STMS
     override fun run() {
 
         if (readOnly){
-
-            Log.d("DEBUG", "removing pool database from array")
-            Log.d("DEBUG", "pool database count before remove: ${adapter.poolDatabases.size}")
+            STMFunctions.debugLog("DEBUG", "removing pool database from array")
+            STMFunctions.debugLog("DEBUG", "pool database count before remove: ${adapter.poolDatabases.size}")
 
             synchronized(adapter.poolDatabases){
                 database = adapter.poolDatabases.removeAt(0)
@@ -71,8 +71,8 @@ class STMSQLiteDatabaseOperation(val readOnly:Boolean, private var adapter: STMS
 
         if (readOnly){
 
-            Log.d("Debug", "returning pool database to array")
-            Log.d("DEBUG", "pool database count before append: ${adapter.poolDatabases.size}")
+            STMFunctions.debugLog("DEBUG", "returning pool database to array")
+            STMFunctions.debugLog("DEBUG", "pool database count before append: ${adapter.poolDatabases.size}")
 
             synchronized(adapter.poolDatabases){
                 adapter.poolDatabases.add(database!!)

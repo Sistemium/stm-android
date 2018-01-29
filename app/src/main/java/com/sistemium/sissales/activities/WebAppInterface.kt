@@ -27,7 +27,7 @@ class WebAppInterface internal constructor(private var webViewActivity: WebViewA
     @JavascriptInterface
     fun errorCatcher(parameters: String?){
 
-        Log.d("DEBUG", "errorCatcher")
+        STMFunctions.debugLog("DEBUG", "errorCatcher")
 
         val mapParameters = gson.fromJson(parameters, Map::class.java)
 
@@ -40,7 +40,7 @@ class WebAppInterface internal constructor(private var webViewActivity: WebViewA
     @JavascriptInterface
     fun post(parameters: String?){
 
-        Log.d("DEBUG", "post")
+        STMFunctions.debugLog("DEBUG", "post")
 
         val mapParameters = gson.fromJson(parameters, Map::class.java)
 
@@ -51,7 +51,7 @@ class WebAppInterface internal constructor(private var webViewActivity: WebViewA
     @JavascriptInterface
     fun get(parameters: String?){
 
-        Log.d("DEBUG", "got")
+        STMFunctions.debugLog("DEBUG", "got")
 
         val mapParameters = gson.fromJson(parameters, Map::class.java)
 
@@ -62,7 +62,7 @@ class WebAppInterface internal constructor(private var webViewActivity: WebViewA
     @JavascriptInterface
     fun barCodeScannerOn(parameters: String?){
 
-        Log.d("DEBUG", "barCodeScannerOn")
+        STMFunctions.debugLog("DEBUG", "barCodeScannerOn")
 
         val mapParameters = gson.fromJson(parameters, Map::class.java)
 
@@ -76,7 +76,7 @@ class WebAppInterface internal constructor(private var webViewActivity: WebViewA
     @JavascriptInterface
     fun findAll(parameters: String?){
 
-        Log.d("DEBUG", "findAll")
+        STMFunctions.debugLog("DEBUG", "findAll")
 
         val mapParameters = gson.fromJson(parameters, Map::class.java)
 
@@ -95,7 +95,7 @@ class WebAppInterface internal constructor(private var webViewActivity: WebViewA
     @JavascriptInterface
     fun find(parameters: String?){
 
-        Log.d("DEBUG", "find")
+        STMFunctions.debugLog("DEBUG", "find")
 
         return findAll(parameters)
 
@@ -104,7 +104,7 @@ class WebAppInterface internal constructor(private var webViewActivity: WebViewA
     @JavascriptInterface
     fun updateAll(parameters: String?){
 
-        Log.d("DEBUG", "updateAll")
+        STMFunctions.debugLog("DEBUG", "updateAll")
 
         val mapParameters = gson.fromJson(parameters, Map::class.java)
 
@@ -123,7 +123,7 @@ class WebAppInterface internal constructor(private var webViewActivity: WebViewA
     @JavascriptInterface
     fun update(parameters: String?){
 
-        Log.d("DEBUG", "update")
+        STMFunctions.debugLog("DEBUG", "update")
 
         return updateAll(parameters)
 
@@ -132,7 +132,7 @@ class WebAppInterface internal constructor(private var webViewActivity: WebViewA
     @JavascriptInterface
     fun destroy(parameters: String?){
 
-        Log.d("DEBUG", "destroy")
+        STMFunctions.debugLog("DEBUG", "destroy")
 
         val mapParameters = gson.fromJson(parameters, Map::class.java)
 
@@ -157,7 +157,7 @@ class WebAppInterface internal constructor(private var webViewActivity: WebViewA
     @JavascriptInterface
     fun sound(parameters: String?){
 
-        Log.d("DEBUG", "sound")
+        STMFunctions.debugLog("DEBUG", "sound")
 
         val mapParameters = gson.fromJson(parameters, Map::class.java)
 
@@ -170,7 +170,7 @@ class WebAppInterface internal constructor(private var webViewActivity: WebViewA
     @JavascriptInterface
     fun tabbar(parameters: String?){
 
-        Log.d("DEBUG", "tabbar")
+        STMFunctions.debugLog("DEBUG", "tabbar")
 
         val mapParameters = gson.fromJson(parameters, Map::class.java)
 
@@ -187,7 +187,7 @@ class WebAppInterface internal constructor(private var webViewActivity: WebViewA
     @JavascriptInterface
     fun subscribe(parameters: String?){
 
-        Log.d("DEBUG", "subscribe")
+        STMFunctions.debugLog("DEBUG", "subscribe")
 
         val mapParameters = gson.fromJson(parameters, Map::class.java)
 
@@ -236,7 +236,7 @@ class WebAppInterface internal constructor(private var webViewActivity: WebViewA
     @JavascriptInterface
     fun remoteControl(parameters: String?){
 
-        Log.d("DEBUG", "remoteControl")
+        STMFunctions.debugLog("DEBUG", "remoteControl")
 
         val mapParameters = gson.fromJson(parameters, Map::class.java)
 
@@ -251,7 +251,7 @@ class WebAppInterface internal constructor(private var webViewActivity: WebViewA
     @JavascriptInterface
     fun roles(parameters: String?){
 
-        Log.d("DEBUG", "roles")
+        STMFunctions.debugLog("DEBUG", "remoteControl")
 
         val mapParameters = gson.fromJson(parameters, Map::class.java)
 
@@ -290,7 +290,7 @@ class WebAppInterface internal constructor(private var webViewActivity: WebViewA
     @JavascriptInterface
     fun checkin(parameters: String?){
 
-        Log.d("DEBUG", "checkin")
+        STMFunctions.debugLog("DEBUG", "checkin")
 
         val mapParameters = gson.fromJson(parameters, Map::class.java)
 
@@ -305,7 +305,7 @@ class WebAppInterface internal constructor(private var webViewActivity: WebViewA
     @JavascriptInterface
     fun getPicture(parameters: String?){
 
-        Log.d("DEBUG", "getPicture")
+        STMFunctions.debugLog("DEBUG", "getPicture")
 
         val mapParameters = gson.fromJson(parameters, Map::class.java)
 
@@ -320,7 +320,7 @@ class WebAppInterface internal constructor(private var webViewActivity: WebViewA
     @JavascriptInterface
     fun takePhoto(parameters: String?){
 
-        Log.d("DEBUG", "takePhoto")
+        STMFunctions.debugLog("DEBUG", "takePhoto")
 
         val mapParameters = gson.fromJson(parameters, Map::class.java)
 
@@ -335,7 +335,7 @@ class WebAppInterface internal constructor(private var webViewActivity: WebViewA
     @JavascriptInterface
     fun unsyncedInfoService(parameters: String?){
 
-        Log.d("DEBUG", "unsyncedInfoService")
+        STMFunctions.debugLog("DEBUG", "unsyncedInfoService")
 
         val mapParameters = gson.fromJson(parameters, Map::class.java)
 
@@ -346,7 +346,7 @@ class WebAppInterface internal constructor(private var webViewActivity: WebViewA
     @JavascriptInterface
     fun sendToCameraRoll(parameters: String?){
 
-        Log.d("DEBUG", "sendToCameraRoll")
+        STMFunctions.debugLog("DEBUG", "sendToCameraRoll")
 
         val mapParameters = gson.fromJson(parameters, Map::class.java)
 
@@ -361,7 +361,7 @@ class WebAppInterface internal constructor(private var webViewActivity: WebViewA
     @JavascriptInterface
     fun loadImage(parameters: String?){
 
-        Log.d("DEBUG", "loadImage")
+        STMFunctions.debugLog("DEBUG", "loadImage")
 
         val mapParameters = gson.fromJson(parameters, Map::class.java)
 
@@ -376,7 +376,7 @@ class WebAppInterface internal constructor(private var webViewActivity: WebViewA
     @JavascriptInterface
     fun saveImage(parameters: String?){
 
-        Log.d("DEBUG", "saveImage")
+        STMFunctions.debugLog("DEBUG", "saveImage")
 
         val mapParameters = gson.fromJson(parameters, Map::class.java)
 
@@ -391,7 +391,7 @@ class WebAppInterface internal constructor(private var webViewActivity: WebViewA
     @JavascriptInterface
     fun copyToClipboard(parameters: String?){
 
-        Log.d("DEBUG", "copyToClipboard")
+        STMFunctions.debugLog("DEBUG", "copyToClipboard")
 
         val mapParameters = gson.fromJson(parameters, Map::class.java)
 
@@ -540,7 +540,7 @@ class WebAppInterface internal constructor(private var webViewActivity: WebViewA
 
     private fun sendSubscribedBunchOfObjects(objectsArray:ArrayList<*>, entityName:String){
 
-
+        TODO("not implemented")
 
     }
 
@@ -580,10 +580,11 @@ class WebAppInterface internal constructor(private var webViewActivity: WebViewA
 
             webViewActivity.webView?.evaluateJavascript(jsFunction){
                 result ->
-                Log.d("DEBUG","EvaluateJS")
-                Log.d("DEBUG", jsCallbackFunction)
-                Log.d("DEBUG", this.gson.toJson(arguments))
-                Log.d("DEBUG", result)
+                STMFunctions.debugLog("DEBUG", "EvaluateJS")
+                STMFunctions.debugLog("DEBUG", jsCallbackFunction)
+                STMFunctions.debugLog("DEBUG", this.gson.toJson(arguments))
+                STMFunctions.debugLog("DEBUG", result)
+
             }
 
         }
@@ -611,9 +612,11 @@ class WebAppInterface internal constructor(private var webViewActivity: WebViewA
 
             webViewActivity.webView?.evaluateJavascript(jsFunction){
                 result ->
-                Log.d("DEBUG","EvaluateErrorJS")
-                Log.d("DEBUG", this.gson.toJson(arguments))
-                Log.d("DEBUG", result)
+
+                STMFunctions.debugLog("DEBUG", "EvaluateErrorJS")
+                STMFunctions.debugLog("DEBUG", this.gson.toJson(arguments))
+                STMFunctions.debugLog("DEBUG", result)
+
             }
 
         }

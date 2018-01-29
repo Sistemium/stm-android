@@ -1,5 +1,6 @@
 package com.sistemium.sissales.base
 
+import android.util.Log
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -52,6 +53,12 @@ class STMFunctions{
         fun jsonStringFromObject(value:Any):String{
 
             TODO("not implemented")
+
+        }
+
+        fun debugLog(name:String, msg:String){
+
+            Log.d("${stringFromNow()}:$name", msg)
 
         }
 

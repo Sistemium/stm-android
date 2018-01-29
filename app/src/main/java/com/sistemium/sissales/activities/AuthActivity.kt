@@ -18,6 +18,7 @@ import android.app.ActivityOptions
 import android.util.Log
 import android.view.KeyEvent
 import com.sistemium.sissales.R
+import com.sistemium.sissales.base.STMFunctions
 import devliving.online.securedpreferencestore.DefaultRecoveryHandler
 import devliving.online.securedpreferencestore.SecuredPreferenceStore
 
@@ -133,7 +134,7 @@ class AuthActivity : AppCompatActivity() {
 
         if (error is Error){
 
-            Log.d("ERROR", error.toString())
+            STMFunctions.debugLog("Error", error.toString())
 
         }
 

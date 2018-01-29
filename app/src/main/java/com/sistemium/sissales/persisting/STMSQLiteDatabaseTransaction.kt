@@ -92,10 +92,10 @@ class STMSQLiteDatabaseTransaction(private var database: SQLiteDatabase, private
 
         if (predicate != null){
             where = predicate.predicateForAdapter(adapter, entityName) ?: ""
-            Log.d("DEBUG:EntityName", entityName)
-            Log.d("DEBUG:PREDICATE", where)
-            Log.d("DEBUG:OPTIONS", options)
-            Log.d("DEBUG:COLUMNS", columns)
+            STMFunctions.debugLog("EntityName", entityName)
+            STMFunctions.debugLog("PREDICATE", where)
+            STMFunctions.debugLog("OPTIONS", options)
+            STMFunctions.debugLog("COLUMNS", columns)
         }
 
         return selectFrom(tableName, columns, where, options)
@@ -302,7 +302,7 @@ class STMSQLiteDatabaseTransaction(private var database: SQLiteDatabase, private
 
         val query = "SELECT $columns FROM [$tableName]$_where $_orderBy"
 
-        Log.d("DEBUG:QUERY", query)
+        STMFunctions.debugLog("QUERY", query)
 
         val c = this.database.rawQuery(query,null)
 

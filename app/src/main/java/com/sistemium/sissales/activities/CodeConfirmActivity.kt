@@ -18,6 +18,7 @@ import com.github.kittinunf.fuel.android.extension.responseJson
 import com.github.kittinunf.result.Result
 import com.github.kittinunf.result.getAs
 import com.sistemium.sissales.R
+import com.sistemium.sissales.base.STMFunctions
 import devliving.online.securedpreferencestore.SecuredPreferenceStore
 
 class CodeConfirmActivity : AppCompatActivity() {
@@ -101,7 +102,7 @@ class CodeConfirmActivity : AppCompatActivity() {
 
         if (error is Error){
 
-            Log.d("ERROR", error.toString())
+            STMFunctions.debugLog("ERROR", error.toString())
 
         }
 

@@ -12,7 +12,7 @@ class STMConstants{
         const val DEFAULT_PERSISTING_PRIMARY_KEY = "id"
         const val STMPersistingOptionFantoms = "fantoms"
         const val STMPersistingOptionForceStorage = "forceStorage"
-        const val POOL_SIZE = 3
+        const val POOL_SIZE = 1
         const val SQL_LITE_PATH = "sqllitepath"
         const val STMPersistingOptionPageSize = "pageSize"
         const val STMPersistingOptionStartPage = "startPage"
