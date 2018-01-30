@@ -1,5 +1,6 @@
 package com.sistemium.sissales.persisting
 
+import com.sistemium.sissales.base.STMConstants
 import com.sistemium.sissales.base.STMFunctions
 import com.sistemium.sissales.interfaces.*
 import nl.komponents.kovenant.Promise
@@ -98,6 +99,40 @@ class STMPersister(private val runner:STMPersistingRunning): STMFullStackPersist
             return@task mergeManySync(entityName, attributeArray, options)
 
         }
+
+    }
+
+    override fun destroy(entityName: String, identifier: String, options: Map<*, *>?): Promise<Boolean, Exception> {
+
+        return task{
+
+            return@task destroySync(entityName, identifier, options)
+
+        }
+
+    }
+
+    override fun destroySync(entityName: String, identifier: String, options: Map<*, *>?): Boolean {
+
+        val deletedCount = destroyAllSync(entityName, STMPredicate("=", STMPredicate(STMConstants.DEFAULT_PERSISTING_PRIMARY_KEY), STMPredicate(identifier)), null)
+
+        return deletedCount > 0
+
+    }
+
+    override fun destroyAllSync(entityName: String, predicate: STMPredicate?, options: Map<*, *>?): Int {
+
+        var count = 0
+
+        runner.execute {
+
+            count = it.destroyWithoutSave(entityName, predicate, options)
+
+            return@execute true
+
+        }
+
+        return count
 
     }
 

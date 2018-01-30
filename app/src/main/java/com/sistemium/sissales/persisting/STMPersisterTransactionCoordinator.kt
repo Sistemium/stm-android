@@ -1,6 +1,7 @@
 package com.sistemium.sissales.persisting
 
 import com.sistemium.sissales.base.STMConstants
+import com.sistemium.sissales.base.STMFunctions
 import com.sistemium.sissales.enums.STMStorageType
 import com.sistemium.sissales.interfaces.STMAdapting
 import com.sistemium.sissales.interfaces.STMModelling
@@ -34,7 +35,53 @@ class STMPersisterTransactionCoordinator(private val adapters:HashMap<STMStorage
     }
 
     override fun destroyWithoutSave(entityName: String, predicate: STMPredicate?, options: Map<*, *>?):Int {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+
+        var objects = arrayListOf<Map<*, *>>()
+
+        if (options?.get(STMConstants.STMPersistingOptionRecordstatuses) == null || options[STMConstants.STMPersistingOptionRecordstatuses] == true){
+
+            objects = findAllSync(entityName, predicate, options)
+
+        }
+
+        val transaction = transactionForEntityName(entityName, options)
+
+        val count = transaction.destroyWithoutSave(entityName,predicate, options)
+
+        val recordStatuses:ArrayList<Any>? = arrayListOf()
+
+        val recordStatusEntity = STMFunctions.addPrefixToEntityName("RecordStatus")
+
+        for (obj in objects){
+
+            var recordStatus: Map<*,*>? = hashMapOf(
+
+                    "objectXid" to obj[STMConstants.DEFAULT_PERSISTING_PRIMARY_KEY],
+                    "name" to STMFunctions.removePrefixFromEntityName(entityName),
+                    "isRemoved" to 1
+
+            )
+
+            recordStatus = mergeWithoutSave(recordStatusEntity, recordStatus!!, hashMapOf(STMConstants.STMPersistingOptionRecordstatuses to 0))
+
+            if (recordStatus != null){
+
+                recordStatuses?.add(recordStatus)
+
+            }
+
+        }
+
+        if (recordStatuses?.count() != null && recordStatuses.count() > 0) {
+
+//            dispatch_async(self.dispatchQueue, ^{
+//                [self.modellingDelegate notifyObservingEntityName:recordStatusEntity ofUpdatedArray:recordStatuses options:options];
+//            });
+        }
+
+
+        return count
+
     }
 
     fun endTransactionWithSuccess(success:Boolean){

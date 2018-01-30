@@ -17,4 +17,6 @@ interface STMPersistingPromised {
 
     fun mergeMany(entityName:String, attributeArray:ArrayList<*>, options:Map<*,*>?):Promise<ArrayList<Map<*,*>>,Exception>
 
+    fun destroy(entityName:String, identifier:String, options:Map<*,*>?):Promise<Boolean,Exception>
+
 }

@@ -138,9 +138,7 @@ class WebAppInterface internal constructor(private var webViewActivity: WebViewA
 
         task {
 
-            // TODO implement destroyObjectFromScriptMessage
-
-            arrayOf<Map<*, *>>()
+            destroyObjectFromScriptMessage(mapParameters)
 
         } then {
 
@@ -404,6 +402,28 @@ class WebAppInterface internal constructor(private var webViewActivity: WebViewA
     }
 
     // interface handling helpers
+
+    private fun destroyObjectFromScriptMessage(parameters: Map<*, *>): Promise<ArrayList<Map<*, *>>, Exception>{
+
+        val entityName = parameters["entity"] as? String ?: throw Exception("entity is not specified")
+
+        val xidString = parameters[STMConstants.DEFAULT_PERSISTING_PRIMARY_KEY] as? String
+
+        if (xidString != null){
+            return webViewActivity.persistenceDelegate?.destroy(entityName, xidString, null)?.then {
+
+                val result:Map<*, *> = hashMapOf("objectXid" to xidString)
+
+                return@then arrayListOf(result)
+
+            } ?: throw Exception("Missing persistenceDelegate")
+        } else{
+
+            throw Exception("empty xid")
+
+        }
+
+    }
 
     private fun arrayOfObjectsRequestedByScriptMessage(parameters: Map<*, *>):Promise<ArrayList<Map<*, *>>, Exception>{
 

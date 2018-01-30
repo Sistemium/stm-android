@@ -19,4 +19,10 @@ interface STMPersistingSync {
     @Throws(Exception::class)
     fun mergeManySync(entityName:String, attributeArray:ArrayList<*>, options:Map<*,*>?):ArrayList<Map<*,*>>
 
+    @Throws(Exception::class)
+    fun destroySync(entityName: String, identifier: String, options: Map<*, *>?):Boolean
+
+    @Throws(Exception::class)
+    fun destroyAllSync(entityName: String, predicate: STMPredicate?, options: Map<*, *>?):Int
+
 }

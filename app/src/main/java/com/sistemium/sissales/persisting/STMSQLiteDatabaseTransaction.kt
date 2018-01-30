@@ -4,7 +4,6 @@ import android.content.ContentValues
 import android.database.Cursor.FIELD_TYPE_FLOAT
 import android.database.Cursor.FIELD_TYPE_INTEGER
 import android.database.sqlite.SQLiteDatabase
-import android.util.Log
 import com.sistemium.sissales.base.STMConstants
 import com.sistemium.sissales.base.STMFunctions
 import com.sistemium.sissales.interfaces.STMModelling
