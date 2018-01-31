@@ -8,6 +8,7 @@ import com.sistemium.sissales.R
 import com.sistemium.sissales.base.STMConstants
 import com.sistemium.sissales.base.STMCoreSessionFiler
 import com.sistemium.sissales.enums.STMStorageType
+import com.sistemium.sissales.interfaces.STMFullStackPersisting
 import com.sistemium.sissales.model.STMSQLiteDatabaseAdapter
 import com.sistemium.sissales.model.STMModeller
 import com.sistemium.sissales.persisting.*
@@ -21,7 +22,7 @@ class WebViewActivity : Activity() {
 
     var roles:String? = null
 
-    var persistenceDelegate: STMPersister? = null
+    var persistenceDelegate: STMFullStackPersisting? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -58,6 +59,8 @@ class WebViewActivity : Activity() {
         persister.beforeMergeEntityName(STMConstants.STM_RECORDSTATUS_NAME, recordStatusInterceptor)
 
         persistenceDelegate = persister
+
+        modeler.persistanceDelegate = persistenceDelegate
 
         webView = findViewById(R.id.webView1)
         webView?.settings?.javaScriptEnabled = true

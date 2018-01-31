@@ -12,6 +12,8 @@ import com.sistemium.sissales.model.STMRelationshipDescription
 
 interface STMModelling {
 
+    var persistanceDelegate:STMFullStackPersisting?
+
     val managedObjectModel: STMManagedObjectModel
 
     val concreteEntities: Map <String, STMEntityDescription>

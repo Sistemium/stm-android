@@ -150,7 +150,21 @@ class STMSQLiteDatabaseTransaction(private var database: SQLiteDatabase, private
     }
 
     override fun destroyWithoutSave(entityName: String, predicate: STMPredicate?, options: Map<*, *>?):Int {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+
+        var where = predicate?.predicateForAdapter(adapter, entityName) ?: ""
+
+        val tablename = STMFunctions.removePrefixFromEntityName(entityName)
+
+        val whereOption = options?.get(STMConstants.STMPersistingOptionWhere)
+
+        if (whereOption != null && where.isNotEmpty()){
+
+            where = "($where) AND ($whereOption)"
+
+        }
+
+        return database.delete(tablename, where, null)
+
     }
 
     private fun mergeInto(tableName:String, dictionary:Map<*,*>):String?{

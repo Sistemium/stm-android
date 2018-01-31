@@ -18,7 +18,7 @@ class STMPersistingInterceptorUniqueProperty: STMPersistingMergeInterceptor {
 
         val value = attributes[this.propertyName] ?: throw Exception("$propertyName can not be null in STMPersisterInterceptorUniqueProperty")
 
-        val predicate = STMPredicate("=",STMPredicate(propertyName!!),STMPredicate(value.toString()))
+        val predicate = STMPredicate("=",STMPredicate(propertyName!!),STMPredicate("'$value'"))
 
         val findOptions = hashMapOf(STMConstants.STMPersistingOptionPageSize to 1)
 

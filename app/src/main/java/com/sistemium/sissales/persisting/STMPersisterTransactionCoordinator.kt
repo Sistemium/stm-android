@@ -74,9 +74,8 @@ class STMPersisterTransactionCoordinator(private val adapters:HashMap<STMStorage
 
         if (recordStatuses?.count() != null && recordStatuses.count() > 0) {
 
-//            dispatch_async(self.dispatchQueue, ^{
-//                [self.modellingDelegate notifyObservingEntityName:recordStatusEntity ofUpdatedArray:recordStatuses options:options];
-//            });
+            transaction.modellingDelegate?.persistanceDelegate?.notifyObservingEntityName(recordStatusEntity, recordStatuses, options)
+
         }
 
 

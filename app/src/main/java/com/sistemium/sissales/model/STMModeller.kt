@@ -2,6 +2,7 @@ package com.sistemium.sissales.model
 
 import com.sistemium.sissales.base.STMFunctions
 import com.sistemium.sissales.enums.STMStorageType
+import com.sistemium.sissales.interfaces.STMFullStackPersisting
 import com.sistemium.sissales.interfaces.STMModelling
 
 /**
@@ -9,6 +10,8 @@ import com.sistemium.sissales.interfaces.STMModelling
  */
 
 class STMModeller(modelJSON:String) : STMModelling {
+
+    override var persistanceDelegate: STMFullStackPersisting? = null
 
     override val managedObjectModel: STMManagedObjectModel = STMManagedObjectModel(modelJSON)
 

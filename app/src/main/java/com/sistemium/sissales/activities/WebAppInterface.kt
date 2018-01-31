@@ -136,11 +136,7 @@ class WebAppInterface internal constructor(private var webViewActivity: WebViewA
 
         val mapParameters = gson.fromJson(parameters, Map::class.java)
 
-        task {
-
-            destroyObjectFromScriptMessage(mapParameters)
-
-        } then {
+        destroyObjectFromScriptMessage(mapParameters) then {
 
             javascriptCallback(it, mapParameters)
 
