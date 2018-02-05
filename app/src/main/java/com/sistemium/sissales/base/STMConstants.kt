@@ -31,6 +31,8 @@ class STMConstants{
         const val STMPersistingOptionRecordstatuses = "createRecordStatuses"
         const val STMPersistingOptionOrderDirectionDescValue = "DESC"
         const val STMPersistingOptionWhere = "where"
+        const val KC_PHONE_NUMBER = "phoneNumber"
+        const val preferencesKey = "SistemiumSharedPreferences"
 
     }
 

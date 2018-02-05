@@ -62,6 +62,12 @@ class STMFunctions{
 
         }
 
+        fun isCorrectPhoneNumber(phoneNumber:String):Boolean{
+
+            TODO("not implemented")
+
+        }
+
     }
 
 }

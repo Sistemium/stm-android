@@ -50,7 +50,7 @@ class WebViewActivity : Activity() {
 
         persister.beforeMergeEntityName(entityNameInterceptor.entityName!!, entityNameInterceptor)
 
-        val settingsInterceptor = STMSettingsController()
+        val settingsInterceptor = STMCoreSettingsController()
 
         persister.beforeMergeEntityName(STMConstants.STM_SETTING_NAME, settingsInterceptor)
 
