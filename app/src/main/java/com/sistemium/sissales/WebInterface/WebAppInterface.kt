@@ -1,4 +1,4 @@
-package com.sistemium.sissales.activities
+package com.sistemium.sissales.WebInterface
 
 import android.webkit.JavascriptInterface
 import nl.komponents.kovenant.*
@@ -6,7 +6,7 @@ import com.github.kittinunf.fuel.Fuel
 import com.github.kittinunf.result.Result
 import com.github.kittinunf.result.getAs
 import com.google.gson.GsonBuilder
-import com.sistemium.sissales.WebInterface.STMWebAppInterfaceSubscription
+import com.sistemium.sissales.activities.WebViewActivity
 import com.sistemium.sissales.base.STMConstants
 import com.sistemium.sissales.base.STMFunctions
 import com.sistemium.sissales.persisting.STMPredicate
@@ -245,7 +245,7 @@ class WebAppInterface internal constructor(private var webViewActivity: WebViewA
     @JavascriptInterface
     fun roles(parameters: String?){
 
-        STMFunctions.debugLog("DEBUG", "remoteControl")
+        STMFunctions.debugLog("DEBUG", "roles")
 
         val mapParameters = gson.fromJson(parameters, Map::class.java)
 

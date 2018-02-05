@@ -18,7 +18,9 @@ import android.app.ActivityOptions
 import android.util.Log
 import android.view.KeyEvent
 import com.sistemium.sissales.R
+import com.sistemium.sissales.base.MyApplication
 import com.sistemium.sissales.base.STMFunctions
+import com.sistemium.sissales.base.session.STMCoreAuthController
 import devliving.online.securedpreferencestore.DefaultRecoveryHandler
 import devliving.online.securedpreferencestore.SecuredPreferenceStore
 
@@ -27,19 +29,9 @@ class AuthActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        SecuredPreferenceStore.init(applicationContext, DefaultRecoveryHandler())
-        val prefStore = SecuredPreferenceStore.getSharedInstance()
-        val accessToken = prefStore.getString("accessToken", null)
+        if (STMCoreAuthController.logIn()){
 
-        if (accessToken != null){
-
-            val myIntent = Intent(this@AuthActivity, WebViewActivity::class.java)
-
-            myIntent.putExtra("accessToken", accessToken)
-
-            val options = ActivityOptions.makeCustomAnimation(this, R.anim.abc_fade_in, R.anim.abc_fade_out)
-
-            this@AuthActivity.startActivity(myIntent, options.toBundle())
+            return finish()
 
         }
 
@@ -97,58 +89,23 @@ class AuthActivity : AppCompatActivity() {
         val clickButton:Button = findViewById(R.id.button)
         val onClickListener = View.OnClickListener {
 
-            Fuel.get("https://api.sistemium.com/pha/auth", listOf("mobileNumber" to phoneNumberEdit.text))
-                    .responseJson { _, _, result ->
+            val requestId = STMCoreAuthController.requestNewSMSCode(phoneNumberEdit.text.toString())
 
-                        when (result) {
-                            is Result.Failure -> {
+            if(requestId != null){
 
-                                val error:Error? = result.getAs()
+                val myIntent = Intent(this@AuthActivity, CodeConfirmActivity::class.java)
+                myIntent.putExtra("ID", requestId)
+                myIntent.putExtra("mobileNumber", phoneNumberEdit.text.toString())
 
-                                handleError(error)
+                val options = ActivityOptions.makeCustomAnimation(this, R.anim.abc_fade_in, R.anim.abc_fade_out)
 
-                            }
-                            is Result.Success -> {
+                this@AuthActivity.startActivity(myIntent, options.toBundle())
 
-                                val data = result.get().obj()
-
-                                val myIntent = Intent(this@AuthActivity, CodeConfirmActivity::class.java)
-                                myIntent.putExtra("ID", data.get("ID") as String)
-                                myIntent.putExtra("mobileNumber", phoneNumberEdit.text.toString())
-
-                                val options = ActivityOptions.makeCustomAnimation(this, R.anim.abc_fade_in, R.anim.abc_fade_out)
-
-                                this@AuthActivity.startActivity(myIntent, options.toBundle())
-
-                            }
-                        }
-
-                    }
+            }
 
         }
 
         clickButton.setOnClickListener( onClickListener )
-    }
-
-    private fun handleError(error: Error?){
-
-        if (error is Error){
-
-            STMFunctions.debugLog("Error", error.toString())
-
-        }
-
-        val builder: AlertDialog.Builder = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            AlertDialog.Builder(this, android.R.style.Theme_Material_Dialog_Alert)
-        } else {
-            AlertDialog.Builder(this)
-        }
-        builder.setTitle("Error")
-                .setMessage("Wrong phone number")
-                .setPositiveButton(android.R.string.ok, { _, _ -> })
-                .setIcon(android.R.drawable.ic_dialog_alert)
-                .show()
-
     }
 
 }

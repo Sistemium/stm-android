@@ -18,7 +18,9 @@ import com.github.kittinunf.fuel.android.extension.responseJson
 import com.github.kittinunf.result.Result
 import com.github.kittinunf.result.getAs
 import com.sistemium.sissales.R
+import com.sistemium.sissales.base.MyApplication
 import com.sistemium.sissales.base.STMFunctions
+import com.sistemium.sissales.base.session.STMCoreAuthController
 import devliving.online.securedpreferencestore.SecuredPreferenceStore
 
 class CodeConfirmActivity : AppCompatActivity() {
@@ -61,62 +63,21 @@ class CodeConfirmActivity : AppCompatActivity() {
 
         val onClickListener = View.OnClickListener {
 
-            Fuel.get("https://api.sistemium.com/pha/auth", listOf("ID" to id, "smsCode" to smsCodeEdit.text))
-                    .responseJson { _, _, result ->
+            val accessToken = STMCoreAuthController.requestAccessToken(id, smsCodeEdit.text.toString())
 
-                        when (result) {
-                            is Result.Failure -> {
+            if (accessToken != null){
 
-                                val error:Error? = result.getAs()
+                if(STMCoreAuthController.logIn()){
 
-                                handleError(error)
+                    finish()
 
-                            }
-                            is Result.Success -> {
+                }
 
-                                val data = result.get().obj()
-
-                                val prefStore = SecuredPreferenceStore.getSharedInstance()
-
-                                prefStore.edit().putString("accessToken", data.get("accessToken") as? String).apply()
-
-                                val myIntent = Intent(this@CodeConfirmActivity, WebViewActivity::class.java)
-                                myIntent.putExtra("accessToken", data.get("accessToken") as String)
-
-                                val options = ActivityOptions.makeCustomAnimation(this, R.anim.abc_fade_in, R.anim.abc_fade_out)
-
-                                this@CodeConfirmActivity.startActivity(myIntent, options.toBundle())
-
-                            }
-                        }
-
-                    }
+            }
 
         }
 
         sendButton.setOnClickListener( onClickListener )
-
-    }
-
-    private fun handleError(error: Error?){
-
-        if (error is Error){
-
-            STMFunctions.debugLog("ERROR", error.toString())
-
-        }
-
-        val builder: AlertDialog.Builder = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            AlertDialog.Builder(this, android.R.style.Theme_Material_Dialog_Alert)
-        } else {
-            AlertDialog.Builder(this)
-        }
-
-        builder.setTitle("Error")
-                .setMessage("Wrong sms code")
-                .setPositiveButton(android.R.string.ok, { _, _ -> })
-                .setIcon(android.R.drawable.ic_dialog_alert)
-                .show()
 
     }
 
