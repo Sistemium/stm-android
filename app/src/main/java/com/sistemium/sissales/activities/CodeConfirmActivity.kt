@@ -22,6 +22,7 @@ import com.sistemium.sissales.base.MyApplication
 import com.sistemium.sissales.base.STMFunctions
 import com.sistemium.sissales.base.session.STMCoreAuthController
 import devliving.online.securedpreferencestore.SecuredPreferenceStore
+import nl.komponents.kovenant.then
 
 class CodeConfirmActivity : AppCompatActivity() {
 
@@ -63,15 +64,17 @@ class CodeConfirmActivity : AppCompatActivity() {
 
         val onClickListener = View.OnClickListener {
 
-            val accessToken = STMCoreAuthController.requestAccessToken(id, smsCodeEdit.text.toString())
-
-            if (accessToken != null){
+            STMCoreAuthController.requestAccessToken(id, smsCodeEdit.text.toString()).then {
 
                 if(STMCoreAuthController.logIn()){
 
                     finish()
 
                 }
+
+            } fail {
+
+                STMFunctions.handleError(this, "Wrong SMS Code")
 
             }
 
@@ -82,7 +85,7 @@ class CodeConfirmActivity : AppCompatActivity() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return when (item.getItemId()) {
+        return when (item.itemId) {
             android.R.id.home -> {
                 val intent = Intent(this@CodeConfirmActivity, AuthActivity::class.java)
                 intent.putExtra("mobileNumber", mobileNumber)

@@ -1,5 +1,6 @@
 package com.sistemium.sissales.base.session
 
+import android.app.Activity
 import android.app.ActivityOptions
 import android.app.AlertDialog
 import android.content.Intent
@@ -15,6 +16,8 @@ import com.sistemium.sissales.base.MyApplication
 import com.sistemium.sissales.base.STMFunctions
 import devliving.online.securedpreferencestore.DefaultRecoveryHandler
 import devliving.online.securedpreferencestore.SecuredPreferenceStore
+import nl.komponents.kovenant.Promise
+import nl.komponents.kovenant.task
 
 /**
  * Created by edgarjanvuicik on 05/02/2018.
@@ -38,53 +41,46 @@ class STMCoreAuthController {
 
         }
 
-        fun requestNewSMSCode(phoneNumber:String):String?{
+        fun requestNewSMSCode(phoneNumber:String):Promise<String?, Exception>{
 
-            val (_, _, result) = Fuel.get("https://api.sistemium.com/pha/auth", listOf("mobileNumber" to phoneNumber)).responseJson()
+            return task {
 
-            when (result) {
-                is Result.Failure -> {
+                val (_, _, result) = Fuel.get("https://api.sistemium.com/pha/auth", listOf("mobileNumber" to phoneNumber)).responseJson()
 
-                    val error:Error? = result.getAs()
+                when (result) {
+                    is Result.Success -> {
 
-                    handleError(error, "Wrong Phone Number")
+                        return@task result.get().obj().get("ID") as? String
 
+                    }
                 }
-                is Result.Success -> {
 
-                    return result.get().obj().get("ID") as? String
-
-                }
+                throw Exception("Wrong phone number")
             }
-
-            return null
 
         }
 
-        fun requestAccessToken(id:String, smsCode:String):String?{
+        fun requestAccessToken(id:String, smsCode:String):Promise<String, Exception>{
 
-            val (_,_, result) = Fuel.get("https://api.sistemium.com/pha/auth", listOf("ID" to id, "smsCode" to smsCode)).responseJson()
+            return task {
 
-            when (result) {
-                is Result.Failure -> {
+                val (_,_, result) = Fuel.get("https://api.sistemium.com/pha/auth", listOf("ID" to id, "smsCode" to smsCode)).responseJson()
 
-                    val error:Error? = result.getAs()
+                when (result) {
+                    is Result.Success -> {
 
-                    handleError(error, "Wrong SMS Code")
+                        val data = result.get().obj()
 
+                        STMCoreAuthController.accessToken = data.get("accessToken") as? String
+
+                        return@task data.get("accessToken") as String
+
+                    }
                 }
-                is Result.Success -> {
 
-                    val data = result.get().obj()
+                throw Exception("Wrong SMS Code")
 
-                    STMCoreAuthController.accessToken = data.get("accessToken") as? String
-
-                    return data.get("accessToken") as? String
-
-                }
             }
-
-            return null
 
         }
 
@@ -111,27 +107,6 @@ class STMCoreAuthController {
                 return false
 
             }
-
-        }
-
-        private fun handleError(error: Error?, message:String){
-
-            if (error is Error){
-
-                STMFunctions.debugLog("Error", error.toString())
-
-            }
-
-            val builder: AlertDialog.Builder = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                AlertDialog.Builder(MyApplication.appContext, android.R.style.Theme_Material_Dialog_Alert)
-            } else {
-                AlertDialog.Builder(MyApplication.appContext)
-            }
-            builder.setTitle("Error")
-                    .setMessage(message)
-                    .setPositiveButton(android.R.string.ok, { _, _ -> })
-                    .setIcon(android.R.drawable.ic_dialog_alert)
-                    .show()
 
         }
 

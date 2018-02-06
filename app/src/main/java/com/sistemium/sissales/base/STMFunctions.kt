@@ -1,5 +1,8 @@
 package com.sistemium.sissales.base
 
+import android.app.Activity
+import android.app.AlertDialog
+import android.os.Build
 import android.util.Log
 import java.text.SimpleDateFormat
 import java.util.*
@@ -65,6 +68,25 @@ class STMFunctions{
         fun isCorrectPhoneNumber(phoneNumber:String):Boolean{
 
             TODO("not implemented")
+
+        }
+
+        fun handleError(activity: Activity?, message:String){
+
+            activity?.runOnUiThread{
+
+                val builder: AlertDialog.Builder = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    AlertDialog.Builder(activity, android.R.style.Theme_Material_Dialog_Alert)
+                } else {
+                    AlertDialog.Builder(activity)
+                }
+                builder.setTitle("Error")
+                        .setMessage(message)
+                        .setPositiveButton(android.R.string.ok, { _, _ -> })
+                        .setIcon(android.R.drawable.ic_dialog_alert)
+                        .show()
+
+            }
 
         }
 

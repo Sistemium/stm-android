@@ -23,6 +23,7 @@ import com.sistemium.sissales.base.STMFunctions
 import com.sistemium.sissales.base.session.STMCoreAuthController
 import devliving.online.securedpreferencestore.DefaultRecoveryHandler
 import devliving.online.securedpreferencestore.SecuredPreferenceStore
+import nl.komponents.kovenant.then
 
 class AuthActivity : AppCompatActivity() {
 
@@ -89,17 +90,19 @@ class AuthActivity : AppCompatActivity() {
         val clickButton:Button = findViewById(R.id.button)
         val onClickListener = View.OnClickListener {
 
-            val requestId = STMCoreAuthController.requestNewSMSCode(phoneNumberEdit.text.toString())
-
-            if(requestId != null){
+            STMCoreAuthController.requestNewSMSCode(phoneNumberEdit.text.toString()) then {
 
                 val myIntent = Intent(this@AuthActivity, CodeConfirmActivity::class.java)
-                myIntent.putExtra("ID", requestId)
+                myIntent.putExtra("ID", it)
                 myIntent.putExtra("mobileNumber", phoneNumberEdit.text.toString())
 
                 val options = ActivityOptions.makeCustomAnimation(this, R.anim.abc_fade_in, R.anim.abc_fade_out)
 
                 this@AuthActivity.startActivity(myIntent, options.toBundle())
+
+            } fail {
+
+                STMFunctions.handleError(this, "Wrong Phone Number")
 
             }
 
