@@ -5,6 +5,7 @@ import android.app.Activity
 import android.os.Bundle
 import android.webkit.WebView
 import com.sistemium.sissales.R
+import com.sistemium.sissales.WebInterface.WebAppInterface
 import com.sistemium.sissales.base.STMConstants
 import com.sistemium.sissales.base.STMCoreSessionFiler
 import com.sistemium.sissales.enums.STMStorageType
@@ -17,10 +18,6 @@ import com.sistemium.sissales.persisting.*
 class WebViewActivity : Activity() {
 
     var webView: WebView? = null
-
-    var accessToken:String? = null
-
-    var roles:String? = null
 
     var persistenceDelegate: STMFullStackPersisting? = null
 
@@ -66,15 +63,11 @@ class WebViewActivity : Activity() {
         webView?.settings?.javaScriptEnabled = true
         webView?.settings?.domStorageEnabled = true
 
-        val intent = intent
-
-        accessToken = intent.getStringExtra("accessToken")
-
         val webInterface = WebAppInterface(this)
 
         webView?.addJavascriptInterface(webInterface, "stmAndroid")
 
-        webView?.loadUrl("http://10.0.1.5:3002")
+        webView?.loadUrl("http://10.0.1.5:3000")
 
 
     }

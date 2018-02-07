@@ -1,7 +1,6 @@
 package com.sistemium.sissales.persisting
 
 import android.database.sqlite.SQLiteDatabase
-import android.util.Log
 import com.sistemium.sissales.base.STMFunctions
 import com.sistemium.sissales.model.STMSQLiteDatabaseAdapter
 

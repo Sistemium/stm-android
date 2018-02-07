@@ -1,10 +1,9 @@
 package com.sistemium.sissales.persisting
 
 import com.sistemium.sissales.base.STMConstants
-import com.sistemium.sissales.base.STMFunctions
 import com.sistemium.sissales.interfaces.STMPersistingMergeInterceptor
 import com.sistemium.sissales.interfaces.STMPersistingTransaction
-import java.util.HashMap
+import java.util.*
 
 /**
  * Created by edgarjanvuicik on 22/01/2018.

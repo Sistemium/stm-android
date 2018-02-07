@@ -1,7 +1,5 @@
 package com.sistemium.sissales.interfaces
 
-import java.util.function.BiPredicate
-
 /**
  * Created by edgarjanvuicik on 25/01/2018.
  */

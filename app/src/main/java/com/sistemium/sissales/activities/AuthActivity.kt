@@ -1,6 +1,5 @@
 package com.sistemium.sissales.activities
 
-import android.app.AlertDialog
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.text.Editable
@@ -9,20 +8,12 @@ import android.view.View
 import android.widget.Button
 import kotlinx.android.synthetic.main.activity_auth.*
 import android.widget.EditText
-import com.github.kittinunf.fuel.*
-import com.github.kittinunf.result.*
-import android.os.Build
 import android.content.Intent
-import com.github.kittinunf.fuel.android.extension.responseJson
 import android.app.ActivityOptions
-import android.util.Log
 import android.view.KeyEvent
 import com.sistemium.sissales.R
-import com.sistemium.sissales.base.MyApplication
 import com.sistemium.sissales.base.STMFunctions
 import com.sistemium.sissales.base.session.STMCoreAuthController
-import devliving.online.securedpreferencestore.DefaultRecoveryHandler
-import devliving.online.securedpreferencestore.SecuredPreferenceStore
 import nl.komponents.kovenant.then
 
 class AuthActivity : AppCompatActivity() {
@@ -30,11 +21,22 @@ class AuthActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        if (STMCoreAuthController.logIn()){
+        STMCoreAuthController.logIn() then {
 
-            return finish()
+            finish()
+
+        } fail {
+
+            runOnUiThread{
+
+                setup()
+
+            }
 
         }
+    }
+
+    private fun setup(){
 
         setContentView(R.layout.activity_auth)
         setSupportActionBar(toolbar)
@@ -109,6 +111,7 @@ class AuthActivity : AppCompatActivity() {
         }
 
         clickButton.setOnClickListener( onClickListener )
+
     }
 
 }

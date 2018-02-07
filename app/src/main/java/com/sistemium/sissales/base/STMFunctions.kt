@@ -4,6 +4,7 @@ import android.app.Activity
 import android.app.AlertDialog
 import android.os.Build
 import android.util.Log
+import com.google.gson.GsonBuilder
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -14,6 +15,9 @@ import java.util.*
 class STMFunctions{
 
     companion object {
+
+        val gson = GsonBuilder().serializeNulls().create()
+
         fun addPrefixToEntityName(entityName:String):String {
 
             var _entityName = entityName

@@ -1,15 +1,14 @@
 package com.sistemium.sissales.WebInterface
 
 import android.webkit.JavascriptInterface
-import nl.komponents.kovenant.*
-import com.github.kittinunf.fuel.Fuel
-import com.github.kittinunf.result.Result
-import com.github.kittinunf.result.getAs
-import com.google.gson.GsonBuilder
 import com.sistemium.sissales.activities.WebViewActivity
 import com.sistemium.sissales.base.STMConstants
 import com.sistemium.sissales.base.STMFunctions
+import com.sistemium.sissales.base.STMFunctions.Companion.gson
+import com.sistemium.sissales.base.session.STMCoreAuthController
 import com.sistemium.sissales.persisting.STMPredicate
+import nl.komponents.kovenant.Promise
+import nl.komponents.kovenant.then
 
 
 /**
@@ -17,8 +16,6 @@ import com.sistemium.sissales.persisting.STMPredicate
  */
 
 class WebAppInterface internal constructor(private var webViewActivity: WebViewActivity) {
-
-    private val gson = GsonBuilder().serializeNulls().create()
 
     private val javascriptCallback = "iSistemiumIOSCallback"
 
@@ -251,33 +248,7 @@ class WebAppInterface internal constructor(private var webViewActivity: WebViewA
 
         val callback = mapParameters["callback"]
 
-        if (webViewActivity.roles != null){
-
-            return javascriptCallback(arrayOf(gson.fromJson(webViewActivity.roles!!, Map::class.java)), mapParameters, callback as String)
-
-        }
-
-        Fuel.get("https://api.sistemium.com/pha/roles", listOf("access_token" to webViewActivity.accessToken))
-                .responseString { _, _, result ->
-
-                    when (result) {
-                        is Result.Failure -> {
-
-                            val error:Error? = result.getAs()
-
-                            javascriptCallback(error?.toString() ?: "" , mapParameters)
-
-                        }
-                        is Result.Success -> {
-
-                            webViewActivity.roles = result.get()
-
-                            javascriptCallback(arrayOf(gson.fromJson(result.get(), Map::class.java)), mapParameters, callback as String)
-
-                        }
-                    }
-
-                }
+        javascriptCallback(arrayOf(STMCoreAuthController.rolesResponse), mapParameters, callback as String)
 
     }
 
@@ -588,7 +559,7 @@ class WebAppInterface internal constructor(private var webViewActivity: WebViewA
 
         }
 
-        val jsFunction = "window.$jsCallbackFunction && $jsCallbackFunction.apply(null,${this.gson.toJson(arguments)})"
+        val jsFunction = "window.$jsCallbackFunction && $jsCallbackFunction.apply(null,${gson.toJson(arguments)})"
 
         webViewActivity.webView?.post {
 
@@ -620,7 +591,7 @@ class WebAppInterface internal constructor(private var webViewActivity: WebViewA
 
         }
 
-        val jsFunction = "${this.javascriptCallback}.apply(null, ${this.gson.toJson(arguments)})"
+        val jsFunction = "${this.javascriptCallback}.apply(null, ${gson.toJson(arguments)})"
 
         webViewActivity.webView?.post {
 
