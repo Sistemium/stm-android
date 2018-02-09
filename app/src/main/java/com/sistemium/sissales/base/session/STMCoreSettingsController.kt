@@ -1,15 +1,15 @@
-package com.sistemium.sissales.persisting
+package com.sistemium.sissales.base.session
 
 import com.sistemium.sissales.base.STMConstants
 import com.sistemium.sissales.interfaces.STMPersistingMergeInterceptor
 import com.sistemium.sissales.interfaces.STMPersistingTransaction
 import com.sistemium.sissales.interfaces.STMSettingsController
-import java.util.HashMap
+import java.util.*
 
 /**
  * Created by edgarjanvuicik on 23/01/2018.
  */
-class STMCoreSettingsController :STMPersistingMergeInterceptor, STMSettingsController {
+class STMCoreSettingsController(private val startSetting:Map<*,*>, private val defaultSetting:Map<*,*>) :STMPersistingMergeInterceptor, STMSettingsController {
 
     fun settingWithName(name:String?, group:String?):Map<*,*>?{
 

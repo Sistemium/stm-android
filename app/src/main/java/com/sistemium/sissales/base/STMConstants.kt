@@ -13,7 +13,7 @@ class STMConstants{
         const val STMPersistingOptionFantoms = "fantoms"
         const val STMPersistingOptionForceStorage = "forceStorage"
         const val POOL_SIZE = 3
-        const val SQL_LITE_PATH = "sqllitepath"
+        const val SQL_LITE_PATH = "sqllite"
         const val STMPersistingOptionPageSize = "pageSize"
         const val STMPersistingOptionStartPage = "startPage"
         const val STMPersistingOptionGroupBy = "groupBy"
@@ -33,6 +33,8 @@ class STMConstants{
         const val STMPersistingOptionWhere = "where"
         const val KC_PHONE_NUMBER = "phoneNumber"
         const val preferencesKey = "SistemiumSharedPreferences"
+        const val SHARED_PATH = "shared"
+        const val PERSISTENCE_PATH = "persistence"
 
     }
 

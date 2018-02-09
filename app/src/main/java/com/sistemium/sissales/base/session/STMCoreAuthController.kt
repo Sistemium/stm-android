@@ -73,11 +73,125 @@ class STMCoreAuthController {
 
                 val prefStore = MyApplication.appContext?.getSharedPreferences("Sistemium", Context.MODE_PRIVATE)
 
-                val rolesResponseJSON =  STMFunctions.gson.toJson(value)
+                val stcTabsResponseJSON =  STMFunctions.gson.toJson(value)
 
-                prefStore?.edit()?.putString("stcTabs", rolesResponseJSON)?.apply()
+                prefStore?.edit()?.putString("stcTabs", stcTabsResponseJSON)?.apply()
 
             }
+
+        var accountOrg:String?
+            get() {
+
+                val prefStore = MyApplication.appContext?.getSharedPreferences("Sistemium", Context.MODE_PRIVATE)
+
+                return prefStore?.getString("accountOrg", null)
+
+            }
+            set(value) {
+
+                val prefStore = MyApplication.appContext?.getSharedPreferences("Sistemium", Context.MODE_PRIVATE)
+
+                prefStore?.edit()?.putString("accountOrg", value)?.apply()
+
+            }
+
+        var iSisDB:String?
+            get() {
+
+                val prefStore = MyApplication.appContext?.getSharedPreferences("Sistemium", Context.MODE_PRIVATE)
+
+                return prefStore?.getString("iSisDB", null)
+
+            }
+            set(value) {
+
+                val prefStore = MyApplication.appContext?.getSharedPreferences("Sistemium", Context.MODE_PRIVATE)
+
+                prefStore?.edit()?.putString("iSisDB", value)?.apply()
+
+            }
+
+        var requestID:String?
+            get() {
+
+                val prefStore = MyApplication.appContext?.getSharedPreferences("Sistemium", Context.MODE_PRIVATE)
+
+                return prefStore?.getString("requestID", null)
+
+            }
+            set(value) {
+
+                val prefStore = MyApplication.appContext?.getSharedPreferences("Sistemium", Context.MODE_PRIVATE)
+
+                prefStore?.edit()?.putString("requestID", value)?.apply()
+
+            }
+
+        var entityResource:String?
+            get() {
+
+                val prefStore = MyApplication.appContext?.getSharedPreferences("Sistemium", Context.MODE_PRIVATE)
+
+                return prefStore?.getString("entityResource", null)
+
+            }
+            set(value) {
+
+                val prefStore = MyApplication.appContext?.getSharedPreferences("Sistemium", Context.MODE_PRIVATE)
+
+                prefStore?.edit()?.putString("entityResource", value)?.apply()
+
+            }
+
+        var socketURL:String?
+            get() {
+
+                val prefStore = MyApplication.appContext?.getSharedPreferences("Sistemium", Context.MODE_PRIVATE)
+
+                return prefStore?.getString("socketURL", null)
+
+            }
+            set(value) {
+
+                val prefStore = MyApplication.appContext?.getSharedPreferences("Sistemium", Context.MODE_PRIVATE)
+
+                prefStore?.edit()?.putString("socketURL", value)?.apply()
+
+            }
+
+        var userID:String?
+            get() {
+
+                val prefStore = MyApplication.appContext?.getSharedPreferences("Sistemium", Context.MODE_PRIVATE)
+
+                return prefStore?.getString("userID", null)
+
+            }
+            set(value) {
+
+                val prefStore = MyApplication.appContext?.getSharedPreferences("Sistemium", Context.MODE_PRIVATE)
+
+                prefStore?.edit()?.putString("userID", value)?.apply()
+
+            }
+
+        var userName:String?
+            get() {
+
+                val prefStore = MyApplication.appContext?.getSharedPreferences("Sistemium", Context.MODE_PRIVATE)
+
+                return prefStore?.getString("userName", null)
+
+            }
+            set(value) {
+
+                val prefStore = MyApplication.appContext?.getSharedPreferences("Sistemium", Context.MODE_PRIVATE)
+
+                prefStore?.edit()?.putString("userName", value)?.apply()
+
+            }
+
+        val dataModelName = "iSisSales"
 
         fun requestNewSMSCode(phoneNumber:String):Promise<String?, Exception>{
 
@@ -88,7 +202,11 @@ class STMCoreAuthController {
                 when (result) {
                     is Result.Success -> {
 
-                        return@task result.get().obj().get("ID") as? String
+                        val id = result.get().obj().get("ID") as? String
+
+                        requestID = id
+
+                        return@task id
 
                     }
                 }
@@ -111,6 +229,11 @@ class STMCoreAuthController {
 
                         STMCoreAuthController.accessToken = data.get("accessToken") as? String
 
+                        entityResource = data["redirectUri"] as? String
+                        socketURL = data["apiUrl"] as? String
+                        userID = data["ID"] as? String
+                        userName = data["name"] as? String
+
                         return@task data.get("accessToken") as String
 
                     }
@@ -124,15 +247,34 @@ class STMCoreAuthController {
 
         fun startSession(){
 
-            TODO("not implemented")
+            STMFunctions.debugLog("STMCoreAuthController", "socketURL $socketURL")
+            STMFunctions.debugLog("STMCoreAuthController", "entity resource $entityResource")
+
+            val trackers = arrayListOf("battery", "location")
+
+            val startSettings = hashMapOf(
+                    "entityResource" to entityResource!!,
+                    "dataModelName" to dataModelName,
+                    "socketUrl" to socketURL!!
+            )
+
+            val sessionManager = STMCoreSessionManager.sharedManager
+
+            sessionManager.startSession(trackers, startSettings, "settings")
 
         }
 
         private fun requestRoles():Promise<Map<*,*>,Exception>{
 
-            if (stcTabs != null){
+            if (rolesResponse != null){
 
-                startSession()
+                return task {
+
+                    startSession()
+
+                    return@task rolesResponse!!
+
+                }
 
             }
 
@@ -146,6 +288,30 @@ class STMCoreAuthController {
                         val roles = STMFunctions.gson.fromJson(result.get().content, Map::class.java)
 
                         rolesResponse = roles
+
+                        accountOrg = (roles["roles"] as? Map<*,*>)?.get("org") as? String
+
+                        iSisDB = (roles["roles"] as? Map<*,*>)?.get("iSisDB") as? String
+
+                        val tabs = (roles["roles"] as? Map<*,*>)?.get("stcTabs") as? ArrayList<*>
+
+                        if (tabs != null){
+
+                            stcTabs = tabs
+
+                        }else{
+
+                            val tab = (roles["roles"] as? Map<*,*>)?.get("stcTabs") as? Map<*,*>
+
+                            if (tab != null) {
+
+                                stcTabs = arrayListOf(tab)
+
+                            }
+
+                        }
+
+                        startSession()
 
                         return@task roles
 

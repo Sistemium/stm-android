@@ -6,6 +6,8 @@ import com.sistemium.sissales.base.STMConstants
 import com.sistemium.sissales.base.STMFunctions
 import com.sistemium.sissales.base.STMFunctions.Companion.gson
 import com.sistemium.sissales.base.session.STMCoreAuthController
+import com.sistemium.sissales.base.session.STMCoreSessionManager
+import com.sistemium.sissales.interfaces.STMFullStackPersisting
 import com.sistemium.sissales.persisting.STMPredicate
 import nl.komponents.kovenant.Promise
 import nl.komponents.kovenant.then
@@ -18,6 +20,8 @@ import nl.komponents.kovenant.then
 class WebAppInterface internal constructor(private var webViewActivity: WebViewActivity) {
 
     private val javascriptCallback = "iSistemiumIOSCallback"
+
+    var persistenceDelegate: STMFullStackPersisting?  = STMCoreSessionManager.sharedManager.currentSession?.persistenceDelegate
 
     @JavascriptInterface
     fun errorCatcher(parameters: String?){
@@ -377,7 +381,7 @@ class WebAppInterface internal constructor(private var webViewActivity: WebViewA
         val xidString = parameters[STMConstants.DEFAULT_PERSISTING_PRIMARY_KEY] as? String
 
         if (xidString != null){
-            return webViewActivity.persistenceDelegate?.destroy(entityName, xidString, null)?.then {
+            return persistenceDelegate?.destroy(entityName, xidString, null)?.then {
 
                 val result:Map<*, *> = hashMapOf("objectXid" to xidString)
 
@@ -401,7 +405,7 @@ class WebAppInterface internal constructor(private var webViewActivity: WebViewA
         val options = parameters["options"] as? Map<*,*>
 
         if (xidString != null){
-            return webViewActivity.persistenceDelegate?.find(entityName, xidString, options)?.then {
+            return persistenceDelegate?.find(entityName, xidString, options)?.then {
 
                 return@then arrayListOf(it)
 
@@ -414,7 +418,7 @@ class WebAppInterface internal constructor(private var webViewActivity: WebViewA
 
         val predicate = STMPredicate.filterPredicate(filter, where)
 
-        return webViewActivity.persistenceDelegate?.findAll(entityName, predicate, options) ?: throw Exception("Missing persistenceDelegate")
+        return persistenceDelegate?.findAll(entityName, predicate, options) ?: throw Exception("Missing persistenceDelegate")
 
     }
 
@@ -440,7 +444,7 @@ class WebAppInterface internal constructor(private var webViewActivity: WebViewA
 
         }
 
-        return webViewActivity.persistenceDelegate?.mergeMany(entityName, parametersData, null) ?: throw Exception("Missing persistenceDelegate")
+        return persistenceDelegate?.mergeMany(entityName, parametersData, null) ?: throw Exception("Missing persistenceDelegate")
 
     }
 
@@ -468,7 +472,7 @@ class WebAppInterface internal constructor(private var webViewActivity: WebViewA
 
         for (subscriptionID in subscription.persisterSubscriptions){
 
-            webViewActivity.persistenceDelegate?.cancelSubscription(subscriptionID)
+            persistenceDelegate?.cancelSubscription(subscriptionID)
 
         }
 
@@ -478,7 +482,7 @@ class WebAppInterface internal constructor(private var webViewActivity: WebViewA
 
         for (entityName in subscription.entityNames){
 
-            persisterSubscriptions.add(webViewActivity.persistenceDelegate!!.observeEntity(entityName, null, options){
+            persisterSubscriptions.add(persistenceDelegate!!.observeEntity(entityName, null, options){
 
                 sendSubscribedBunchOfObjects(it, entityName)
 
@@ -535,7 +539,7 @@ class WebAppInterface internal constructor(private var webViewActivity: WebViewA
                                 STMConstants.STMPersistingOptionOrder to STMConstants.STMPersistingOptionLts,
                                 STMConstants.STMPersistingOptionOrderDirection to STMConstants.STMPersistingOptionOrderDirectionDescValue)
 
-        val objects = webViewActivity.persistenceDelegate?.findAllSync(entityName, null, options)
+        val objects = persistenceDelegate?.findAllSync(entityName, null, options)
 
         if (objects?.firstOrNull() != null){
 

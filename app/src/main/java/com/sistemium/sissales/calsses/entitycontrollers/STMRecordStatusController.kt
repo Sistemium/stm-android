@@ -1,9 +1,10 @@
-package com.sistemium.sissales.persisting
+package com.sistemium.sissales.calsses.entitycontrollers
 
 import com.sistemium.sissales.base.STMConstants
 import com.sistemium.sissales.base.STMFunctions
 import com.sistemium.sissales.interfaces.STMPersistingMergeInterceptor
 import com.sistemium.sissales.interfaces.STMPersistingTransaction
+import com.sistemium.sissales.persisting.STMPredicate
 
 /**
  * Created by edgarjanvuicik on 23/01/2018.
