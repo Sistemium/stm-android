@@ -2,6 +2,7 @@ package com.sistemium.sissales.base.session
 
 import com.sistemium.sissales.base.STMConstants
 import com.sistemium.sissales.base.STMCoreSessionFiler
+import com.sistemium.sissales.base.helper.logger.STMLogger
 import com.sistemium.sissales.calsses.entitycontrollers.STMRecordStatusController
 import com.sistemium.sissales.enums.STMSessionStatus
 import com.sistemium.sissales.enums.STMStorageType
@@ -9,32 +10,28 @@ import com.sistemium.sissales.interfaces.*
 import com.sistemium.sissales.model.STMModeller
 import com.sistemium.sissales.model.STMSQLiteDatabaseAdapter
 import com.sistemium.sissales.persisting.STMPersister
+import com.sistemium.sissales.persisting.STMPersisterFantoms
 import com.sistemium.sissales.persisting.STMPersisterRunner
 import com.sistemium.sissales.persisting.STMPersistingInterceptorUniqueProperty
 
 /**
  * Created by edgarjanvuicik on 08/02/2018.
  */
-class STMCoreSession(var trackers: ArrayList<String>, var startSettings: Map<String, String>) :STMSession {
-    override var coreSettingsController: STMCoreSettingsController? = null
-
-    var manager: STMSessionManager? = null
-    var startTrackers:ArrayList<String> = ArrayList(trackers)
+class STMCoreSession(var trackers: ArrayList<String>) :STMSession {
     override var uid:String = STMCoreAuthController.userID!!
     override var filing: STMFiling = STMCoreSessionFiler(STMCoreAuthController.accountOrg!!, STMCoreAuthController.iSisDB ?: uid)
     override var status: STMSessionStatus = STMSessionStatus.STMSessionStarting
-    override var persistenceDelegate: STMFullStackPersisting = initPersistable()
-    var settingsController: STMSettingsController? = null
+    override lateinit var persistenceDelegate: STMFullStackPersisting
+    override var logger: STMLogger? = null
 
-    fun initPersistable():STMPersister{
+    var manager: STMSessionManager? = null
+    var startTrackers:ArrayList<String> = ArrayList(trackers)
+    override var settingsController: STMSettingsController? = null
+    var syncer:STMSyncer? = null
 
-        var dataModelName = startSettings["dataModelName"]
+    init{
 
-        if (dataModelName == null){
-
-            dataModelName = STMCoreAuthController.dataModelName
-
-        }
+        val dataModelName = STMCoreAuthController.dataModelName
 
         val databaseFile = dataModelName + ".db"
 
@@ -58,28 +55,28 @@ class STMCoreSession(var trackers: ArrayList<String>, var startSettings: Map<Str
 
         persister.beforeMergeEntityName(STMConstants.STM_RECORDSTATUS_NAME, recordStatusInterceptor)
 
-        persistenceDelegate = persister
+        this.persistenceDelegate = persister
 
         modeler.persistanceDelegate = persistenceDelegate
 
-//        settingsController = STMCoreSettingsController(startSettings, defaultSettings)
-//        self.settingsController.persistenceDelegate = self.persistenceDelegate;
-//        self.settingsController.session = self;
-//        self.controllers[NSStringFromClass([self settingsControllerClass])] = self.settingsController;
-//        val settingsInterceptor = STMCoreSettingsController()
-//        persister.beforeMergeEntityName(STMConstants.STM_SETTING_NAME, settingsInterceptor)
-//        self.logger = [STMLogger sharedLogger];
-//        self.logger.session = self;
+        val settings = STMCoreSettingsController()
+        settings.persistenceDelegate = persistenceDelegate
+        settingsController = settings
+        val settingsInterceptor = settingsController as STMPersistingMergeInterceptor
+        persister.beforeMergeEntityName(STMConstants.STM_SETTING_NAME, settingsInterceptor)
+
+        logger = STMLogger.sharedLogger
+        logger?.session = this
 
         trackers = ArrayList()
+
+        checkTrackersToStart()
 
 //        [self checkTrackersToStart];
 
         status = STMSessionStatus.STMSessionRunning
 
-//        [self setupSyncer];
-
-        return persister
+        setupSyncer()
 
     }
 
@@ -92,6 +89,46 @@ class STMCoreSession(var trackers: ArrayList<String>, var startSettings: Map<Str
     fun dismissSession(){
 
         TODO("not implemented")
+
+    }
+
+    fun checkTrackersToStart(){
+
+        if (startTrackers.contains("location")){
+
+//            val locationTracker = STMCoreLocationTracker()
+//            self.trackers[self.locationTracker.group] = self.locationTracker;
+//            self.locationTracker.session = self;
+
+        }
+
+        if(startTrackers.contains("battery")){
+
+//            self.batteryTracker = [[[self batteryTrackerClass] alloc] init];
+//            self.trackers[self.batteryTracker.group] = self.batteryTracker;
+//            self.batteryTracker.session = self;
+
+        }
+
+    }
+
+    private fun setupSyncer(){
+
+        val syncer = STMSyncer()
+        val syncerHelper = STMSyncerHelper()
+        syncerHelper.persistenceFantomsDelegate = STMPersisterFantoms()
+        syncerHelper.dataDownloadingOwner = syncer
+        syncerHelper.defantomizingOwner = syncer
+        syncer.dataDownloadingDelegate = syncerHelper
+        syncer.defantomizingDelegate = syncerHelper
+
+        val unsyncedHelper = STMUnsyncedDataHelper()
+        unsyncedHelper.subscriberDelegate = syncer
+        unsyncedHelper.session = this
+        syncer.dataSyncingDelegate = unsyncedHelper
+        syncer.session = this
+        this.syncer = syncer
+        syncer.startSyncer()
 
     }
 

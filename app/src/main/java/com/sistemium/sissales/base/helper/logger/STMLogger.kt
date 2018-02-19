@@ -15,7 +15,7 @@ class STMLogger private constructor() {
         val sharedLogger: STMLogger by lazy { Holder.INSTANCE }
     }
 
-    private var session: STMSession? = null
+    var session: STMSession? = null
 
     private val availableTypes = arrayListOf("important", "error", "warning", "info", "debug")
 
@@ -26,7 +26,7 @@ class STMLogger private constructor() {
 
             if (_uploadLogType == null){
 
-                _uploadLogType = session?.coreSettingsController?.stringValueForSettings("uploadLog.type", "syncer")
+                _uploadLogType = session?.settingsController!!.stringValueForSettings("uploadLog.type", "syncer")
 
             }
 

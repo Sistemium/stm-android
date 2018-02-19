@@ -22,7 +22,7 @@ class STMCoreSessionManager private constructor():STMSessionManager {
     var currentSession:STMSession? = null
         get() = sessions[currentSessionUID]
 
-    fun startSession(trackers:ArrayList<String>, startSettings:Map<String,String>, defaultSettingsFileName:String): STMSession?{
+    fun startSession(trackers:ArrayList<String>): STMSession?{
 
         val uid = STMCoreAuthController.userID
 
@@ -43,13 +43,7 @@ class STMCoreSessionManager private constructor():STMSessionManager {
 
         }
 
-//TODO
-//        val validSettings = STMSettingsData.settingsFromFileName(defaultSettingsFileName, "settings_schema")
-//
-//        session.defaultSettings = validSettings["values"]
-//        session.settingsControls = validSettings["controls"]
-
-        session = STMCoreSession(trackers, startSettings)
+        session = STMCoreSession(trackers)
 
         session.manager = this
 

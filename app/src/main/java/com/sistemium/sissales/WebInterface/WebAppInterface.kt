@@ -21,7 +21,7 @@ class WebAppInterface internal constructor(private var webViewActivity: WebViewA
 
     private val javascriptCallback = "iSistemiumIOSCallback"
 
-    var persistenceDelegate: STMFullStackPersisting?  = STMCoreSessionManager.sharedManager.currentSession?.persistenceDelegate
+    var persistenceDelegate: STMFullStackPersisting = STMCoreSessionManager.sharedManager.currentSession!!.persistenceDelegate
 
     @JavascriptInterface
     fun errorCatcher(parameters: String?){

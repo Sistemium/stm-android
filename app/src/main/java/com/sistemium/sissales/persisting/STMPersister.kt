@@ -50,7 +50,23 @@ class STMPersister(private val runner:STMPersistingRunning): STMFullStackPersist
     }
 
     override fun mergeSync(entityName: String, attributes: Map<*, *>, options: Map<*, *>?): Map<*, *> {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+
+        var result:Map<*,*>? = null
+
+        runner.execute {
+
+            result = applyMergeInterceptors(entityName, attributes, options, it)
+
+            result = it.mergeWithoutSave(entityName, result!!, options)
+
+            return@execute true
+
+        }
+
+        notifyObservingEntityName(STMFunctions.addPrefixToEntityName(entityName), if (result?.count() != 0) result!! else null, options)
+
+        return result!!
+
     }
 
     override fun mergeManySync(entityName: String, attributeArray: ArrayList<*>, options: Map<*, *>?): ArrayList<Map<*, *>> {
@@ -211,6 +227,14 @@ class STMPersister(private val runner:STMPersistingRunning): STMFullStackPersist
             }
 
         }
+
+    }
+
+    override fun notifyObservingEntityName(entityName: String, item: Map<*, *>?, options: Map<*, *>?) {
+
+        val data = arrayListOf(item)
+
+        notifyObservingEntityName(entityName, data, options)
 
     }
 

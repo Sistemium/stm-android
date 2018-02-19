@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.Intent
 import com.github.kittinunf.fuel.Fuel
 import com.github.kittinunf.fuel.android.extension.responseJson
+import com.github.kittinunf.fuel.core.FuelManager
 import com.github.kittinunf.result.Result
 import com.sistemium.sissales.R
 import com.sistemium.sissales.activities.WebViewActivity
@@ -220,6 +221,8 @@ class STMCoreAuthController {
 
             return task {
 
+                FuelManager.instance.baseHeaders = mapOf("user-agent" to "iSisSales/360")
+
                 val (_,_, result) = Fuel.get("https://api.sistemium.com/pha/auth", listOf("ID" to id, "smsCode" to smsCode)).responseJson()
 
                 when (result) {
@@ -227,8 +230,7 @@ class STMCoreAuthController {
 
                         val data = result.get().obj()
 
-                        STMCoreAuthController.accessToken = data.get("accessToken") as? String
-
+                        accessToken = data.get("accessToken") as? String
                         entityResource = data["redirectUri"] as? String
                         socketURL = data["apiUrl"] as? String
                         userID = data["ID"] as? String
@@ -252,15 +254,9 @@ class STMCoreAuthController {
 
             val trackers = arrayListOf("battery", "location")
 
-            val startSettings = hashMapOf(
-                    "entityResource" to entityResource!!,
-                    "dataModelName" to dataModelName,
-                    "socketUrl" to socketURL!!
-            )
-
             val sessionManager = STMCoreSessionManager.sharedManager
 
-            sessionManager.startSession(trackers, startSettings, "settings")
+            sessionManager.startSession(trackers)
 
         }
 

@@ -5,6 +5,7 @@ package com.sistemium.sissales.interfaces
  */
 interface STMSettingsController {
 
-    fun stringValueForSettings(settingsName:String, group:String):String
+    fun stringValueForSettings(settingsName:String, group:String):String?
+    fun currentSettingsForGroup(group:String):Map<*,*>?
 
 }
