@@ -7,4 +7,7 @@ interface STMDataSyncing {
 
     var subscriberDelegate:STMDataSyncingSubscriber?
 
+    fun startSyncing()
+    fun pauseSyncing()
+
 }

@@ -87,11 +87,11 @@ class STMLogger private constructor() {
 
     private fun nsLogMessageWithType(type:String?, text:String?){
 
-        Log.i("Log","$type, $$text")
+        Log.i("Log","$type, $text")
 
     }
 
-    private fun syncingTypesForSettingType(settingType:String?):ArrayList<*>{
+    fun syncingTypesForSettingType(settingType:String?):ArrayList<String>{
 
         val types = ArrayList(availableTypes)
 

@@ -1,6 +1,7 @@
 package com.sistemium.sissales.interfaces
 
 import com.sistemium.sissales.base.helper.logger.STMLogger
+import com.sistemium.sissales.base.session.STMSyncer
 import com.sistemium.sissales.enums.STMSessionStatus
 
 /**
@@ -14,5 +15,6 @@ interface STMSession {
     var persistenceDelegate: STMFullStackPersisting
     var status: STMSessionStatus
     var logger: STMLogger?
+    var syncer: STMSyncer?
 
 }

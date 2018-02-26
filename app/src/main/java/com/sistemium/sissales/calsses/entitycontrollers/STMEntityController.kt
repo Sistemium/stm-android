@@ -3,6 +3,7 @@ package com.sistemium.sissales.calsses.entitycontrollers
 import com.sistemium.sissales.base.STMConstants
 import com.sistemium.sissales.base.STMFunctions
 import com.sistemium.sissales.base.helper.logger.STMLogger
+import com.sistemium.sissales.base.session.STMCoreAuthController
 import com.sistemium.sissales.interfaces.STMFullStackPersisting
 import com.sistemium.sissales.persisting.STMPredicate
 
@@ -53,7 +54,7 @@ class STMEntityController private constructor() {
 
     }
 
-    var _entitiesArray:ArrayList<Map<*,*>>? = null
+    private var _entitiesArray:ArrayList<Map<*,*>>? = null
 
     var entitiesArray:ArrayList<Map<*,*>>? = null
     get() {
@@ -70,6 +71,33 @@ class STMEntityController private constructor() {
         return _entitiesArray
 
     }
+
+    private var _uploadableEntitiesNames:ArrayList<String>? = null
+
+    var uploadableEntitiesNames:ArrayList<String>? = null
+        get() {
+
+            if (_uploadableEntitiesNames == null){
+
+                val filteredKeys = arrayListOf<String>()
+
+                stcEntities?.forEach{
+
+                    if (it.value["isUploadable"] == true){
+
+                        filteredKeys.add(it.key)
+
+                    }
+
+                }
+
+                _uploadableEntitiesNames = filteredKeys
+
+            }
+
+            return _uploadableEntitiesNames
+
+        }
 
     fun checkEntitiesForDuplicates(){
 
@@ -123,6 +151,30 @@ class STMEntityController private constructor() {
             STMLogger.sharedLogger.infoMessage("stc.entity duplicates not found")
 
         }
+
+    }
+
+    fun downloadableEntityNames():ArrayList<String> {
+
+        return ArrayList(stcEntities!!.filter{
+            return@filter it.value["url"] != null
+        }.keys)
+
+    }
+
+    fun resourceForEntity(entityName:String):String{
+
+        val entity = stcEntities?.get(entityName)
+
+        return if (entity?.get("url") != null) entity["url"] as String else "${STMCoreAuthController.accountOrg}/${entity?.get("name")}"
+
+    }
+
+    fun entityWithName(name:String):Map<*,*>?{
+
+        val _name = STMFunctions.removePrefixFromEntityName(name)
+        val predicate = STMPredicate("=", STMPredicate("name"), STMPredicate("\"$_name\""))
+        return persistenceDelegate?.findAllSync("STMEntity", predicate, null)?.lastOrNull()
 
     }
 

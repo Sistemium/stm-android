@@ -35,6 +35,10 @@ class STMConstants{
         const val preferencesKey = "SistemiumSharedPreferences"
         const val SHARED_PATH = "shared"
         const val PERSISTENCE_PATH = "persistence"
+        const val AUTH_DELAY = 20
+        const val syncInterval = 600
+        const val LOGMESSAGE_MAX_TIME_INTERVAL_TO_UPLOAD = 1000 * 60 * 60 * 24
+        const val STMPersistingOptionOrderDirectionAscValue = "ASC"
 
     }
 

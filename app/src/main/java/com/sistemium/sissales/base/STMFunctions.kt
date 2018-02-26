@@ -40,13 +40,13 @@ class STMFunctions{
 
         }
 
-        fun stringFromNow():String{
+        fun stringFrom(date:Date):String{
 
             val sdf = SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS", Locale.US)
 
             sdf.timeZone = TimeZone.getTimeZone("GMT")
 
-            return sdf.format(Date())
+            return sdf.format(date)
 
 
         }
@@ -65,7 +65,7 @@ class STMFunctions{
 
         fun debugLog(name:String, msg:String){
 
-            Log.d("${stringFromNow()}:$name", msg)
+            Log.d("${stringFrom(Date())}:$name", msg)
 
         }
 
@@ -93,6 +93,8 @@ class STMFunctions{
             }
 
         }
+
+
     }
 
 }

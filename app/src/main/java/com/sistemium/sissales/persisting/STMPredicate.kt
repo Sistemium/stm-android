@@ -185,7 +185,7 @@ class STMPredicate {
         }
 
         @JvmStatic
-        private fun combinePredicates(subPredicates:ArrayList<STMPredicate>):STMPredicate{
+        fun combinePredicates(subPredicates:ArrayList<STMPredicate>):STMPredicate{
 
             if (subPredicates.size == 1){
 

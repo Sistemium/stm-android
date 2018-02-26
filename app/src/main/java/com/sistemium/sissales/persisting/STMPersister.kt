@@ -11,6 +11,7 @@ import nl.komponents.kovenant.task
  */
 class STMPersister(private val runner:STMPersistingRunning): STMFullStackPersisting, STMPersistingIntercepting {
 
+    @Throws(Exception::class)
     override fun findSync(entityName: String, identifier: String, options: Map<*, *>?): Map<*, *> {
 
         val predicate = STMPredicate.primaryKeyPredicate(arrayOf(identifier))
@@ -21,6 +22,7 @@ class STMPersister(private val runner:STMPersistingRunning): STMFullStackPersist
 
     }
 
+    @Throws(Exception::class)
     override fun findAllSync(entityName: String, predicate: STMPredicate?, options: Map<*, *>?): ArrayList<Map<*, *>> {
 
         return runner.readOnly {
@@ -49,6 +51,7 @@ class STMPersister(private val runner:STMPersistingRunning): STMFullStackPersist
 
     }
 
+    @Throws(Exception::class)
     override fun mergeSync(entityName: String, attributes: Map<*, *>, options: Map<*, *>?): Map<*, *> {
 
         var result:Map<*,*>? = null
@@ -69,6 +72,7 @@ class STMPersister(private val runner:STMPersistingRunning): STMFullStackPersist
 
     }
 
+    @Throws(Exception::class)
     override fun mergeManySync(entityName: String, attributeArray: ArrayList<*>, options: Map<*, *>?): ArrayList<Map<*, *>> {
 
         val result = arrayListOf<Map<*, *>>()
@@ -128,6 +132,7 @@ class STMPersister(private val runner:STMPersistingRunning): STMFullStackPersist
 
     }
 
+    @Throws(Exception::class)
     override fun destroySync(entityName: String, identifier: String, options: Map<*, *>?): Boolean {
 
         val deletedCount = destroyAllSync(entityName, STMPredicate("=", STMPredicate(STMConstants.DEFAULT_PERSISTING_PRIMARY_KEY), STMPredicate("'$identifier'")), null)
@@ -136,6 +141,7 @@ class STMPersister(private val runner:STMPersistingRunning): STMFullStackPersist
 
     }
 
+    @Throws(Exception::class)
     override fun destroyAllSync(entityName: String, predicate: STMPredicate?, options: Map<*, *>?): Int {
 
         var count = 0

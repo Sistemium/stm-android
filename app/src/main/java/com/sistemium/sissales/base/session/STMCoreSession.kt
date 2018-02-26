@@ -1,5 +1,6 @@
 package com.sistemium.sissales.base.session
 
+import com.sistemium.sissales.base.MyApplication
 import com.sistemium.sissales.base.STMConstants
 import com.sistemium.sissales.base.STMCoreSessionFiler
 import com.sistemium.sissales.base.helper.logger.STMLogger
@@ -27,7 +28,7 @@ class STMCoreSession(var trackers: ArrayList<String>) :STMSession {
     var manager: STMSessionManager? = null
     var startTrackers:ArrayList<String> = ArrayList(trackers)
     override var settingsController: STMSettingsController? = null
-    var syncer:STMSyncer? = null
+    override var syncer:STMSyncer? = null
 
     init{
 
@@ -40,6 +41,8 @@ class STMCoreSession(var trackers: ArrayList<String>) :STMSession {
         val modeler = STMModeller(filing.bundledModelJSON(dataModelName))
 
         val adapter = STMSQLiteDatabaseAdapter(modeler, databasePath)
+
+        MyApplication.testAdapter = adapter
 
         val runner = STMPersisterRunner(hashMapOf(STMStorageType.STMStorageTypeSQLiteDatabase to adapter))
 
@@ -72,8 +75,6 @@ class STMCoreSession(var trackers: ArrayList<String>) :STMSession {
 
         checkTrackersToStart()
 
-//        [self checkTrackersToStart];
-
         status = STMSessionStatus.STMSessionRunning
 
         setupSyncer()
@@ -94,6 +95,7 @@ class STMCoreSession(var trackers: ArrayList<String>) :STMSession {
 
     fun checkTrackersToStart(){
 
+        //TODO check trackers
         if (startTrackers.contains("location")){
 
 //            val locationTracker = STMCoreLocationTracker()

@@ -103,7 +103,7 @@ class STMSQLiteDatabaseTransaction(private var database: SQLiteDatabase, private
 
     override fun mergeWithoutSave(entityName: String, attributes: Map<*, *>, options: Map<*, *>?): Map<*, *>? {
 
-        val now = STMFunctions.stringFromNow()
+        val now = STMFunctions.stringFrom(Date())
 
         var returnSaved = true
 
