@@ -10,14 +10,6 @@ import com.sistemium.sissales.model.STMSQLiteDatabaseAdapter
 
 class STMSQLiteDatabaseOperation(val readOnly:Boolean, private var adapter: STMSQLiteDatabaseAdapter) :Runnable {
 
-    private val lock1 = Object()
-
-    private val lock2 = Object()
-
-    private var database:SQLiteDatabase? = null
-
-    private var _transaction: STMSQLiteDatabaseTransaction? = null
-
     var success = false
 
     val transaction:STMSQLiteDatabaseTransaction by lazy {
@@ -33,6 +25,14 @@ class STMSQLiteDatabaseOperation(val readOnly:Boolean, private var adapter: STMS
         }
 
     }
+
+    private val lock1 = Object()
+
+    private val lock2 = Object()
+
+    private var database:SQLiteDatabase? = null
+
+    private var _transaction: STMSQLiteDatabaseTransaction? = null
 
     override fun run() {
 

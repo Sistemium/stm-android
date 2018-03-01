@@ -10,26 +10,26 @@ class STMClientDataController {
 
     companion object {
 
-        var persistenceDelegate: STMFullStackPersisting = STMCoreSessionManager.sharedManager.currentSession!!.persistenceDelegate
-
         val clientData:Map<*,*>
-        get() {
+            get() {
 
-            val entityName = "STMClientData"
+                val entityName = "STMClientData"
 
-            val fetchResult = persistenceDelegate.findAllSync(entityName, null, null)
+                val fetchResult = persistenceDelegate.findAllSync(entityName, null, null)
 
-            var clientData = fetchResult.lastOrNull()
+                var clientData = fetchResult.lastOrNull()
 
-            if (clientData == null) {
+                if (clientData == null) {
 
-                clientData = hashMapOf<Any,Any>()
+                    clientData = hashMapOf<Any,Any>()
+
+                }
+
+                return clientData
 
             }
 
-            return clientData
-
-        }
+        private var persistenceDelegate: STMFullStackPersisting = STMCoreSessionManager.sharedManager.currentSession!!.persistenceDelegate
 
     }
 

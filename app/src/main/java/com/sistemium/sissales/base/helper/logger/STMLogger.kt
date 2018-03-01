@@ -19,18 +19,16 @@ class STMLogger private constructor() {
 
     private val availableTypes = arrayListOf("important", "error", "warning", "info", "debug")
 
-    private var _uploadLogType:String? = null
-
-    private val uploadLogType:String?
+    private val uploadLogType:String? = null
         get() {
 
-            if (_uploadLogType == null){
+            if (field == null){
 
-                _uploadLogType = session?.settingsController!!.stringValueForSettings("uploadLog.type", "syncer")
+                field = session?.settingsController!!.stringValueForSettings("uploadLog.type", "syncer")
 
             }
 
-            return _uploadLogType
+            return field
 
         }
 
@@ -49,45 +47,6 @@ class STMLogger private constructor() {
     fun importantMessage(text:String){
 
         saveLogMessageWithText(text, STMLogMessageType.STMLogMessageTypeImportant)
-
-    }
-
-    private fun saveLogMessageWithText(text:String, numType: STMLogMessageType){
-
-        var type = numType.toString()
-
-        if (!availableTypes.contains(type)) type = "info"
-
-        val uploadTypes = syncingTypesForSettingType(uploadLogType)
-
-        if (uploadTypes.contains(type)){
-
-            val logMessageDic = hashMapOf(
-                    "text" to text,
-                    "type" to type
-                    )
-
-            nsLogMessageWithType(logMessageDic["type"], logMessageDic["text"])
-
-            saveLogMessageDic(logMessageDic)
-
-        }else{
-
-            nsLogMessageWithType(type, text)
-
-        }
-
-    }
-
-    private fun saveLogMessageDic(logMessageDic:Map<*,*>){
-
-        TODO("not implemented")
-
-    }
-
-    private fun nsLogMessageWithType(type:String?, text:String?){
-
-        Log.i("Log","$type, $text")
 
     }
 
@@ -144,6 +103,45 @@ class STMLogger private constructor() {
 
         }
 
+
+    }
+
+    private fun saveLogMessageWithText(text:String, numType: STMLogMessageType){
+
+        var type = numType.toString()
+
+        if (!availableTypes.contains(type)) type = "info"
+
+        val uploadTypes = syncingTypesForSettingType(uploadLogType)
+
+        if (uploadTypes.contains(type)){
+
+            val logMessageDic = hashMapOf(
+                    "text" to text,
+                    "type" to type
+            )
+
+            nsLogMessageWithType(logMessageDic["type"], logMessageDic["text"])
+
+            saveLogMessageDic(logMessageDic)
+
+        }else{
+
+            nsLogMessageWithType(type, text)
+
+        }
+
+    }
+
+    private fun saveLogMessageDic(logMessageDic:Map<*,*>){
+
+        TODO("not implemented")
+
+    }
+
+    private fun nsLogMessageWithType(type:String?, text:String?){
+
+        Log.i("Log","$type, $text")
 
     }
 

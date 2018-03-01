@@ -15,12 +15,12 @@ class STMCoreSessionManager private constructor():STMSessionManager {
         val sharedManager: STMCoreSessionManager by lazy { Holder.INSTANCE }
     }
 
-    private val sessions = hashMapOf<String, STMCoreSession>()
-
-    var currentSessionUID:String? = null
-
     var currentSession:STMSession? = null
         get() = sessions[currentSessionUID]
+
+    private val sessions = hashMapOf<String, STMCoreSession>()
+
+    private var currentSessionUID:String? = null
 
     fun startSession(trackers:ArrayList<String>): STMSession?{
 
@@ -43,10 +43,11 @@ class STMCoreSessionManager private constructor():STMSessionManager {
 
         }
 
-        session = STMCoreSession(trackers)
+        val core = STMCoreSession(trackers)
+
+        session = core
 
         session.manager = this
-
         sessions[uid] = session
 
         currentSessionUID = uid

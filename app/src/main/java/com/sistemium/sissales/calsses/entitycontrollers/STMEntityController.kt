@@ -20,14 +20,12 @@ class STMEntityController private constructor() {
 
     }
 
-    private var _stcEntities:Map<String,Map<*,*>>? = null
-
     var persistenceDelegate: STMFullStackPersisting? = null
 
     var stcEntities:Map<String,Map<*,*>>? = null
     get() {
 
-        if (_stcEntities == null){
+        if (field == null){
 
             val stc = hashMapOf<String, Map<*,*>>()
 
@@ -45,39 +43,19 @@ class STMEntityController private constructor() {
 
             }
 
-            _stcEntities = if (stc.count() > 0) stc else null
+            field = if (stc.count() > 0) stc else null
 
 
         }
 
-        return _stcEntities
+        return field
 
     }
-
-    private var _entitiesArray:ArrayList<Map<*,*>>? = null
-
-    var entitiesArray:ArrayList<Map<*,*>>? = null
-    get() {
-
-        if (_entitiesArray == null){
-
-            val options = hashMapOf(STMConstants.STMPersistingOptionOrder to "name")
-            val result = persistenceDelegate?.findAllSync(STMConstants.STM_ENTITY_NAME, null, options)
-
-            _entitiesArray = if (result?.count() ?: 0 > 0) result else null
-
-        }
-
-        return _entitiesArray
-
-    }
-
-    private var _uploadableEntitiesNames:ArrayList<String>? = null
 
     var uploadableEntitiesNames:ArrayList<String>? = null
         get() {
 
-            if (_uploadableEntitiesNames == null){
+            if (field == null){
 
                 val filteredKeys = arrayListOf<String>()
 
@@ -91,11 +69,27 @@ class STMEntityController private constructor() {
 
                 }
 
-                _uploadableEntitiesNames = filteredKeys
+                field = filteredKeys
 
             }
 
-            return _uploadableEntitiesNames
+            return field
+
+        }
+
+    private var entitiesArray:ArrayList<Map<*,*>>? = null
+        get() {
+
+            if (field == null){
+
+                val options = hashMapOf(STMConstants.STMPersistingOptionOrder to "name")
+                val result = persistenceDelegate?.findAllSync(STMConstants.STM_ENTITY_NAME, null, options)
+
+                field = if (result?.count() ?: 0 > 0) result else null
+
+            }
+
+            return field
 
         }
 
@@ -135,11 +129,11 @@ class STMEntityController private constructor() {
 
             STMLogger.sharedLogger.errorMessage(message)
 
-            val newStcEntitiesArray = ArrayList(_entitiesArray)
+            val newStcEntitiesArray = ArrayList(entitiesArray)
 
             newStcEntitiesArray.removeAll(duplicates)
 
-            _entitiesArray = newStcEntitiesArray
+            entitiesArray = newStcEntitiesArray
             val predicate = STMPredicate.primaryKeyPredicate(duplicates.map { return@map it["id"] }.toTypedArray())
 
             persistenceDelegate?.destroyAllSync(STMConstants.STM_ENTITY_NAME, predicate, hashMapOf(STMConstants.STMPersistingOptionRecordstatuses to false))

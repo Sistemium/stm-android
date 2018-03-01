@@ -19,16 +19,18 @@ import com.sistemium.sissales.persisting.STMPersistingInterceptorUniqueProperty
  * Created by edgarjanvuicik on 08/02/2018.
  */
 class STMCoreSession(var trackers: ArrayList<String>) :STMSession {
+
     override var uid:String = STMCoreAuthController.userID!!
     override var filing: STMFiling = STMCoreSessionFiler(STMCoreAuthController.accountOrg!!, STMCoreAuthController.iSisDB ?: uid)
     override var status: STMSessionStatus = STMSessionStatus.STMSessionStarting
     override lateinit var persistenceDelegate: STMFullStackPersisting
     override var logger: STMLogger? = null
-
-    var manager: STMSessionManager? = null
-    var startTrackers:ArrayList<String> = ArrayList(trackers)
     override var settingsController: STMSettingsController? = null
     override var syncer:STMSyncer? = null
+
+    var manager: STMSessionManager? = null
+
+    private var startTrackers:ArrayList<String> = ArrayList(trackers)
 
     init{
 
@@ -93,7 +95,7 @@ class STMCoreSession(var trackers: ArrayList<String>) :STMSession {
 
     }
 
-    fun checkTrackersToStart(){
+    private fun checkTrackersToStart(){
 
         //TODO check trackers
         if (startTrackers.contains("location")){
@@ -125,8 +127,8 @@ class STMCoreSession(var trackers: ArrayList<String>) :STMSession {
         syncer.defantomizingDelegate = syncerHelper
 
         val unsyncedHelper = STMUnsyncedDataHelper()
-        unsyncedHelper.subscriberDelegate = syncer
         unsyncedHelper.session = this
+        unsyncedHelper.subscriberDelegate = syncer
         syncer.dataSyncingDelegate = unsyncedHelper
         syncer.session = this
         this.syncer = syncer

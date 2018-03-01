@@ -12,34 +12,33 @@ import com.sistemium.sissales.persisting.STMSQLiteDatabaseTransaction
 import java.io.File
 import java.util.*
 import java.util.concurrent.Executors
-import kotlin.collections.ArrayList
 
 /**
  * Created by edgarjanvuicik on 15/11/2017.
  */
 class STMSQLiteDatabaseAdapter(override var model: STMModelling, private var dbPath:String) :STMAdapting {
 
-    private val operationPoolQueue = Executors.newFixedThreadPool(STMConstants.POOL_SIZE)
-
-    private val operationQueue = Executors.newFixedThreadPool(1)
-
-    var database: SQLiteDatabase? = null
-
-    val poolDatabases = arrayListOf<SQLiteDatabase>()
-
     override var storageType = STMStorageType.STMStorageTypeSQLiteDatabase
 
     override var builtInAttributeNames: Array<String> = arrayOf(
-    STMConstants.DEFAULT_PERSISTING_PRIMARY_KEY,
-    STMConstants.STMPersistingKeyCreationTimestamp,
-    STMConstants.STMPersistingKeyVersion,
-    STMConstants.STMPersistingOptionLts,
-    STMConstants.STMPersistingKeyPhantom
+            STMConstants.DEFAULT_PERSISTING_PRIMARY_KEY,
+            STMConstants.STMPersistingKeyCreationTimestamp,
+            STMConstants.STMPersistingKeyVersion,
+            STMConstants.STMPersistingOptionLts,
+            STMConstants.STMPersistingKeyPhantom
     )
 
     override var columnsByTable: Map<String, Map<String, String>>? = null
 
     override var ignoredAttributeNames: Array<String> = builtInAttributeNames.plus("xid")
+
+    var database: SQLiteDatabase? = null
+
+    val poolDatabases = arrayListOf<SQLiteDatabase>()
+
+    private val operationPoolQueue = Executors.newFixedThreadPool(STMConstants.POOL_SIZE)
+
+    private val operationQueue = Executors.newFixedThreadPool(1)
 
     init {
 

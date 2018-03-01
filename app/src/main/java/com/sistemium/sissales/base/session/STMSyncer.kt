@@ -6,6 +6,7 @@ import com.sistemium.sissales.base.helper.logger.STMLogger
 import com.sistemium.sissales.calsses.entitycontrollers.STMEntityController
 import com.sistemium.sissales.enums.STMSocketEvent
 import com.sistemium.sissales.interfaces.*
+import nl.komponents.kovenant.then
 import java.util.*
 
 /**
@@ -17,33 +18,68 @@ class STMSyncer: STMDefantomizingOwner, STMDataDownloadingOwner, STMDataSyncingS
     var defantomizingDelegate: STMDefantomizing? = null
     var dataSyncingDelegate:STMDataSyncing? = null
     var session:STMSession? = null
-    var isRunning = false
-    var socketTransport:STMSocketConnection? = null
-    var isSendingData = false
-    var syncTimer: Timer? = null
-    var needRepeatDownload = false
-
-    private var _settings:Map<*,*>? = null
-
-    var settings:Map<*,*>? = null
+    private var isRunning = false
+    private var socketTransport:STMSocketConnection? = null
+    private var isSendingData = false
+    private var syncTimer: Timer? = null
+    private var needRepeatDownload = false
+    private var settings:Map<*,*>? = null
     get() {
 
-        if (_settings == null) {
+        if (field == null) {
 
-            _settings = session?.settingsController?.currentSettingsForGroup("syncer")
+            field = session?.settingsController?.currentSettingsForGroup("syncer")
 
         }
 
-        return _settings
+        return field
 
     }
 
+    override fun socketReceiveAuthorization(){
+
+        subscribeToUnsyncedObjects()
+
+        initTimer()
+
+        val downloadableEntityNames = STMEntityController.sharedInstance.downloadableEntityNames()
+        val downloadableEntityResources = downloadableEntityNames.map {
+
+            STMEntityController.sharedInstance.resourceForEntity(it)
+
+        }
+
+        socketTransport!!.socketSendEvent(STMSocketEvent.STMSocketEventSubscribe, downloadableEntityResources)
+
+    }
+    override fun finishUnsyncedProcess(){
+
+        isSendingData = false
+
+    }
+    override fun haveUnsynced(entityName: String, itemData: Map<*, *>, itemVersion: String) {
+
+        isSendingData = true
+        socketTransport!!.mergeAsync(entityName, itemData, null)
+                .then {
+
+                    dataSyncingDelegate!!.setSynced(true, entityName, it, itemVersion)
+
+                }.fail {
+
+                    STMFunctions.debugLog("STMSyncer","updateResource error: $it")
+
+                    dataSyncingDelegate!!.setSynced(false, entityName, itemData, itemVersion)
+
+                }
+
+    }
 
     fun startSyncer(){
 
         if (isRunning) return
 
-        _settings = null
+        settings = null
 
         if (!checkStcEntities()){
 
@@ -71,8 +107,13 @@ class STMSyncer: STMDefantomizingOwner, STMDataDownloadingOwner, STMDataSyncingS
         isRunning = true
 
     }
+    fun sendEventViaSocket(event:STMSocketEvent, value:Any){
 
-    fun checkStcEntities():Boolean{
+        socketTransport?.socketSendEvent(event, value)
+
+    }
+
+    private fun checkStcEntities():Boolean{
 
         STMEntityController.sharedInstance.persistenceDelegate = session?.persistenceDelegate
 
@@ -113,29 +154,6 @@ class STMSyncer: STMDefantomizingOwner, STMDataDownloadingOwner, STMDataSyncingS
 
     }
 
-    fun sendEventViaSocket(event:STMSocketEvent, value:Any){
-
-        socketTransport?.socketSendEvent(event, value)
-
-    }
-
-    override fun socketReceiveAuthorization(){
-
-        subscribeToUnsyncedObjects()
-
-        initTimer()
-
-        val downloadableEntityNames = STMEntityController.sharedInstance.downloadableEntityNames()
-        val downloadableEntityResources = downloadableEntityNames.map {
-
-            STMEntityController.sharedInstance.resourceForEntity(it)
-
-        }
-
-        socketTransport!!.socketSendEvent(STMSocketEvent.STMSocketEventSubscribe, downloadableEntityResources)
-
-    }
-
     private fun subscribeToUnsyncedObjects(){
 
         unsubscribeFromUnsyncedObjects()
@@ -149,12 +167,6 @@ class STMSyncer: STMDefantomizingOwner, STMDataDownloadingOwner, STMDataSyncingS
         dataSyncingDelegate!!.subscriberDelegate = null
         dataSyncingDelegate!!.pauseSyncing()
         finishUnsyncedProcess()
-
-    }
-
-    override fun finishUnsyncedProcess(){
-
-        isSendingData = false
 
     }
 
@@ -182,7 +194,7 @@ class STMSyncer: STMDefantomizingOwner, STMDataDownloadingOwner, STMDataSyncingS
 
     }
 
-    fun receiveData(){
+    private fun receiveData(){
 
         if (!isRunning) return
 
@@ -196,10 +208,6 @@ class STMSyncer: STMDefantomizingOwner, STMDataDownloadingOwner, STMDataSyncingS
 
         dataDownloadingDelegate!!.startDownloading(null)
 
-    }
-
-    override fun haveUnsynced(entityName: String, itemData: Map<*, *>, itemVersion: String) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
 }

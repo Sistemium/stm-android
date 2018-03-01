@@ -10,4 +10,6 @@ interface STMDataSyncing {
     fun startSyncing()
     fun pauseSyncing()
 
+    fun setSynced(success:Boolean, entityName:String, itemData:Map<*,*>, itemVersion:String):Boolean
+
 }

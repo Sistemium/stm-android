@@ -10,41 +10,6 @@ import com.sistemium.sissales.interfaces.STMAdapting
 
 class STMPredicate {
 
-    enum class PredicateType{
-        Value, PredicateArray, Comparison
-    }
-
-    constructor(relation: String, value:String){
-        this.relation = relation
-        this.value = value
-        this.type = PredicateType.Value
-    }
-
-    constructor(value:String){
-        this.value = value
-        this.type = PredicateType.Value
-    }
-
-    constructor(relation:String, predicateArray:List<STMPredicate>){
-        this.relation = relation
-        this.predicateArray = predicateArray
-        this.type = PredicateType.PredicateArray
-    }
-
-    constructor(relation:String, leftPredicate:STMPredicate, rightPredicate:STMPredicate){
-        this.relation = relation
-        this.leftPredicate = leftPredicate
-        this.rightPredicate = rightPredicate
-        this.type = PredicateType.Comparison
-    }
-
-    private var value:String? = null
-    private var predicateArray:List<STMPredicate>? = null
-    private var leftPredicate:STMPredicate? = null
-    private var rightPredicate:STMPredicate? = null
-    private var relation:String? = null
-    private var type:PredicateType
-
     companion object {
 
         @JvmStatic
@@ -199,6 +164,43 @@ class STMPredicate {
 
     }
 
+    private enum class PredicateType{
+        Value, PredicateArray, Comparison
+    }
+
+    private var value:String? = null
+    private var predicateArray:List<STMPredicate>? = null
+    private var leftPredicate:STMPredicate? = null
+    private var rightPredicate:STMPredicate? = null
+    private var relation:String? = null
+    private var type:PredicateType
+
+    constructor(relation: String, value:String){
+        this.relation = relation
+        this.value = value
+        this.type = PredicateType.Value
+    }
+
+    constructor(value:String){
+        this.value = value
+        this.type = PredicateType.Value
+    }
+
+    constructor(relation:String, predicateArray:List<STMPredicate>){
+        this.relation = relation
+        this.predicateArray = predicateArray
+        this.type = PredicateType.PredicateArray
+    }
+
+    constructor(relation:String, leftPredicate:STMPredicate, rightPredicate:STMPredicate){
+        this.relation = relation
+        this.leftPredicate = leftPredicate
+        this.rightPredicate = rightPredicate
+        this.type = PredicateType.Comparison
+    }
+
+    override fun toString(): String = throw Exception("should not, use predicateForAdapter instead")
+
     fun predicateForAdapter(adapter:STMAdapting?, entityName:String?):String?{
 
         when(type){
@@ -305,7 +307,5 @@ class STMPredicate {
         }
 
     }
-
-    override fun toString(): String = throw Exception("should not, use predicateForAdapter instead")
 
 }

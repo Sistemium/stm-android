@@ -14,23 +14,16 @@ class STMCoreSettingsController :STMPersistingMergeInterceptor, STMSettingsContr
 
     var persistenceDelegate: STMFullStackPersisting? = null
 
-    private var _currentSettings:ArrayList<Map<*,*>>? = null
     private var currentSettings:ArrayList<Map<*,*>>? = null
     get() {
 
-        if (_currentSettings == null || _currentSettings?.size == 0){
+        if (field == null || field?.size == 0){
 
             reloadCurrentSettings()
 
         }
 
-        return _currentSettings
-
-    }
-
-    private fun reloadCurrentSettings(){
-
-        _currentSettings = persistenceDelegate?.findAllSync("STMSetting", null, null)
+        return field
 
     }
 
@@ -52,12 +45,6 @@ class STMCoreSettingsController :STMPersistingMergeInterceptor, STMSettingsContr
 
     }
 
-    fun settingWithName(name:String?, group:String?):Map<*,*>?{
-
-        TODO("not implemented")
-
-    }
-
     override fun stringValueForSettings(settingsName: String, group: String): String? {
 
         return currentSettingsForGroup(group)?.get(settingsName) as String
@@ -73,6 +60,18 @@ class STMCoreSettingsController :STMPersistingMergeInterceptor, STMSettingsContr
         mutAtr[STMConstants.DEFAULT_PERSISTING_PRIMARY_KEY] = setting[STMConstants.DEFAULT_PERSISTING_PRIMARY_KEY]
 
         return mutAtr
+
+    }
+
+    private fun reloadCurrentSettings(){
+
+        currentSettings = persistenceDelegate?.findAllSync("STMSetting", null, null)
+
+    }
+
+    private fun settingWithName(name:String?, group:String?):Map<*,*>?{
+
+        TODO("not implemented")
 
     }
 

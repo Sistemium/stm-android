@@ -45,62 +45,6 @@ class STMSQLiteDatabaseTransaction(private var database: SQLiteDatabase, private
         return findAllSync(entityName, predicate, orderBy, asc, pageSize, offset, groupBy)
     }
 
-    private fun findAllSync(entityName: String, predicate: STMPredicate?, orderBy:String?, ascending:Boolean,
-                            fetchLimit:Int?, fetchOffset:Int?, groupBy:ArrayList<*>?):ArrayList<Map<*, *>> {
-
-        var options = ""
-        var columns = ""
-
-        if (groupBy?.count() != null && groupBy.count() != 0) {
-
-            val columnKeys = ArrayList(groupBy.map {
-                "[$it]"
-            })
-
-            options = " GROUP BY " + columnKeys.joinToString(", ")
-
-            columnKeys += sumKeysForEntityName(entityName)
-
-            columnKeys += "count(*) [count()]"
-
-            columns = columnKeys.joinToString(", ")
-
-        } else {
-            columns = "*"
-        }
-
-        if (orderBy != null) {
-            val _orderBy = orderBy.split(",").joinToString( if (ascending) " ASC," else " DESC,")
-            val order = " ORDER BY $_orderBy ${if (ascending) "ASC" else "DESC"}"
-            options += order
-        }
-
-        if (fetchLimit != null && fetchLimit > 0) {
-            val limit = " LIMIT $fetchLimit"
-            options += limit
-        }
-
-        if (fetchOffset != null && fetchOffset > 0) {
-            val offset = " OFFSET $fetchOffset"
-            options += offset
-        }
-
-        val tableName = STMFunctions.removePrefixFromEntityName(entityName)
-
-        var where = ""
-
-        if (predicate != null){
-            where = predicate.predicateForAdapter(adapter, entityName) ?: ""
-            STMFunctions.debugLog("EntityName", entityName)
-            STMFunctions.debugLog("PREDICATE", where)
-            STMFunctions.debugLog("OPTIONS", options)
-            STMFunctions.debugLog("COLUMNS", columns)
-        }
-
-        return selectFrom(tableName, columns, where, options)
-
-    }
-
     override fun mergeWithoutSave(entityName: String, attributes: Map<*, *>, options: Map<*, *>?): Map<*, *>? {
 
         val now = STMFunctions.stringFrom(Date())
@@ -167,6 +111,62 @@ class STMSQLiteDatabaseTransaction(private var database: SQLiteDatabase, private
 
     }
 
+    private fun findAllSync(entityName: String, predicate: STMPredicate?, orderBy:String?, ascending:Boolean,
+                            fetchLimit:Int?, fetchOffset:Int?, groupBy:ArrayList<*>?):ArrayList<Map<*, *>> {
+
+        var options = ""
+        var columns = ""
+
+        if (groupBy?.count() != null && groupBy.count() != 0) {
+
+            val columnKeys = ArrayList(groupBy.map {
+                "[$it]"
+            })
+
+            options = " GROUP BY " + columnKeys.joinToString(", ")
+
+            columnKeys += sumKeysForEntityName(entityName)
+
+            columnKeys += "count(*) [count()]"
+
+            columns = columnKeys.joinToString(", ")
+
+        } else {
+            columns = "*"
+        }
+
+        if (orderBy != null) {
+            val _orderBy = orderBy.split(",").joinToString( if (ascending) " ASC," else " DESC,")
+            val order = " ORDER BY $_orderBy ${if (ascending) "ASC" else "DESC"}"
+            options += order
+        }
+
+        if (fetchLimit != null && fetchLimit > 0) {
+            val limit = " LIMIT $fetchLimit"
+            options += limit
+        }
+
+        if (fetchOffset != null && fetchOffset > 0) {
+            val offset = " OFFSET $fetchOffset"
+            options += offset
+        }
+
+        val tableName = STMFunctions.removePrefixFromEntityName(entityName)
+
+        var where = ""
+
+        if (predicate != null){
+            where = predicate.predicateForAdapter(adapter, entityName) ?: ""
+            STMFunctions.debugLog("EntityName", entityName)
+            STMFunctions.debugLog("PREDICATE", where)
+            STMFunctions.debugLog("OPTIONS", options)
+            STMFunctions.debugLog("COLUMNS", columns)
+        }
+
+        return selectFrom(tableName, columns, where, options)
+
+    }
+
     private fun mergeInto(tableName:String, dictionary:Map<*,*>):String?{
 
         val pk = if (dictionary[STMConstants.DEFAULT_PERSISTING_PRIMARY_KEY] != null) dictionary[STMConstants.DEFAULT_PERSISTING_PRIMARY_KEY] as String else STMFunctions.uuidString()
@@ -205,7 +205,7 @@ class STMSQLiteDatabaseTransaction(private var database: SQLiteDatabase, private
 
         } catch (e:Exception) {
 
-            if (e.toString() == "ignored") {
+            if (e.localizedMessage.startsWith("ignored")) {
 
                 return pk
 

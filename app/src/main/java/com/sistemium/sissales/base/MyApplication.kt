@@ -19,16 +19,9 @@ import kotlin.properties.Delegates
  */
 class MyApplication : Application(), Application.ActivityLifecycleCallbacks, ComponentCallbacks2 {
 
-    override fun onCreate() {
-        super.onCreate()
-        appContext = applicationContext
-        SecuredPreferenceStore.init(appContext, DefaultRecoveryHandler())
-        this.registerActivityLifecycleCallbacks(this)
-    }
-
     companion object {
 
-        var testAdapter:STMAdapting? = null
+        var testAdapter: STMAdapting? = null
 
         var syncer: STMSyncer? = null
             get() {
@@ -79,13 +72,17 @@ class MyApplication : Application(), Application.ActivityLifecycleCallbacks, Com
         }
 
     }
-
     override fun onActivityResumed(p0: Activity?) {
 
         MyApplication.inBackground = false
 
     }
-
+    override fun onCreate() {
+        super.onCreate()
+        appContext = applicationContext
+        SecuredPreferenceStore.init(appContext, DefaultRecoveryHandler())
+        this.registerActivityLifecycleCallbacks(this)
+    }
     override fun onActivityPaused(p0: Activity?) {}
     override fun onActivityStarted(p0: Activity?) {}
     override fun onActivityDestroyed(p0: Activity?) {}

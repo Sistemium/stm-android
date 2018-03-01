@@ -247,7 +247,41 @@ class STMCoreAuthController {
 
         }
 
-        fun startSession(){
+        fun logIn():Promise<Map<*,*>, Exception>{
+
+            val accessToken = STMCoreAuthController.accessToken
+
+            if (accessToken != null){
+
+                val myIntent = Intent(MyApplication.appContext, WebViewActivity::class.java)
+
+                myIntent.putExtra("accessToken", accessToken)
+
+                myIntent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+
+                val options = ActivityOptions.makeCustomAnimation(MyApplication.appContext, R.anim.abc_fade_in, R.anim.abc_fade_out)
+
+                return requestRoles() then {
+
+                    MyApplication.appContext?.startActivity(myIntent, options.toBundle())
+
+                    return@then it
+
+                } fail {
+                    val test = ""
+                }
+
+            }
+
+            return task {
+
+                throw Exception("no accessToken")
+
+            }
+
+        }
+
+        private fun startSession(){
 
             STMFunctions.debugLog("STMCoreAuthController", "socketURL $socketURL")
             STMFunctions.debugLog("STMCoreAuthController", "entity resource $entityResource")
@@ -315,38 +349,6 @@ class STMCoreAuthController {
                 }
 
                 throw Exception("Wrong SMS Code")
-
-            }
-
-        }
-
-        fun logIn():Promise<Map<*,*>, Exception>{
-
-            val accessToken = STMCoreAuthController.accessToken
-
-            if (accessToken != null){
-
-                val myIntent = Intent(MyApplication.appContext, WebViewActivity::class.java)
-
-                myIntent.putExtra("accessToken", accessToken)
-
-                myIntent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
-
-                val options = ActivityOptions.makeCustomAnimation(MyApplication.appContext, R.anim.abc_fade_in, R.anim.abc_fade_out)
-
-                return requestRoles() then {
-
-                    MyApplication.appContext?.startActivity(myIntent, options.toBundle())
-
-                    return@then it
-
-                }
-
-            }
-
-            return task {
-
-                throw Exception("no accessToken")
 
             }
 

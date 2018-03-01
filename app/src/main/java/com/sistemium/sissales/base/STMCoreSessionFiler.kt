@@ -11,10 +11,10 @@ import java.util.*
  */
 class STMCoreSessionFiler(org:String, uid:String): STMFiling, STMDirectoring {
 
-    val userDocuments = MyApplication.appContext!!.filesDir.absolutePath + "/" + org + "/" + uid
-    val sharedDocuments = MyApplication.appContext!!.filesDir.absolutePath + "/" + org + "/" + SHARED_PATH
-    val directoring:STMDirectoring = this
-    val persistenceBasePath = (testPersistencePath() ?: userDocuments) + "/" + STMConstants.PERSISTENCE_PATH
+    private val userDocuments = MyApplication.appContext!!.filesDir.absolutePath + "/" + org + "/" + uid
+    private val sharedDocuments = MyApplication.appContext!!.filesDir.absolutePath + "/" + org + "/" + SHARED_PATH
+    private val directoring:STMDirectoring = this
+    private val persistenceBasePath = (testPersistencePath() ?: userDocuments) + "/" + STMConstants.PERSISTENCE_PATH
 
     override fun bundledModelJSON(modelName: String):String {
 

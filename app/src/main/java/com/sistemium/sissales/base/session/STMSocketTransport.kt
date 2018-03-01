@@ -1,11 +1,11 @@
 package com.sistemium.sissales.base.session
 
-import android.util.Log
 import com.sistemium.sissales.base.MyApplication
 import com.sistemium.sissales.base.STMConstants
 import com.sistemium.sissales.base.STMFunctions
 import com.sistemium.sissales.base.helper.logger.STMLogger
 import com.sistemium.sissales.calsses.entitycontrollers.STMClientDataController
+import com.sistemium.sissales.calsses.entitycontrollers.STMEntityController
 import com.sistemium.sissales.enums.STMSocketEvent
 import com.sistemium.sissales.interfaces.STMRemoteDataEventHandling
 import com.sistemium.sissales.interfaces.STMSocketConnection
@@ -13,8 +13,10 @@ import com.sistemium.sissales.interfaces.STMSocketConnectionOwner
 import io.socket.client.Ack
 import io.socket.client.IO
 import io.socket.client.Socket
-import nl.komponents.kovenant.Deferred
+import nl.komponents.kovenant.Promise
 import nl.komponents.kovenant.deferred
+import nl.komponents.kovenant.then
+import org.json.JSONArray
 import org.json.JSONObject
 import java.net.URI
 
@@ -24,16 +26,16 @@ import java.net.URI
 
 class STMSocketTransport(var socketUrlString:String, var entityResource:String, var owner:STMSocketConnectionOwner, var remoteDataEventHandling: STMRemoteDataEventHandling):STMSocketConnection {
 
+    override var isReady:Boolean = false
+        get() {
+
+            return socket?.connected() == true && isAuthorized
+
+        }
+
     private var socket:Socket? = null
 
-    var isAuthorized = false
-
-    override var isReady:Boolean = false
-    get() {
-
-        return socket?.connected() == true && isAuthorized
-
-    }
+    private var isAuthorized = false
 
     init {
 
@@ -41,7 +43,166 @@ class STMSocketTransport(var socketUrlString:String, var entityResource:String, 
 
     }
 
-    fun startSocket(){
+    override fun mergeAsync(entityName: String, attributes: Map<*, *>, options: Map<*, *>?): Promise<Map<*, *>, Exception> {
+
+        val deferred = deferred<Map<*, *>, Exception>()
+
+        val resource = STMEntityController.sharedInstance.resourceForEntity(entityName)
+
+        val value = hashMapOf(
+                "method" to STMConstants.kSocketUpdateMethod,
+                "resource" to resource,
+                "id" to attributes["id"],
+                "attrs" to attributes
+        )
+
+        socketSendEvent(STMSocketEvent.STMSocketEventJSData, value)
+                .then {
+
+                        val (result, error) =  respondOnData(it)
+
+                        if (error != null){
+
+                            deferred.reject(error)
+
+                        }else{
+
+                            deferred.resolve(result!!)
+
+                        }
+
+                }.fail {
+
+                    deferred.reject(it)
+
+                }
+
+        return deferred.promise
+
+    }
+
+    override fun socketSendEvent(event: STMSocketEvent, value: Any?): Promise<Array<*>, Exception> {
+
+        val deferred = deferred<Array<*>,Exception>()
+
+        val _value = if (value is HashMap<*, *>) JSONObject(value) else value as? JSONObject
+
+        if (!isReady){
+
+            val errorMessage = "socket not connected while sendEvent"
+            socketLostConnection(errorMessage)
+
+            deferred.reject(Exception(errorMessage))
+
+            return deferred.promise
+
+        }
+
+        if (event == STMSocketEvent.STMSocketEventJSData){
+
+            if (_value !is JSONObject){
+
+                deferred.reject(Exception("STMSocketEventJSData value is not JSONObject"))
+
+                return deferred.promise
+
+            }
+
+            socket!!.emit(event.toString(), _value, Ack{
+
+                if (it.firstOrNull() == "NO ACK"){
+
+                    deferred.reject(Exception("ack timeout"))
+
+                }
+
+                deferred.resolve(it)
+
+            })
+
+            return deferred.promise
+
+        }
+
+        val primaryKey = primaryKeyForEvent(event)
+
+        if (primaryKey != null && _value != null) {
+
+            val dataDic = hashMapOf(primaryKey to _value)
+            val message = "send via socket for event: $event"
+            STMFunctions.debugLog("STMSocketTransport", message)
+            deferred.resolve(arrayOf(dataDic))
+
+        } else if (_value != null) {
+            socket!!.emit(event.toString(), arrayOf(_value), {
+
+                if (it.firstOrNull() == "NO ACK"){
+
+                    deferred.reject(Exception("ack timeout"))
+
+                }
+
+                deferred.resolve(it)
+
+            })
+        } else {
+
+            socket!!.emit(event.toString(), Ack {
+
+                if (it.firstOrNull() == "NO ACK"){
+
+                    deferred.reject(Exception("ack timeout"))
+
+                }
+
+                deferred.resolve(it)
+
+            })
+
+        }
+
+        return deferred.promise
+
+    }
+
+    private fun respondOnData(array: Array<*>): Pair<Map<*, *>?, Exception?>{
+
+        var decoded = null
+
+        if (array.size != 1){
+
+            return Pair(null, Exception("Response length is not 1"))
+
+        }
+
+        val stResponse = array.firstOrNull() as? JSONObject ?: return Pair(null, Exception("No stResponse "))
+
+        val data = stResponse["data"]
+
+        when (data) {
+            is JSONObject ->{
+
+                return Pair(STMFunctions.gson.fromJson(data.toString(), Map::class.java), null)
+
+            }
+            is JSONArray -> TODO("not implemented")
+
+//            response = [[STSocketsJSDataResponseSuccessArray alloc] init];
+//            [(STSocketsJSDataResponseSuccessObject *)response setData:data];
+//            STSocketsJSDataResponseSuccessArray *response = (STSocketsJSDataResponseSuccessArray *)decoded;
+//                handler(YES, response.data, response.headers, nil);
+
+            else -> {
+
+                return Pair(null, Exception(data.toString()))
+
+            }
+
+        }
+
+    }
+
+    private fun startSocket(){
 
         STMLogger.sharedLogger.infoMessage("STMSocketTransport")
 
@@ -61,7 +222,7 @@ class STMSocketTransport(var socketUrlString:String, var entityResource:String, 
 
     }
 
-    fun addEventObservers(){
+    private fun addEventObservers(){
 
         socket?.off()
 
@@ -75,73 +236,73 @@ class STMSocketTransport(var socketUrlString:String, var entityResource:String, 
 
         socket!!.on(STMSocketEvent.STMSocketEventDisconnect.toString()){
 
-            Log.d(",","")
+            TODO("not implemented")
 
         }
 
         socket!!.on(STMSocketEvent.STMSocketEventError.toString()){
 
-            Log.d(",","")
+            TODO("not implemented")
 
         }
 
         socket!!.on(STMSocketEvent.STMSocketEventReconnect.toString()){
 
-            Log.d(",","")
+            TODO("not implemented")
 
         }
 
         socket!!.on(STMSocketEvent.STMSocketEventReconnectAttempt.toString()){
 
-            Log.d(",","")
+            TODO("not implemented")
 
         }
 
         socket!!.on(STMSocketEvent.STMSocketEventRemoteCommands.toString()){
 
-            Log.d(",","")
+            TODO("not implemented")
 
         }
 
         socket!!.on(STMSocketEvent.STMSocketEventRemoteRequests.toString()){
 
-            Log.d(",","")
+            TODO("not implemented")
 
         }
 
         socket!!.on(STMSocketEvent.STMSocketEventData.toString()){
 
-            Log.d(",","")
+            TODO("not implemented")
 
         }
 
         socket!!.on(STMSocketEvent.STMSocketEventJSData.toString()){
 
-            Log.d(",","")
+            TODO("not implemented")
 
         }
 
         socket!!.on(STMSocketEvent.STMSocketEventUpdate.toString()){
 
-            Log.d(",","")
+            TODO("not implemented")
 
         }
 
         socket!!.on(STMSocketEvent.STMSocketEventUpdateCollection.toString()){
 
-            Log.d(",","")
+            TODO("not implemented")
 
         }
 
         socket!!.on(STMSocketEvent.STMSocketEventDestroy.toString()){
 
-            Log.d(",","")
+            TODO("not implemented")
 
         }
 
     }
 
-    fun emitAuthorization(){
+    private fun emitAuthorization(){
 
         var dataDic = STMClientDataController.clientData
 
@@ -168,7 +329,7 @@ class STMSocketTransport(var socketUrlString:String, var entityResource:String, 
 
     }
 
-    fun receiveAuthorizationAckWithData(data:Array<*>){
+    private fun receiveAuthorizationAckWithData(data:Array<*>){
 
         if (data.firstOrNull() == "NO ACK"){
 
@@ -208,13 +369,13 @@ class STMSocketTransport(var socketUrlString:String, var entityResource:String, 
 
     }
 
-    fun notAuthorizedWithError(errorString:String){
+    private fun notAuthorizedWithError(errorString:String){
 
         TODO("not implemented")
 
     }
 
-    fun delayedAuthorization(){
+    private fun delayedAuthorization(){
 
         android.os.Handler(MyApplication.appContext!!.mainLooper).postDelayed({
 
@@ -224,7 +385,7 @@ class STMSocketTransport(var socketUrlString:String, var entityResource:String, 
 
     }
 
-    fun checkAppState(){
+    private fun checkAppState(){
 
         val appState = if (MyApplication.inBackground) "UIApplicationStateBackground" else "UIApplicationStateActive"
 
@@ -232,95 +393,13 @@ class STMSocketTransport(var socketUrlString:String, var entityResource:String, 
 
     }
 
-    override fun socketSendEvent(event: STMSocketEvent, value: Any?): Deferred<Pair<Boolean, Array<*>?>, Exception> {
-
-        val deferred = deferred<Pair<Boolean, Array<*>?>,Exception>()
-
-        if (!isReady){
-
-            val errorMessage = "socket not connected while sendEvent"
-            socketLostConnection(errorMessage)
-
-            deferred.resolve(Pair(false, null))
-
-            return deferred
-
-        }
-
-        if (event == STMSocketEvent.STMSocketEventJSData){
-
-            if (value !is JSONObject){
-
-                deferred.reject(Exception("STMSocketEventJSData value is not JSONObject"))
-
-                return deferred
-
-            }
-
-            socket!!.emit(event.toString(), value, Ack{
-
-                if (it.firstOrNull() == "NO ACK"){
-
-                    deferred.reject(Exception("ack timeout"))
-
-                }
-
-                deferred.resolve(Pair(true, it))
-
-            })
-
-            return deferred
-
-        }
-
-        val primaryKey = primaryKeyForEvent(event)
-
-        if (primaryKey != null && value != null) {
-
-            val dataDic = hashMapOf(primaryKey to value)
-            val message = "send via socket for event: $event"
-            STMFunctions.debugLog("STMSocketTransport", message)
-            deferred.resolve(Pair(true, arrayOf(dataDic)))
-
-        } else if (value != null) {
-            socket!!.emit(event.toString(), arrayOf(value), {
-
-                if (it.firstOrNull() == "NO ACK"){
-
-                    deferred.reject(Exception("ack timeout"))
-
-                }
-
-                deferred.resolve(Pair(true, it))
-
-            })
-        } else {
-
-            socket!!.emit(event.toString(), Ack {
-
-                if (it.firstOrNull() == "NO ACK"){
-
-                    deferred.reject(Exception("ack timeout"))
-
-                }
-
-                deferred.resolve(Pair(true, it))
-
-            })
-
-        }
-
-        return deferred
-
-    }
-
-    fun socketLostConnection(infoString:String){
+    private fun socketLostConnection(infoString:String){
 
         TODO("not implemented")
 
     }
 
-    fun primaryKeyForEvent(event: STMSocketEvent):String?{
+    private fun primaryKeyForEvent(event: STMSocketEvent):String?{
 
         if (event == STMSocketEvent.STMSocketEventSubscribe){
 

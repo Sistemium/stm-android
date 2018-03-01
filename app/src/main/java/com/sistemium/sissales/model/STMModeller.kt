@@ -21,6 +21,10 @@ class STMModeller(modelJSON:String) : STMModelling {
 
     private val _storageForEntityName = hashMapOf<String, STMStorageType>()
 
+    private var _fieldsForEntityName = hashMapOf<String, Map<String, STMAttributeDescription>>()
+
+    private var _objectRelationshipsForEntityName = hashMapOf<String, Map<String, STMRelationshipDescription>>()
+
     override fun storageForEntityName(entityName: String): STMStorageType {
 
         if (_storageForEntityName[entityName] != null){
@@ -62,8 +66,6 @@ class STMModeller(modelJSON:String) : STMModelling {
 
     }
 
-    private var _fieldsForEntityName = hashMapOf<String, Map<String, STMAttributeDescription>>()
-
     override fun fieldsForEntityName(entityName: String): Map<String, STMAttributeDescription> {
 
         if (_fieldsForEntityName[entityName] != null){
@@ -84,8 +86,6 @@ class STMModeller(modelJSON:String) : STMModelling {
         return _fieldsForEntityName[entityName]!!
 
     }
-
-    private var _objectRelationshipsForEntityName = hashMapOf<String, Map<String, STMRelationshipDescription>>()
 
     override fun objectRelationshipsForEntityName(entityName: String, isToMany: Boolean?, cascade: Boolean?, optional: Boolean?): Map<String, STMRelationshipDescription> {
 

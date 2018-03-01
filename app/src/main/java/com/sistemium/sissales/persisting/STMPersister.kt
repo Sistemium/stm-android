@@ -190,9 +190,7 @@ class STMPersister(private val runner:STMPersistingRunning): STMFullStackPersist
 
     override fun notifyObservingEntityName(entityName:String, items: ArrayList<*>, options:Map<*,*>?){
 
-        for (key in this.subscriptions.keys) {
-
-            val subscription = this.subscriptions[key] ?: continue
+        for (subscription in this.subscriptions.values) {
 
             if (subscription.entityName != entityName) continue
 

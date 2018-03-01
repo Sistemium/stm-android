@@ -21,7 +21,7 @@ class WebAppInterface internal constructor(private var webViewActivity: WebViewA
 
     private val javascriptCallback = "iSistemiumIOSCallback"
 
-    var persistenceDelegate: STMFullStackPersisting = STMCoreSessionManager.sharedManager.currentSession!!.persistenceDelegate
+    private var persistenceDelegate: STMFullStackPersisting = STMCoreSessionManager.sharedManager.currentSession!!.persistenceDelegate
 
     @JavascriptInterface
     fun errorCatcher(parameters: String?){
@@ -482,7 +482,7 @@ class WebAppInterface internal constructor(private var webViewActivity: WebViewA
 
         for (entityName in subscription.entityNames){
 
-            persisterSubscriptions.add(persistenceDelegate!!.observeEntity(entityName, null, options){
+            persisterSubscriptions.add(persistenceDelegate.observeEntity(entityName, null, options){
 
                 sendSubscribedBunchOfObjects(it, entityName)
 
@@ -529,7 +529,35 @@ class WebAppInterface internal constructor(private var webViewActivity: WebViewA
 
     private fun sendSubscribedBunchOfObjects(objectsArray:ArrayList<*>, entityName:String){
 
-        TODO("not implemented")
+        val matchingCallbacks = subscriptions.filter {
+
+            return@filter it.value.entityNames.contains(entityName)
+
+        }.keys
+
+        if (matchingCallbacks.isEmpty()){
+
+            return
+
+        }
+
+        val _entityName = STMFunctions.removePrefixFromEntityName(entityName)
+
+        val resultArray = objectsArray.map {
+
+            return@map hashMapOf(
+                    "entity" to _entityName,
+                    "xid" to (it as Map<*,*>)["it"],
+                    "data" to it
+            )
+
+        }
+
+        for (callback in matchingCallbacks){
+
+            javascriptCallback(resultArray, hashMapOf("reason" to "subscription"), callback)
+
+        }
 
     }
 

@@ -1,6 +1,6 @@
 package com.sistemium.sissales.model
 
-import com.google.gson.Gson
+import com.sistemium.sissales.base.STMFunctions
 import java.io.File
 import java.util.*
 
@@ -10,9 +10,9 @@ import java.util.*
 
 class STMManagedObjectModel(var model: String){
 
-    private val gson = Gson()
-
     var entitiesByName:MutableMap<String, STMEntityDescription> = hashMapOf()
+
+    private val gson = STMFunctions.gson
 
     init {
 
@@ -30,16 +30,6 @@ class STMManagedObjectModel(var model: String){
 
     }
 
-    fun saveToFile(path:String){
-
-        val file = File(path)
-
-        file.createNewFile()
-
-        file.writeText(model)
-
-    }
-
     override fun equals(other: Any?): Boolean {
 
         if (other !is STMManagedObjectModel){
@@ -51,6 +41,16 @@ class STMManagedObjectModel(var model: String){
 
     override fun hashCode(): Int {
         return entitiesByName.hashCode()
+    }
+
+    fun saveToFile(path:String){
+
+        val file = File(path)
+
+        file.createNewFile()
+
+        file.writeText(model)
+
     }
 
 }
