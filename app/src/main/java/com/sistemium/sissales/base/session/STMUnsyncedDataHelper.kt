@@ -130,6 +130,8 @@ class STMUnsyncedDataHelper: STMDataSyncing {
     }
 
     private fun anyObjectToSend():Map<*,*>?{
+        //TODO
+        return null
 
         for (entityName in STMEntityController.sharedInstance.uploadableEntitiesNames!!){
 
