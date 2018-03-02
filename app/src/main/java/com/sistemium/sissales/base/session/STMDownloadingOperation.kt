@@ -9,25 +9,25 @@ import com.sistemium.sissales.calsses.entitycontrollers.STMClientEntityControlle
 
 class STMDownloadingOperation(var entityName:String) :Runnable {
 
+    var owner:STMSyncerHelper? = null
+
     private val lock = Object()
 
     override fun run() {
 
         STMFunctions.debugLog("STMDownloadingOperation", "start downloadEntityName: $entityName")
 
-        var lastKnownEtag = STMClientEntityController.clientEntityWithName(entityName)["eTag"]
+        var lastKnownEtag:String? = STMClientEntityController.clientEntityWithName(entityName)["eTag"] as? String
 
         if (lastKnownEtag == null) lastKnownEtag = "*"
+
+        owner!!.dataDownloadingOwner!!.receiveData(entityName, lastKnownEtag)
 
         synchronized(lock){
 
             lock.wait()
 
         }
-
-        TODO("not implemented")
-
-//        [self.dowlonadingQueue.owner.dataDownloadingOwner receiveData:self.entityName offset:lastKnownEtag];
 
     }
 

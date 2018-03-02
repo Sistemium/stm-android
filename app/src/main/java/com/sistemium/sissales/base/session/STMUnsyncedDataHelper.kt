@@ -130,8 +130,6 @@ class STMUnsyncedDataHelper: STMDataSyncing {
     }
 
     private fun anyObjectToSend():Map<*,*>?{
-        //TODO
-        return null
 
         for (entityName in STMEntityController.sharedInstance.uploadableEntitiesNames!!){
 
@@ -179,7 +177,7 @@ class STMUnsyncedDataHelper: STMDataSyncing {
 
         STMFunctions.debugLog("STMUnsyncedDataHelper", "syncing entityName: $entityName xid:${itemData["id"]} ")
 
-        val itemVersion = STMConstants.STMPersistingKeyVersion
+        val itemVersion = itemData[STMConstants.STMPersistingKeyVersion] as String
 
         subscriberDelegate!!.haveUnsynced(entityName, itemData, itemVersion)
 

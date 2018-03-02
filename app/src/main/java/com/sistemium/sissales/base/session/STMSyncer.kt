@@ -8,6 +8,7 @@ import com.sistemium.sissales.enums.STMSocketEvent
 import com.sistemium.sissales.interfaces.*
 import nl.komponents.kovenant.then
 import java.util.*
+import kotlin.collections.HashMap
 
 /**
  * Created by edgarjanvuicik on 09/02/2018.
@@ -63,7 +64,7 @@ class STMSyncer: STMDefantomizingOwner, STMDataDownloadingOwner, STMDataSyncingS
         socketTransport!!.mergeAsync(entityName, itemData, null)
                 .then {
 
-                    dataSyncingDelegate!!.setSynced(true, entityName, it, itemVersion)
+                    dataSyncingDelegate!!.setSynced(true, entityName, it["data"] as Map<*,*> , itemVersion)
 
                 }.fail {
 
@@ -72,6 +73,38 @@ class STMSyncer: STMDefantomizingOwner, STMDataDownloadingOwner, STMDataSyncingS
                     dataSyncingDelegate!!.setSynced(false, entityName, itemData, itemVersion)
 
                 }
+
+    }
+
+    override fun receiveData(entityName: String, offset: String) {
+
+        if (!socketTransport!!.isReady){
+
+            dataDownloadingDelegate!!.stopDownloading()
+
+        }
+
+        val fetchLimit =  (settings!!["fetchLimit"] as String).toInt()
+
+        val options = hashMapOf(
+                STMConstants.STMPersistingOptionPageSize to fetchLimit,
+                STMConstants.STMPersistingOptionOffset to offset
+        )
+
+//        socketTransport!!.findAllAsync(entityName, options)
+//                .then{
+//
+//                    val responseOffset = (it[STMPersistingOptionOffset] as String).toInt()
+//
+//                    val pageSize =  (it[STMPersistingOptionPageSize] as String).toInt()
+//
+//                    dataDownloadingDelegate!!.dataReceivedSuccessfully(true, entityName, it["data"] as ArrayList<*>, responseOffset, pageSize)
+//
+//                }.fail {
+//
+//                    dataDownloadingDelegate!!.dataReceivedSuccessfully(false, null, null, null, null)
+//
+//                }
 
     }
 

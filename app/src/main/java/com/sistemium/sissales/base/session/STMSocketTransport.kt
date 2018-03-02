@@ -16,7 +16,6 @@ import io.socket.client.Socket
 import nl.komponents.kovenant.Promise
 import nl.komponents.kovenant.deferred
 import nl.komponents.kovenant.then
-import org.json.JSONArray
 import org.json.JSONObject
 import java.net.URI
 
@@ -70,6 +69,51 @@ class STMSocketTransport(var socketUrlString:String, var entityResource:String, 
                             deferred.resolve(result!!)
 
                         }
+
+                }.fail {
+
+                    deferred.reject(it)
+
+                }
+
+        return deferred.promise
+
+    }
+
+    override fun findAllAsync(entityName: String, options: Map<*, *>?): Promise<Map<*, *>, Exception> {
+
+        val deferred = deferred<Map<*,*>, Exception>()
+
+        val errorMessage = preFindAllAsyncCheckForEntityName(entityName)
+
+        if (errorMessage != null) {
+
+            deferred.reject(Exception(errorMessage))
+
+        }
+
+        val resource = STMEntityController.sharedInstance.resourceForEntity(entityName)
+
+        val value = hashMapOf(
+                "method" to STMConstants.kSocketFindAllMethod,
+                "resource" to resource,
+                "options" to options
+        )
+
+        socketSendEvent(STMSocketEvent.STMSocketEventJSData, value)
+                .then {
+
+                    val (result, error) =  respondOnData(it)
+
+                    if (error != null){
+
+                        deferred.reject(error)
+
+                    }else{
+
+                        deferred.resolve(result!!)
+
+                    }
 
                 }.fail {
 
@@ -167,8 +211,6 @@ class STMSocketTransport(var socketUrlString:String, var entityResource:String, 
 
     private fun respondOnData(array: Array<*>): Pair<Map<*, *>?, Exception?>{
 
-        var decoded = null
-
         if (array.size != 1){
 
             return Pair(null, Exception("Response length is not 1"))
@@ -177,28 +219,7 @@ class STMSocketTransport(var socketUrlString:String, var entityResource:String, 
 
         val stResponse = array.firstOrNull() as? JSONObject ?: return Pair(null, Exception("No stResponse "))
 
-        val data = stResponse["data"]
-
-        when (data) {
-            is JSONObject ->{
-
-                return Pair(STMFunctions.gson.fromJson(data.toString(), Map::class.java), null)
-
-            }
-            is JSONArray -> TODO("not implemented")
-
-//            response = [[STSocketsJSDataResponseSuccessArray alloc] init];
-//            [(STSocketsJSDataResponseSuccessObject *)response setData:data];
-//            STSocketsJSDataResponseSuccessArray *response = (STSocketsJSDataResponseSuccessArray *)decoded;
-//                handler(YES, response.data, response.headers, nil);
-
-            else -> {
-
-                return Pair(null, Exception(data.toString()))
-
-            }
-
-        }
+        return Pair(STMFunctions.gson.fromJson(stResponse.toString(), Map::class.java), null)
 
     }
 
@@ -414,6 +435,19 @@ class STMSocketTransport(var socketUrlString:String, var entityResource:String, 
         }
 
         return "url"
+
+    }
+
+    private fun preFindAllAsyncCheckForEntityName(entityName:String):String?{
+
+        if (!isReady){
+            return "socket is not ready (not connected or not authorized)"
+        }
+        val entity = STMEntityController.sharedInstance.stcEntities?.get(entityName) ?: return "have no such entity $entityName"
+
+        val resource = STMEntityController.sharedInstance.resourceForEntity(entityName)
+
+        return null
 
     }
 

@@ -11,5 +11,6 @@ interface STMDataDownloading {
     var downloadingQueue: ExecutorService?
 
     fun startDownloading(entitiesNames:ArrayList<String>?)
+    fun stopDownloading()
 
 }

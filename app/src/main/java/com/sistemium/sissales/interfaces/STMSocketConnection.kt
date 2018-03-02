@@ -14,4 +14,6 @@ interface STMSocketConnection {
 
     fun mergeAsync(entityName:String, attributes:Map<*,*>, options:Map<*,*>?) : Promise<Map<*, *>, Exception>
 
+    fun findAllAsync(entityName:String, options:Map<*,*>?): Promise<Map<*, *>, Exception>
+
 }

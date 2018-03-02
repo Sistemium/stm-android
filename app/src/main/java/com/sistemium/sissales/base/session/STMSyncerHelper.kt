@@ -45,14 +45,19 @@ class STMSyncerHelper: STMDefantomizing, STMDataDownloading {
 
         for (entityName in _entitiesNames){
 
-            downloadingQueue?.execute(STMDownloadingOperation(entityName))
+            val operation = STMDownloadingOperation(entityName)
+
+            operation.owner = this
+
+            downloadingQueue?.execute(operation)
 
         }
 
-//        for (NSString *entityName in entitiesNames) [state.queue downloadEntityName:entityName];
-//        [self postAsyncMainQueueNotification:NOTIFICATION_SYNCER_RECEIVE_STARTED];
-//        NSLog(@"will download %@ entities with %@ concurrent", @(state.queue.operationCount), @(state.queue.maxConcurrentOperationCount));
-//        state.queue.suspended = NO;
+    }
+
+    override fun stopDownloading() {
+
+        TODO("not implemented")
 
     }
 
