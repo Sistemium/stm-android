@@ -42,6 +42,16 @@ class STMClientEntityController {
 
             return clientEntity
         }
+
+        fun clientEntityWithName(name:String, eTag:String?){
+
+            val clientEntity = HashMap(clientEntityWithName(name))
+
+            clientEntity["eTag"] = eTag
+
+            STMCoreSessionManager.sharedManager.currentSession!!.persistenceDelegate.mergeSync("STMClientEntity", clientEntity, null)
+
+        }
     }
 
 }

@@ -6,5 +6,6 @@ package com.sistemium.sissales.interfaces
 interface STMDataDownloadingOwner {
 
     fun receiveData(entityName:String, offset:String)
+    fun dataDownloadingFinished()
 
 }

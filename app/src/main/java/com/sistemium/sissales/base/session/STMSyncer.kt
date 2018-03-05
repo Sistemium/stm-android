@@ -3,6 +3,7 @@ package com.sistemium.sissales.base.session
 import com.sistemium.sissales.base.STMConstants
 import com.sistemium.sissales.base.STMFunctions
 import com.sistemium.sissales.base.helper.logger.STMLogger
+import com.sistemium.sissales.calsses.entitycontrollers.STMCorePicturesController
 import com.sistemium.sissales.calsses.entitycontrollers.STMEntityController
 import com.sistemium.sissales.enums.STMSocketEvent
 import com.sistemium.sissales.interfaces.*
@@ -36,6 +37,7 @@ class STMSyncer: STMDefantomizingOwner, STMDataDownloadingOwner, STMDataSyncingS
         return field
 
     }
+    private var isDefantomizing = false
 
     override fun socketReceiveAuthorization(){
 
@@ -91,20 +93,40 @@ class STMSyncer: STMDefantomizingOwner, STMDataDownloadingOwner, STMDataSyncingS
                 STMConstants.STMPersistingOptionOffset to offset
         )
 
-//        socketTransport!!.findAllAsync(entityName, options)
-//                .then{
-//
-//                    val responseOffset = (it[STMPersistingOptionOffset] as String).toInt()
-//
-//                    val pageSize =  (it[STMPersistingOptionPageSize] as String).toInt()
-//
-//                    dataDownloadingDelegate!!.dataReceivedSuccessfully(true, entityName, it["data"] as ArrayList<*>, responseOffset, pageSize)
-//
-//                }.fail {
-//
-//                    dataDownloadingDelegate!!.dataReceivedSuccessfully(false, null, null, null, null)
-//
-//                }
+        socketTransport!!.findAllAsync(entityName, options)
+                .then{
+
+                    val responseOffset = it[STMConstants.STMPersistingOptionOffset] as String
+
+                    val pageSize =  (it[STMConstants.STMPersistingOptionPageSize] as Double).toInt()
+
+                    dataDownloadingDelegate!!.dataReceivedSuccessfully(entityName, it["data"] as ArrayList<*>, responseOffset, pageSize, null)
+
+                }.fail {
+
+                    dataDownloadingDelegate!!.dataReceivedSuccessfully(entityName, null, null, null, it)
+
+                }
+
+    }
+
+    override fun dataDownloadingFinished() {
+
+        if (needRepeatDownload){
+
+            STMFunctions.debugLog("STMSyncer", "dataDownloadingFinished and needRepeatDownload")
+            needRepeatDownload = false
+            return receiveData()
+
+        }
+
+        STMFunctions.debugLog("STMSyncer","dataDownloadingFinished")
+
+        STMCorePicturesController.sharedInstance.checkNotUploadedPhotos()
+
+        STMLogger.sharedLogger.infoMessage("dataDownloadingFinished")
+
+        startDefantomization()
 
     }
 
@@ -240,6 +262,26 @@ class STMSyncer: STMDefantomizingOwner, STMDataDownloadingOwner, STMDataSyncingS
         }
 
         dataDownloadingDelegate!!.startDownloading(null)
+
+    }
+
+    private fun startDefantomization(){
+
+        if (!socketTransport!!.isReady){
+
+            defantomizingDelegate!!.stopDefantomization()
+
+        }
+
+        if (isDefantomizing){
+
+            return
+
+        }
+
+        isDefantomizing = true
+
+        defantomizingDelegate!!.startDefantomization()
 
     }
 

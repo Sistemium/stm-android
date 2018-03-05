@@ -12,5 +12,6 @@ interface STMDataDownloading {
 
     fun startDownloading(entitiesNames:ArrayList<String>?)
     fun stopDownloading()
+    fun dataReceivedSuccessfully(entityName:String, dataRecieved:ArrayList<*>?, offset:String?, pageSize:Int?, error:Exception?)
 
 }

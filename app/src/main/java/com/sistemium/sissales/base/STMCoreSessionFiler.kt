@@ -51,9 +51,15 @@ class STMCoreSessionFiler(org:String, uid:String): STMFiling, STMDirectoring {
 
             stream = assetManager.open("iSisSales.db")
             file = File(MyApplication.appContext!!.filesDir.absolutePath+"/testPersistenceFile/${STMConstants.PERSISTENCE_PATH}/${STMConstants.SQL_LITE_PATH}/iSisSales.db")
-            file.parentFile.mkdirs()
-            file.createNewFile()
-            file.writeBytes(stream.readBytes())
+
+            if (!file.exists()){
+
+                file.parentFile.mkdirs()
+                file.createNewFile()
+                file.writeBytes(stream.readBytes())
+
+            }
+
             MyApplication.appContext!!.filesDir.absolutePath+"/testPersistenceFile"
 
         }catch (e:Exception){

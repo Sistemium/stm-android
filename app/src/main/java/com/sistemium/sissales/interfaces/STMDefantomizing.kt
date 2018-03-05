@@ -8,4 +8,7 @@ interface STMDefantomizing {
     var persistenceFantomsDelegate: STMPersistingFantoms?
     var defantomizingOwner:STMDefantomizingOwner?
 
+    fun stopDefantomization()
+    fun startDefantomization()
+
 }

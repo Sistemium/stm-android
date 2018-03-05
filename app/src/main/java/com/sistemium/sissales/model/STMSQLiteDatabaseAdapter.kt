@@ -92,6 +92,12 @@ class STMSQLiteDatabaseAdapter(override var model: STMModelling, private var dbP
 
                 database!!.setTransactionSuccessful()
 
+            }else{
+
+                STMFunctions.debugLog("","")
+
+                TODO("not implemented")
+
             }
 
             database!!.endTransaction()

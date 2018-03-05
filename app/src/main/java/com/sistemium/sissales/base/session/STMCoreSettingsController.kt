@@ -71,8 +71,11 @@ class STMCoreSettingsController :STMPersistingMergeInterceptor, STMSettingsContr
 
     private fun settingWithName(name:String?, group:String?):Map<*,*>?{
 
-        TODO("not implemented")
+        return currentSettings!!.filter {
 
+            return@filter group == it["group"] && name == it["name"]
+
+        }.lastOrNull()
     }
 
 }
