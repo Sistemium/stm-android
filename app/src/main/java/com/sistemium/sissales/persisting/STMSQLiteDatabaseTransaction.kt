@@ -157,10 +157,10 @@ class STMSQLiteDatabaseTransaction(private var database: SQLiteDatabase, private
 
         if (predicate != null){
             where = predicate.predicateForAdapter(adapter, entityName) ?: ""
-            STMFunctions.debugLog("EntityName", entityName)
-            STMFunctions.debugLog("PREDICATE", where)
-            STMFunctions.debugLog("OPTIONS", options)
-            STMFunctions.debugLog("COLUMNS", columns)
+//            STMFunctions.debugLog("EntityName", entityName)
+//            STMFunctions.debugLog("PREDICATE", where)
+//            STMFunctions.debugLog("OPTIONS", options)
+//            STMFunctions.debugLog("COLUMNS", columns)
         }
 
         return selectFrom(tableName, columns, where, options)
@@ -315,11 +315,11 @@ class STMSQLiteDatabaseTransaction(private var database: SQLiteDatabase, private
 
         val query = "SELECT $columns FROM [$tableName]$_where $_orderBy"
 
-        STMFunctions.debugLog("QUERY", query)
+//        STMFunctions.debugLog("QUERY", query)
 
         val c = this.database.rawQuery(query,null)
 
-        STMFunctions.debugLog("QUERY", "execute finished")
+//        STMFunctions.debugLog("QUERY", "execute finished")
 
         if (c.moveToFirst()) {
 
@@ -331,7 +331,7 @@ class STMSQLiteDatabaseTransaction(private var database: SQLiteDatabase, private
 
             }
 
-            STMFunctions.debugLog("QUERY", "result reading preparations finished")
+//            STMFunctions.debugLog("QUERY", "result reading preparations finished")
 
             do {
 
@@ -385,7 +385,7 @@ class STMSQLiteDatabaseTransaction(private var database: SQLiteDatabase, private
 
             } while (c.moveToNext())
 
-            STMFunctions.debugLog("QUERY", "result reading finished")
+//            STMFunctions.debugLog("QUERY", "result reading finished")
         }
         c.close()
 

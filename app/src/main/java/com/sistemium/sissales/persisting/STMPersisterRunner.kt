@@ -1,6 +1,5 @@
 package com.sistemium.sissales.persisting
 
-import com.sistemium.sissales.base.STMFunctions
 import com.sistemium.sissales.enums.STMStorageType
 import com.sistemium.sissales.interfaces.STMAdapting
 import com.sistemium.sissales.interfaces.STMPersistingRunning
@@ -20,7 +19,7 @@ class STMPersisterRunner(private val adapters:HashMap<STMStorageType, STMAdaptin
 
         readOnlyTransactionCoordinator.endTransactionWithSuccess(true)
 
-        STMFunctions.debugLog("RUNNER", "Read only transaction ended")
+//        STMFunctions.debugLog("RUNNER", "Read only transaction ended")
 
         return result
 

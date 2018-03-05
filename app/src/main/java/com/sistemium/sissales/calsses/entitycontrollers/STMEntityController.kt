@@ -172,4 +172,16 @@ class STMEntityController private constructor() {
 
     }
 
+    fun entityNamesWithResolveFantoms():ArrayList<String>{
+
+        val filteredKeys = stcEntities!!.filter {
+
+            return@filter it.value["isResolveFantoms"] == true && it.value["url"] != null
+
+        }.keys
+
+        return ArrayList(filteredKeys)
+
+    }
+
 }

@@ -23,6 +23,7 @@ class STMSyncerHelper: STMDefantomizing, STMDataDownloading {
     override var dataDownloadingOwner: STMDataDownloadingOwner? = null
     override var defantomizingOwner:STMDefantomizingOwner? = null
     private var operations = hashMapOf<String, STMDownloadingOperation>()
+    private var defantomizing:STMSyncerHelperDefantomizing? = null
 
     override fun startDownloading(entitiesNames:ArrayList<String>?) {
 
@@ -116,37 +117,49 @@ class STMSyncerHelper: STMDefantomizing, STMDataDownloading {
 
     override fun startDefantomization() {
 
-//        STMSyncerHelperDefantomizing *defantomizing;
-//        @synchronized (self) {
-//            defantomizing = self.defantomizing;
-//            if (!defantomizing) {
-//                defantomizing = [STMSyncerHelperDefantomizing defantomizingWithDispatchQueue:self.dispatchQueue];
-//                defantomizing.operationQueue.owner = self;
-//            }
-//            if (defantomizing.operationQueue.operationCount) return;
-//            defantomizing.operationQueue.suspended = YES;
-//            self.defantomizing = defantomizing;
-//        }
-//        for (NSString *entityName in [STMEntityController entityNamesWithResolveFantoms]) {
-//            NSDictionary *entity = [STMEntityController stcEntities][entityName];
-//            if (![STMFunctions isNotNull:entity[@"url"]]) {
-//                NSLog(@"have no url for entity name: %@, fantoms will not to be resolved", entityName);
-//                continue;
-//            }
-//            NSArray *results = [self.persistenceFantomsDelegate findAllFantomsIdsSync:entityName excludingIds:defantomizing.failToResolveIds.allObjects];
-//            if (!results.count) continue;
-//            NSLog(@"%@ %@ fantom(s)", @(results.count), entityName);
-//            for (NSString *identifier in results)
-//            [defantomizing.operationQueue addDefantomizationOfEntityName:entityName identifier:identifier];
-//        }
-//        NSUInteger count = defantomizing.operationQueue.operationCount;
-//        if (!count) return [self defantomizingFinished];
-//        NSLog(@"DEFANTOMIZING_START with queue of %@", @(count));
-//        [self postAsyncMainQueueNotification:NOTIFICATION_DEFANTOMIZING_START
-//                userInfo:@{@"fantomsCount": @(count)}];
-//        defantomizing.operationQueue.suspended = NO;
+        //TODO @synchronized?
 
-//        TODO("not implemented")
+        var defantomizing = this.defantomizing
+
+        if (defantomizing == null) {
+
+            defantomizing = STMSyncerHelperDefantomizing()
+            //TODO
+//            defantomizing.owner = this
+
+        }
+
+        if (defantomizing.operations.count() != 0) return
+
+        this.defantomizing = defantomizing
+
+        for (entityName in STMEntityController.sharedInstance.entityNamesWithResolveFantoms()){
+
+            val entity = STMEntityController.sharedInstance.stcEntities!![entityName]
+
+            if (entity?.get("url") == null){
+
+                STMFunctions.debugLog("STMSyncerHelper","have no url for entity name: $entityName, fantoms will not to be resolved")
+                continue
+            }
+
+            val results = persistenceFantomsDelegate!!.findAllFantomsIdsSync(entityName, defantomizing.failToResolveIds)
+
+            if (results.count() == 0) continue
+            STMFunctions.debugLog("STMSyncerHelper","${results.count()} $entityName fantom(s)")
+            for (identifier in results){
+
+                defantomizing.addDefantomizationOfEntityName(entityName, identifier)
+
+            }
+
+        }
+
+        val count = defantomizing.operations.count()
+
+        STMFunctions.debugLog("STMSyncerHelper","DEFANTOMIZING_START with queue of $count")
+
+        if (count == 0) defantomizingFinished()
 
     }
 
@@ -166,6 +179,8 @@ class STMSyncerHelper: STMDefantomizing, STMDataDownloading {
 
         operation?.finish()
 
+        operations.remove(entityName)
+
         dataDownloadingOwner!!.dataDownloadingFinished()
 
     }
@@ -182,6 +197,14 @@ class STMSyncerHelper: STMDefantomizing, STMDataDownloading {
         }
 
         dataDownloadingOwner!!.receiveData(entityName, offset)
+
+    }
+
+    private fun defantomizingFinished(){
+
+        STMFunctions.debugLog("STMSyncedHelper","DEFANTOMIZING_FINISHED")
+        this.defantomizing = null
+        defantomizingOwner!!.defantomizingFinished()
 
     }
 

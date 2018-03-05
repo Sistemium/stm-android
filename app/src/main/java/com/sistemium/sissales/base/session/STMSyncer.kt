@@ -130,6 +130,12 @@ class STMSyncer: STMDefantomizingOwner, STMDataDownloadingOwner, STMDataSyncingS
 
     }
 
+    override fun defantomizingFinished() {
+
+        isDefantomizing = false
+
+    }
+
     fun startSyncer(){
 
         if (isRunning) return

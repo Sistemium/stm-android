@@ -1,7 +1,6 @@
 package com.sistemium.sissales.persisting
 
 import android.database.sqlite.SQLiteDatabase
-import com.sistemium.sissales.base.STMFunctions
 import com.sistemium.sissales.model.STMSQLiteDatabaseAdapter
 
 /**
@@ -37,8 +36,8 @@ class STMSQLiteDatabaseOperation(val readOnly:Boolean, private var adapter: STMS
     override fun run() {
 
         if (readOnly){
-            STMFunctions.debugLog("DEBUG", "removing pool database from array")
-            STMFunctions.debugLog("DEBUG", "pool database count before remove: ${adapter.poolDatabases.size}")
+//            STMFunctions.debugLog("DEBUG", "removing pool database from array")
+//            STMFunctions.debugLog("DEBUG", "pool database count before remove: ${adapter.poolDatabases.size}")
 
             synchronized(adapter.poolDatabases){
                 database = adapter.poolDatabases.removeAt(0)
@@ -70,13 +69,13 @@ class STMSQLiteDatabaseOperation(val readOnly:Boolean, private var adapter: STMS
 
         if (readOnly){
 
-            STMFunctions.debugLog("SQLite", "returning pool database to array")
+//            STMFunctions.debugLog("SQLite", "returning pool database to array")
 
             synchronized(adapter.poolDatabases){
                 adapter.poolDatabases.add(database!!)
             }
 
-            STMFunctions.debugLog("SQLite", "Returned pooldatabase, pools size: ${adapter.poolDatabases.size}")
+//            STMFunctions.debugLog("SQLite", "Returned pooldatabase, pools size: ${adapter.poolDatabases.size}")
 
 
         }
@@ -87,7 +86,7 @@ class STMSQLiteDatabaseOperation(val readOnly:Boolean, private var adapter: STMS
 
         }
 
-        STMFunctions.debugLog("SQLite", "Finished operation")
+//        STMFunctions.debugLog("SQLite", "Finished operation")
 
     }
 
