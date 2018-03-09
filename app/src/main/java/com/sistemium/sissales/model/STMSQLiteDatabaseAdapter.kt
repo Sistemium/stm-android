@@ -146,15 +146,7 @@ class STMSQLiteDatabaseAdapter(override var model: STMModelling, private var dbP
 
             _columnsByTable = schema.createTablesWithModelMapping(modelMapper)
 
-            if (columnsByTable != null){
-
-                modelMapper.destinationModel.saveToFile(savedModelPath)
-
-            }else{
-
-                throw Exception("columnsByTable is null")
-
-            }
+            modelMapper.destinationModel.saveToFile(savedModelPath)
 
         }else{
 

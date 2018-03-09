@@ -10,11 +10,16 @@ import com.github.kittinunf.result.Result
 import com.sistemium.sissales.R
 import com.sistemium.sissales.activities.WebViewActivity
 import com.sistemium.sissales.base.MyApplication
+import com.sistemium.sissales.base.STMConstants
 import com.sistemium.sissales.base.STMFunctions
 import devliving.online.securedpreferencestore.SecuredPreferenceStore
 import nl.komponents.kovenant.Promise
 import nl.komponents.kovenant.task
 import nl.komponents.kovenant.then
+
+
+
+
 
 /**
  * Created by edgarjanvuicik on 05/02/2018.
@@ -221,7 +226,7 @@ class STMCoreAuthController {
 
             return task {
 
-                FuelManager.instance.baseHeaders = mapOf("user-agent" to "iSisSales/360")
+                FuelManager.instance.baseHeaders = mapOf("user-agent" to STMConstants.userAgent, "DeviceUUID" to STMFunctions.deviceUUID())
 
                 val (_,_, result) = Fuel.get("https://api.sistemium.com/pha/auth", listOf("ID" to id, "smsCode" to smsCode)).responseJson()
 
@@ -295,6 +300,8 @@ class STMCoreAuthController {
         }
 
         private fun requestRoles():Promise<Map<*,*>,Exception>{
+
+            FuelManager.instance.baseHeaders = mapOf("user-agent" to "iSisSales/360", "DeviceUUID" to STMFunctions.deviceUUID(), "Authorization" to accessToken!!)
 
             if (rolesResponse != null){
 

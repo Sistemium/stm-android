@@ -35,7 +35,11 @@ class STMCoreSessionFiler(org:String, uid:String): STMFiling, STMDirectoring {
 
     override fun persistencePath(folderName: String): String {
 
-        return persistenceBasePath + "/" + folderName
+        val path = persistenceBasePath + "/" + folderName
+
+        File(path).mkdirs()
+
+        return path
 
     }
 

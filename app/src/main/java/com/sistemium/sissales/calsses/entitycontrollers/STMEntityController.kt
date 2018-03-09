@@ -4,6 +4,7 @@ import com.sistemium.sissales.base.STMConstants
 import com.sistemium.sissales.base.STMFunctions
 import com.sistemium.sissales.base.helper.logger.STMLogger
 import com.sistemium.sissales.base.session.STMCoreAuthController
+import com.sistemium.sissales.interfaces.STMDataDownloadingOwner
 import com.sistemium.sissales.interfaces.STMFullStackPersisting
 import com.sistemium.sissales.persisting.STMPredicate
 
@@ -21,6 +22,25 @@ class STMEntityController private constructor() {
     }
 
     var persistenceDelegate: STMFullStackPersisting? = null
+    set(value) {
+        if (field == null && value != null){
+
+            field = value
+            field?.observeEntity(STMConstants.STM_ENTITY_NAME, null, hashMapOf<Any,Any>()){
+
+                stcEntities = null
+                entitiesArray = null
+                uploadableEntitiesNames = null
+
+                owner!!.entitiesChanged()
+
+                STMFunctions.debugLog("STMEntityController", "checkStcEntities got called back with ${it.count()} items")
+            }
+
+        }
+    }
+
+    var owner: STMDataDownloadingOwner? = null
 
     var stcEntities:Map<String,Map<*,*>>? = null
     get() {

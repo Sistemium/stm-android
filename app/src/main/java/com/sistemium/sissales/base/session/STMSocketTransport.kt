@@ -16,6 +16,7 @@ import io.socket.client.Socket
 import nl.komponents.kovenant.Promise
 import nl.komponents.kovenant.deferred
 import nl.komponents.kovenant.then
+import org.json.JSONArray
 import org.json.JSONObject
 import java.net.URI
 
@@ -129,7 +130,7 @@ class STMSocketTransport(var socketUrlString:String, var entityResource:String, 
 
         val deferred = deferred<Array<*>,Exception>()
 
-        val _value = if (value is HashMap<*, *>) JSONObject(value) else value as? JSONObject
+        val _value:Any? = if (value is HashMap<*, *>) JSONObject(value) else if (value is ArrayList<*>) JSONArray(value) else value as? JSONObject
 
         if (!isReady){
 
@@ -325,11 +326,15 @@ class STMSocketTransport(var socketUrlString:String, var entityResource:String, 
 
     private fun emitAuthorization(){
 
+        //TODO clientData is empty
         var dataDic = STMClientDataController.clientData
 
         val authDic = hashMapOf(
                 "userId" to STMCoreAuthController.userID,
-                "accessToken" to STMCoreAuthController.accessToken
+                "accessToken" to STMCoreAuthController.accessToken,
+                "deviceUUID" to STMFunctions.deviceUUID(),
+                "bundleIdentifier" to STMConstants.userAgent.split("/").first(),
+                "appVersion" to STMConstants.userAgent.split("/").last()
         )
 
         dataDic += authDic

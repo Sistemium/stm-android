@@ -42,6 +42,16 @@ class STMConstants{
         const val kSocketUpdateMethod = "update"
         const val STMPersistingOptionOffset = "offset"
         const val kSocketFindAllMethod = "findAll"
+        const val SQLiteText = "TEXT"
+        const val SQLiteInt = "INTEGER"
+        const val SQLiteNumber = "NUMERIC"
+        const val CASCADE_TRIGGER_PREFIX = "cascade_"
+        const val SQLiteBeforeDelete = "BEFORE DELETE"
+        const val SQLiteBeforeInsert = "BEFORE INSERT"
+        const val SQLiteStatementSeparator = "; "
+        const val SQLiteDefaultNow = "DEFAULT(STRFTIME('%Y-%m-%d %H:%M:%f', 'NOW'))"
+        const val fetchLimit = 500
+        const val userAgent = "iSisSales/360"
 
     }
 

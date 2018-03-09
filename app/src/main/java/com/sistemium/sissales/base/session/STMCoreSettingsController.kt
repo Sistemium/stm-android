@@ -47,7 +47,7 @@ class STMCoreSettingsController :STMPersistingMergeInterceptor, STMSettingsContr
 
     override fun stringValueForSettings(settingsName: String, group: String): String? {
 
-        return currentSettingsForGroup(group)?.get(settingsName) as String
+        return currentSettingsForGroup(group)?.get(settingsName) as? String
 
     }
 

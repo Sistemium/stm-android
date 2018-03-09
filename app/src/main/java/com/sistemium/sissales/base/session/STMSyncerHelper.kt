@@ -177,9 +177,19 @@ class STMSyncerHelper: STMDefantomizing, STMDataDownloading {
 
         val operation = operations[entityName]
 
+        operations.remove(entityName)
+
         operation?.finish()
 
-        operations.remove(entityName)
+        STMFunctions.debugLog("STMSyncerHelper", "doneWith $entityName remain ${operations.size} to receive")
+
+        if (operations.size>0){
+
+            return
+
+        }
+
+        downloadingQueue = null
 
         dataDownloadingOwner!!.dataDownloadingFinished()
 

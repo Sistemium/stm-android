@@ -4,6 +4,7 @@ import com.sistemium.sissales.base.MyApplication
 import com.sistemium.sissales.base.STMConstants
 import com.sistemium.sissales.base.STMCoreSessionFiler
 import com.sistemium.sissales.base.helper.logger.STMLogger
+import com.sistemium.sissales.calsses.entitycontrollers.STMEntityController
 import com.sistemium.sissales.calsses.entitycontrollers.STMRecordStatusController
 import com.sistemium.sissales.enums.STMSessionStatus
 import com.sistemium.sissales.enums.STMStorageType
@@ -128,6 +129,7 @@ class STMCoreSession(var trackers: ArrayList<String>) :STMSession {
 
         val unsyncedHelper = STMUnsyncedDataHelper()
         unsyncedHelper.session = this
+        STMEntityController.sharedInstance.owner = syncer
         unsyncedHelper.subscriberDelegate = syncer
         syncer.dataSyncingDelegate = unsyncedHelper
         syncer.session = this

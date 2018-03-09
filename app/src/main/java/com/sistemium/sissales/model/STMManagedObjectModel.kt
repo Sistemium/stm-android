@@ -47,6 +47,8 @@ class STMManagedObjectModel(var model: String){
 
         val file = File(path)
 
+        file.parentFile.mkdirs()
+
         file.createNewFile()
 
         file.writeText(model)

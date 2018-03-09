@@ -20,11 +20,11 @@ class STMSyncer: STMDefantomizingOwner, STMDataDownloadingOwner, STMDataSyncingS
     var defantomizingDelegate: STMDefantomizing? = null
     var dataSyncingDelegate:STMDataSyncing? = null
     var session:STMSession? = null
+    private var needRepeatDownload = false
     private var isRunning = false
     private var socketTransport:STMSocketConnection? = null
     private var isSendingData = false
     private var syncTimer: Timer? = null
-    private var needRepeatDownload = false
     private var settings:Map<*,*>? = null
     get() {
 
@@ -86,7 +86,7 @@ class STMSyncer: STMDefantomizingOwner, STMDataDownloadingOwner, STMDataSyncingS
 
         }
 
-        val fetchLimit =  (settings!!["fetchLimit"] as String).toInt()
+        val fetchLimit = (settings!!["fetchLimit"] as? String)?.toInt() ?: STMConstants.fetchLimit
 
         val options = hashMapOf(
                 STMConstants.STMPersistingOptionPageSize to fetchLimit,
@@ -98,7 +98,7 @@ class STMSyncer: STMDefantomizingOwner, STMDataDownloadingOwner, STMDataSyncingS
 
                     val responseOffset = it[STMConstants.STMPersistingOptionOffset] as String
 
-                    val pageSize =  (it[STMConstants.STMPersistingOptionPageSize] as Double).toInt()
+                    val pageSize = (it[STMConstants.STMPersistingOptionPageSize] as Double).toInt()
 
                     dataDownloadingDelegate!!.dataReceivedSuccessfully(entityName, it["data"] as ArrayList<*>, responseOffset, pageSize, null)
 
@@ -133,6 +133,13 @@ class STMSyncer: STMDefantomizingOwner, STMDataDownloadingOwner, STMDataSyncingS
     override fun defantomizingFinished() {
 
         isDefantomizing = false
+
+    }
+
+    override fun entitiesChanged() {
+
+        subscribeToUnsyncedObjects()
+        receiveData()
 
     }
 
@@ -182,7 +189,7 @@ class STMSyncer: STMDefantomizingOwner, STMDataDownloadingOwner, STMDataSyncingS
 
         val entity = stcEntities?.get("STMEntity")
 
-        if (entity != null){
+        if (entity == null){
 
             if (STMCoreAuthController.entityResource == null) {
 
@@ -199,9 +206,9 @@ class STMSyncer: STMDefantomizingOwner, STMDataDownloadingOwner, STMDataSyncingS
             session?.persistenceDelegate?.mergeSync("STMEntity", attributes, hashMapOf(STMConstants.STMPersistingOptionLts to STMFunctions.stringFrom(Date())))
 
 
-        } else if (entity?.get("url") != null && entity!!["url"] != STMCoreAuthController.entityResource) {
+        } else if (entity["url"] != null && entity["url"] != STMCoreAuthController.entityResource) {
 
-            STMFunctions.debugLog("STMSyncer", "change STMEntity url from ${entity!!["url"]} to ${STMCoreAuthController.entityResource}")
+            STMFunctions.debugLog("STMSyncer", "change STMEntity url from ${entity["url"]} to ${STMCoreAuthController.entityResource}")
 
             val attributes = HashMap(entity!! as Map)
 

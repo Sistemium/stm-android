@@ -1,8 +1,10 @@
 package com.sistemium.sissales.base
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.AlertDialog
 import android.os.Build
+import android.provider.Settings
 import android.util.Log
 import com.google.gson.GsonBuilder
 import java.text.SimpleDateFormat
@@ -59,7 +61,7 @@ class STMFunctions{
 
         fun jsonStringFromObject(value:Any):String{
 
-            TODO("not implemented")
+            return gson.toJson(value)
 
         }
 
@@ -94,6 +96,13 @@ class STMFunctions{
 
         }
 
+
+        @SuppressLint("HardwareIds")
+        fun deviceUUID():String{
+
+            return Settings.Secure.getString(MyApplication.appContext!!.contentResolver, Settings.Secure.ANDROID_ID)
+
+        }
 
     }
 

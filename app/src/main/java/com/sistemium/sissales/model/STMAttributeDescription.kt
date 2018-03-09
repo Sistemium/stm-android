@@ -9,6 +9,8 @@ class STMAttributeDescription(attribute: Map<*,*>) {
 
     val attributeType:String = attribute["attributeType"] as? String ?: throw Exception("Wrong attribute Name")
 
+    val indexed:Boolean = attribute["indexed"] as? String == "YES"
+
     override fun equals(other: Any?): Boolean {
 
         if (other !is STMAttributeDescription){
