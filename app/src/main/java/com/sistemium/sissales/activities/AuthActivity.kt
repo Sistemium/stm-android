@@ -1,19 +1,19 @@
 package com.sistemium.sissales.activities
 
+import android.app.ActivityOptions
+import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.text.Editable
 import android.text.TextWatcher
+import android.view.KeyEvent
 import android.view.View
 import android.widget.Button
-import kotlinx.android.synthetic.main.activity_auth.*
 import android.widget.EditText
-import android.content.Intent
-import android.app.ActivityOptions
-import android.view.KeyEvent
 import com.sistemium.sissales.R
 import com.sistemium.sissales.base.STMFunctions
 import com.sistemium.sissales.base.session.STMCoreAuthController
+import kotlinx.android.synthetic.main.activity_auth.*
 import nl.komponents.kovenant.then
 
 class AuthActivity : AppCompatActivity() {

@@ -179,11 +179,13 @@ class STMSQLIteSchema(private val database: SQLiteDatabase) {
 
     }
 
-    private fun executeDDL(ddl:String):Boolean{
+    private fun executeDDL(ddls:ArrayList<String>):Boolean{
 
-        if (ddl.isEmpty()) return true
+        if (ddls.isEmpty()) return true
         try {
-            database.execSQL(ddl)
+            ddls
+                    .filterNot { it.isEmpty() }
+                    .forEach { database.execSQL(it) }
         }catch (e: SQLException){
 
             return false
@@ -194,7 +196,7 @@ class STMSQLIteSchema(private val database: SQLiteDatabase) {
 
     }
 
-    private fun createTableDDL(tableName:String):String{
+    private fun createTableDDL(tableName:String):ArrayList<String>{
 
         val builtInColumns = arrayListOf<String>()
 
@@ -220,7 +222,7 @@ class STMSQLIteSchema(private val database: SQLiteDatabase) {
 
         clauses.add(createTriggerDDL("isRemoved", STMConstants.SQLiteBeforeInsert, tableName, ignoreRemoved, null))
 
-        return clauses.joinToString(STMConstants.SQLiteStatementSeparator)
+        return clauses
 
     }
 
@@ -272,7 +274,7 @@ class STMSQLIteSchema(private val database: SQLiteDatabase) {
 
     }
 
-    private fun addAttributeDDL(attribute:STMAttributeDescription, tableName:String):String{
+    private fun addAttributeDDL(attribute:STMAttributeDescription, tableName:String):ArrayList<String>{
 
         val clauses = arrayListOf<String>()
         val columnName = attribute.attributeName
@@ -285,7 +287,7 @@ class STMSQLIteSchema(private val database: SQLiteDatabase) {
 
         }
 
-        return clauses.joinToString(STMConstants.SQLiteStatementSeparator)
+        return clauses
 
     }
 
@@ -328,22 +330,22 @@ class STMSQLIteSchema(private val database: SQLiteDatabase) {
 
     }
 
-    private fun addToManyRelationshipDDL(relationship:STMRelationshipDescription, tableName:String):String?{
+    private fun addToManyRelationshipDDL(relationship:STMRelationshipDescription, tableName:String):ArrayList<String>{
 
         if (!relationship.isToMany){
 
             STMFunctions.debugLog("STMSQLLiteSchema","attempt to add non-to-many relationship with addToManyRelationshipDDL")
-            return null
+            return arrayListOf()
 
         }
 
-        if (relationship.deleteRule != "Cascade") return null
+        if (relationship.deleteRule != "Cascade") return arrayListOf()
 
         val name = relationship.relationshipName
         val childTableName = STMFunctions.removePrefixFromEntityName(relationship.destinationEntityName)
         val fkColumn = relationship.inverseRelationshipName!! + STMConstants.RELATIONSHIP_SUFFIX
         val deleteChildren = "DELETE FROM $childTableName WHERE $fkColumn = OLD.${STMConstants.DEFAULT_PERSISTING_PRIMARY_KEY}"
-        return createTriggerDDL(STMConstants.CASCADE_TRIGGER_PREFIX + name, STMConstants.SQLiteBeforeDelete, tableName, deleteChildren, null)
+        return arrayListOf(createTriggerDDL(STMConstants.CASCADE_TRIGGER_PREFIX + name, STMConstants.SQLiteBeforeDelete, tableName, deleteChildren, null))
 
     }
 
@@ -359,12 +361,12 @@ class STMSQLIteSchema(private val database: SQLiteDatabase) {
 
     }
 
-    private fun addRelationshipDDL(relationship:STMRelationshipDescription, tableName:String):String?{
+    private fun addRelationshipDDL(relationship:STMRelationshipDescription, tableName:String):ArrayList<String>{
 
         if (relationship.isToMany){
 
             STMFunctions.debugLog("STMSQLLiteSchema","attempt to add non-to-one relationship with addRelationshipDDL")
-            return null
+            return arrayListOf()
 
         }
 
@@ -381,8 +383,9 @@ class STMSQLIteSchema(private val database: SQLiteDatabase) {
         val columnNotNull = "NEW.$columnName is not null"
         val createPhantom = arrayListOf(phantomFields, phantomData, phantomSource).joinToString(" ")
         clauses.add(createTriggerDDL("phantom_" + columnName, STMConstants.SQLiteBeforeInsert, tableName, createPhantom, columnNotNull))
+        clauses.add(createTriggerDDL("phantom_update_" + columnName, "BEFORE UPDATE OF " + columnName, tableName, createPhantom, columnNotNull))
 
-        return clauses.joinToString(STMConstants.SQLiteStatementSeparator)
+        return clauses
 
     }
 
@@ -421,7 +424,7 @@ class STMSQLIteSchema(private val database: SQLiteDatabase) {
 
         STMFunctions.debugLog("STMSQLLiteSchema", "delete entity ${entity.entityName}")
         val tableName = STMFunctions.removePrefixFromEntityName(entity.entityName)
-        val result = executeDDL(dropTable(tableName))
+        val result = executeDDL(arrayListOf(dropTable(tableName)))
 
         if (result){
 
@@ -530,7 +533,7 @@ class STMSQLIteSchema(private val database: SQLiteDatabase) {
             val toOneRelName = modelMapping!!.destinationModel.entitiesByName[it.destinationEntityName]!!.relationshipsByName[it.inverseRelationshipName]!!.relationshipName
             val toManyRelTableName = STMFunctions.removePrefixFromEntityName(it.destinationEntityName)
             val insertFantomsDDL = "INSERT INTO $tableName (id, isFantom, deviceCts) SELECT DISTINCT $toOneRelName, 1, null FROM $toManyRelTableName"
-            migrationSuccessful = migrationSuccessful && executeDDL(insertFantomsDDL)
+            migrationSuccessful = migrationSuccessful && executeDDL(arrayListOf(insertFantomsDDL))
 
         }
 

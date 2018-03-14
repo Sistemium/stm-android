@@ -22,7 +22,7 @@ class STMPersisterTransactionCoordinator(private val adapters:HashMap<STMStorage
 
         val transaction = transactionForEntityName(entityName, options)
 
-        return transaction.findAllSync(entityName, predicateWithOptions, options)
+        return transaction?.findAllSync(entityName, predicateWithOptions, options) ?: ArrayList()
 
     }
 
@@ -30,7 +30,7 @@ class STMPersisterTransactionCoordinator(private val adapters:HashMap<STMStorage
 
         val transaction = transactionForEntityName(entityName, options)
 
-        return transaction.mergeWithoutSave(entityName, attributes, options)
+        return transaction?.mergeWithoutSave(entityName, attributes, options)
 
     }
 
@@ -46,7 +46,7 @@ class STMPersisterTransactionCoordinator(private val adapters:HashMap<STMStorage
 
         val transaction = transactionForEntityName(entityName, options)
 
-        val count = transaction.destroyWithoutSave(entityName,predicate, options)
+        val count = transaction?.destroyWithoutSave(entityName,predicate, options)
 
         val recordStatuses:ArrayList<Any>? = arrayListOf()
 
@@ -74,12 +74,12 @@ class STMPersisterTransactionCoordinator(private val adapters:HashMap<STMStorage
 
         if (recordStatuses?.count() != null && recordStatuses.count() > 0) {
 
-            transaction.modellingDelegate?.persistanceDelegate?.notifyObservingEntityName(recordStatusEntity, recordStatuses, options)
+            transaction?.modellingDelegate?.persistanceDelegate?.notifyObservingEntityName(recordStatusEntity, recordStatuses, options)
 
         }
 
 
-        return count
+        return count ?: 0
 
     }
 
@@ -94,7 +94,7 @@ class STMPersisterTransactionCoordinator(private val adapters:HashMap<STMStorage
 
     }
 
-    private fun transactionForEntityName(entityName:String, options:Map<*,*>?):STMPersistingTransaction{
+    private fun transactionForEntityName(entityName:String, options:Map<*,*>?):STMPersistingTransaction?{
 
         val storageType = storageForEntityName(entityName, options)
 
@@ -103,12 +103,6 @@ class STMPersisterTransactionCoordinator(private val adapters:HashMap<STMStorage
         if (transaction == null && adapters.keys.contains(storageType)){
             transactions[storageType] = adapters[storageType]!!.beginTransaction(readOnly)
             transaction = transactions[storageType]
-        }
-
-        if (transaction == null) {
-
-            throw Exception("wrong entity name: $entityName")
-
         }
 
         return transaction
