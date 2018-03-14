@@ -36,9 +36,9 @@ class STMSQLiteDatabaseAdapter(override var model: STMModelling, private var dbP
 
     val poolDatabases = arrayListOf<SQLiteDatabase>()
 
-    private val operationPoolQueue = Executors.newFixedThreadPool(STMConstants.POOL_SIZE)
-
     private val operationQueue = Executors.newFixedThreadPool(1)
+
+    private val operationPoolQueue = if (STMConstants.POOL_SIZE > 0) Executors.newFixedThreadPool(STMConstants.POOL_SIZE) else operationQueue
 
     init {
 
@@ -46,7 +46,9 @@ class STMSQLiteDatabaseAdapter(override var model: STMModelling, private var dbP
 
         database = SQLiteDatabase.openDatabase(dbPath, null, flags)
 
-        database?.execSQL("PRAGMA TEMP_STORE=MEMORY;")
+        database!!.execSQL("PRAGMA TEMP_STORE=MEMORY;")
+
+        database!!.enableWriteAheadLogging()
 
         checkModelMapping()
 
@@ -58,25 +60,41 @@ class STMSQLiteDatabaseAdapter(override var model: STMModelling, private var dbP
 
         }
 
+        if (poolDatabases.count() == 0){
+
+            poolDatabases.add(database!!)
+
+        }
+
     }
 
     override fun beginTransaction(readOnly:Boolean):STMPersistingTransaction{
 
         val operation = STMSQLiteDatabaseOperation(readOnly, this)
 
+        val transaction: STMPersistingTransaction
+
         if (readOnly){
 
             operationPoolQueue.execute(operation)
+
+            transaction = operation.transaction
+
+//            STMFunctions.debugLog("Syncer", "did not beginTransactionNonExclusive")
 
         }else{
 
             operationQueue.execute(operation)
 
-            database!!.beginTransaction()
+            transaction = operation.transaction
+
+            database!!.beginTransactionNonExclusive()
+
+//            STMFunctions.debugLog("Syncer", "beginTransactionNonExclusive")
 
         }
 
-        return operation.transaction
+        return transaction
 
     }
 
@@ -100,13 +118,17 @@ class STMSQLiteDatabaseAdapter(override var model: STMModelling, private var dbP
 
             }
 
+//            STMFunctions.debugLog("Syncer", "endTransaction")
+
             database!!.endTransaction()
+
+        }else{
+
+//            STMFunctions.debugLog("Syncer", "did not endTransaction")
 
         }
 
         operation.finish()
-
-
 
     }
 

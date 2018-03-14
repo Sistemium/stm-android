@@ -100,7 +100,7 @@ class STMFunctions{
         @SuppressLint("HardwareIds")
         fun deviceUUID():String{
 
-            return Settings.Secure.getString(MyApplication.appContext!!.contentResolver, Settings.Secure.ANDROID_ID)
+            return Settings.Secure.getString(MyApplication.appContext!!.contentResolver, Settings.Secure.ANDROID_ID) + Settings.Secure.getString(MyApplication.appContext!!.contentResolver, Settings.Secure.ANDROID_ID)
 
         }
 

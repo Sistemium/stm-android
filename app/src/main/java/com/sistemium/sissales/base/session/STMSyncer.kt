@@ -66,6 +66,12 @@ class STMSyncer: STMDefantomizingOwner, STMDataDownloadingOwner, STMDataSyncingS
         socketTransport!!.mergeAsync(entityName, itemData, null)
                 .then {
 
+                    if (it["data"] == null){
+
+                        STMFunctions.debugLog("STMSyncer","updateResource error: $it")
+
+                    }
+
                     dataSyncingDelegate!!.setSynced(true, entityName, it["data"] as Map<*,*> , itemVersion)
 
                 }.fail {

@@ -33,7 +33,7 @@ class STMPersister(private val runner:STMPersistingRunning): STMFullStackPersist
 
     override fun find(entityName: String, identifier: String, options: Map<*, *>?): Promise<Map<*, *>, Exception> {
 
-        return task {
+        return task{
 
             return@task findSync(entityName, identifier, options)
 

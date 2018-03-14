@@ -8,7 +8,7 @@ import com.github.kittinunf.fuel.android.extension.responseJson
 import com.github.kittinunf.fuel.core.FuelManager
 import com.github.kittinunf.result.Result
 import com.sistemium.sissales.R
-import com.sistemium.sissales.activities.WebViewActivity
+import com.sistemium.sissales.activities.ProfileActivity
 import com.sistemium.sissales.base.MyApplication
 import com.sistemium.sissales.base.STMConstants
 import com.sistemium.sissales.base.STMFunctions
@@ -201,7 +201,7 @@ class STMCoreAuthController {
 
         fun requestNewSMSCode(phoneNumber:String):Promise<String?, Exception>{
 
-            return task {
+            return task{
 
                 val (_, _, result) = Fuel.get("https://api.sistemium.com/pha/auth", listOf("mobileNumber" to phoneNumber)).responseJson()
 
@@ -224,7 +224,7 @@ class STMCoreAuthController {
 
         fun requestAccessToken(id:String, smsCode:String):Promise<String, Exception>{
 
-            return task {
+            return task{
 
                 FuelManager.instance.baseHeaders = mapOf("user-agent" to STMConstants.userAgent, "DeviceUUID" to STMFunctions.deviceUUID())
 
@@ -258,7 +258,7 @@ class STMCoreAuthController {
 
             if (accessToken != null){
 
-                val myIntent = Intent(MyApplication.appContext, WebViewActivity::class.java)
+                val myIntent = Intent(MyApplication.appContext, ProfileActivity::class.java)
 
                 myIntent.putExtra("accessToken", accessToken)
 
@@ -273,12 +273,13 @@ class STMCoreAuthController {
                     return@then it
 
                 } fail {
+                    //TODO
                     val test = ""
                 }
 
             }
 
-            return task {
+            return task{
 
                 throw Exception("no accessToken")
 
@@ -305,7 +306,7 @@ class STMCoreAuthController {
 
             if (rolesResponse != null){
 
-                return task {
+                return task{
 
                     startSession()
 
@@ -315,7 +316,7 @@ class STMCoreAuthController {
 
             }
 
-            return task {
+            return task{
 
                 val (_,_, result) = Fuel.get("https://api.sistemium.com/pha/roles", listOf("access_token" to accessToken)).responseJson()
 

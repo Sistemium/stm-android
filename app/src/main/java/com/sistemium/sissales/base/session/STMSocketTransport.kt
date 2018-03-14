@@ -230,9 +230,9 @@ class STMSocketTransport(var socketUrlString:String, var entityResource:String, 
 
         val o = IO.Options()
 
-//        val u = URI(socketUrlString)
-
-        val u = URI("http://10.0.1.5:8000/socket.io-client")
+//        val u = URI(socketUrlString) //production
+        val u = URI("http://10.0.1.5:8000/socket.io-client") //work
+//        val u = URI("http://192.168.0.106:8000/socket.io-client") //home
 
         o.path = u.path + "/"
 

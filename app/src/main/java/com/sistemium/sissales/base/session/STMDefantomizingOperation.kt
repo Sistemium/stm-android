@@ -9,10 +9,7 @@ class STMDefantomizingOperation(var entityName:String, identifier: String):Runna
 
     override fun run() {
 
-
-
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-
 
         synchronized(lock){
 

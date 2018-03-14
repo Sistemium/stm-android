@@ -173,17 +173,25 @@ class STMSQLiteDatabaseTransaction(private var database: SQLiteDatabase, private
 
         val (keys, values) = updateTablename(tableName, dictionary)
 
+        if (tableName == "ClientEntity"){
+
+            STMFunctions.debugLog("","")
+
+        }
+
         val cv = ContentValues()
 
         for (index in 0 until keys.size){
 
-            if (values[index] == "null"){
+            when (values[index]){
 
-                cv.putNull(keys[index])
+                "null" -> cv.putNull(keys[index])
 
-            }else{
+                "true" -> cv.put(keys[index], 1)
 
-                cv.put(keys[index], values[index])
+                "false" -> cv.put(keys[index], 0)
+
+                else -> cv.put(keys[index], values[index])
 
             }
 

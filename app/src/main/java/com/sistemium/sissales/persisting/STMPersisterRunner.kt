@@ -1,5 +1,6 @@
 package com.sistemium.sissales.persisting
 
+import com.sistemium.sissales.base.STMFunctions
 import com.sistemium.sissales.enums.STMStorageType
 import com.sistemium.sissales.interfaces.STMAdapting
 import com.sistemium.sissales.interfaces.STMPersistingRunning
@@ -15,13 +16,25 @@ class STMPersisterRunner(private val adapters:HashMap<STMStorageType, STMAdaptin
 
         val readOnlyTransactionCoordinator = STMPersisterTransactionCoordinator(adapters, true)
 
-        val result = block(readOnlyTransactionCoordinator)
+        try {
 
-        readOnlyTransactionCoordinator.endTransactionWithSuccess(true)
+            val result = block(readOnlyTransactionCoordinator)
 
-//        STMFunctions.debugLog("RUNNER", "Read only transaction ended")
+            readOnlyTransactionCoordinator.endTransactionWithSuccess(true)
 
-        return result
+            //        STMFunctions.debugLog("RUNNER", "Read only transaction ended")
+
+            return result
+
+        }catch (e:Exception){
+
+            readOnlyTransactionCoordinator.endTransactionWithSuccess(false)
+
+            STMFunctions.debugLog("STMPersisterRunner", "Error: ${e.localizedMessage}")
+
+            throw Exception(e)
+
+        }
 
     }
 
@@ -29,9 +42,21 @@ class STMPersisterRunner(private val adapters:HashMap<STMStorageType, STMAdaptin
 
         val transactionCoordinator = STMPersisterTransactionCoordinator(adapters, false)
 
-        val result = block(transactionCoordinator)
+        try {
 
-        transactionCoordinator.endTransactionWithSuccess(result)
+            val result = block(transactionCoordinator)
+
+            transactionCoordinator.endTransactionWithSuccess(result)
+
+        } catch (e:Exception){
+
+            transactionCoordinator.endTransactionWithSuccess(false)
+
+            STMFunctions.debugLog("STMPersisterRunner", "Error: ${e.localizedMessage}")
+
+            throw Exception(e)
+
+        }
 
     }
 

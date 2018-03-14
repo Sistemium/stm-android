@@ -156,6 +156,8 @@ class STMSQLIteSchema(private val database: SQLiteDatabase) {
 
     private fun addEntity(entity:STMEntityDescription){
 
+        if (entity.abstract) return
+
         STMFunctions.debugLog("STMSQLiteSchema","add entity ${entity.entityName}")
         val columns = ArrayList(builtInAttributes)
         val tableName = STMFunctions.removePrefixFromEntityName(entity.entityName)
@@ -551,8 +553,6 @@ class STMSQLIteSchema(private val database: SQLiteDatabase) {
         }
 
         val formatString = questionMarks.joinToString(",")
-
-        val resetETagSQL = "UPDATE ClientEntity SET [eTag] = '*' WHERE [name] IN (%@)"
 
         val cv = ContentValues()
 

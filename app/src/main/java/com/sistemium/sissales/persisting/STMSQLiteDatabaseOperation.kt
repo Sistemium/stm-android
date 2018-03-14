@@ -35,6 +35,8 @@ class STMSQLiteDatabaseOperation(val readOnly:Boolean, private var adapter: STMS
 
     override fun run() {
 
+//        STMFunctions.debugLog("Syncer", "operation started")
+
         if (readOnly){
 //            STMFunctions.debugLog("DEBUG", "removing pool database from array")
 //            STMFunctions.debugLog("DEBUG", "pool database count before remove: ${adapter.poolDatabases.size}")
@@ -79,6 +81,8 @@ class STMSQLiteDatabaseOperation(val readOnly:Boolean, private var adapter: STMS
 
 
         }
+
+//        STMFunctions.debugLog("Syncer", "operation ended")
 
         synchronized(lock2){
 

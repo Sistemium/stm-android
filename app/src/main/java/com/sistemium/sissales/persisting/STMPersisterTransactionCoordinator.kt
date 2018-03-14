@@ -105,7 +105,13 @@ class STMPersisterTransactionCoordinator(private val adapters:HashMap<STMStorage
             transaction = transactions[storageType]
         }
 
-        return transaction ?: throw Exception("wrong entity name: $entityName")
+        if (transaction == null) {
+
+            throw Exception("wrong entity name: $entityName")
+
+        }
+
+        return transaction
 
     }
 

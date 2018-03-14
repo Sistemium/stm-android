@@ -381,13 +381,13 @@ class WebAppInterface internal constructor(private var webViewActivity: WebViewA
         val xidString = parameters[STMConstants.DEFAULT_PERSISTING_PRIMARY_KEY] as? String
 
         if (xidString != null){
-            return persistenceDelegate?.destroy(entityName, xidString, null)?.then {
+            return persistenceDelegate.destroy(entityName, xidString, null).then {
 
                 val result:Map<*, *> = hashMapOf("objectXid" to xidString)
 
                 return@then arrayListOf(result)
 
-            } ?: throw Exception("Missing persistenceDelegate")
+            }
         } else{
 
             throw Exception("empty xid")
@@ -405,11 +405,11 @@ class WebAppInterface internal constructor(private var webViewActivity: WebViewA
         val options = parameters["options"] as? Map<*,*>
 
         if (xidString != null){
-            return persistenceDelegate?.find(entityName, xidString, options)?.then {
+            return persistenceDelegate.find(entityName, xidString, options).then {
 
                 return@then arrayListOf(it)
 
-            } ?: throw Exception("Missing persistenceDelegate")
+            }
         }
 
         val filter = parameters["filter"] as? Map<*, *>
