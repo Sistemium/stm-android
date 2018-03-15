@@ -13,19 +13,19 @@ import java.util.*
 class STMCoreSettingsController :STMPersistingMergeInterceptor, STMSettingsController {
 
     var persistenceDelegate: STMFullStackPersisting? = null
+        set(value) {
 
-    private var currentSettings:ArrayList<Map<*,*>>? = null
-    get() {
+            if (value != null){
 
-        if (field == null || field?.size == 0){
+                field = value
 
-            reloadCurrentSettings()
+                currentSettings = field!!.findAllSync("STMSetting", null, null)
+
+            }
 
         }
 
-        return field
-
-    }
+    private var currentSettings:ArrayList<Map<*,*>>? = null
 
     override fun currentSettingsForGroup(group: String): Map<*, *>? {
 
@@ -60,12 +60,6 @@ class STMCoreSettingsController :STMPersistingMergeInterceptor, STMSettingsContr
         mutAtr[STMConstants.DEFAULT_PERSISTING_PRIMARY_KEY] = setting[STMConstants.DEFAULT_PERSISTING_PRIMARY_KEY]
 
         return mutAtr
-
-    }
-
-    private fun reloadCurrentSettings(){
-
-        currentSettings = persistenceDelegate?.findAllSync("STMSetting", null, null)
 
     }
 

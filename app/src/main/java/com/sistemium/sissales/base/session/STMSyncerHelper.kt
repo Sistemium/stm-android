@@ -88,15 +88,15 @@ class STMSyncerHelper: STMDefantomizing, STMDataDownloading {
 
         }
 
-        if (dataRecieved!!.count() > 0 && offset!! == currentEtag) {
+        if (dataRecieved!!.count() > 0 && offset!! != currentEtag) {
 
-            STMClientEntityController.clientEntityWithName(entityName, offset)
+            STMClientEntityController.setEtag(entityName, offset)
 
         }
 
         if (dataRecieved.size == 0){
 
-            doneDownloadingEntityName(entityName, null)
+            return doneDownloadingEntityName(entityName, null)
 
         }
 
@@ -179,11 +179,11 @@ class STMSyncerHelper: STMDefantomizing, STMDataDownloading {
 
         operations.remove(entityName)
 
-        operation?.finish()
+        operation!!.finish()
 
         STMFunctions.debugLog("STMSyncerHelper", "doneWith $entityName remain ${operations.size} to receive")
 
-        if (operations.size>0){
+        if (operations.size > 0){
 
             return
 
@@ -201,7 +201,7 @@ class STMSyncerHelper: STMDefantomizing, STMDataDownloading {
 
         if (result.size < pageSize){
 
-            STMClientEntityController.clientEntityWithName(entityName, offset)
+            STMClientEntityController.setEtag(entityName, offset)
             return doneDownloadingEntityName(entityName, null)
 
         }

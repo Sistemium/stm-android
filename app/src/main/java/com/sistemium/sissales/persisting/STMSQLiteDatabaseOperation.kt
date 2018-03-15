@@ -13,11 +13,13 @@ class STMSQLiteDatabaseOperation(val readOnly:Boolean, private var adapter: STMS
 
     val transaction:STMSQLiteDatabaseTransaction by lazy {
 
-        if (_transaction != null) return@lazy _transaction!!
-
         synchronized(lock1){
 
-            lock1.wait()
+            while (_transaction == null){
+
+                lock1.wait()
+
+            }
 
             return@lazy _transaction!!
 
@@ -53,7 +55,7 @@ class STMSQLiteDatabaseOperation(val readOnly:Boolean, private var adapter: STMS
 
         _transaction = STMSQLiteDatabaseTransaction(database!!, adapter)
 
-        _transaction?.operation = this
+        _transaction!!.operation = this
 
         synchronized(lock1){
             lock1.notify()

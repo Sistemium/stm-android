@@ -117,7 +117,7 @@ class STMUnsyncedDataHelper: STMDataSyncing {
 
         if (subscriberDelegate == null || isPaused){
 
-            checkUnsyncedObjects()
+            return checkUnsyncedObjects()
 
         }
         if (!syncingState){

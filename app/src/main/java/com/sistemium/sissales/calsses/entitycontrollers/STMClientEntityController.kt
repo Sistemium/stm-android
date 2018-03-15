@@ -43,7 +43,7 @@ class STMClientEntityController {
             return clientEntity
         }
 
-        fun clientEntityWithName(name:String, eTag:String?){
+        fun setEtag(name:String, eTag:String?){
 
             val clientEntity = HashMap(clientEntityWithName(name))
 
