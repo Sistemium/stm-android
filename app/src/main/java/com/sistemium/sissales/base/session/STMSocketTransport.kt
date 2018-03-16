@@ -81,7 +81,7 @@ class STMSocketTransport(var socketUrlString:String, var entityResource:String, 
 
     }
 
-    override fun findAllAsync(entityName: String, options: Map<*, *>?): Promise<Map<*, *>, Exception> {
+    override fun findAllAsync(entityName: String, options: Map<*, *>?, identifier:String?): Promise<Map<*, *>, Exception> {
 
         val deferred = deferred<Map<*,*>, Exception>()
 
@@ -95,11 +95,24 @@ class STMSocketTransport(var socketUrlString:String, var entityResource:String, 
 
         val resource = STMEntityController.sharedInstance.resourceForEntity(entityName)
 
-        val value = hashMapOf(
-                "method" to STMConstants.kSocketFindAllMethod,
-                "resource" to resource,
-                "options" to options
-        )
+        val value = if (identifier != null){
+
+            hashMapOf(
+                    "method" to STMConstants.kSocketFindMethod,
+                    "resource" to resource,
+                    "options" to options,
+                    "id" to identifier
+            )
+
+        } else {
+
+            hashMapOf(
+                    "method" to STMConstants.kSocketFindAllMethod,
+                    "resource" to resource,
+                    "options" to options
+            )
+
+        }
 
         socketSendEvent(STMSocketEvent.STMSocketEventJSData, value)
                 .then {

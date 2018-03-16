@@ -10,5 +10,6 @@ interface STMDefantomizing {
 
     fun stopDefantomization()
     fun startDefantomization()
+    fun defantomizedEntityName(entityName:String, identifier:String, attributes:Map<*,*>?, error:Exception?)
 
 }

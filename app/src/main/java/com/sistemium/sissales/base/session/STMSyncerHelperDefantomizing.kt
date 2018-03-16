@@ -11,13 +11,13 @@ class STMSyncerHelperDefantomizing {
 
     var failToResolveIds = ArrayList<Any>()
 
-    var operations = HashMap<String, STMDefantomizingOperation>()
+    var operations = HashMap<Pair<String, String>, STMDefantomizingOperation>()
 
     fun addDefantomizationOfEntityName(entityName:String, identifier:String){
 
-        val op = STMDefantomizingOperation(entityName, identifier)
+        val op = STMDefantomizingOperation(entityName, identifier, STMCoreSessionManager.sharedManager.currentSession!!.syncer!!)
 
-        operations[entityName] = op
+        operations[Pair(entityName, identifier)] = op
 
         operationQueue.execute(op)
 

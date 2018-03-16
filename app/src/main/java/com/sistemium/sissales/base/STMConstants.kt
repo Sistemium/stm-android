@@ -41,6 +41,7 @@ class STMConstants{
         const val STMPersistingOptionOrderDirectionAscValue = "ASC"
         const val kSocketUpdateMethod = "update"
         const val STMPersistingOptionOffset = "offset"
+        const val kSocketFindMethod = "find"
         const val kSocketFindAllMethod = "findAll"
         const val SQLiteText = "TEXT"
         const val SQLiteInt = "INTEGER"

@@ -173,12 +173,6 @@ class STMSQLiteDatabaseTransaction(private var database: SQLiteDatabase, private
 
         val (keys, values) = updateTablename(tableName, dictionary)
 
-        if (tableName == "ClientEntity"){
-
-            STMFunctions.debugLog("","")
-
-        }
-
         val cv = ContentValues()
 
         for (index in 0 until keys.size){
@@ -199,13 +193,15 @@ class STMSQLiteDatabaseTransaction(private var database: SQLiteDatabase, private
 
         try {
 
+            val test = database.rawQuery("select * from $tableName where id = '$pk'", null)
+
             val changes = database.update(tableName, cv, "[id] = ?", arrayOf(pk))
+
+            test.close()
 
             if (changes == 0) {
 
                 cv.put("id", pk)
-
-                cv.put("[isFantom]", 0)
 
                 database.insert(tableName, null, cv)
 
@@ -239,6 +235,9 @@ class STMSQLiteDatabaseTransaction(private var database: SQLiteDatabase, private
             return@filterValues it == "Transformable"
 
         }?.keys
+
+        keys.add("[isFantom]")
+        values.add("false")
 
         for (key in dictionary.keys){
 

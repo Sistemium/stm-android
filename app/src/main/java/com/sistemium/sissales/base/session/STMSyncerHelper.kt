@@ -124,8 +124,6 @@ class STMSyncerHelper: STMDefantomizing, STMDataDownloading {
         if (defantomizing == null) {
 
             defantomizing = STMSyncerHelperDefantomizing()
-            //TODO
-//            defantomizing.owner = this
 
         }
 
@@ -165,6 +163,34 @@ class STMSyncerHelper: STMDefantomizing, STMDataDownloading {
 
     override fun stopDefantomization() {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override fun defantomizedEntityName(entityName: String, identifier: String, attributes: Map<*, *>?, error: Exception?) {
+
+        if (error != null){
+
+            TODO("not implemented")
+
+//            NSLog(@"defantomize %@ %@ error: %@", entityName, identifier, errorString.length ? errorString : @"no description");
+//            BOOL deleteObject = [errorString hasSuffix:@"404"] || [errorString hasSuffix:@"403"];
+//            if (deleteObject) {
+//                NSLog(@"delete fantom %@ %@", entityName, identifier);
+//                [self.persistenceFantomsDelegate destroyFantomSync:entityName identifier:identifier];
+//            } else {
+//                @synchronized (self) {
+//                    [self.defantomizing.failToResolveIds addObject:identifier];
+//                }
+//            }
+//            [self doneWithEntityName:entityName identifier:identifier];
+
+        }
+
+        persistenceFantomsDelegate!!.mergeFantomAsync(entityName, attributes!!).then {
+
+            doneWithEntityName(entityName, identifier)
+
+        }
+
     }
 
     private fun doneDownloadingEntityName(entityName:String, errorMessage:String?){
@@ -215,6 +241,24 @@ class STMSyncerHelper: STMDefantomizing, STMDataDownloading {
         STMFunctions.debugLog("STMSyncedHelper","DEFANTOMIZING_FINISHED")
         this.defantomizing = null
         defantomizingOwner!!.defantomizingFinished()
+
+    }
+
+    private fun doneWithEntityName(entityName: String, identifier: String){
+
+        defantomizing!!.operations[Pair(entityName, identifier)]!!.finish()
+
+        defantomizing!!.operations.remove(Pair(entityName, identifier))
+
+        val count = defantomizing!!.operations.size
+
+        STMFunctions.debugLog("STMSyncerHelper", "doneWith $entityName $identifier ($count)")
+
+        if (count == 0){
+
+            startDefantomization()
+
+        }
 
     }
 

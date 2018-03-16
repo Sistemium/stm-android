@@ -99,7 +99,7 @@ class STMSyncer: STMDefantomizingOwner, STMDataDownloadingOwner, STMDataSyncingS
                 STMConstants.STMPersistingOptionOffset to offset
         )
 
-        socketTransport!!.findAllAsync(entityName, options)
+        socketTransport!!.findAllAsync(entityName, options, null)
                 .then{
 
                     val responseOffset = it[STMConstants.STMPersistingOptionOffset] as String
@@ -146,6 +146,23 @@ class STMSyncer: STMDefantomizingOwner, STMDataDownloadingOwner, STMDataSyncingS
 
         subscribeToUnsyncedObjects()
         receiveData()
+
+    }
+
+    override fun defantomizeEntityName(entityName: String, identifier: String) {
+
+        if (!isDefantomizing) return defantomizingDelegate!!.stopDefantomization()
+        socketTransport!!.findAllAsync(entityName, null, identifier)
+                .then {
+
+                    defantomizingDelegate!!.defantomizedEntityName(entityName, identifier, it["data"] as Map<*, *>, null)
+
+                }
+                .fail {
+
+                    defantomizingDelegate!!.defantomizedEntityName(entityName, identifier, null, it)
+
+                }
 
     }
 

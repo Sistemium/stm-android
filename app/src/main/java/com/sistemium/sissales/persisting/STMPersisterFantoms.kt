@@ -1,8 +1,11 @@
 package com.sistemium.sissales.persisting
 
 import com.sistemium.sissales.base.STMConstants
+import com.sistemium.sissales.base.STMFunctions
 import com.sistemium.sissales.base.session.STMCoreSessionManager
 import com.sistemium.sissales.interfaces.STMPersistingFantoms
+import nl.komponents.kovenant.Promise
+import java.util.*
 
 /**
  * Created by edgarjanvuicik on 09/02/2018.
@@ -24,6 +27,12 @@ class STMPersisterFantoms:STMPersistingFantoms {
             return@filter !excludingIds.contains(it)
 
         })
+
+    }
+
+    override fun mergeFantomAsync(entityName: String, attributes: Map<*, *>): Promise<Map<*, *>, Exception> {
+
+        return STMCoreSessionManager.sharedManager.currentSession!!.persistenceDelegate.merge(entityName, attributes, hashMapOf(STMConstants.STMPersistingOptionLts to STMFunctions.stringFrom(Date())))
 
     }
 
