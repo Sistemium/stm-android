@@ -5,6 +5,7 @@ import android.app.Application
 import android.content.ComponentCallbacks2
 import android.content.Context
 import android.os.Bundle
+import com.crashlytics.android.Crashlytics
 import com.sistemium.sissales.base.helper.logger.STMLogger
 import com.sistemium.sissales.base.session.STMCoreSessionManager
 import com.sistemium.sissales.base.session.STMSyncer
@@ -12,7 +13,10 @@ import com.sistemium.sissales.enums.STMSocketEvent
 import com.sistemium.sissales.interfaces.STMAdapting
 import devliving.online.securedpreferencestore.DefaultRecoveryHandler
 import devliving.online.securedpreferencestore.SecuredPreferenceStore
+import io.fabric.sdk.android.Fabric
 import kotlin.properties.Delegates
+
+
 
 /**
  * Created by edgarjanvuicik on 02/02/2018.
@@ -82,6 +86,8 @@ class MyApplication : Application(), Application.ActivityLifecycleCallbacks, Com
         appContext = applicationContext
         SecuredPreferenceStore.init(appContext, DefaultRecoveryHandler())
         this.registerActivityLifecycleCallbacks(this)
+        Fabric.with(this, Crashlytics())
+
     }
     override fun onActivityPaused(p0: Activity?) {}
     override fun onActivityStarted(p0: Activity?) {}

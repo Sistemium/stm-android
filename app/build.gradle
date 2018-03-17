@@ -1,3 +1,18 @@
+buildscript {
+    repositories {
+        maven { url 'https://maven.fabric.io/public' }
+    }
+
+    dependencies {
+        // These docs use an open ended version so that our plugin
+        // can be updated quickly in response to Android tooling updates
+
+        // We recommend changing it to the latest version from our changelog:
+        // https://docs.fabric.io/android/changelog.html#fabric-gradle-plugin
+        classpath 'io.fabric.tools:gradle:1.+'
+    }
+}
+
 apply plugin: 'com.android.application'
 
 apply plugin: 'kotlin-android'
@@ -23,8 +38,11 @@ android {
 
 }
 
+apply plugin: 'io.fabric'
+
 repositories {
     jcenter()
+    maven { url 'https://maven.fabric.io/public' }
 }
 
 dependencies {
@@ -46,5 +64,8 @@ dependencies {
     compile 'com.github.kittinunf.fuel:fuel-jackson:1.11.0'
     compile group: 'online.devliving', name: 'securedpreferencestore', version: '0.5.0'
     compile group: 'io.socket', name: 'socket.io-client', version: '0.9.0'
+    compile('com.crashlytics.sdk.android:crashlytics:2.9.1@aar') {
+        transitive = true
+    }
 
 }
