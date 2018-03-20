@@ -197,6 +197,22 @@ class STMCoreAuthController {
 
             }
 
+        var phoneNumber:String?
+            get() {
+
+                val prefStore = MyApplication.appContext?.getSharedPreferences("Sistemium", Context.MODE_PRIVATE)
+
+                return prefStore?.getString("phoneNumber", null)
+
+            }
+            set(value) {
+
+                val prefStore = MyApplication.appContext?.getSharedPreferences("Sistemium", Context.MODE_PRIVATE)
+
+                prefStore?.edit()?.putString("phoneNumber", value)?.apply()
+
+            }
+
         val dataModelName = "iSisSales"
 
         fun requestNewSMSCode(phoneNumber:String):Promise<String?, Exception>{
@@ -211,6 +227,8 @@ class STMCoreAuthController {
                         val id = result.get().obj().get("ID") as? String
 
                         requestID = id
+
+                        this.phoneNumber = phoneNumber
 
                         return@task id
 
