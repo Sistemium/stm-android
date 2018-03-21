@@ -51,15 +51,9 @@ class AuthActivity : AppCompatActivity() {
         phoneNumberEdit.setText(mobileNumber)
         phoneNumberEdit.setSelection(phoneNumberEdit.text.length)
 
-        phoneNumberEdit.setOnKeyListener(View.OnKeyListener { _, keyCode, event ->
+        val listener = View.OnKeyListener({ _, keyCode, event ->
 
-            if (event.action !=KeyEvent.ACTION_DOWN){
-
-                return@OnKeyListener true
-
-            }
-
-            if(keyCode == KeyEvent.KEYCODE_ENTER){
+            if(keyCode == KeyEvent.KEYCODE_ENTER && event.action != KeyEvent.ACTION_UP){
 
                 sendButton.performClick()
 
@@ -69,6 +63,8 @@ class AuthActivity : AppCompatActivity() {
 
             false
         })
+
+        phoneNumberEdit.setOnKeyListener(listener)
 
         sendButton.isEnabled = phoneNumberEdit.text.length == 11
 
@@ -114,6 +110,12 @@ class AuthActivity : AppCompatActivity() {
                 val options = ActivityOptions.makeCustomAnimation(this, R.anim.abc_fade_in, R.anim.abc_fade_out)
 
                 this@AuthActivity.startActivity(myIntent, options.toBundle())
+
+                this.runOnUiThread{
+
+                    spinner.visibility = View.INVISIBLE
+
+                }
 
             } fail {
 

@@ -31,7 +31,9 @@
             android:name=".activities.CodeConfirmActivity"
             android:label=""
             android:theme="@style/AppTheme.NoActionBar"
-            android:windowSoftInputMode="stateVisible">
+            android:windowSoftInputMode="stateVisible"
+            android:parentActivityName=".activities.AuthActivity"
+            >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".activities.AuthActivity" />

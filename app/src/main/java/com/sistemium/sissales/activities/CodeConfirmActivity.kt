@@ -38,13 +38,7 @@ class CodeConfirmActivity : AppCompatActivity() {
 
         smsCodeEdit.setOnKeyListener(View.OnKeyListener { _, keyCode, event ->
 
-            if (event.action !=KeyEvent.ACTION_DOWN){
-
-                return@OnKeyListener true
-
-            }
-
-            if(keyCode == KeyEvent.KEYCODE_ENTER){
+            if(keyCode == KeyEvent.KEYCODE_ENTER  && event.action != KeyEvent.ACTION_UP){
 
                 sendButton.performClick()
 
@@ -73,6 +67,14 @@ class CodeConfirmActivity : AppCompatActivity() {
             STMCoreAuthController.requestAccessToken(id, smsCodeEdit.text.toString()) then {
 
                 STMCoreAuthController.logIn() then {
+
+                    this.runOnUiThread{
+
+                        spinner.visibility = View.INVISIBLE
+
+                        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+
+                    }
 
                     finish()
 
@@ -110,6 +112,18 @@ class CodeConfirmActivity : AppCompatActivity() {
 
             else -> super.onOptionsItemSelected(item)
         }
+    }
+
+    override fun onBackPressed() {
+
+        val spinner:ConstraintLayout = findViewById(R.id.loading_screen)
+
+        if (spinner.visibility == View.INVISIBLE){
+
+            super.onBackPressed()
+
+        }
+
     }
 
 }
