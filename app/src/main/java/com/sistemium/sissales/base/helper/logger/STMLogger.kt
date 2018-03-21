@@ -19,12 +19,12 @@ class STMLogger private constructor() {
 
     private val availableTypes = arrayListOf("important", "error", "warning", "info", "debug")
 
-    private val uploadLogType:String? = null
+    private var uploadLogType:String? = null
         get() {
 
             if (field == null){
 
-                field = session?.settingsController!!.stringValueForSettings("uploadLog.type", "syncer")
+                field = session?.settingsController?.stringValueForSettings("uploadLog.type", "syncer")
 
             }
 
