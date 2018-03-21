@@ -29,7 +29,7 @@ class ProfileActivityController(var activity:ProfileActivity) {
     fun addProgress(progress:Int){
 
         activity.runOnUiThread{
-            
+
             activity.progressBar!!.progress += progress
 
             if (activity.progressBar!!.progress >= activity.progressBar!!.max){

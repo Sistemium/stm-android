@@ -1,13 +1,16 @@
 package com.sistemium.sissales.activities
 
 import android.app.ActivityOptions
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.support.constraint.ConstraintLayout
 import android.support.v7.app.AppCompatActivity
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.KeyEvent
 import android.view.View
+import android.view.inputmethod.InputMethodManager
 import android.widget.Button
 import android.widget.EditText
 import com.sistemium.sissales.R
@@ -92,6 +95,16 @@ class AuthActivity : AppCompatActivity() {
         val clickButton:Button = findViewById(R.id.button)
         val onClickListener = View.OnClickListener {
 
+            val spinner: ConstraintLayout = findViewById(R.id.loading_screen)
+
+            spinner.visibility = View.VISIBLE
+
+            val view = this.currentFocus
+            if (view != null) {
+                val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                imm.hideSoftInputFromWindow(view.windowToken, 0)
+            }
+
             STMCoreAuthController.requestNewSMSCode(phoneNumberEdit.text.toString()) then {
 
                 val myIntent = Intent(this@AuthActivity, CodeConfirmActivity::class.java)
@@ -103,6 +116,12 @@ class AuthActivity : AppCompatActivity() {
                 this@AuthActivity.startActivity(myIntent, options.toBundle())
 
             } fail {
+
+                this.runOnUiThread{
+
+                    spinner.visibility = View.INVISIBLE
+
+                }
 
                 STMFunctions.handleError(this, "Wrong Phone Number")
 
