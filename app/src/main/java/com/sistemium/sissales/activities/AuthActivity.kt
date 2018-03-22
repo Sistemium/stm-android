@@ -125,7 +125,7 @@ class AuthActivity : AppCompatActivity() {
 
                 }
 
-                STMFunctions.handleError(this, "Wrong Phone Number")
+                STMFunctions.handleError(this, it.localizedMessage)
 
             }
 

@@ -40,4 +40,8 @@ class ProfileActivity : AppCompatActivity() {
 
     }
 
+    override fun onBackPressed() {
+        this.moveTaskToBack(true)
+    }
+
 }

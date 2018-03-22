@@ -7,6 +7,7 @@ import android.os.Build
 import android.provider.Settings
 import android.util.Log
 import com.google.gson.GsonBuilder
+import com.sistemium.sissales.R
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -86,7 +87,7 @@ class STMFunctions{
                 } else {
                     AlertDialog.Builder(activity)
                 }
-                builder.setTitle("Error")
+                builder.setTitle(activity.resources.getString(R.string.error))
                         .setMessage(message)
                         .setPositiveButton(android.R.string.ok, { _, _ -> })
                         .setIcon(android.R.drawable.ic_dialog_alert)

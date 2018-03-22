@@ -1,0 +1,16 @@
+<resources>
+    <string name="app_name">SisSales</string>
+    <string name="auth_toolbar_title">Вход в Sistemium</string>
+    <string name="enter_code_from_sms">Введите код из SMS:</string>
+    <string name="send">Отправить</string>
+    <string name="_8xxxxxxxxxx">8XXXXXXXXXX</string>
+    <string name="title_activity_code_confirm">CodeConfirmActivity</string>
+    <string name="enter_phone_number">Введите номер телефона:</string>
+    <string name="passwordHint">******</string>
+    <string name="title_activity_profile">SisSales</string>
+    <string name="authorization">Авторизация…</string>
+    <string name="error">Ошибка</string>
+    <string name="no_internet">Нет доступа к Интернету</string>
+    <string name="wrong_phone">Неверный номер телефона</string>
+    <string name="wrong_sms">Неверный код</string>
+</resources>

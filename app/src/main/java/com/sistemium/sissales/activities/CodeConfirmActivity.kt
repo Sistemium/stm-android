@@ -90,7 +90,7 @@ class CodeConfirmActivity : AppCompatActivity() {
 
                 }
 
-                STMFunctions.handleError(this, "Wrong SMS Code")
+                STMFunctions.handleError(this, it.localizedMessage)
 
             }
 
