@@ -9,7 +9,7 @@ buildscript {
 
         // We recommend changing it to the latest version from our changelog:
         // https://docs.fabric.io/android/changelog.html#fabric-gradle-plugin
-        classpath 'io.fabric.tools:gradle:1.+'
+        classpath 'io.fabric.tools:gradle:1.25.2'
     }
 }
 
@@ -54,17 +54,17 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.1'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
-    compile 'com.google.code.gson:gson:2.8.2'
-    compile 'nl.komponents.kovenant:kovenant:3.3.0'
-    compile 'com.github.kittinunf.fuel:fuel:1.11.0'
-    compile 'com.github.kittinunf.fuel:fuel-android:1.11.0'
-    compile 'com.github.kittinunf.fuel:fuel-livedata:1.11.0'
-    compile 'com.github.kittinunf.fuel:fuel-rxjava:1.11.0'
-    compile 'com.github.kittinunf.fuel:fuel-gson:1.11.0'
-    compile 'com.github.kittinunf.fuel:fuel-jackson:1.11.0'
-    compile group: 'online.devliving', name: 'securedpreferencestore', version: '0.5.0'
-    compile group: 'io.socket', name: 'socket.io-client', version: '0.9.0'
-    compile('com.crashlytics.sdk.android:crashlytics:2.9.1@aar') {
+    implementation 'com.google.code.gson:gson:2.8.2'
+    implementation 'nl.komponents.kovenant:kovenant:3.3.0'
+    implementation 'com.github.kittinunf.fuel:fuel:1.11.0'
+    implementation 'com.github.kittinunf.fuel:fuel-android:1.11.0'
+    implementation 'com.github.kittinunf.fuel:fuel-livedata:1.11.0'
+    implementation 'com.github.kittinunf.fuel:fuel-rxjava:1.11.0'
+    implementation 'com.github.kittinunf.fuel:fuel-gson:1.11.0'
+    implementation 'com.github.kittinunf.fuel:fuel-jackson:1.11.0'
+    implementation group: 'online.devliving', name: 'securedpreferencestore', version: '0.5.0'
+    implementation group: 'io.socket', name: 'socket.io-client', version: '1.0.0'
+    implementation('com.crashlytics.sdk.android:crashlytics:2.9.1@aar') {
         transitive = true
     }
 
