@@ -28,8 +28,6 @@ class CodeConfirmActivity : AppCompatActivity() {
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-        val intent = intent
-
         val id = intent.getStringExtra("ID")
         mobileNumber = intent.getStringExtra("mobileNumber")
 

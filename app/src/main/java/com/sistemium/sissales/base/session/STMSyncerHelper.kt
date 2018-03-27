@@ -248,6 +248,7 @@ class STMSyncerHelper: STMDefantomizing, STMDataDownloading {
         STMFunctions.debugLog("STMSyncedHelper","DEFANTOMIZING_FINISHED")
         this.defantomizing = null
         defantomizingOwner!!.defantomizingFinished()
+        ProfileActivity.profileActivityController?.showGridView()
 
     }
 

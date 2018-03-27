@@ -24,7 +24,11 @@ class WebViewActivity : Activity() {
 
         webView?.addJavascriptInterface(webInterface, "stmAndroid")
 
-        webView?.loadUrl("http://10.0.1.5:3000")
+        var url = intent.getStringExtra("url")
+
+        url = url.replace("http://lamac.local:3000", "http://10.0.1.5:3000")
+
+        webView?.loadUrl(url)
 
 
     }
