@@ -5,6 +5,7 @@ import android.database.sqlite.SQLiteDatabase
 import com.sistemium.sissales.base.STMConstants
 import com.sistemium.sissales.base.STMFunctions
 import com.sistemium.sissales.interfaces.STMModelMapping
+import com.sistemium.sissales.interfaces.STMModelling
 import java.sql.SQLException
 
 /**
@@ -25,11 +26,13 @@ class STMSQLIteSchema(private val database: SQLiteDatabase) {
     private val ignoredAttributes = builtInAttributes + "xid"
     private var recreatedTables = hashSetOf<String>()
     private val tablesToReload = hashSetOf<String>()
+    private var modeler:STMModelling? = null
 
-    fun createTablesWithModelMapping(modelMapping: STMModelMapping): Map<String, ArrayList<String>>{
+    fun createTablesWithModelMapping(modelMapping: STMModelMapping, modeler:STMModelling): Map<String, ArrayList<String>>{
 
         STMFunctions.debugLog("STMSQLIteSchema","createTablesWithModelMapping")
         this.modelMapping = modelMapping
+        this.modeler = modeler
         migrationSuccessful = true
         columnsDictionary = HashMap(currentDBScheme())
 
@@ -241,7 +244,8 @@ class STMSQLIteSchema(private val database: SQLiteDatabase) {
     private fun processPropertiesForEntity(entity:STMEntityDescription, tableName:String):ArrayList<String>{
 
         val columns = arrayListOf<String>()
-        var columnAttributes = entity.attributesByName.values
+
+        var columnAttributes = modeler!!.fieldsForEntityName(entity.entityName).values
         columnAttributes = ArrayList(
                 columnAttributes.filter {
 
