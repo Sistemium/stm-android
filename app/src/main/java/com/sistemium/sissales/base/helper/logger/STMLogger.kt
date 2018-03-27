@@ -1,8 +1,11 @@
 package com.sistemium.sissales.base.helper.logger
 
 import android.util.Log
+import com.sistemium.sissales.base.STMConstants
 import com.sistemium.sissales.enums.STMLogMessageType
+import com.sistemium.sissales.enums.STMSessionStatus
 import com.sistemium.sissales.interfaces.STMSession
+import java.util.*
 
 /**
  * Created by edgarjanvuicik on 31/01/2018.
@@ -135,7 +138,21 @@ class STMLogger private constructor() {
 
     private fun saveLogMessageDic(logMessageDic:Map<*,*>){
 
-        TODO("not implemented")
+        val sessionIsRunning = this.session!!.status == STMSessionStatus.STMSessionRunning
+
+        if (sessionIsRunning) {
+
+            createAndSaveLogMessageFromDictionary(logMessageDic)
+
+        }
+
+    }
+
+    private fun createAndSaveLogMessageFromDictionary(logMessageDic:Map<*,*>){
+
+        val options = hashMapOf(STMConstants.STMPersistingOptionReturnSaved to false)
+
+        session!!.persistenceDelegate.merge("STMLogMessage", logMessageDic, options)
 
     }
 
