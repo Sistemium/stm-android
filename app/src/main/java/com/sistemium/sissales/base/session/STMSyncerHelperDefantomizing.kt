@@ -1,5 +1,6 @@
 package com.sistemium.sissales.base.session
 
+import com.sistemium.sissales.base.STMFunctions
 import java.util.concurrent.Executors
 
 /**
@@ -11,15 +12,23 @@ class STMSyncerHelperDefantomizing {
 
     var failToResolveIds = ArrayList<Any>()
 
-    var operations = HashMap<Pair<String, String>, STMDefantomizingOperation>()
+    @Volatile var operations = HashMap<Pair<String, String>, STMDefantomizingOperation>()
 
     fun addDefantomizationOfEntityName(entityName:String, identifier:String){
 
         val op = STMDefantomizingOperation(entityName, identifier, STMCoreSessionManager.sharedManager.currentSession!!.syncer!!)
 
-        operations[Pair(entityName, identifier)] = op
+        try {
 
-        operationQueue.execute(op)
+            operationQueue.execute(op)
+
+            operations[Pair(entityName, identifier)] = op
+
+        }catch (e:Exception){
+
+            STMFunctions.debugLog("STMSyncerHelperDefantomizing","Rejecting defantomizing execution")
+
+        }
 
     }
 

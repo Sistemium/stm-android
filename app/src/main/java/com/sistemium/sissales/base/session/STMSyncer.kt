@@ -166,6 +166,14 @@ class STMSyncer: STMDefantomizingOwner, STMDataDownloadingOwner, STMDataSyncingS
 
     }
 
+    override fun socketWillClosed() {
+
+        STMFunctions.debugLog("STMSyncer","socketWillClosed")
+
+        stopSyncerActivity()
+
+    }
+
     fun startSyncer(){
 
         if (isRunning) return
@@ -285,6 +293,14 @@ class STMSyncer: STMDefantomizingOwner, STMDataDownloadingOwner, STMDataSyncingS
 
     }
 
+    private fun releaseTimer(){
+
+        syncTimer?.cancel()
+
+        syncTimer = null
+
+    }
+
     private fun receiveData(){
 
         if (!isRunning) return
@@ -318,6 +334,16 @@ class STMSyncer: STMDefantomizingOwner, STMDataDownloadingOwner, STMDataSyncingS
         isDefantomizing = true
 
         defantomizingDelegate!!.startDefantomization()
+
+    }
+
+    private fun stopSyncerActivity(){
+
+        releaseTimer()
+        unsubscribeFromUnsyncedObjects()
+        isSendingData = false
+        dataDownloadingDelegate!!.stopDownloading()
+        defantomizingDelegate!!.stopDefantomization()
 
     }
 

@@ -5,6 +5,8 @@ package com.sistemium.sissales.interfaces
  */
 interface STMSocketConnectionOwner {
 
+    fun socketWillClosed()
+
     fun socketReceiveAuthorization()
 
 }

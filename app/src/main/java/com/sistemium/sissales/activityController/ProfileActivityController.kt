@@ -43,6 +43,16 @@ class ProfileActivityController(var activity:ProfileActivity) {
 
     }
 
+    fun hideGridView(){
+
+        activity.runOnUiThread{
+
+            activity.gridView.visibility = View.INVISIBLE
+
+        }
+
+    }
+
     fun showGridView(){
 
         activity.runOnUiThread{

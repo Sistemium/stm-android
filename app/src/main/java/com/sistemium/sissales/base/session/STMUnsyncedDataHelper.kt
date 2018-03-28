@@ -79,13 +79,21 @@ class STMUnsyncedDataHelper: STMDataSyncing {
 
     private fun declineFromSync(obj:Map<*,*>, entityName: String){
 
-        TODO("not implemented")
+        if (syncingState){
+
+            TODO("not implemented")
+
+        }
 
     }
 
     private fun releasePendingObject(obj:Map<*,*>, entityName: String){
 
-        TODO("not implemented")
+        if (syncingState) {
+
+            TODO("not implemented")
+
+        }
 
     }
 

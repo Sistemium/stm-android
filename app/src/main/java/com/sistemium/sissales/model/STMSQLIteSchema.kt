@@ -304,18 +304,14 @@ class STMSQLIteSchema(private val database: SQLiteDatabase) {
 
                 val ddl = addToManyRelationshipDDL(relationship, tableName)
 
-                if (ddl != null){
-
-                    migrationSuccessful = migrationSuccessful && executeDDL(ddl)
-
-                }
+                migrationSuccessful = migrationSuccessful && executeDDL(ddl)
 
                 continue
 
             }
 
             columns.add(relationship.relationshipName + STMConstants.RELATIONSHIP_SUFFIX)
-            migrationSuccessful = migrationSuccessful && executeDDL(addRelationshipDDL(relationship, tableName)!!)
+            migrationSuccessful = migrationSuccessful && executeDDL(addRelationshipDDL(relationship, tableName))
 
         }
 

@@ -243,7 +243,7 @@ class STMSocketTransport(var socketUrlString:String, var entityResource:String, 
 
         val o = IO.Options()
 
-//        val u = URI(socketUrlString) //production
+//        val u = URI(socketUrlString.replace("socket.", "socket-v2").replace("socket2.", "socket-v2")) //production
         val u = URI("http://10.0.1.5:8000/socket.io-client") //work
 //        val u = URI("http://192.168.0.106:8000/socket.io-client") //home
 
@@ -277,13 +277,13 @@ class STMSocketTransport(var socketUrlString:String, var entityResource:String, 
 
         socket!!.on(STMSocketEvent.STMSocketEventError.toString()){
 
-            TODO("not implemented")
+            reconnectSocket()
 
         }
 
         socket!!.on(STMSocketEvent.STMSocketEventReconnect.toString()){
 
-            TODO("not implemented")
+            reconnectSocket()
 
         }
 
@@ -334,6 +334,24 @@ class STMSocketTransport(var socketUrlString:String, var entityResource:String, 
             TODO("not implemented")
 
         }
+
+    }
+
+    private fun reconnectSocket(){
+
+        closeSocket()
+        startSocket()
+
+    }
+
+    private fun closeSocket(){
+
+        STMLogger.sharedLogger.infoMessage("close Socket")
+        socket!!.off()
+        socket!!.disconnect()
+        owner.socketWillClosed()
+        socket = null
+        isAuthorized = false
 
     }
 
@@ -434,7 +452,7 @@ class STMSocketTransport(var socketUrlString:String, var entityResource:String, 
 
     private fun socketLostConnection(infoString:String){
 
-        TODO("not implemented")
+        STMLogger.sharedLogger.infoMessage("Socket lost connection: $infoString")
 
     }
 
