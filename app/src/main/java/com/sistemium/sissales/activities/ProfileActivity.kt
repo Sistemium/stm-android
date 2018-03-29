@@ -23,6 +23,8 @@ class ProfileActivity : AppCompatActivity() {
 
     var progressBar:ProgressBar? = null
 
+    var progressInfo:TextView? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         profileActivityController = ProfileActivityController(this)
@@ -32,6 +34,8 @@ class ProfileActivity : AppCompatActivity() {
         progressBar = findViewById(R.id.progressBar)
 
         progressBar!!.visibility = View.INVISIBLE
+
+        progressInfo = findViewById(R.id.progress_info)
 
         val profileName:TextView = findViewById(R.id.profileName)
 
@@ -55,8 +59,9 @@ class ProfileActivity : AppCompatActivity() {
 
         }
 
-        val booksAdapter = ProfileAdapter(this, tabs)
-        gridView.adapter = booksAdapter
+        val profileAdapter = ProfileAdapter(this, tabs)
+
+        gridView.adapter = profileAdapter
 
         gridView.onItemClickListener = AdapterView.OnItemClickListener { parent, view, position, id ->
             val tab = tabs[position]
@@ -64,7 +69,7 @@ class ProfileActivity : AppCompatActivity() {
             val intent = Intent(this@ProfileActivity, WebViewActivity::class.java)
             intent.putExtra("url",tab["url"] as String)
             startActivity(intent)
-            booksAdapter.notifyDataSetChanged()
+            profileAdapter.notifyDataSetChanged()
             finish()
         }
 

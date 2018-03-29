@@ -23,7 +23,7 @@ class ProfileAdapter(val context: Context, private val tabs:ArrayList<Map<*,*>>)
 
         if (p1 == null) {
             val layoutInflater = LayoutInflater.from(context)
-            convertView = layoutInflater.inflate(R.layout.linearlayout_tabs, null)
+            convertView = layoutInflater.inflate(R.layout.linearlayout_tabs, p1)
         }
 
         val imageView = convertView!!.findViewById(R.id.imageview_cover) as ImageView

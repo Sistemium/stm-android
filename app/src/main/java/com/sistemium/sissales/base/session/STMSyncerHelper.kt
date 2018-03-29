@@ -1,6 +1,7 @@
 package com.sistemium.sissales.base.session
 
 import com.sistemium.sissales.activities.ProfileActivity
+import com.sistemium.sissales.activityController.ProfileActivityController
 import com.sistemium.sissales.base.STMConstants.Companion.STMPersistingOptionLts
 import com.sistemium.sissales.base.STMConstants.Companion.STM_ENTITY_NAME
 import com.sistemium.sissales.base.STMFunctions
@@ -82,6 +83,8 @@ class STMSyncerHelper: STMDefantomizing, STMDataDownloading {
     override fun stopDownloading() {
 
         STMFunctions.debugLog("STMSyncerHelper","stopDownloading")
+
+        ProfileActivity.profileActivityController!!.setProgressInfo("")
 
         downloadingQueue?.shutdown()
 
@@ -270,6 +273,8 @@ class STMSyncerHelper: STMDefantomizing, STMDataDownloading {
 
         STMFunctions.debugLog("STMSyncerHelper","    $entityName: got ${result.size} objects")
 
+        ProfileActivity.profileActivityController!!.setProgressInfo("got ${result.size} objects")
+
         if (result.size < pageSize){
 
             STMClientEntityController.setEtag(entityName, offset)
@@ -299,6 +304,8 @@ class STMSyncerHelper: STMDefantomizing, STMDataDownloading {
         val count = defantomizing!!.operations.size
 
         STMFunctions.debugLog("STMSyncerHelper", "doneWith $entityName $identifier ($count)")
+
+        ProfileActivity.profileActivityController!!.setProgressInfo("")
 
         ProfileActivity.profileActivityController!!.addProgress(1)
 

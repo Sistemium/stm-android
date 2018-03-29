@@ -63,4 +63,14 @@ class ProfileActivityController(var activity:ProfileActivity) {
 
     }
 
+    fun setProgressInfo(info:String){
+
+        activity.runOnUiThread{
+
+            activity.progressInfo?.text = info
+
+        }
+
+    }
+
 }
