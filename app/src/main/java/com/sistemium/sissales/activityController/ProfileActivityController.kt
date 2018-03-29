@@ -1,13 +1,22 @@
 package com.sistemium.sissales.activityController
 
+import android.annotation.SuppressLint
 import android.view.View
+import com.sistemium.sissales.R
 import com.sistemium.sissales.activities.ProfileActivity
+import com.sistemium.sissales.base.MyApplication
 import kotlinx.android.synthetic.main.content_profile.*
 
 /**
  * Created by edgarjanvuicik on 20/03/2018.
  */
 class ProfileActivityController(var activity:ProfileActivity) {
+
+    companion object {
+
+        var got = 0
+
+    }
 
     fun setMaxProgress(max:Int){
 
@@ -63,11 +72,23 @@ class ProfileActivityController(var activity:ProfileActivity) {
 
     }
 
-    fun setProgressInfo(info:String){
+    fun setProgressInfo(info:Int){
 
         activity.runOnUiThread{
 
-            activity.progressInfo?.text = info
+            got += info
+
+            val text = "${MyApplication.appContext!!.getString(R.string.receive)} $got ${MyApplication.appContext!!.getString(R.string.objects)}"
+
+            activity.progressInfo?.text = text
+
+            if (info == -1){
+
+                got = 0
+
+                activity.progressInfo?.text = ""
+
+            }
 
         }
 

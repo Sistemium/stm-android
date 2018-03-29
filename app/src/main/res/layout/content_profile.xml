@@ -50,6 +50,7 @@
         android:id="@+id/gridView"
         android:layout_width="327dp"
         android:layout_height="315dp"
+        android:layout_marginBottom="8dp"
         android:clipChildren="false"
         android:columnWidth="80dp"
         android:gravity="center"
@@ -59,7 +60,7 @@
         android:stackFromBottom="true"
         android:stretchMode="columnWidth"
         android:verticalSpacing="12dp"
-        android:visibility="visible"
+        android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />

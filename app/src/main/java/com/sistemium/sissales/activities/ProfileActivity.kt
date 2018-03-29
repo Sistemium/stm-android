@@ -67,7 +67,16 @@ class ProfileActivity : AppCompatActivity() {
             val tab = tabs[position]
 
             val intent = Intent(this@ProfileActivity, WebViewActivity::class.java)
-            intent.putExtra("url",tab["url"] as String)
+
+            var url = tab["url"] as? String
+
+            if (url == null){
+
+                url = (tab["appManifestURI"] as? String)?.replace("app.manifest","?access-token=${STMCoreAuthController.accessToken}")
+
+            }
+
+            intent.putExtra("url",url)
             startActivity(intent)
             profileAdapter.notifyDataSetChanged()
             finish()

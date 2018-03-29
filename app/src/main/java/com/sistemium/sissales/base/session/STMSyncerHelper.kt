@@ -84,7 +84,7 @@ class STMSyncerHelper: STMDefantomizing, STMDataDownloading {
 
         STMFunctions.debugLog("STMSyncerHelper","stopDownloading")
 
-        ProfileActivity.profileActivityController!!.setProgressInfo("")
+        ProfileActivity.profileActivityController!!.setProgressInfo(-1)
 
         downloadingQueue?.shutdown()
 
@@ -273,7 +273,7 @@ class STMSyncerHelper: STMDefantomizing, STMDataDownloading {
 
         STMFunctions.debugLog("STMSyncerHelper","    $entityName: got ${result.size} objects")
 
-        ProfileActivity.profileActivityController!!.setProgressInfo("got ${result.size} objects")
+        ProfileActivity.profileActivityController!!.setProgressInfo(result.size)
 
         if (result.size < pageSize){
 
@@ -289,6 +289,7 @@ class STMSyncerHelper: STMDefantomizing, STMDataDownloading {
     private fun defantomizingFinished(){
 
         STMFunctions.debugLog("STMSyncedHelper","DEFANTOMIZING_FINISHED")
+        ProfileActivity.profileActivityController!!.setProgressInfo(-1)
         this.defantomizing = null
         defantomizingOwner!!.defantomizingFinished()
         ProfileActivity.profileActivityController?.showGridView()
@@ -304,8 +305,6 @@ class STMSyncerHelper: STMDefantomizing, STMDataDownloading {
         val count = defantomizing!!.operations.size
 
         STMFunctions.debugLog("STMSyncerHelper", "doneWith $entityName $identifier ($count)")
-
-        ProfileActivity.profileActivityController!!.setProgressInfo("")
 
         ProfileActivity.profileActivityController!!.addProgress(1)
 

@@ -13,4 +13,6 @@
     <string name="no_internet">No Internet access</string>
     <string name="wrong_phone">Wrong phone number</string>
     <string name="wrong_sms">Wrong SMS Code</string>
+    <string name="receive">Receive</string>
+    <string name="objects">objects</string>
 </resources>

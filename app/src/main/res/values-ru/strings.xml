@@ -13,4 +13,6 @@
     <string name="no_internet">Нет доступа к Интернету</string>
     <string name="wrong_phone">Неверный номер телефона</string>
     <string name="wrong_sms">Неверный код</string>
+    <string name="receive">Получено</string>
+    <string name="objects">объектов</string>
 </resources>
