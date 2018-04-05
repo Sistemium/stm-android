@@ -1,6 +1,5 @@
 package com.sistemium.sissales.activityController
 
-import android.annotation.SuppressLint
 import android.view.View
 import com.sistemium.sissales.R
 import com.sistemium.sissales.activities.ProfileActivity
@@ -10,7 +9,7 @@ import kotlinx.android.synthetic.main.content_profile.*
 /**
  * Created by edgarjanvuicik on 20/03/2018.
  */
-class ProfileActivityController(var activity:ProfileActivity) {
+class ProfileActivityController(private var activity:ProfileActivity) {
 
     companion object {
 

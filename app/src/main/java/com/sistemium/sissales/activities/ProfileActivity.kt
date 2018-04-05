@@ -25,6 +25,8 @@ class ProfileActivity : AppCompatActivity() {
 
     var progressInfo:TextView? = null
 
+    var currentTab:Map<*,*>? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         profileActivityController = ProfileActivityController(this)
@@ -64,22 +66,30 @@ class ProfileActivity : AppCompatActivity() {
         gridView.adapter = profileAdapter
 
         gridView.onItemClickListener = AdapterView.OnItemClickListener { parent, view, position, id ->
-            val tab = tabs[position]
+            currentTab = tabs[position]
 
             val intent = Intent(this@ProfileActivity, WebViewActivity::class.java)
 
-            var url = tab["url"] as? String
+            var url = currentTab!!["url"] as? String
 
-            if (url == null){
+            var manifest = currentTab!!["appManifestURI"] as? String
 
-                url = (tab["appManifestURI"] as? String)?.replace("app.manifest","?access-token=${STMCoreAuthController.accessToken}")
+
+            //debug
+            url = url?.replace("http://lamac.local:3000", "http://10.0.1.5:3000")
+            manifest = manifest?.replace("http://lamac.local:3000", "http://10.0.1.5:3000")
+            manifest = "$url/app.manifest"
+
+            if (manifest != null){
+
+                intent.putExtra("manifest", manifest)
 
             }
 
-            intent.putExtra("url",url)
+            intent.putExtra("url", url)
             startActivity(intent)
             profileAdapter.notifyDataSetChanged()
-            finish()
+
         }
 
     }

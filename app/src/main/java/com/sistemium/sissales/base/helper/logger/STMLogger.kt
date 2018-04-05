@@ -109,7 +109,7 @@ class STMLogger private constructor() {
 
     }
 
-    private fun saveLogMessageWithText(text:String, numType: STMLogMessageType){
+    fun saveLogMessageWithText(text:String, numType: STMLogMessageType){
 
         var type = numType.toString()
 

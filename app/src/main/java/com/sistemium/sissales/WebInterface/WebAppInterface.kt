@@ -1,4 +1,4 @@
-package com.sistemium.sissales.WebInterface
+package com.sistemium.sissales.webInterface
 
 import android.webkit.JavascriptInterface
 import com.sistemium.sissales.activities.WebViewActivity

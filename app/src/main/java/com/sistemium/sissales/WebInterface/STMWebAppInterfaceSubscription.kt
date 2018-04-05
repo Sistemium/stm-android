@@ -1,4 +1,4 @@
-package com.sistemium.sissales.WebInterface
+package com.sistemium.sissales.webInterface
 
 /**
  * Created by edgarjanvuicik on 25/01/2018.
