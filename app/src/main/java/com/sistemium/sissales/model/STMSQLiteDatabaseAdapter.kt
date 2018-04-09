@@ -38,7 +38,7 @@ class STMSQLiteDatabaseAdapter(override var model: STMModelling, private var dbP
 
     private val operationQueue = Executors.newFixedThreadPool(1)
 
-    private val operationPoolQueue = if (STMConstants.POOL_SIZE > 0) Executors.newFixedThreadPool(STMConstants.POOL_SIZE) else operationQueue
+    private val operationPoolQueue = Executors.newFixedThreadPool(STMConstants.POOL_SIZE)
 
     init {
 

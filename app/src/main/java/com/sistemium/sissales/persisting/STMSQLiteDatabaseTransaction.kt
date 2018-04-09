@@ -315,7 +315,7 @@ class STMSQLiteDatabaseTransaction(private var database: SQLiteDatabase, private
         var _orderBy = orderBy
 
         if (_where.isNotEmpty()) {
-            _where = " WHERE " + _where
+            _where = " WHERE $_where"
         }
 
         if (_orderBy == null) _orderBy = ""

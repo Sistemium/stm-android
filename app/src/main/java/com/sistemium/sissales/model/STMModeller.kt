@@ -25,6 +25,12 @@ class STMModeller(modelJSON:String) : STMModelling {
 
     private var _objectRelationshipsForEntityName = hashMapOf<String, Map<String, STMRelationshipDescription>>()
 
+    init {
+
+        STMModelling.sharedModeler = this
+
+    }
+
     override fun storageForEntityName(entityName: String): STMStorageType {
 
         if (_storageForEntityName[entityName] != null){
@@ -108,16 +114,10 @@ class STMModeller(modelJSON:String) : STMModelling {
 
     }
 
-    override fun toOneRelationshipsForEntityName(entityName: String): Map<String, String> {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
+    override fun toOneRelationshipsForEntityName(entityName: String): Map<String, STMRelationshipDescription> {
 
-    override fun objectRelationshipsForEntityName(entityName: String, isToMany: Boolean?): Map<String, String> {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
+        return objectRelationshipsForEntityName(entityName, false, null)
 
-    override fun hierarchyForEntityName(entityName: String): Set<String> {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
 }

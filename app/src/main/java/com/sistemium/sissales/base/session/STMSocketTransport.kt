@@ -85,14 +85,6 @@ class STMSocketTransport(var socketUrlString:String, var entityResource:String, 
 
         val deferred = deferred<Map<*,*>, Exception>()
 
-        val errorMessage = preFindAllAsyncCheckForEntityName(entityName)
-
-        if (errorMessage != null) {
-
-            deferred.reject(Exception(errorMessage))
-
-        }
-
         val resource = STMEntityController.sharedInstance.resourceForEntity(entityName)
 
         val value = if (identifier != null){
@@ -243,8 +235,8 @@ class STMSocketTransport(var socketUrlString:String, var entityResource:String, 
 
         val o = IO.Options()
 
-//        val u = URI(socketUrlString.replace("socket.", "socket-v2").replace("socket2.", "socket-v2")) //production
-        val u = URI("http://10.0.1.5:8000/socket.io-client") //work
+        val u = URI(socketUrlString.replace("//socket.", "//socket-v2.")) //production
+//        val u = URI("http://10.0.1.5:8000/socket.io-client") //work
 //        val u = URI("http://192.168.0.105:8000/socket.io-client") //home
 
         o.path = u.path + "/"
@@ -271,7 +263,7 @@ class STMSocketTransport(var socketUrlString:String, var entityResource:String, 
 
         socket!!.on(STMSocketEvent.STMSocketEventDisconnect.toString()){
 
-            TODO("not implemented")
+            owner.socketWillClosed()
 
         }
 
@@ -287,12 +279,6 @@ class STMSocketTransport(var socketUrlString:String, var entityResource:String, 
 
         }
 
-        socket!!.on(STMSocketEvent.STMSocketEventReconnectAttempt.toString()){
-
-            TODO("not implemented")
-
-        }
-
         socket!!.on(STMSocketEvent.STMSocketEventRemoteCommands.toString()){
 
             TODO("not implemented")
@@ -305,33 +291,21 @@ class STMSocketTransport(var socketUrlString:String, var entityResource:String, 
 
         }
 
-        socket!!.on(STMSocketEvent.STMSocketEventData.toString()){
-
-            TODO("not implemented")
-
-        }
-
-        socket!!.on(STMSocketEvent.STMSocketEventJSData.toString()){
-
-            TODO("not implemented")
-
-        }
-
         socket!!.on(STMSocketEvent.STMSocketEventUpdate.toString()){
 
-            TODO("not implemented")
+            updateEventHandleWithData(it)
 
         }
 
         socket!!.on(STMSocketEvent.STMSocketEventUpdateCollection.toString()){
 
-            TODO("not implemented")
+            updateEventHandleWithData(it)
 
         }
 
         socket!!.on(STMSocketEvent.STMSocketEventDestroy.toString()){
 
-            TODO("not implemented")
+            destroyEventHandleWithData(it)
 
         }
 
@@ -474,16 +448,47 @@ class STMSocketTransport(var socketUrlString:String, var entityResource:String, 
 
     }
 
-    private fun preFindAllAsyncCheckForEntityName(entityName:String):String?{
+    private fun updateEventHandleWithData(data:Array<*>){
 
-        if (!isReady){
-            return "socket is not ready (not connected or not authorized)"
+        val receivedData = data.firstOrNull() as? JSONObject
+
+        if (receivedData?.get("resource") != null){
+
+            val entityName = (receivedData["resource"] as String).split("/").last()
+
+            val d = receivedData["data"] as? JSONObject
+
+            if (d != null && d["id"] != null){
+
+                remoteDataEventHandling.remoteUpdated(entityName, STMFunctions.gson.fromJson(d.toString(), Map::class.java))
+
+            } else {
+
+                remoteDataEventHandling.remoteHasNewData(entityName)
+
+            }
+
         }
-        val entity = STMEntityController.sharedInstance.stcEntities?.get(entityName) ?: return "have no such entity $entityName"
 
-        val resource = STMEntityController.sharedInstance.resourceForEntity(entityName)
+    }
 
-        return null
+    private fun destroyEventHandleWithData(data:Array<*>){
+
+        val receivedData = data.firstOrNull() as? JSONObject
+
+        if (receivedData?.get("resource") != null){
+
+            val entityName = (receivedData["resource"] as String).split("/").last()
+
+            val d = receivedData["data"] as? JSONObject?
+
+            if (d != null && d["id"] != null){
+
+                remoteDataEventHandling.remoteDestroyed(entityName, d["id"] as String)
+
+            }
+
+        }
 
     }
 

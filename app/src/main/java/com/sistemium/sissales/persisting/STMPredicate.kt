@@ -96,10 +96,10 @@ class STMPredicate {
                             STMPredicate(" where "),
                             whereVal,
                             STMPredicate(" and "),
-                            STMPredicate("?", "uncapitalizedTableName"),
+                            if (anyValue.endsWith("s")) STMPredicate("?", "uncapitalizedTableName") else  STMPredicate(""),
                             STMPredicate("Id = "),
-                            STMPredicate("?", "capitalizedTableName"),
-                            STMPredicate(".id )")
+                            if (anyValue.endsWith("s")) STMPredicate("?", "capitalizedTableName") else STMPredicate(anyValue + STMConstants.RELATIONSHIP_SUFFIX),
+                            if (anyValue.endsWith("s")) STMPredicate(".id )") else  STMPredicate(" )")
                     ))
 
                     subPredicates.add(predicate)

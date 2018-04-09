@@ -36,4 +36,10 @@ class STMPersisterFantoms:STMPersistingFantoms {
 
     }
 
+    override fun destroyFantomSync(entityName: String, identifier: String) {
+
+        STMCoreSessionManager.sharedManager.currentSession!!.persistenceDelegate.destroySync(entityName, identifier, hashMapOf(STMConstants.STMPersistingOptionRecordstatuses to false))
+
+    }
+
 }

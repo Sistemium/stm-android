@@ -9,5 +9,6 @@ interface STMPersistingFantoms {
 
     fun findAllFantomsIdsSync(entityName:String, excludingIds:ArrayList<*>):ArrayList<String>
     fun mergeFantomAsync(entityName:String, attributes:Map<*,*>) :Promise<Map<*,*>, Exception>
+    fun destroyFantomSync(entityName:String, identifier:String)
 
 }

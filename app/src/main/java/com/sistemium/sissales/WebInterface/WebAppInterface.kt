@@ -407,7 +407,7 @@ class WebAppInterface internal constructor(private var webViewActivity: WebViewA
         if (xidString != null){
             return persistenceDelegate.find(entityName, xidString, options).then {
 
-                return@then arrayListOf(it)
+                return@then arrayListOf(it!!)
 
             }
         }
@@ -418,7 +418,7 @@ class WebAppInterface internal constructor(private var webViewActivity: WebViewA
 
         val predicate = STMPredicate.filterPredicate(filter, where)
 
-        return persistenceDelegate?.findAll(entityName, predicate, options) ?: throw Exception("Missing persistenceDelegate")
+        return persistenceDelegate.findAll(entityName, predicate, options)
 
     }
 
@@ -444,7 +444,7 @@ class WebAppInterface internal constructor(private var webViewActivity: WebViewA
 
         }
 
-        return persistenceDelegate?.mergeMany(entityName, parametersData, null) ?: throw Exception("Missing persistenceDelegate")
+        return persistenceDelegate.mergeMany(entityName, parametersData, null)
 
     }
 
@@ -472,7 +472,7 @@ class WebAppInterface internal constructor(private var webViewActivity: WebViewA
 
         for (subscriptionID in subscription.persisterSubscriptions){
 
-            persistenceDelegate?.cancelSubscription(subscriptionID)
+            persistenceDelegate.cancelSubscription(subscriptionID)
 
         }
 
@@ -567,9 +567,9 @@ class WebAppInterface internal constructor(private var webViewActivity: WebViewA
                                 STMConstants.STMPersistingOptionOrder to STMConstants.STMPersistingOptionLts,
                                 STMConstants.STMPersistingOptionOrderDirection to STMConstants.STMPersistingOptionOrderDirectionDescValue)
 
-        val objects = persistenceDelegate?.findAllSync(entityName, null, options)
+        val objects = persistenceDelegate.findAllSync(entityName, null, options)
 
-        if (objects?.firstOrNull() != null){
+        if (objects.firstOrNull() != null){
 
             subscription.ltsOffset[entityName] = objects.first()[STMConstants.STMPersistingOptionLts] as String
 

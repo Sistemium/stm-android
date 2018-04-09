@@ -12,13 +12,13 @@ import nl.komponents.kovenant.task
 class STMPersister(private val runner:STMPersistingRunning): STMFullStackPersisting, STMPersistingIntercepting {
 
     @Throws(Exception::class)
-    override fun findSync(entityName: String, identifier: String, options: Map<*, *>?): Map<*, *> {
+    override fun findSync(entityName: String, identifier: String, options: Map<*, *>?): Map<*, *>? {
 
         val predicate = STMPredicate.primaryKeyPredicate(arrayOf(identifier))
 
         val results = findAllSync(entityName, predicate, options)
 
-        return results.first()
+        return results.firstOrNull()
 
     }
 
@@ -31,7 +31,7 @@ class STMPersister(private val runner:STMPersistingRunning): STMFullStackPersist
 
     }
 
-    override fun find(entityName: String, identifier: String, options: Map<*, *>?): Promise<Map<*, *>, Exception> {
+    override fun find(entityName: String, identifier: String, options: Map<*, *>?): Promise<Map<*, *>?, Exception> {
 
         return task{
 

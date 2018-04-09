@@ -9,7 +9,7 @@ import nl.komponents.kovenant.Promise
 
 interface STMPersistingPromised {
 
-    fun find(entityName:String, identifier:String, options:Map<*,*>?):Promise<Map<*,*>,Exception>
+    fun find(entityName:String, identifier:String, options:Map<*,*>?):Promise<Map<*,*>?,Exception>
 
     fun findAll(entityName:String, predicate:STMPredicate?, options:Map<*,*>?):Promise<ArrayList<Map<*,*>>,Exception>
 

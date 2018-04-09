@@ -8,7 +8,7 @@ import com.sistemium.sissales.persisting.STMPredicate
 interface STMPersistingSync {
 
     @Throws(Exception::class)
-    fun findSync(entityName:String, identifier:String, options:Map<*,*>?):Map<*,*>
+    fun findSync(entityName:String, identifier:String, options:Map<*,*>?):Map<*,*>?
 
     @Throws(Exception::class)
     fun findAllSync(entityName:String, predicate:STMPredicate?, options:Map<*,*>?):ArrayList<Map<*,*>>

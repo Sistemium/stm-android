@@ -211,21 +211,27 @@ class STMSyncerHelper: STMDefantomizing, STMDataDownloading {
 
             if (!error.localizedMessage.startsWith("socket is not ready")){
 
-                TODO("not implemented")
+                STMFunctions.debugLog("STMSyncerHelper", "defantomize $entityName $identifier error: ${error.localizedMessage}")
 
-            }
+                val deleteObject = error.localizedMessage.startsWith("403") || error.localizedMessage.startsWith("404")
 
-//            NSLog(@"defantomize %@ %@ error: %@", entityName, identifier, errorString.length ? errorString : @"no description");
-//            BOOL deleteObject = [errorString hasSuffix:@"404"] || [errorString hasSuffix:@"403"];
-//            if (deleteObject) {
-//                NSLog(@"delete fantom %@ %@", entityName, identifier);
-//                [self.persistenceFantomsDelegate destroyFantomSync:entityName identifier:identifier];
-//            } else {
+                if (deleteObject) {
+
+                    STMFunctions.debugLog("STMSyncerHelper", "delete fantom $entityName $identifier")
+                    persistenceFantomsDelegate?.destroyFantomSync(entityName, identifier)
+
+                } else {
+
+                    TODO("not implemented")
 //                @synchronized (self) {
 //                    [self.defantomizing.failToResolveIds addObject:identifier];
 //                }
-//            }
-//            [self doneWithEntityName:entityName identifier:identifier];
+
+                }
+
+                doneWithEntityName(entityName, identifier)
+
+            }
 
         }else{
 
