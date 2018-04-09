@@ -4,6 +4,8 @@ import android.annotation.SuppressLint
 import android.app.Activity
 import android.graphics.Bitmap
 import android.os.Bundle
+import android.support.constraint.ConstraintLayout
+import android.view.View
 import android.webkit.WebSettings
 import android.webkit.WebView
 import com.sistemium.sissales.R
@@ -118,6 +120,20 @@ class WebViewActivity : Activity() {
 
         }
 
+    }
+
+    override fun onBackPressed() {
 
     }
+
+    fun goBack() {
+
+        runOnUiThread {
+
+            super.onBackPressed()
+
+        }
+
+    }
+
 }

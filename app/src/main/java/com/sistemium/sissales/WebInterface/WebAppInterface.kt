@@ -169,10 +169,9 @@ class WebAppInterface internal constructor(private var webViewActivity: WebViewA
 
         val mapParameters = gson.fromJson(parameters, Map::class.java)
 
-        // TODO implement handleTabbarMessage
-
         return if (mapParameters["action"]?.equals("show") == true){
             javascriptCallback(arrayOf("tabbar show success"), mapParameters)
+            webViewActivity.goBack()
         }else{
             javascriptCallback(arrayOf("tabbar hide success"), mapParameters)
         }
