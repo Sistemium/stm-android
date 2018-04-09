@@ -3,9 +3,9 @@
         "type": "com.apple.IDECoreDataModeler.DataModel",
         "documentVersion": "1.0",
         "lastSavedToolsVersion": "13772",
-        "systemVersion": "17C88",
+        "systemVersion": "17D102",
         "minimumToolsVersion": "Xcode 7.3",
-        "sourceLanguage": "ObjectiveC",
+        "sourceLanguage": "Objective-C",
         "entity": [
             {
                 "name": "STMAbstract",
@@ -81,7 +81,7 @@
                         "name": "cashings",
                         "optional": "YES",
                         "toMany": "YES",
-                        "deletionRule": "Cascade",
+                        "deletionRule": "No Action",
                         "destinationEntity": "STMCashing",
                         "inverseName": "creator",
                         "inverseEntity": "STMCashing",
@@ -91,7 +91,7 @@
                         "name": "commentarys",
                         "optional": "YES",
                         "toMany": "YES",
-                        "deletionRule": "Cascade",
+                        "deletionRule": "No Action",
                         "destinationEntity": "STMCommentary",
                         "inverseName": "author",
                         "inverseEntity": "STMCommentary",
@@ -101,7 +101,7 @@
                         "name": "uncashings",
                         "optional": "YES",
                         "toMany": "YES",
-                        "deletionRule": "Cascade",
+                        "deletionRule": "No Action",
                         "destinationEntity": "STMUncashing",
                         "inverseName": "creator",
                         "inverseEntity": "STMUncashing",
@@ -194,6 +194,16 @@
                 ],
                 "relationship": [
                     {
+                        "name": "articleBarCodes",
+                        "optional": "YES",
+                        "toMany": "YES",
+                        "deletionRule": "Cascade",
+                        "destinationEntity": "STMArticleBarCode",
+                        "inverseName": "article",
+                        "inverseEntity": "STMArticleBarCode",
+                        "syncable": "YES"
+                    },
+                    {
                         "name": "articleGroup",
                         "optional": "YES",
                         "maxCount": "1",
@@ -274,6 +284,16 @@
                         "syncable": "YES"
                     },
                     {
+                        "name": "saleOrderDiscounts",
+                        "optional": "YES",
+                        "toMany": "YES",
+                        "deletionRule": "Nullify",
+                        "destinationEntity": "STMSaleOrderDiscount",
+                        "inverseName": "article",
+                        "inverseEntity": "STMSaleOrderDiscount",
+                        "syncable": "YES"
+                    },
+                    {
                         "name": "saleOrderPositions",
                         "optional": "YES",
                         "toMany": "YES",
@@ -304,6 +324,28 @@
                         "syncable": "YES"
                     }
                 ]
+            },
+            {
+                "name": "STMArticleBarCode",
+                "representedClassName": "STMArticleBarCode",
+                "parentEntity": "STMAbstract",
+                "syncable": "YES",
+                "attribute": {
+                    "name": "code",
+                    "optional": "YES",
+                    "attributeType": "String",
+                    "syncable": "YES"
+                },
+                "relationship": {
+                    "name": "article",
+                    "optional": "YES",
+                    "maxCount": "1",
+                    "deletionRule": "Nullify",
+                    "destinationEntity": "STMArticle",
+                    "inverseName": "articleBarCodes",
+                    "inverseEntity": "STMArticle",
+                    "syncable": "YES"
+                }
             },
             {
                 "name": "STMArticleGroup",
@@ -1190,7 +1232,7 @@
                     "name": "photos",
                     "optional": "YES",
                     "toMany": "YES",
-                    "deletionRule": "Nullify",
+                    "deletionRule": "Deny",
                     "destinationEntity": "STMCorePhoto",
                     "inverseName": "location",
                     "inverseEntity": "STMCorePhoto",
@@ -1677,7 +1719,7 @@
                         "name": "outlets",
                         "optional": "YES",
                         "toMany": "YES",
-                        "deletionRule": "Nullify",
+                        "deletionRule": "Deny",
                         "destinationEntity": "STMOutlet",
                         "inverseName": "location",
                         "inverseEntity": "STMOutlet",
@@ -1687,7 +1729,7 @@
                         "name": "visitIns",
                         "optional": "YES",
                         "toMany": "YES",
-                        "deletionRule": "Nullify",
+                        "deletionRule": "Deny",
                         "destinationEntity": "STMVisit",
                         "inverseName": "checkInLocation",
                         "inverseEntity": "STMVisit",
@@ -1697,7 +1739,7 @@
                         "name": "visitOuts",
                         "optional": "YES",
                         "toMany": "YES",
-                        "deletionRule": "Nullify",
+                        "deletionRule": "Deny",
                         "destinationEntity": "STMVisit",
                         "inverseName": "checkOutLocation",
                         "inverseEntity": "STMVisit",
@@ -2520,6 +2562,16 @@
                         "inverseName": "priceGroup",
                         "inverseEntity": "STMPartnerPriceGroup",
                         "syncable": "YES"
+                    },
+                    {
+                        "name": "saleOrderDiscounts",
+                        "optional": "YES",
+                        "toMany": "YES",
+                        "deletionRule": "Nullify",
+                        "destinationEntity": "STMSaleOrderDiscount",
+                        "inverseName": "priceGroup",
+                        "inverseEntity": "STMSaleOrderDiscount",
+                        "syncable": "YES"
                     }
                 ]
             },
@@ -2782,6 +2834,14 @@
                         "syncable": "YES"
                     },
                     {
+                        "name": "salesSchema",
+                        "optional": "YES",
+                        "attributeType": "Integer 64",
+                        "defaultValueString": "0",
+                        "usesScalarValueType": "NO",
+                        "syncable": "YES"
+                    },
+                    {
                         "name": "spoilerNotNeeded",
                         "optional": "YES",
                         "attributeType": "Boolean",
@@ -2797,6 +2857,13 @@
                     },
                     {
                         "name": "totalCostDoc",
+                        "optional": "YES",
+                        "attributeType": "Decimal",
+                        "defaultValueString": "0.0",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "totalSelfCost",
                         "optional": "YES",
                         "attributeType": "Decimal",
                         "defaultValueString": "0.0",
@@ -2835,6 +2902,16 @@
                         "syncable": "YES"
                     },
                     {
+                        "name": "saleOrderDiscounts",
+                        "optional": "YES",
+                        "toMany": "YES",
+                        "deletionRule": "Cascade",
+                        "destinationEntity": "STMSaleOrderDiscount",
+                        "inverseName": "saleOrder",
+                        "inverseEntity": "STMSaleOrderDiscount",
+                        "syncable": "YES"
+                    },
+                    {
                         "name": "saleOrderPositions",
                         "optional": "YES",
                         "toMany": "YES",
@@ -2862,6 +2939,71 @@
                         "destinationEntity": "STMShipment",
                         "inverseName": "saleOrder",
                         "inverseEntity": "STMShipment",
+                        "syncable": "YES"
+                    }
+                ]
+            },
+            {
+                "name": "STMSaleOrderDiscount",
+                "parentEntity": "STMAbstract",
+                "syncable": "YES",
+                "attribute": [
+                    {
+                        "name": "discount",
+                        "optional": "YES",
+                        "attributeType": "Decimal",
+                        "defaultValueString": "0.0",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "discountDoc",
+                        "optional": "YES",
+                        "attributeType": "Decimal",
+                        "defaultValueString": "0.0",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "discountScope",
+                        "optional": "YES",
+                        "attributeType": "String",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "processing",
+                        "optional": "YES",
+                        "attributeType": "String",
+                        "syncable": "YES"
+                    }
+                ],
+                "relationship": [
+                    {
+                        "name": "article",
+                        "optional": "YES",
+                        "maxCount": "1",
+                        "deletionRule": "Nullify",
+                        "destinationEntity": "STMArticle",
+                        "inverseName": "saleOrderDiscounts",
+                        "inverseEntity": "STMArticle",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "priceGroup",
+                        "optional": "YES",
+                        "maxCount": "1",
+                        "deletionRule": "Nullify",
+                        "destinationEntity": "STMPriceGroup",
+                        "inverseName": "saleOrderDiscounts",
+                        "inverseEntity": "STMPriceGroup",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "saleOrder",
+                        "optional": "YES",
+                        "maxCount": "1",
+                        "deletionRule": "Nullify",
+                        "destinationEntity": "STMSaleOrder",
+                        "inverseName": "saleOrderDiscounts",
+                        "inverseEntity": "STMSaleOrder",
                         "syncable": "YES"
                     }
                 ]
@@ -2910,6 +3052,13 @@
                     },
                     {
                         "name": "price",
+                        "optional": "YES",
+                        "attributeType": "Decimal",
+                        "defaultValueString": "0.0",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "priceAgent",
                         "optional": "YES",
                         "attributeType": "Decimal",
                         "defaultValueString": "0.0",
@@ -3250,6 +3399,42 @@
                 }
             },
             {
+                "name": "STMSearchQuery",
+                "representedClassName": "STMSearchQuery",
+                "parentEntity": "STMAbstract",
+                "syncable": "YES",
+                "attribute": [
+                    {
+                        "name": "cnt",
+                        "optional": "YES",
+                        "attributeType": "Integer 64",
+                        "defaultValueString": "0",
+                        "usesScalarValueType": "NO",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "isFavourite",
+                        "optional": "YES",
+                        "attributeType": "Boolean",
+                        "usesScalarValueType": "NO",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "lastUsed",
+                        "optional": "YES",
+                        "attributeType": "Date",
+                        "usesScalarValueType": "NO",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "query",
+                        "optional": "YES",
+                        "attributeType": "String",
+                        "syncable": "YES"
+                    }
+                ]
+            },
+            {
                 "name": "STMSetting",
                 "representedClassName": "STMSetting",
                 "parentEntity": "STMAbstract",
@@ -3521,6 +3706,13 @@
                         "syncable": "YES"
                     },
                     {
+                        "name": "priceAgent",
+                        "optional": "YES",
+                        "attributeType": "Decimal",
+                        "defaultValueString": "0.0",
+                        "syncable": "YES"
+                    },
+                    {
                         "name": "volume",
                         "optional": "YES",
                         "attributeType": "Integer 64",
@@ -3681,6 +3873,13 @@
                         "name": "authId",
                         "optional": "YES",
                         "attributeType": "String",
+                        "syncable": "YES"
+                    },
+                    {
+                        "name": "lastReadCommentaries",
+                        "optional": "YES",
+                        "attributeType": "Date",
+                        "usesScalarValueType": "NO",
                         "syncable": "YES"
                     },
                     {
@@ -4039,7 +4238,14 @@
                     "positionX": "1163",
                     "positionY": "619",
                     "width": "128",
-                    "height": "375"
+                    "height": "405"
+                },
+                {
+                    "name": "STMArticleBarCode",
+                    "positionX": "1368",
+                    "positionY": "2133",
+                    "width": "128",
+                    "height": "75"
                 },
                 {
                     "name": "STMArticleGroup",
@@ -4235,7 +4441,7 @@
                     "positionX": "720",
                     "positionY": "1135",
                     "width": "128",
-                    "height": "88"
+                    "height": "90"
                 },
                 {
                     "name": "STMLogMessage",
@@ -4340,7 +4546,7 @@
                     "positionX": "1368",
                     "positionY": "2133",
                     "width": "128",
-                    "height": "105"
+                    "height": "120"
                 },
                 {
                     "name": "STMPriceType",
@@ -4375,14 +4581,21 @@
                     "positionX": "945",
                     "positionY": "901",
                     "width": "128",
-                    "height": "315"
+                    "height": "360"
+                },
+                {
+                    "name": "STMSaleOrderDiscount",
+                    "positionX": "1368",
+                    "positionY": "2133",
+                    "width": "128",
+                    "height": "150"
                 },
                 {
                     "name": "STMSaleOrderPosition",
                     "positionX": "1134",
                     "positionY": "999",
                     "width": "128",
-                    "height": "210"
+                    "height": "225"
                 },
                 {
                     "name": "STMSalesman",
@@ -4448,11 +4661,18 @@
                     "height": "120"
                 },
                 {
+                    "name": "STMSQLPatch",
+                    "positionX": "1368",
+                    "positionY": "2133",
+                    "width": "128",
+                    "height": "105"
+                },
+                {
                     "name": "STMStock",
                     "positionX": "947",
                     "positionY": "540",
                     "width": "128",
-                    "height": "90"
+                    "height": "105"
                 },
                 {
                     "name": "STMUncashing",
@@ -4480,7 +4700,7 @@
                     "positionX": "1359",
                     "positionY": "2124",
                     "width": "128",
-                    "height": "90"
+                    "height": "105"
                 },
                 {
                     "name": "STMVisit",
@@ -4539,7 +4759,7 @@
                     "height": "105"
                 },
                 {
-                    "name": "STMSQLPatch",
+                    "name": "STMSearchQuery",
                     "positionX": "1368",
                     "positionY": "2133",
                     "width": "128",
