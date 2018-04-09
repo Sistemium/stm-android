@@ -45,8 +45,6 @@ class STMCoreSession(var trackers: ArrayList<String>) :STMSession {
 
         val adapter = STMSQLiteDatabaseAdapter(modeler, databasePath)
 
-        MyApplication.testAdapter = adapter
-
         val runner = STMPersisterRunner(hashMapOf(STMStorageType.STMStorageTypeSQLiteDatabase to adapter))
 
         val persister = STMPersister(runner)

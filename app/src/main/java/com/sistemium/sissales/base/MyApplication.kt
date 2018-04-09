@@ -25,8 +25,6 @@ class MyApplication : Application(), Application.ActivityLifecycleCallbacks, Com
 
     companion object {
 
-        var testAdapter: STMAdapting? = null
-
         var syncer: STMSyncer? = null
             get() {
 
