@@ -36,15 +36,23 @@ class STMPredicate {
 
             var value = map[key] as Map<*,*>
 
-            if (value[value.keys.first()] == null){
+            if (value[value.keys.first()] == null && value.keys.first() == "=="){
 
                 value = hashMapOf("IS" to "NULL")
+
+            }
+
+            if (value[value.keys.first()] == null && value.keys.first() == "!="){
+
+                value = hashMapOf("IS NOT" to "NULL")
 
             }
 
             var comparator = value.keys.first()
 
             if (comparator == "==") comparator = "="
+
+            if (comparator == "!=") comparator = "<>"
 
             var rightPredicateString = "\"${value[value.keys.first()]}\""
 
