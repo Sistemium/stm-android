@@ -170,37 +170,36 @@ class STMUnsyncedDataHelper : STMDataSyncing {
 
     }
 
-    private fun findSyncableObjectWithEntityName(entityName:String, exclude:ArrayList<String> = ArrayList()):Map<*,*>?{
+    private fun findSyncableObjectWithEntityName(entityName: String, exclude: ArrayList<String> = ArrayList()): Map<*, *>? {
 
         val unsyncedObject = unsyncedObjectWithEntityName(entityName, exclude) ?: return null
 
-        val parrentNames = STMModelling.sharedModeler!!.toOneRelationshipsForEntityName(entityName).keys.map {
+        val parentNames = STMModelling.sharedModeler!!.toOneRelationshipsForEntityName(entityName).keys.map {
 
             it + STMConstants.RELATIONSHIP_SUFFIX
 
         }.filter {
 
-            unsyncedObject[it] != null && session!!.persistenceDelegate.findSync(it.removeSuffix(STMConstants.RELATIONSHIP_SUFFIX).capitalize(), unsyncedObject[it] as String, null)!![STMConstants.STMPersistingOptionLts] == null
+            val capitalized = it.removeSuffix(STMConstants.RELATIONSHIP_SUFFIX).capitalize()
+
+            val pk = unsyncedObject[it] as? String ?: return@filter false
+
+            val lts = session!!.persistenceDelegate
+                    .findSync(capitalized, pk, null)!![STMConstants.STMPersistingOptionLts]
+
+            lts == null || lts.toString().isEmpty()
 
         }
 
-        if (parrentNames.isNotEmpty()) {
+        if (parentNames.isNotEmpty()) {
 
-            val parrents = ArrayList<String>()
+            val nexExclude = ArrayList(exclude + unsyncedObject["id"] as String)
 
-            parrentNames.forEach{
-
-                parrents.add(unsyncedObject[it] as String)
-
-            }
-
-            return findSyncableObjectWithEntityName(entityName, parrents)
-
-        } else {
-
-            return unsyncedObject
+            return findSyncableObjectWithEntityName(entityName, nexExclude)
 
         }
+
+        return unsyncedObject
 
     }
 
