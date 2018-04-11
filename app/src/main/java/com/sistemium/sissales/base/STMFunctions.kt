@@ -15,13 +15,13 @@ import java.util.*
  * Created by edgarjanvuicik on 14/11/2017.
  */
 
-class STMFunctions{
+class STMFunctions {
 
     companion object {
 
         val gson = GsonBuilder().serializeNulls().create()
 
-        fun addPrefixToEntityName(entityName:String):String {
+        fun addPrefixToEntityName(entityName: String): String {
 
             var _entityName = entityName
 
@@ -32,7 +32,7 @@ class STMFunctions{
 
         }
 
-        fun removePrefixFromEntityName(entityName:String):String {
+        fun removePrefixFromEntityName(entityName: String): String {
 
             var _entityName = entityName
 
@@ -43,7 +43,7 @@ class STMFunctions{
 
         }
 
-        fun stringFrom(date:Date):String{
+        fun stringFrom(date: Date): String {
 
             val sdf = SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS", Locale.US)
 
@@ -54,33 +54,33 @@ class STMFunctions{
 
         }
 
-        fun uuidString():String{
+        fun uuidString(): String {
 
             return UUID.randomUUID().toString()
 
         }
 
-        fun jsonStringFromObject(value:Any):String{
+        fun jsonStringFromObject(value: Any): String {
 
             return gson.toJson(value)
 
         }
 
-        fun debugLog(name:String, msg:String){
+        fun debugLog(name: String, msg: String) {
 
             Log.d("${stringFrom(Date())}:$name", msg)
 
         }
 
-        fun isCorrectPhoneNumber(phoneNumber:String):Boolean{
+        fun isCorrectPhoneNumber(phoneNumber: String): Boolean {
 
             TODO("not implemented")
 
         }
 
-        fun handleError(activity: Activity?, message:String){
+        fun handleError(activity: Activity?, message: String) {
 
-            activity?.runOnUiThread{
+            activity?.runOnUiThread {
 
                 val builder: AlertDialog.Builder = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                     AlertDialog.Builder(activity, android.R.style.Theme_Material_Dialog_Alert)
@@ -99,7 +99,7 @@ class STMFunctions{
 
 
         @SuppressLint("HardwareIds")
-        fun deviceUUID():String{
+        fun deviceUUID(): String {
 
             return Settings.Secure.getString(MyApplication.appContext!!.contentResolver, Settings.Secure.ANDROID_ID) + Settings.Secure.getString(MyApplication.appContext!!.contentResolver, Settings.Secure.ANDROID_ID)
 

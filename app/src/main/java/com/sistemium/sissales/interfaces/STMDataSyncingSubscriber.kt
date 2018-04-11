@@ -6,6 +6,6 @@ package com.sistemium.sissales.interfaces
 interface STMDataSyncingSubscriber {
 
     fun finishUnsyncedProcess()
-    fun haveUnsynced(entityName:String, itemData: Map<*,*>, itemVersion:String)
+    fun haveUnsynced(entityName: String, itemData: Map<*, *>, itemVersion: String)
 
 }

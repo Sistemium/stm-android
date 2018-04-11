@@ -16,7 +16,7 @@ import java.util.concurrent.Executors
 /**
  * Created by edgarjanvuicik on 15/11/2017.
  */
-class STMSQLiteDatabaseAdapter(override var model: STMModelling, private var dbPath:String) :STMAdapting {
+class STMSQLiteDatabaseAdapter(override var model: STMModelling, private var dbPath: String) : STMAdapting {
 
     override var storageType = STMStorageType.STMStorageTypeSQLiteDatabase
 
@@ -52,7 +52,7 @@ class STMSQLiteDatabaseAdapter(override var model: STMModelling, private var dbP
 
         checkModelMapping()
 
-        for (i in 0 until STMConstants.POOL_SIZE){
+        for (i in 0 until STMConstants.POOL_SIZE) {
 
             //TODO select before end transaction will not return already inserted data
 //            val poolDb = SQLiteDatabase.openDatabase(dbPath, null, SQLiteDatabase.OPEN_READONLY)
@@ -61,7 +61,7 @@ class STMSQLiteDatabaseAdapter(override var model: STMModelling, private var dbP
 
         }
 
-        if (poolDatabases.count() == 0){
+        if (poolDatabases.count() == 0) {
 
             poolDatabases.add(database!!)
 
@@ -69,13 +69,13 @@ class STMSQLiteDatabaseAdapter(override var model: STMModelling, private var dbP
 
     }
 
-    override fun beginTransaction(readOnly:Boolean):STMPersistingTransaction{
+    override fun beginTransaction(readOnly: Boolean): STMPersistingTransaction {
 
         val operation = STMSQLiteDatabaseOperation(readOnly, this)
 
         val transaction: STMPersistingTransaction
 
-        if (readOnly){
+        if (readOnly) {
 
             operationPoolQueue.execute(operation)
 
@@ -83,7 +83,7 @@ class STMSQLiteDatabaseAdapter(override var model: STMModelling, private var dbP
 
 //            STMFunctions.debugLog("Syncer", "did not beginTransactionNonExclusive")
 
-        }else{
+        } else {
 
             operationQueue.execute(operation)
 
@@ -105,15 +105,15 @@ class STMSQLiteDatabaseAdapter(override var model: STMModelling, private var dbP
 
         operation!!.success = success
 
-        if (!operation.readOnly){
+        if (!operation.readOnly) {
 
-            if (operation.success){
+            if (operation.success) {
 
                 database!!.setTransactionSuccessful()
 
-            }else{
+            } else {
 
-                STMFunctions.debugLog("","")
+                STMFunctions.debugLog("", "")
 
                 TODO("not implemented")
 
@@ -123,7 +123,7 @@ class STMSQLiteDatabaseAdapter(override var model: STMModelling, private var dbP
 
             database!!.endTransaction()
 
-        }else{
+        } else {
 
 //            STMFunctions.debugLog("Syncer", "did not endTransaction")
 
@@ -133,7 +133,7 @@ class STMSQLiteDatabaseAdapter(override var model: STMModelling, private var dbP
 
     }
 
-    private fun checkModelMapping(){
+    private fun checkModelMapping() {
 
         val _columnsByTable: Map<String, ArrayList<String>>?
 
@@ -141,7 +141,7 @@ class STMSQLiteDatabaseAdapter(override var model: STMModelling, private var dbP
 
         val destinationModel = model.managedObjectModel
 
-        var savedModel:STMManagedObjectModel? = null
+        var savedModel: STMManagedObjectModel? = null
 
         val savedModelPath = dbPath.replace(".db", ".json")
 
@@ -171,7 +171,7 @@ class STMSQLiteDatabaseAdapter(override var model: STMModelling, private var dbP
 
             modelMapper.destinationModel.saveToFile(savedModelPath)
 
-        }else{
+        } else {
 
             _columnsByTable = schema.currentDBScheme()
 
@@ -181,9 +181,9 @@ class STMSQLiteDatabaseAdapter(override var model: STMModelling, private var dbP
 
         for (tablename in _columnsByTable.keys) {
 
-            val columns = hashMapOf<String,String>()
+            val columns = hashMapOf<String, String>()
 
-            for (columnname in _columnsByTable[tablename]!!){
+            for (columnname in _columnsByTable[tablename]!!) {
 
                 val attributeType = model.fieldsForEntityName(STMFunctions.addPrefixToEntityName(tablename))[columnname]?.attributeType
 

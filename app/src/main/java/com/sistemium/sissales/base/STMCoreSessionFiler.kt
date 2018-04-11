@@ -9,14 +9,15 @@ import java.util.*
 /**
  * Created by edgarjanvuicik on 27/11/2017.
  */
-class STMCoreSessionFiler(org:String, uid:String): STMFiling, STMDirectoring {
+class STMCoreSessionFiler(org: String, uid: String) : STMFiling, STMDirectoring {
 
     private val userDocuments = MyApplication.appContext!!.filesDir.absolutePath + "/" + org + "/" + uid
     private val sharedDocuments = MyApplication.appContext!!.filesDir.absolutePath + "/" + org + "/" + SHARED_PATH
-    private val directoring:STMDirectoring = this
-    private val persistenceBasePath = (testPersistencePath() ?: userDocuments) + "/" + STMConstants.PERSISTENCE_PATH
+    private val directoring: STMDirectoring = this
+    private val persistenceBasePath = (testPersistencePath()
+            ?: userDocuments) + "/" + STMConstants.PERSISTENCE_PATH
 
-    override fun bundledModelJSON(modelName: String):String {
+    override fun bundledModelJSON(modelName: String): String {
 
         val assetManager = MyApplication.appContext!!.assets
         val stream = assetManager.open("model/$modelName.json")
@@ -48,15 +49,15 @@ class STMCoreSessionFiler(org:String, uid:String): STMFiling, STMDirectoring {
 
             val assetManager = MyApplication.appContext!!.assets
             var stream = assetManager.open("model/iSisSales.json")
-            var file = File(MyApplication.appContext!!.filesDir.absolutePath+"/testPersistenceFile/${STMConstants.PERSISTENCE_PATH}/${STMConstants.SQL_LITE_PATH}/iSisSales.json")
+            var file = File(MyApplication.appContext!!.filesDir.absolutePath + "/testPersistenceFile/${STMConstants.PERSISTENCE_PATH}/${STMConstants.SQL_LITE_PATH}/iSisSales.json")
             file.parentFile.mkdirs()
             file.createNewFile()
             file.writeBytes(stream.readBytes())
 
             stream = assetManager.open("iSisSales.db")
-            file = File(MyApplication.appContext!!.filesDir.absolutePath+"/testPersistenceFile/${STMConstants.PERSISTENCE_PATH}/${STMConstants.SQL_LITE_PATH}/iSisSales.db")
+            file = File(MyApplication.appContext!!.filesDir.absolutePath + "/testPersistenceFile/${STMConstants.PERSISTENCE_PATH}/${STMConstants.SQL_LITE_PATH}/iSisSales.db")
 
-            if (!file.exists()){
+            if (!file.exists()) {
 
                 file.parentFile.mkdirs()
                 file.createNewFile()
@@ -64,9 +65,9 @@ class STMCoreSessionFiler(org:String, uid:String): STMFiling, STMDirectoring {
 
             }
 
-            MyApplication.appContext!!.filesDir.absolutePath+"/testPersistenceFile"
+            MyApplication.appContext!!.filesDir.absolutePath + "/testPersistenceFile"
 
-        }catch (e:Exception){
+        } catch (e: Exception) {
 
             null
 

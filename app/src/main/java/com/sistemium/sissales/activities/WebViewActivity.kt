@@ -6,7 +6,9 @@ import android.graphics.Bitmap
 import android.os.Bundle
 import android.support.constraint.ConstraintLayout
 import android.view.View
+import android.webkit.WebResourceRequest
 import android.webkit.WebSettings
+import android.webkit.WebSettings.MIXED_CONTENT_ALWAYS_ALLOW
 import android.webkit.WebView
 import com.sistemium.sissales.R
 import com.sistemium.sissales.webInterface.WebAppInterface
@@ -27,7 +29,7 @@ class WebViewActivity : Activity() {
 
     var webView: WebView? = null
 
-    var manifestEtag:String?
+    var manifestEtag: String?
         get() {
 
             val prefStore = SecuredPreferenceStore.getSharedInstance()

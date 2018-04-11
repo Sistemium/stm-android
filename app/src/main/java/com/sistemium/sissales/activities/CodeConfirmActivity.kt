@@ -20,7 +20,7 @@ import nl.komponents.kovenant.then
 
 class CodeConfirmActivity : AppCompatActivity() {
 
-    private var mobileNumber:String? = null
+    private var mobileNumber: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,7 +36,7 @@ class CodeConfirmActivity : AppCompatActivity() {
 
         smsCodeEdit.setOnKeyListener(View.OnKeyListener { _, keyCode, event ->
 
-            if(keyCode == KeyEvent.KEYCODE_ENTER  && event.action != KeyEvent.ACTION_UP){
+            if (keyCode == KeyEvent.KEYCODE_ENTER && event.action != KeyEvent.ACTION_UP) {
 
                 sendButton.performClick()
 
@@ -50,7 +50,7 @@ class CodeConfirmActivity : AppCompatActivity() {
 
         val onClickListener = View.OnClickListener {
 
-            val spinner:ConstraintLayout = findViewById(R.id.loading_screen)
+            val spinner: ConstraintLayout = findViewById(R.id.loading_screen)
 
             spinner.visibility = View.VISIBLE
 
@@ -66,7 +66,7 @@ class CodeConfirmActivity : AppCompatActivity() {
 
                 STMCoreAuthController.logIn() then {
 
-                    this.runOnUiThread{
+                    this.runOnUiThread {
 
                         spinner.visibility = View.INVISIBLE
 
@@ -80,7 +80,7 @@ class CodeConfirmActivity : AppCompatActivity() {
 
             } fail {
 
-                this.runOnUiThread{
+                this.runOnUiThread {
 
                     spinner.visibility = View.INVISIBLE
 
@@ -94,7 +94,7 @@ class CodeConfirmActivity : AppCompatActivity() {
 
         }
 
-        sendButton.setOnClickListener( onClickListener )
+        sendButton.setOnClickListener(onClickListener)
 
     }
 
@@ -114,9 +114,9 @@ class CodeConfirmActivity : AppCompatActivity() {
 
     override fun onBackPressed() {
 
-        val spinner:ConstraintLayout = findViewById(R.id.loading_screen)
+        val spinner: ConstraintLayout = findViewById(R.id.loading_screen)
 
-        if (spinner.visibility == View.INVISIBLE){
+        if (spinner.visibility == View.INVISIBLE) {
 
             super.onBackPressed()
 

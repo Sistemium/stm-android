@@ -30,7 +30,7 @@ class AuthActivity : AppCompatActivity() {
 
         } fail {
 
-            runOnUiThread{
+            runOnUiThread {
 
                 setup()
 
@@ -39,7 +39,7 @@ class AuthActivity : AppCompatActivity() {
         }
     }
 
-    private fun setup(){
+    private fun setup() {
 
         setContentView(R.layout.activity_auth)
         setSupportActionBar(toolbar)
@@ -53,7 +53,7 @@ class AuthActivity : AppCompatActivity() {
 
         val listener = View.OnKeyListener({ _, keyCode, event ->
 
-            if(keyCode == KeyEvent.KEYCODE_ENTER && event.action != KeyEvent.ACTION_UP){
+            if (keyCode == KeyEvent.KEYCODE_ENTER && event.action != KeyEvent.ACTION_UP) {
 
                 sendButton.performClick()
 
@@ -88,7 +88,7 @@ class AuthActivity : AppCompatActivity() {
 
         phoneNumberEdit.addTextChangedListener(textWatcher)
 
-        val clickButton:Button = findViewById(R.id.button)
+        val clickButton: Button = findViewById(R.id.button)
         val onClickListener = View.OnClickListener {
 
             val spinner: ConstraintLayout = findViewById(R.id.loading_screen)
@@ -111,7 +111,7 @@ class AuthActivity : AppCompatActivity() {
 
                 this@AuthActivity.startActivity(myIntent, options.toBundle())
 
-                this.runOnUiThread{
+                this.runOnUiThread {
 
                     spinner.visibility = View.INVISIBLE
 
@@ -119,7 +119,7 @@ class AuthActivity : AppCompatActivity() {
 
             } fail {
 
-                this.runOnUiThread{
+                this.runOnUiThread {
 
                     spinner.visibility = View.INVISIBLE
 
@@ -131,7 +131,7 @@ class AuthActivity : AppCompatActivity() {
 
         }
 
-        clickButton.setOnClickListener( onClickListener )
+        clickButton.setOnClickListener(onClickListener)
 
     }
 

@@ -32,8 +32,7 @@
             android:label=""
             android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="stateVisible"
-            android:parentActivityName=".activities.AuthActivity"
-            >
+            android:parentActivityName=".activities.AuthActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".activities.AuthActivity" />
@@ -42,9 +41,9 @@
             android:name=".activities.ProfileActivity"
             android:label=""
             android:theme="@style/AppTheme.NoActionBar" />
+
         <meta-data
             android:name="io.fabric.ApiKey"
-            />
     </application>
 
 </manifest>

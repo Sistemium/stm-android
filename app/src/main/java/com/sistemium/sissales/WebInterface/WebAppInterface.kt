@@ -21,10 +21,12 @@ class WebAppInterface internal constructor(private var webViewActivity: WebViewA
 
     private val javascriptCallback = "iSistemiumIOSCallback"
 
+    private val errorCallback = "iSistemiumIOSErrorCallback"
+
     private var persistenceDelegate: STMFullStackPersisting = STMCoreSessionManager.sharedManager.currentSession!!.persistenceDelegate
 
     @JavascriptInterface
-    fun errorCatcher(parameters: String?){
+    fun errorCatcher(parameters: String?) {
 
         STMFunctions.debugLog("DEBUG", "errorCatcher")
 
@@ -37,7 +39,7 @@ class WebAppInterface internal constructor(private var webViewActivity: WebViewA
     }
 
     @JavascriptInterface
-    fun post(parameters: String?){
+    fun post(parameters: String?) {
 
         STMFunctions.debugLog("DEBUG", "post")
 
@@ -48,7 +50,7 @@ class WebAppInterface internal constructor(private var webViewActivity: WebViewA
     }
 
     @JavascriptInterface
-    fun get(parameters: String?){
+    fun get(parameters: String?) {
 
         STMFunctions.debugLog("DEBUG", "got")
 
@@ -59,7 +61,7 @@ class WebAppInterface internal constructor(private var webViewActivity: WebViewA
     }
 
     @JavascriptInterface
-    fun barCodeScannerOn(parameters: String?){
+    fun barCodeScannerOn(parameters: String?) {
 
         STMFunctions.debugLog("DEBUG", "barCodeScannerOn")
 
@@ -73,7 +75,7 @@ class WebAppInterface internal constructor(private var webViewActivity: WebViewA
     }
 
     @JavascriptInterface
-    fun findAll(parameters: String?){
+    fun findAll(parameters: String?) {
 
         STMFunctions.debugLog("DEBUG", "findAll")
 
@@ -94,7 +96,7 @@ class WebAppInterface internal constructor(private var webViewActivity: WebViewA
     }
 
     @JavascriptInterface
-    fun find(parameters: String?){
+    fun find(parameters: String?) {
 
         STMFunctions.debugLog("DEBUG", "find")
 
@@ -103,7 +105,7 @@ class WebAppInterface internal constructor(private var webViewActivity: WebViewA
     }
 
     @JavascriptInterface
-    fun updateAll(parameters: String?){
+    fun updateAll(parameters: String?) {
 
         STMFunctions.debugLog("DEBUG", "updateAll")
 
@@ -122,7 +124,7 @@ class WebAppInterface internal constructor(private var webViewActivity: WebViewA
     }
 
     @JavascriptInterface
-    fun update(parameters: String?){
+    fun update(parameters: String?) {
 
         STMFunctions.debugLog("DEBUG", "update")
 
@@ -131,7 +133,7 @@ class WebAppInterface internal constructor(private var webViewActivity: WebViewA
     }
 
     @JavascriptInterface
-    fun destroy(parameters: String?){
+    fun destroy(parameters: String?) {
 
         STMFunctions.debugLog("DEBUG", "destroy")
 
@@ -150,7 +152,7 @@ class WebAppInterface internal constructor(private var webViewActivity: WebViewA
     }
 
     @JavascriptInterface
-    fun sound(parameters: String?){
+    fun sound(parameters: String?) {
 
         STMFunctions.debugLog("DEBUG", "sound")
 
@@ -158,28 +160,28 @@ class WebAppInterface internal constructor(private var webViewActivity: WebViewA
 
         // TODO implement destroyObjectFromScriptMessage
 
-        javascriptCallback( arrayOf("didFinishSpeaking"), null, mapParameters["callBack"] as String)
+        javascriptCallback(arrayOf("didFinishSpeaking"), null, mapParameters["callBack"] as String)
 
     }
 
     @JavascriptInterface
-    fun tabbar(parameters: String?){
+    fun tabbar(parameters: String?) {
 
         STMFunctions.debugLog("DEBUG", "tabbar")
 
         val mapParameters = gson.fromJson(parameters, Map::class.java)
 
-        return if (mapParameters["action"]?.equals("show") == true){
+        return if (mapParameters["action"]?.equals("show") == true) {
             javascriptCallback(arrayOf("tabbar show success"), mapParameters)
             webViewActivity.goBack()
-        }else{
+        } else {
             javascriptCallback(arrayOf("tabbar hide success"), mapParameters)
         }
 
     }
 
     @JavascriptInterface
-    fun subscribe(parameters: String?){
+    fun subscribe(parameters: String?) {
 
         STMFunctions.debugLog("DEBUG", "subscribe")
 
@@ -187,7 +189,7 @@ class WebAppInterface internal constructor(private var webViewActivity: WebViewA
 
         val entities = mapParameters["entities"] as? ArrayList<*>
 
-        var errorMessage:String? = null
+        var errorMessage: String? = null
 
         val dataCallback = mapParameters["dataCallback"] as? String
 
@@ -201,13 +203,13 @@ class WebAppInterface internal constructor(private var webViewActivity: WebViewA
             errorMessage = "No callback specified"
         }
 
-        if (entities == null){
+        if (entities == null) {
 
             errorMessage = "No entities specified"
 
         }
 
-        if (errorMessage != null){
+        if (errorMessage != null) {
 
             return javascriptCallback(errorMessage, mapParameters)
 
@@ -217,7 +219,7 @@ class WebAppInterface internal constructor(private var webViewActivity: WebViewA
 
             subscribeToEntities(entities!!, dataCallback!!)
 
-        }catch (e:Exception){
+        } catch (e: Exception) {
 
             return javascriptCallback(e.toString(), mapParameters)
 
@@ -228,7 +230,7 @@ class WebAppInterface internal constructor(private var webViewActivity: WebViewA
     }
 
     @JavascriptInterface
-    fun remoteControl(parameters: String?){
+    fun remoteControl(parameters: String?) {
 
         STMFunctions.debugLog("DEBUG", "remoteControl")
 
@@ -243,7 +245,7 @@ class WebAppInterface internal constructor(private var webViewActivity: WebViewA
     }
 
     @JavascriptInterface
-    fun roles(parameters: String?){
+    fun roles(parameters: String?) {
 
         STMFunctions.debugLog("DEBUG", "roles")
 
@@ -256,7 +258,7 @@ class WebAppInterface internal constructor(private var webViewActivity: WebViewA
     }
 
     @JavascriptInterface
-    fun checkin(parameters: String?){
+    fun checkin(parameters: String?) {
 
         STMFunctions.debugLog("DEBUG", "checkin")
 
@@ -271,7 +273,7 @@ class WebAppInterface internal constructor(private var webViewActivity: WebViewA
     }
 
     @JavascriptInterface
-    fun getPicture(parameters: String?){
+    fun getPicture(parameters: String?) {
 
         STMFunctions.debugLog("DEBUG", "getPicture")
 
@@ -286,7 +288,7 @@ class WebAppInterface internal constructor(private var webViewActivity: WebViewA
     }
 
     @JavascriptInterface
-    fun takePhoto(parameters: String?){
+    fun takePhoto(parameters: String?) {
 
         STMFunctions.debugLog("DEBUG", "takePhoto")
 
@@ -301,7 +303,7 @@ class WebAppInterface internal constructor(private var webViewActivity: WebViewA
     }
 
     @JavascriptInterface
-    fun unsyncedInfoService(parameters: String?){
+    fun unsyncedInfoService(parameters: String?) {
 
         STMFunctions.debugLog("DEBUG", "unsyncedInfoService")
 
@@ -312,7 +314,7 @@ class WebAppInterface internal constructor(private var webViewActivity: WebViewA
     }
 
     @JavascriptInterface
-    fun sendToCameraRoll(parameters: String?){
+    fun sendToCameraRoll(parameters: String?) {
 
         STMFunctions.debugLog("DEBUG", "sendToCameraRoll")
 
@@ -327,7 +329,7 @@ class WebAppInterface internal constructor(private var webViewActivity: WebViewA
     }
 
     @JavascriptInterface
-    fun loadImage(parameters: String?){
+    fun loadImage(parameters: String?) {
 
         STMFunctions.debugLog("DEBUG", "loadImage")
 
@@ -342,7 +344,7 @@ class WebAppInterface internal constructor(private var webViewActivity: WebViewA
     }
 
     @JavascriptInterface
-    fun saveImage(parameters: String?){
+    fun saveImage(parameters: String?) {
 
         STMFunctions.debugLog("DEBUG", "saveImage")
 
@@ -357,7 +359,7 @@ class WebAppInterface internal constructor(private var webViewActivity: WebViewA
     }
 
     @JavascriptInterface
-    fun copyToClipboard(parameters: String?){
+    fun copyToClipboard(parameters: String?) {
 
         STMFunctions.debugLog("DEBUG", "copyToClipboard")
 
@@ -373,21 +375,22 @@ class WebAppInterface internal constructor(private var webViewActivity: WebViewA
 
     // interface handling helpers
 
-    private fun destroyObjectFromScriptMessage(parameters: Map<*, *>): Promise<ArrayList<Map<*, *>>, Exception>{
+    private fun destroyObjectFromScriptMessage(parameters: Map<*, *>): Promise<ArrayList<Map<*, *>>, Exception> {
 
-        val entityName = parameters["entity"] as? String ?: throw Exception("entity is not specified")
+        val entityName = parameters["entity"] as? String
+                ?: throw Exception("entity is not specified")
 
         val xidString = parameters[STMConstants.DEFAULT_PERSISTING_PRIMARY_KEY] as? String
 
-        if (xidString != null){
+        if (xidString != null) {
             return persistenceDelegate.destroy(entityName, xidString, null).then {
 
-                val result:Map<*, *> = hashMapOf("objectXid" to xidString)
+                val result: Map<*, *> = hashMapOf("objectXid" to xidString)
 
                 return@then arrayListOf(result)
 
             }
-        } else{
+        } else {
 
             throw Exception("empty xid")
 
@@ -395,15 +398,16 @@ class WebAppInterface internal constructor(private var webViewActivity: WebViewA
 
     }
 
-    private fun arrayOfObjectsRequestedByScriptMessage(parameters: Map<*, *>):Promise<ArrayList<Map<*, *>>, Exception>{
+    private fun arrayOfObjectsRequestedByScriptMessage(parameters: Map<*, *>): Promise<ArrayList<Map<*, *>>, Exception> {
 
-        val entityName = parameters["entity"] as? String ?: throw Exception("entity is not specified")
+        val entityName = parameters["entity"] as? String
+                ?: throw Exception("entity is not specified")
 
         val xidString = parameters[STMConstants.DEFAULT_PERSISTING_PRIMARY_KEY] as? String
 
-        val options = parameters["options"] as? Map<*,*>
+        val options = parameters["options"] as? Map<*, *>
 
-        if (xidString != null){
+        if (xidString != null) {
             return persistenceDelegate.find(entityName, xidString, options).then {
 
                 return@then arrayListOf(it!!)
@@ -421,21 +425,22 @@ class WebAppInterface internal constructor(private var webViewActivity: WebViewA
 
     }
 
-    private fun updateObjectsFromScriptMessage(parameters: Map<*, *>):Promise<ArrayList<Map<*, *>>, Exception>{
+    private fun updateObjectsFromScriptMessage(parameters: Map<*, *>): Promise<ArrayList<Map<*, *>>, Exception> {
 
-        val entityName = parameters["entity"] as? String ?: throw Exception("entity is not specified")
+        val entityName = parameters["entity"] as? String
+                ?: throw Exception("entity is not specified")
 
         var parametersData = parameters["data"] as? ArrayList<*>
 
-        if (parametersData == null){
+        if (parametersData == null) {
 
-            val map = parameters["data"] as? Map<*,*>
+            val map = parameters["data"] as? Map<*, *>
 
-            if (map != null){
+            if (map != null) {
 
                 parametersData = arrayListOf(map)
 
-            }else{
+            } else {
 
                 throw Exception("entity is not specified")
 
@@ -449,17 +454,17 @@ class WebAppInterface internal constructor(private var webViewActivity: WebViewA
 
     private val subscriptions = hashMapOf<String, STMWebAppInterfaceSubscription>()
 
-    private fun subscribeToEntities(entities:ArrayList<*>, callbackName:String){
+    private fun subscribeToEntities(entities: ArrayList<*>, callbackName: String) {
 
         var subscription = subscriptions[callbackName]
 
-        if (subscription == null){
+        if (subscription == null) {
 
             subscription = STMWebAppInterfaceSubscription(callbackName)
 
         }
 
-        for (entityName in entities){
+        for (entityName in entities) {
 
             val prfixedEntityName = STMFunctions.addPrefixToEntityName(entityName as String)
 
@@ -469,7 +474,7 @@ class WebAppInterface internal constructor(private var webViewActivity: WebViewA
 
         }
 
-        for (subscriptionID in subscription.persisterSubscriptions){
+        for (subscriptionID in subscription.persisterSubscriptions) {
 
             persistenceDelegate.cancelSubscription(subscriptionID)
 
@@ -479,25 +484,25 @@ class WebAppInterface internal constructor(private var webViewActivity: WebViewA
 
         val options = hashMapOf(STMConstants.STMPersistingOptionLts to true)
 
-        for (entityName in subscription.entityNames){
+        for (entityName in subscription.entityNames) {
 
-            persisterSubscriptions.add(persistenceDelegate.observeEntity(entityName, null, options){
+            persisterSubscriptions.add(persistenceDelegate.observeEntity(entityName, null, options) {
 
                 sendSubscribedBunchOfObjects(it, entityName)
 
-                var lts:String? = null
+                var lts: String? = null
 
-                for (obj in it){
+                for (obj in it) {
 
-                    val objLts = (obj as? Map<*,*>)?.get(STMConstants.STMPersistingOptionLts) as? String
+                    val objLts = (obj as? Map<*, *>)?.get(STMConstants.STMPersistingOptionLts) as? String
 
-                    if (objLts != null){
+                    if (objLts != null) {
 
-                        if (lts == null){
+                        if (lts == null) {
 
                             lts = objLts
 
-                        }else{
+                        } else {
 
                             if (objLts > lts) {
 
@@ -511,11 +516,11 @@ class WebAppInterface internal constructor(private var webViewActivity: WebViewA
 
                 }
 
-            if (lts != null) {
+                if (lts != null) {
 
-                subscription.ltsOffset[entityName] = lts
+                    subscription.ltsOffset[entityName] = lts
 
-            }
+                }
 
             })
 
@@ -526,7 +531,7 @@ class WebAppInterface internal constructor(private var webViewActivity: WebViewA
 
     }
 
-    private fun sendSubscribedBunchOfObjects(objectsArray:ArrayList<*>, entityName:String){
+    private fun sendSubscribedBunchOfObjects(objectsArray: ArrayList<*>, entityName: String) {
 
         val matchingCallbacks = subscriptions.filter {
 
@@ -534,7 +539,7 @@ class WebAppInterface internal constructor(private var webViewActivity: WebViewA
 
         }.keys
 
-        if (matchingCallbacks.isEmpty()){
+        if (matchingCallbacks.isEmpty()) {
 
             return
 
@@ -546,13 +551,13 @@ class WebAppInterface internal constructor(private var webViewActivity: WebViewA
 
             return@map hashMapOf(
                     "entity" to _entityName,
-                    "xid" to (it as Map<*,*>)["it"],
+                    "xid" to (it as Map<*, *>)["it"],
                     "data" to it
             )
 
         }
 
-        for (callback in matchingCallbacks){
+        for (callback in matchingCallbacks) {
 
             javascriptCallback(resultArray, hashMapOf("reason" to "subscription"), callback)
 
@@ -560,15 +565,15 @@ class WebAppInterface internal constructor(private var webViewActivity: WebViewA
 
     }
 
-    private fun updateLtsOffsetForEntityName(entityName:String, subscription:STMWebAppInterfaceSubscription){
+    private fun updateLtsOffsetForEntityName(entityName: String, subscription: STMWebAppInterfaceSubscription) {
 
         val options = hashMapOf(STMConstants.STMPersistingOptionPageSize to 1,
-                                STMConstants.STMPersistingOptionOrder to STMConstants.STMPersistingOptionLts,
-                                STMConstants.STMPersistingOptionOrderDirection to STMConstants.STMPersistingOptionOrderDirectionDescValue)
+                STMConstants.STMPersistingOptionOrder to STMConstants.STMPersistingOptionLts,
+                STMConstants.STMPersistingOptionOrderDirection to STMConstants.STMPersistingOptionOrderDirectionDescValue)
 
         val objects = persistenceDelegate.findAllSync(entityName, null, options)
 
-        if (objects.firstOrNull() != null){
+        if (objects.firstOrNull() != null) {
 
             subscription.ltsOffset[entityName] = objects.first()[STMConstants.STMPersistingOptionLts] as String
 
@@ -578,13 +583,13 @@ class WebAppInterface internal constructor(private var webViewActivity: WebViewA
 
     // callbacks
 
-    private fun javascriptCallback(data:Any, parameters: Map<*, *>?, jsCallbackFunction: String){
+    private fun javascriptCallback(data: Any, parameters: Map<*, *>?, jsCallbackFunction: String) {
 
         val arguments = mutableListOf<Any>()
 
         arguments.add(data)
 
-        if (parameters is Map<*, *>){
+        if (parameters is Map<*, *>) {
 
             arguments.add(parameters)
 
@@ -597,7 +602,7 @@ class WebAppInterface internal constructor(private var webViewActivity: WebViewA
             STMFunctions.debugLog("DEBUG", "EvaluateJS")
             STMFunctions.debugLog("JSFUNCTION", jsFunction)
 
-            webViewActivity.webView?.evaluateJavascript(jsFunction){
+            webViewActivity.webView?.evaluateJavascript(jsFunction) {
 
                 STMFunctions.debugLog("DEBUG", "Evaluate finish")
 
@@ -607,29 +612,29 @@ class WebAppInterface internal constructor(private var webViewActivity: WebViewA
 
     }
 
-    private fun javascriptCallback(data:Any, parameters: Map<*, *>?) =
+    private fun javascriptCallback(data: Any, parameters: Map<*, *>?) =
             javascriptCallback(data, parameters, this.javascriptCallback)
 
-    private fun javascriptCallback(error:String, parameters: Map<*, *>?){
+    private fun javascriptCallback(error: String, parameters: Map<*, *>?) {
 
         val arguments = mutableListOf<Any>()
 
         arguments.add(error)
 
-        if (parameters is Map<*, *>){
+        if (parameters is Map<*, *>) {
 
             arguments.add(parameters)
 
         }
 
-        val jsFunction = "${this.javascriptCallback}.apply(null, ${gson.toJson(arguments)})"
+        val jsFunction = "${this.errorCallback}.apply(null, ${gson.toJson(arguments)})"
 
         webViewActivity.webView?.post {
 
             STMFunctions.debugLog("DEBUG", "EvaluateErrorJS")
             STMFunctions.debugLog("JSFUNCTION", jsFunction)
 
-            webViewActivity.webView?.evaluateJavascript(jsFunction){
+            webViewActivity.webView?.evaluateJavascript(jsFunction) {
 
                 STMFunctions.debugLog("DEBUG", "Evaluate finish")
 

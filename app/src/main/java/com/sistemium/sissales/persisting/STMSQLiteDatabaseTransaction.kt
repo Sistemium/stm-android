@@ -15,28 +15,28 @@ import kotlin.collections.ArrayList
 /**
  * Created by edgarjanvuicik on 30/11/2017.
  */
-class STMSQLiteDatabaseTransaction(private var database: SQLiteDatabase, private var adapter:STMSQLiteDatabaseAdapter):STMPersistingTransaction {
+class STMSQLiteDatabaseTransaction(private var database: SQLiteDatabase, private var adapter: STMSQLiteDatabaseAdapter) : STMPersistingTransaction {
 
     override var modellingDelegate: STMModelling? = adapter.model
 
-    var operation:STMSQLiteDatabaseOperation? = null
+    var operation: STMSQLiteDatabaseOperation? = null
 
     override fun findAllSync(entityName: String, predicate: STMPredicate?, options: Map<*, *>?): ArrayList<Map<*, *>> {
 
         val pageSize = (options?.get(STMConstants.STMPersistingOptionPageSize) as? Double)?.toInt()
         var offset = (options?.get(STMConstants.STMPersistingOptionStartPage) as? Double)?.toInt()
-        val groupBy= options?.get(STMConstants.STMPersistingOptionGroupBy) as? ArrayList<*>
+        val groupBy = options?.get(STMConstants.STMPersistingOptionGroupBy) as? ArrayList<*>
 
         if (offset != null && pageSize != null) {
             offset -= 1
             offset *= pageSize
         }
 
-        var orderBy:String? = options?.get(STMConstants.STMPersistingOptionOrder) as? String
+        var orderBy: String? = options?.get(STMConstants.STMPersistingOptionOrder) as? String
 
         val direction = options?.get(STMConstants.STMPersistingOptionOrderDirection) as? String
 
-        val asc:Boolean = direction != null &&  direction.toLowerCase() == "asc"
+        val asc: Boolean = direction != null && direction.toLowerCase() == "asc"
 
         if (orderBy == null) {
             orderBy = "id"
@@ -53,13 +53,13 @@ class STMSQLiteDatabaseTransaction(private var database: SQLiteDatabase, private
 
         val savingAttributes = HashMap(attributes)
 
-        if (options?.get(STMConstants.STMPersistingOptionReturnSaved) == false){
+        if (options?.get(STMConstants.STMPersistingOptionReturnSaved) == false) {
 
             returnSaved = false
 
         }
 
-        if (options?.get(STMConstants.STMPersistingOptionLts) != null){
+        if (options?.get(STMConstants.STMPersistingOptionLts) != null) {
 
             savingAttributes[STMConstants.STMPersistingOptionLts] = options[STMConstants.STMPersistingOptionLts]
             savingAttributes.remove(STMConstants.STMPersistingKeyVersion)
@@ -73,7 +73,7 @@ class STMSQLiteDatabaseTransaction(private var database: SQLiteDatabase, private
 
         savingAttributes["deviceAts"] = now
 
-        if (savingAttributes[STMConstants.STMPersistingKeyCreationTimestamp] == null){
+        if (savingAttributes[STMConstants.STMPersistingKeyCreationTimestamp] == null) {
 
             savingAttributes[STMConstants.STMPersistingKeyCreationTimestamp] = now
 
@@ -83,7 +83,7 @@ class STMSQLiteDatabaseTransaction(private var database: SQLiteDatabase, private
 
         val pk = mergeInto(tableName, savingAttributes)
 
-        if (pk == null || !returnSaved){
+        if (pk == null || !returnSaved) {
 
             return null
 
@@ -93,7 +93,7 @@ class STMSQLiteDatabaseTransaction(private var database: SQLiteDatabase, private
 
     }
 
-    override fun destroyWithoutSave(entityName: String, predicate: STMPredicate?, options: Map<*, *>?):Int {
+    override fun destroyWithoutSave(entityName: String, predicate: STMPredicate?, options: Map<*, *>?): Int {
 
         var where = predicate?.predicateForAdapter(adapter, entityName) ?: ""
 
@@ -101,7 +101,7 @@ class STMSQLiteDatabaseTransaction(private var database: SQLiteDatabase, private
 
         val whereOption = options?.get(STMConstants.STMPersistingOptionWhere)
 
-        if (whereOption != null && where.isNotEmpty()){
+        if (whereOption != null && where.isNotEmpty()) {
 
             where = "($where) AND ($whereOption)"
 
@@ -111,8 +111,8 @@ class STMSQLiteDatabaseTransaction(private var database: SQLiteDatabase, private
 
     }
 
-    private fun findAllSync(entityName: String, predicate: STMPredicate?, orderBy:String?, ascending:Boolean,
-                            fetchLimit:Int?, fetchOffset:Int?, groupBy:ArrayList<*>?):ArrayList<Map<*, *>> {
+    private fun findAllSync(entityName: String, predicate: STMPredicate?, orderBy: String?, ascending: Boolean,
+                            fetchLimit: Int?, fetchOffset: Int?, groupBy: ArrayList<*>?): ArrayList<Map<*, *>> {
 
         var options = ""
         var columns = ""
@@ -136,7 +136,7 @@ class STMSQLiteDatabaseTransaction(private var database: SQLiteDatabase, private
         }
 
         if (orderBy != null) {
-            val _orderBy = orderBy.split(",").joinToString( if (ascending) " ASC," else " DESC,")
+            val _orderBy = orderBy.split(",").joinToString(if (ascending) " ASC," else " DESC,")
             val order = " ORDER BY $_orderBy ${if (ascending) "ASC" else "DESC"}"
             options += order
         }
@@ -155,7 +155,7 @@ class STMSQLiteDatabaseTransaction(private var database: SQLiteDatabase, private
 
         var where = ""
 
-        if (predicate != null){
+        if (predicate != null) {
             where = predicate.predicateForAdapter(adapter, entityName) ?: ""
 //            STMFunctions.debugLog("EntityName", entityName)
 //            STMFunctions.debugLog("PREDICATE", where)
@@ -167,7 +167,7 @@ class STMSQLiteDatabaseTransaction(private var database: SQLiteDatabase, private
 
     }
 
-    private fun mergeInto(tableName:String, dictionary:Map<*,*>):String?{
+    private fun mergeInto(tableName: String, dictionary: Map<*, *>): String? {
 
         val pk = if (dictionary[STMConstants.DEFAULT_PERSISTING_PRIMARY_KEY] != null) dictionary[STMConstants.DEFAULT_PERSISTING_PRIMARY_KEY] as String else STMFunctions.uuidString()
 
@@ -175,9 +175,9 @@ class STMSQLiteDatabaseTransaction(private var database: SQLiteDatabase, private
 
         val cv = ContentValues()
 
-        for (index in 0 until keys.size){
+        for (index in 0 until keys.size) {
 
-            when (values[index]){
+            when (values[index]) {
 
                 "null" -> cv.putNull(keys[index])
 
@@ -207,7 +207,7 @@ class STMSQLiteDatabaseTransaction(private var database: SQLiteDatabase, private
 
             }
 
-        } catch (e:Exception) {
+        } catch (e: Exception) {
 
             if (e.localizedMessage.startsWith("ignored")) {
 
@@ -223,7 +223,7 @@ class STMSQLiteDatabaseTransaction(private var database: SQLiteDatabase, private
 
     }
 
-    private fun updateTablename(tableName:String, dictionary:Map<*,*>): Pair<ArrayList<String>, ArrayList<String>>{
+    private fun updateTablename(tableName: String, dictionary: Map<*, *>): Pair<ArrayList<String>, ArrayList<String>> {
 
         val keys = arrayListOf<String>()
         val values = arrayListOf<String>()
@@ -239,15 +239,15 @@ class STMSQLiteDatabaseTransaction(private var database: SQLiteDatabase, private
         keys.add("[isFantom]")
         values.add("false")
 
-        for (key in dictionary.keys){
+        for (key in dictionary.keys) {
 
-            if (columns.contains(key) && !arrayListOf(STMConstants.DEFAULT_PERSISTING_PRIMARY_KEY, STMConstants.STMPersistingKeyPhantom, STMConstants.STMPersistingKeyCreationTimestamp).contains(key)){
+            if (columns.contains(key) && !arrayListOf(STMConstants.DEFAULT_PERSISTING_PRIMARY_KEY, STMConstants.STMPersistingKeyPhantom, STMConstants.STMPersistingKeyCreationTimestamp).contains(key)) {
 
                 keys.add("[$key]")
 
                 val value = dictionary[key]
 
-                if (jsonColumns?.contains(key) == true){
+                if (jsonColumns?.contains(key) == true) {
 
                     values.add(STMFunctions.jsonStringFromObject(value!!))
 
@@ -261,11 +261,11 @@ class STMSQLiteDatabaseTransaction(private var database: SQLiteDatabase, private
 
         }
 
-        return Pair(keys,values)
+        return Pair(keys, values)
 
     }
 
-    private fun sumKeysForEntityName(entityName:String):ArrayList<String>{
+    private fun sumKeysForEntityName(entityName: String): ArrayList<String> {
 
         val numericTypes = arrayOf("Integer 16", "Integer 32", "Integer 64", "Decimal", "Double", "Float")
 
@@ -277,7 +277,7 @@ class STMSQLiteDatabaseTransaction(private var database: SQLiteDatabase, private
 
         tableColumns.map {
 
-            if (it.value.attributeName == "id"){
+            if (it.value.attributeName == "id") {
 
                 return@map
 
@@ -300,13 +300,13 @@ class STMSQLiteDatabaseTransaction(private var database: SQLiteDatabase, private
 
     }
 
-    private fun selectFrom(tableName:String, where:String, orderBy:String?):ArrayList<Map<*, *>> {
+    private fun selectFrom(tableName: String, where: String, orderBy: String?): ArrayList<Map<*, *>> {
 
         return selectFrom(tableName, "*", where, orderBy)
 
     }
 
-    private fun selectFrom(tableName:String, columns:String, where:String, orderBy:String?):ArrayList<Map<*, *>> {
+    private fun selectFrom(tableName: String, columns: String, where: String, orderBy: String?): ArrayList<Map<*, *>> {
 
         val rez = arrayListOf<Map<*, *>>()
 
@@ -324,7 +324,7 @@ class STMSQLiteDatabaseTransaction(private var database: SQLiteDatabase, private
 
 //        STMFunctions.debugLog("QUERY", query)
 
-        val c = this.database.rawQuery(query,null)
+        val c = this.database.rawQuery(query, null)
 
 //        STMFunctions.debugLog("QUERY", "execute finished")
 
@@ -344,13 +344,13 @@ class STMSQLiteDatabaseTransaction(private var database: SQLiteDatabase, private
 
                 val dict = hashMapOf<String, Any?>()
 
-                for (columnName in c.columnNames){
+                for (columnName in c.columnNames) {
 
                     val index = c.getColumnIndex(columnName)
 
                     val attributeType = atributeTypes[columnName]
 
-                    if (c.isNull(index)){
+                    if (c.isNull(index)) {
 
                         dict[columnName] = null
 
@@ -358,7 +358,7 @@ class STMSQLiteDatabaseTransaction(private var database: SQLiteDatabase, private
 
                     }
 
-                    if (attributeType == "Boolean"){
+                    if (attributeType == "Boolean") {
 
                         val data = c.getInt(index)
 
@@ -368,7 +368,7 @@ class STMSQLiteDatabaseTransaction(private var database: SQLiteDatabase, private
 
                     }
 
-                    if (c.getType(index) == FIELD_TYPE_INTEGER){
+                    if (c.getType(index) == FIELD_TYPE_INTEGER) {
 
                         dict[columnName] = c.getInt(index)
 
@@ -376,7 +376,7 @@ class STMSQLiteDatabaseTransaction(private var database: SQLiteDatabase, private
 
                     }
 
-                    if (c.getType(index) == FIELD_TYPE_FLOAT){
+                    if (c.getType(index) == FIELD_TYPE_FLOAT) {
 
                         dict[columnName] = c.getDouble(index)
 

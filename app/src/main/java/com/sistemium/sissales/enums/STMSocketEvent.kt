@@ -3,7 +3,7 @@ package com.sistemium.sissales.enums
 /**
  * Created by edgarjanvuicik on 15/02/2018.
  */
-enum class STMSocketEvent(private val type:String) {
+enum class STMSocketEvent(private val type: String) {
 
     STMSocketEventConnect("connect"),
     STMSocketEventDisconnect("disconnect"),
@@ -22,7 +22,7 @@ enum class STMSocketEvent(private val type:String) {
     STMSocketEventUpdateCollection("jsData:updateCollection"),
     STMSocketEventDestroy("jsData:destroy");
 
-    override fun toString():String{
+    override fun toString(): String {
 
         return type
 

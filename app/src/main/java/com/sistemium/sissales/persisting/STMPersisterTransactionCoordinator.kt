@@ -10,11 +10,11 @@ import com.sistemium.sissales.interfaces.STMPersistingTransaction
 /**
  * Created by edgarjanvuicik on 22/11/2017.
  */
-class STMPersisterTransactionCoordinator(private val adapters:HashMap<STMStorageType, STMAdapting>, private val readOnly:Boolean):STMPersistingTransaction {
+class STMPersisterTransactionCoordinator(private val adapters: HashMap<STMStorageType, STMAdapting>, private val readOnly: Boolean) : STMPersistingTransaction {
 
     override var modellingDelegate: STMModelling? = null
 
-    private val transactions = hashMapOf<STMStorageType,STMPersistingTransaction>()
+    private val transactions = hashMapOf<STMStorageType, STMPersistingTransaction>()
 
     override fun findAllSync(entityName: String, predicate: STMPredicate?, options: Map<*, *>?): ArrayList<Map<*, *>> {
 
@@ -34,11 +34,11 @@ class STMPersisterTransactionCoordinator(private val adapters:HashMap<STMStorage
 
     }
 
-    override fun destroyWithoutSave(entityName: String, predicate: STMPredicate?, options: Map<*, *>?):Int {
+    override fun destroyWithoutSave(entityName: String, predicate: STMPredicate?, options: Map<*, *>?): Int {
 
         var objects = arrayListOf<Map<*, *>>()
 
-        if (options?.get(STMConstants.STMPersistingOptionRecordstatuses) == null || options[STMConstants.STMPersistingOptionRecordstatuses] == true){
+        if (options?.get(STMConstants.STMPersistingOptionRecordstatuses) == null || options[STMConstants.STMPersistingOptionRecordstatuses] == true) {
 
             objects = findAllSync(entityName, predicate, options)
 
@@ -46,15 +46,15 @@ class STMPersisterTransactionCoordinator(private val adapters:HashMap<STMStorage
 
         val transaction = transactionForEntityName(entityName, options)
 
-        val count = transaction?.destroyWithoutSave(entityName,predicate, options)
+        val count = transaction?.destroyWithoutSave(entityName, predicate, options)
 
-        val recordStatuses:ArrayList<Any>? = arrayListOf()
+        val recordStatuses: ArrayList<Any>? = arrayListOf()
 
         val recordStatusEntity = STMFunctions.addPrefixToEntityName("RecordStatus")
 
-        for (obj in objects){
+        for (obj in objects) {
 
-            var recordStatus: Map<*,*>? = hashMapOf(
+            var recordStatus: Map<*, *>? = hashMapOf(
 
                     "objectXid" to obj[STMConstants.DEFAULT_PERSISTING_PRIMARY_KEY],
                     "name" to STMFunctions.removePrefixFromEntityName(entityName),
@@ -64,7 +64,7 @@ class STMPersisterTransactionCoordinator(private val adapters:HashMap<STMStorage
 
             recordStatus = mergeWithoutSave(recordStatusEntity, recordStatus!!, hashMapOf(STMConstants.STMPersistingOptionRecordstatuses to 0))
 
-            if (recordStatus != null){
+            if (recordStatus != null) {
 
                 recordStatuses?.add(recordStatus)
 
@@ -83,9 +83,9 @@ class STMPersisterTransactionCoordinator(private val adapters:HashMap<STMStorage
 
     }
 
-    fun endTransactionWithSuccess(success:Boolean){
+    fun endTransactionWithSuccess(success: Boolean) {
 
-        for (key in transactions.keys){
+        for (key in transactions.keys) {
             val transaction = transactions[key]
             adapters[key]?.endTransactionWithSuccess(transaction!!, success)
         }
@@ -94,13 +94,13 @@ class STMPersisterTransactionCoordinator(private val adapters:HashMap<STMStorage
 
     }
 
-    private fun transactionForEntityName(entityName:String, options:Map<*,*>?):STMPersistingTransaction?{
+    private fun transactionForEntityName(entityName: String, options: Map<*, *>?): STMPersistingTransaction? {
 
         val storageType = storageForEntityName(entityName, options)
 
         var transaction = transactions[storageType]
 
-        if (transaction == null && adapters.keys.contains(storageType)){
+        if (transaction == null && adapters.keys.contains(storageType)) {
             transactions[storageType] = adapters[storageType]!!.beginTransaction(readOnly)
             transaction = transactions[storageType]
         }
@@ -109,19 +109,19 @@ class STMPersisterTransactionCoordinator(private val adapters:HashMap<STMStorage
 
     }
 
-    private fun storageForEntityName(entityName: String, options: Map<*, *>?):STMStorageType{
+    private fun storageForEntityName(entityName: String, options: Map<*, *>?): STMStorageType {
 
-        if (options?.get(STMConstants.STMPersistingOptionForceStorage) as? STMStorageType != null){
+        if (options?.get(STMConstants.STMPersistingOptionForceStorage) as? STMStorageType != null) {
 
             return options[STMConstants.STMPersistingOptionForceStorage] as STMStorageType
 
         }
 
-        for (adapter in adapters.values){
+        for (adapter in adapters.values) {
 
             val storage = adapter.model.storageForEntityName(entityName)
 
-            if (storage != STMStorageType.STMStorageTypeNone){
+            if (storage != STMStorageType.STMStorageTypeNone) {
                 return adapter.model.storageForEntityName(entityName)
             }
         }

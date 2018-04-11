@@ -10,8 +10,8 @@ import com.sistemium.sissales.enums.STMSessionStatus
 interface STMSession {
 
     var settingsController: STMSettingsController?
-    var uid:String
-    var filing:STMFiling
+    var uid: String
+    var filing: STMFiling
     var persistenceDelegate: STMFullStackPersisting
     var status: STMSessionStatus
     var logger: STMLogger?

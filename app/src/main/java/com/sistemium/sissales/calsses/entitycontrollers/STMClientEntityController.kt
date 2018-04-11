@@ -11,7 +11,7 @@ class STMClientEntityController {
 
     companion object {
 
-        fun clientEntityWithName(entityName:String):Map<*,*> {
+        fun clientEntityWithName(entityName: String): Map<*, *> {
 
             val name = STMFunctions.removePrefixFromEntityName(entityName)
 
@@ -43,7 +43,7 @@ class STMClientEntityController {
             return clientEntity
         }
 
-        fun setEtag(name:String, eTag:String?){
+        fun setEtag(name: String, eTag: String?) {
 
             val clientEntity = HashMap(clientEntityWithName(name))
 

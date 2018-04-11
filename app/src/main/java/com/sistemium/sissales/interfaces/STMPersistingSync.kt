@@ -8,21 +8,21 @@ import com.sistemium.sissales.persisting.STMPredicate
 interface STMPersistingSync {
 
     @Throws(Exception::class)
-    fun findSync(entityName:String, identifier:String, options:Map<*,*>?):Map<*,*>?
+    fun findSync(entityName: String, identifier: String, options: Map<*, *>?): Map<*, *>?
 
     @Throws(Exception::class)
-    fun findAllSync(entityName:String, predicate:STMPredicate?, options:Map<*,*>?):ArrayList<Map<*,*>>
+    fun findAllSync(entityName: String, predicate: STMPredicate?, options: Map<*, *>?): ArrayList<Map<*, *>>
 
     @Throws(Exception::class)
     fun mergeSync(entityName:String, attributes:Map<*,*>, options:Map<*,*>?):Map<*,*>
 
     @Throws(Exception::class)
-    fun mergeManySync(entityName:String, attributeArray:ArrayList<*>, options:Map<*,*>?):ArrayList<Map<*,*>>
+    fun mergeManySync(entityName: String, attributeArray: ArrayList<*>, options: Map<*, *>?): ArrayList<Map<*, *>>
 
     @Throws(Exception::class)
-    fun destroySync(entityName: String, identifier: String, options: Map<*, *>?):Boolean
+    fun destroySync(entityName: String, identifier: String, options: Map<*, *>?): Boolean
 
     @Throws(Exception::class)
-    fun destroyAllSync(entityName: String, predicate: STMPredicate?, options: Map<*, *>?):Int
+    fun destroyAllSync(entityName: String, predicate: STMPredicate?, options: Map<*, *>?): Int
 
 }

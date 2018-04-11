@@ -8,9 +8,9 @@ import java.util.*
  * Created by edgarjanvuicik on 09/11/2017.
  */
 
-class STMManagedObjectModel(var model: String){
+class STMManagedObjectModel(var model: String) {
 
-    var entitiesByName:MutableMap<String, STMEntityDescription> = hashMapOf()
+    var entitiesByName: MutableMap<String, STMEntityDescription> = hashMapOf()
 
     private val gson = STMFunctions.gson
 
@@ -18,7 +18,7 @@ class STMManagedObjectModel(var model: String){
 
         val mapModel = gson.fromJson(model, Map::class.java)
 
-        val entityArray = (mapModel["model"] as? Map<* , *>)?.get("entity") as? ArrayList<*>
+        val entityArray = (mapModel["model"] as? Map<*, *>)?.get("entity") as? ArrayList<*>
 
         entityArray?.forEach {
 
@@ -32,7 +32,7 @@ class STMManagedObjectModel(var model: String){
 
     override fun equals(other: Any?): Boolean {
 
-        if (other !is STMManagedObjectModel){
+        if (other !is STMManagedObjectModel) {
             return false
         }
 
@@ -43,7 +43,7 @@ class STMManagedObjectModel(var model: String){
         return entitiesByName.hashCode()
     }
 
-    fun saveToFile(path:String){
+    fun saveToFile(path: String) {
 
         val file = File(path)
 

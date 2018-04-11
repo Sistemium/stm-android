@@ -7,12 +7,12 @@ import com.sistemium.sissales.persisting.STMPredicate
  */
 interface STMPersistingTransaction {
 
-    var modellingDelegate:STMModelling?
+    var modellingDelegate: STMModelling?
 
-    fun findAllSync(entityName:String, predicate: STMPredicate?, options:Map<*,*>?):ArrayList<Map<*,*>>
+    fun findAllSync(entityName: String, predicate: STMPredicate?, options: Map<*, *>?): ArrayList<Map<*, *>>
 
-    fun mergeWithoutSave(entityName:String, attributes:Map<*,*>, options:Map<*,*>?): Map<*,*>?
+    fun mergeWithoutSave(entityName: String, attributes: Map<*, *>, options: Map<*, *>?): Map<*, *>?
 
-    fun destroyWithoutSave(entityName:String, predicate:STMPredicate?, options:Map<*,*>?):Int
+    fun destroyWithoutSave(entityName: String, predicate: STMPredicate?, options: Map<*, *>?): Int
 
 }

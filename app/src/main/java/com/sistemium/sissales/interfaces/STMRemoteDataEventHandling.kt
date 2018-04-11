@@ -5,10 +5,10 @@ package com.sistemium.sissales.interfaces
  */
 interface STMRemoteDataEventHandling {
 
-    fun remoteUpdated(entityName:String, attributes:Map<*,*>)
+    fun remoteUpdated(entityName: String, attributes: Map<*, *>)
 
-    fun remoteHasNewData(entityName:String)
+    fun remoteHasNewData(entityName: String)
 
-    fun remoteDestroyed(entityName:String, id:String)
+    fun remoteDestroyed(entityName: String, id: String)
 
 }

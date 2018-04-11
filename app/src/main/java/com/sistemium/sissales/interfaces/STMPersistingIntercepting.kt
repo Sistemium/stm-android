@@ -5,8 +5,8 @@ package com.sistemium.sissales.interfaces
  */
 interface STMPersistingIntercepting {
 
-    fun beforeMergeEntityName(entityName:String, interceptor:STMPersistingMergeInterceptor?)
+    fun beforeMergeEntityName(entityName: String, interceptor: STMPersistingMergeInterceptor?)
 
-    fun applyMergeInterceptors(entityName:String, attributes:Map<*,*>, options:Map<*,*>?, persistingTransaction: STMPersistingTransaction?): Map<*, *>?
+    fun applyMergeInterceptors(entityName: String, attributes: Map<*, *>, options: Map<*, *>?, persistingTransaction: STMPersistingTransaction?): Map<*, *>?
 
 }

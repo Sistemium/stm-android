@@ -12,7 +12,9 @@ import java.util.*
  */
 class STMLogger private constructor() {
 
-    private object Holder { val INSTANCE = STMLogger() }
+    private object Holder {
+        val INSTANCE = STMLogger()
+    }
 
     companion object {
         val sharedLogger: STMLogger by lazy { Holder.INSTANCE }
@@ -22,10 +24,10 @@ class STMLogger private constructor() {
 
     private val availableTypes = arrayListOf("important", "error", "warning", "info", "debug")
 
-    private var uploadLogType:String? = null
+    private var uploadLogType: String? = null
         get() {
 
-            if (field == null){
+            if (field == null) {
 
                 field = session?.settingsController?.stringValueForSettings("uploadLog.type", "syncer")
 
@@ -35,35 +37,35 @@ class STMLogger private constructor() {
 
         }
 
-    fun infoMessage(text:String){
+    fun infoMessage(text: String) {
 
         saveLogMessageWithText(text, STMLogMessageType.STMLogMessageTypeInfo)
 
     }
 
-    fun errorMessage(text:String){
+    fun errorMessage(text: String) {
 
         saveLogMessageWithText(text, STMLogMessageType.STMLogMessageTypeError)
 
     }
 
-    fun importantMessage(text:String){
+    fun importantMessage(text: String) {
 
         saveLogMessageWithText(text, STMLogMessageType.STMLogMessageTypeImportant)
 
     }
 
-    fun syncingTypesForSettingType(settingType:String?):ArrayList<String>{
+    fun syncingTypesForSettingType(settingType: String?): ArrayList<String> {
 
         val types = ArrayList(availableTypes)
 
-        if (settingType == "debug"){
+        if (settingType == "debug") {
             return types
         } else {
 
             types.remove("debug")
 
-            if (settingType == "debug"){
+            if (settingType == "debug") {
 
                 return types
 
@@ -71,7 +73,7 @@ class STMLogger private constructor() {
 
                 types.remove("debug")
 
-                if (settingType == "info"){
+                if (settingType == "info") {
 
                     return types
 
@@ -109,7 +111,7 @@ class STMLogger private constructor() {
 
     }
 
-    fun saveLogMessageWithText(text:String, numType: STMLogMessageType){
+    fun saveLogMessageWithText(text: String, numType: STMLogMessageType) {
 
         var type = numType.toString()
 
@@ -117,7 +119,7 @@ class STMLogger private constructor() {
 
         val uploadTypes = syncingTypesForSettingType(uploadLogType)
 
-        if (uploadTypes.contains(type)){
+        if (uploadTypes.contains(type)) {
 
             val logMessageDic = hashMapOf(
                     "text" to text,
@@ -128,7 +130,7 @@ class STMLogger private constructor() {
 
             saveLogMessageDic(logMessageDic)
 
-        }else{
+        } else {
 
             nsLogMessageWithType(type, text)
 
@@ -136,7 +138,7 @@ class STMLogger private constructor() {
 
     }
 
-    private fun saveLogMessageDic(logMessageDic:Map<*,*>){
+    private fun saveLogMessageDic(logMessageDic: Map<*, *>) {
 
         val sessionIsRunning = this.session!!.status == STMSessionStatus.STMSessionRunning
 
@@ -148,7 +150,7 @@ class STMLogger private constructor() {
 
     }
 
-    private fun createAndSaveLogMessageFromDictionary(logMessageDic:Map<*,*>){
+    private fun createAndSaveLogMessageFromDictionary(logMessageDic: Map<*, *>) {
 
         val options = hashMapOf(STMConstants.STMPersistingOptionReturnSaved to false)
 
@@ -156,9 +158,9 @@ class STMLogger private constructor() {
 
     }
 
-    private fun nsLogMessageWithType(type:String?, text:String?){
+    private fun nsLogMessageWithType(type: String?, text: String?) {
 
-        Log.i("Log","$type, $text")
+        Log.i("Log", "$type, $text")
 
     }
 

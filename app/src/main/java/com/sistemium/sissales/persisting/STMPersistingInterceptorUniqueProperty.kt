@@ -8,16 +8,17 @@ import java.util.*
 /**
  * Created by edgarjanvuicik on 22/01/2018.
  */
-class STMPersistingInterceptorUniqueProperty: STMPersistingMergeInterceptor {
+class STMPersistingInterceptorUniqueProperty : STMPersistingMergeInterceptor {
 
-    var entityName:String? = null
-    var propertyName:String? = null
+    var entityName: String? = null
+    var propertyName: String? = null
 
     override fun interceptedAttributes(attributes: Map<*, *>, options: Map<*, *>?, persistingTransaction: STMPersistingTransaction?): Map<*, *>? {
 
-        val value = attributes[this.propertyName] ?: throw Exception("$propertyName can not be null in STMPersisterInterceptorUniqueProperty")
+        val value = attributes[this.propertyName]
+                ?: throw Exception("$propertyName can not be null in STMPersisterInterceptorUniqueProperty")
 
-        val predicate = STMPredicate("=",STMPredicate(propertyName!!),STMPredicate("'$value'"))
+        val predicate = STMPredicate("=", STMPredicate(propertyName!!), STMPredicate("'$value'"))
 
         val findOptions = hashMapOf(STMConstants.STMPersistingOptionPageSize to 1)
 

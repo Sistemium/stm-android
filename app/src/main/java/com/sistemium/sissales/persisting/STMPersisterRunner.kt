@@ -10,9 +10,9 @@ import com.sistemium.sissales.interfaces.STMPersistingTransaction
  * Created by edgarjanvuicik on 20/11/2017.
  */
 
-class STMPersisterRunner(private val adapters:HashMap<STMStorageType, STMAdapting>):STMPersistingRunning {
+class STMPersisterRunner(private val adapters: HashMap<STMStorageType, STMAdapting>) : STMPersistingRunning {
 
-    override fun readOnly(block: (persistingTransaction: STMPersistingTransaction) -> ArrayList<Map<*, *>>):ArrayList<Map<*, *>> {
+    override fun readOnly(block: (persistingTransaction: STMPersistingTransaction) -> ArrayList<Map<*, *>>): ArrayList<Map<*, *>> {
 
         val readOnlyTransactionCoordinator = STMPersisterTransactionCoordinator(adapters, true)
 
@@ -26,7 +26,7 @@ class STMPersisterRunner(private val adapters:HashMap<STMStorageType, STMAdaptin
 
             return result
 
-        }catch (e:Exception){
+        } catch (e: Exception) {
 
             readOnlyTransactionCoordinator.endTransactionWithSuccess(false)
 
@@ -48,7 +48,7 @@ class STMPersisterRunner(private val adapters:HashMap<STMStorageType, STMAdaptin
 
             transactionCoordinator.endTransactionWithSuccess(result)
 
-        } catch (e:Exception){
+        } catch (e: Exception) {
 
             transactionCoordinator.endTransactionWithSuccess(false)
 

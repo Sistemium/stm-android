@@ -5,11 +5,11 @@ package com.sistemium.sissales.interfaces
  */
 interface STMDataSyncing {
 
-    var subscriberDelegate:STMDataSyncingSubscriber?
+    var subscriberDelegate: STMDataSyncingSubscriber?
 
     fun startSyncing()
     fun pauseSyncing()
 
-    fun setSynced(success:Boolean, entityName:String, itemData:Map<*,*>, itemVersion:String):Boolean
+    fun setSynced(success: Boolean, entityName: String, itemData: Map<*, *>, itemVersion: String): Boolean
 
 }

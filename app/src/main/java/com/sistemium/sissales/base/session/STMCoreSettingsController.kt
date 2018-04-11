@@ -10,12 +10,12 @@ import java.util.*
 /**
  * Created by edgarjanvuicik on 23/01/2018.
  */
-class STMCoreSettingsController :STMPersistingMergeInterceptor, STMSettingsController {
+class STMCoreSettingsController : STMPersistingMergeInterceptor, STMSettingsController {
 
     var persistenceDelegate: STMFullStackPersisting? = null
         set(value) {
 
-            if (value != null){
+            if (value != null) {
 
                 field = value
 
@@ -25,15 +25,15 @@ class STMCoreSettingsController :STMPersistingMergeInterceptor, STMSettingsContr
 
         }
 
-    private var currentSettings:ArrayList<Map<*,*>>? = null
+    private var currentSettings: ArrayList<Map<*, *>>? = null
 
     override fun currentSettingsForGroup(group: String): Map<*, *>? {
 
-        val res = hashMapOf<Any,Any>()
+        val res = hashMapOf<Any, Any>()
 
         currentSettings?.forEach {
 
-            if (it["group"] == group && it["name"] != null && it["value"] != null){
+            if (it["group"] == group && it["name"] != null && it["value"] != null) {
 
                 res[it["name"]!!] = it["value"]!!
 
@@ -53,7 +53,8 @@ class STMCoreSettingsController :STMPersistingMergeInterceptor, STMSettingsContr
 
     override fun interceptedAttributes(attributes: Map<*, *>, options: Map<*, *>?, persistingTransaction: STMPersistingTransaction?): Map<*, *>? {
 
-        val setting = this.settingWithName(attributes["name"] as? String, attributes["group"] as? String) ?: return attributes
+        val setting = this.settingWithName(attributes["name"] as? String, attributes["group"] as? String)
+                ?: return attributes
 
         val mutAtr = HashMap(attributes)
 
@@ -63,7 +64,7 @@ class STMCoreSettingsController :STMPersistingMergeInterceptor, STMSettingsContr
 
     }
 
-    private fun settingWithName(name:String?, group:String?):Map<*,*>?{
+    private fun settingWithName(name: String?, group: String?): Map<*, *>? {
 
         return currentSettings!!.filter {
 

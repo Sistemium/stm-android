@@ -13,7 +13,7 @@ import java.sql.SQLException
  */
 class STMSQLIteSchema(private val database: SQLiteDatabase) {
 
-    private var modelMapping:STMModelMapping? = null
+    private var modelMapping: STMModelMapping? = null
     private var migrationSuccessful = false
     private var columnsDictionary: HashMap<String, ArrayList<String>>? = null
     private val builtInAttributes = arrayListOf(
@@ -22,15 +22,15 @@ class STMSQLIteSchema(private val database: SQLiteDatabase) {
             STMConstants.STMPersistingKeyVersion,
             STMConstants.STMPersistingOptionLts,
             STMConstants.STMPersistingKeyPhantom
-            )
+    )
     private val ignoredAttributes = builtInAttributes + "xid"
     private var recreatedTables = hashSetOf<String>()
     private val tablesToReload = hashSetOf<String>()
-    private var modeler:STMModelling? = null
+    private var modeler: STMModelling? = null
 
-    fun createTablesWithModelMapping(modelMapping: STMModelMapping, modeler:STMModelling): Map<String, ArrayList<String>>{
+    fun createTablesWithModelMapping(modelMapping: STMModelMapping, modeler: STMModelling): Map<String, ArrayList<String>> {
 
-        STMFunctions.debugLog("STMSQLIteSchema","createTablesWithModelMapping")
+        STMFunctions.debugLog("STMSQLIteSchema", "createTablesWithModelMapping")
         this.modelMapping = modelMapping
         this.modeler = modeler
         migrationSuccessful = true
@@ -40,7 +40,7 @@ class STMSQLIteSchema(private val database: SQLiteDatabase) {
             addEntity(entityDescription)
         }
 
-        for (entityDescription in modelMapping.removedEntities){
+        for (entityDescription in modelMapping.removedEntities) {
             deleteEntity(entityDescription)
         }
 
@@ -99,15 +99,15 @@ class STMSQLIteSchema(private val database: SQLiteDatabase) {
         fillRecreatedTablesWithFantom()
         eTagReseting()
 
-        return if (migrationSuccessful){
+        return if (migrationSuccessful) {
 
-            STMFunctions.debugLog("STMSQLiteSchema","model migrating SUCCESS")
+            STMFunctions.debugLog("STMSQLiteSchema", "model migrating SUCCESS")
 
             columnsDictionary!!
 
         } else {
 
-            STMFunctions.debugLog("STMSQLiteSchema","model migrating NOT SUCCESS")
+            STMFunctions.debugLog("STMSQLiteSchema", "model migrating NOT SUCCESS")
 
             columnsDictionary!!
 
@@ -115,7 +115,7 @@ class STMSQLIteSchema(private val database: SQLiteDatabase) {
 
     }
 
-    fun currentDBScheme(): Map<String, ArrayList<String>>{
+    fun currentDBScheme(): Map<String, ArrayList<String>> {
 
         val result = hashMapOf<String, ArrayList<String>>()
 
@@ -148,7 +148,7 @@ class STMSQLIteSchema(private val database: SQLiteDatabase) {
 
                 result[tableName] = columns
 
-            }while (c.moveToNext())
+            } while (c.moveToNext())
         }
 
         c.close()
@@ -157,22 +157,22 @@ class STMSQLIteSchema(private val database: SQLiteDatabase) {
 
     }
 
-    private fun addEntity(entity:STMEntityDescription){
+    private fun addEntity(entity: STMEntityDescription) {
 
         if (entity.abstract) return
 
-        STMFunctions.debugLog("STMSQLiteSchema","add entity ${entity.entityName}")
+        STMFunctions.debugLog("STMSQLiteSchema", "add entity ${entity.entityName}")
         val columns = ArrayList(builtInAttributes)
         val tableName = STMFunctions.removePrefixFromEntityName(entity.entityName)
         val tableExists = isTableExists(tableName, database)
-        if (!tableExists){
+        if (!tableExists) {
             migrationSuccessful = migrationSuccessful && executeDDL(createTableDDL(tableName))
         }
 
         val propertiesColumns = processPropertiesForEntity(entity, tableName)
 
         columns.addAll(propertiesColumns)
-        if (columns.isEmpty()){
+        if (columns.isEmpty()) {
 
             columnsDictionary!!.remove(tableName)
 
@@ -182,14 +182,14 @@ class STMSQLIteSchema(private val database: SQLiteDatabase) {
 
     }
 
-    private fun executeDDL(ddls:ArrayList<String>):Boolean{
+    private fun executeDDL(ddls: ArrayList<String>): Boolean {
 
         if (ddls.isEmpty()) return true
         try {
             ddls
                     .filterNot { it.isEmpty() }
                     .forEach { database.execSQL(it) }
-        }catch (e: SQLException){
+        } catch (e: SQLException) {
 
             return false
 
@@ -199,7 +199,7 @@ class STMSQLIteSchema(private val database: SQLiteDatabase) {
 
     }
 
-    private fun createTableDDL(tableName:String):ArrayList<String>{
+    private fun createTableDDL(tableName: String): ArrayList<String> {
 
         val builtInColumns = arrayListOf<String>()
 
@@ -229,7 +229,7 @@ class STMSQLIteSchema(private val database: SQLiteDatabase) {
 
     }
 
-    private fun isTableExists(tableName: String, db:SQLiteDatabase): Boolean {
+    private fun isTableExists(tableName: String, db: SQLiteDatabase): Boolean {
         var isExist = false
         val cursor = db.rawQuery("select DISTINCT tbl_name from sqlite_master where tbl_name = '$tableName'", null)
         if (cursor != null) {
@@ -241,7 +241,7 @@ class STMSQLIteSchema(private val database: SQLiteDatabase) {
         return isExist
     }
 
-    private fun processPropertiesForEntity(entity:STMEntityDescription, tableName:String):ArrayList<String>{
+    private fun processPropertiesForEntity(entity: STMEntityDescription, tableName: String): ArrayList<String> {
 
         val columns = arrayListOf<String>()
 
@@ -265,10 +265,10 @@ class STMSQLIteSchema(private val database: SQLiteDatabase) {
 
     }
 
-    private fun addColumns(columnAttributes:ArrayList<STMAttributeDescription>, tableName:String):ArrayList<String>{
+    private fun addColumns(columnAttributes: ArrayList<STMAttributeDescription>, tableName: String): ArrayList<String> {
 
         val columns = arrayListOf<String>()
-        for (attribute in columnAttributes){
+        for (attribute in columnAttributes) {
 
             columns.add((attribute.attributeName))
             migrationSuccessful = migrationSuccessful && executeDDL(addAttributeDDL(attribute, tableName))
@@ -278,7 +278,7 @@ class STMSQLIteSchema(private val database: SQLiteDatabase) {
 
     }
 
-    private fun addAttributeDDL(attribute:STMAttributeDescription, tableName:String):ArrayList<String>{
+    private fun addAttributeDDL(attribute: STMAttributeDescription, tableName: String): ArrayList<String> {
 
         val clauses = arrayListOf<String>()
         val columnName = attribute.attributeName
@@ -295,12 +295,12 @@ class STMSQLIteSchema(private val database: SQLiteDatabase) {
 
     }
 
-    private fun addRelationships(relationships:ArrayList<STMRelationshipDescription>, tableName:String):ArrayList<String>{
+    private fun addRelationships(relationships: ArrayList<STMRelationshipDescription>, tableName: String): ArrayList<String> {
 
         val columns = arrayListOf<String>()
-        for (relationship in relationships){
+        for (relationship in relationships) {
 
-            if (relationship.isToMany){
+            if (relationship.isToMany) {
 
                 val ddl = addToManyRelationshipDDL(relationship, tableName)
 
@@ -319,7 +319,7 @@ class STMSQLIteSchema(private val database: SQLiteDatabase) {
 
     }
 
-    private fun sqliteTypeForAttributeType(attributeType:String):String{
+    private fun sqliteTypeForAttributeType(attributeType: String): String {
 
         return when (attributeType) {
             "String", "Date", "Undefined", "Binary", "Transformable" -> STMConstants.SQLiteText
@@ -330,11 +330,11 @@ class STMSQLIteSchema(private val database: SQLiteDatabase) {
 
     }
 
-    private fun addToManyRelationshipDDL(relationship:STMRelationshipDescription, tableName:String):ArrayList<String>{
+    private fun addToManyRelationshipDDL(relationship: STMRelationshipDescription, tableName: String): ArrayList<String> {
 
-        if (!relationship.isToMany){
+        if (!relationship.isToMany) {
 
-            STMFunctions.debugLog("STMSQLLiteSchema","attempt to add non-to-many relationship with addToManyRelationshipDDL")
+            STMFunctions.debugLog("STMSQLLiteSchema", "attempt to add non-to-many relationship with addToManyRelationshipDDL")
             return arrayListOf()
 
         }
@@ -349,7 +349,7 @@ class STMSQLIteSchema(private val database: SQLiteDatabase) {
 
     }
 
-    private fun createTriggerDDL(name:String, event:String, tableName:String, body:String, whenn:String?):String{
+    private fun createTriggerDDL(name: String, event: String, tableName: String, body: String, whenn: String?): String {
 
         val _when = if (whenn != null) "WHEN " + whenn else ""
         val formats = arrayListOf(
@@ -361,11 +361,11 @@ class STMSQLIteSchema(private val database: SQLiteDatabase) {
 
     }
 
-    private fun addRelationshipDDL(relationship:STMRelationshipDescription, tableName:String):ArrayList<String>{
+    private fun addRelationshipDDL(relationship: STMRelationshipDescription, tableName: String): ArrayList<String> {
 
-        if (relationship.isToMany){
+        if (relationship.isToMany) {
 
-            STMFunctions.debugLog("STMSQLLiteSchema","attempt to add non-to-one relationship with addRelationshipDDL")
+            STMFunctions.debugLog("STMSQLLiteSchema", "attempt to add non-to-one relationship with addRelationshipDDL")
             return arrayListOf()
 
         }
@@ -389,11 +389,11 @@ class STMSQLIteSchema(private val database: SQLiteDatabase) {
 
     }
 
-    private fun columnDDL(columnName:String, datatype:String?, constraints:String?):String{
+    private fun columnDDL(columnName: String, datatype: String?, constraints: String?): String {
 
         val clauses = arrayListOf<String>()
         clauses.add(quoted(columnName))
-        if (datatype != null){
+        if (datatype != null) {
 
             clauses.add(datatype)
 
@@ -408,25 +408,25 @@ class STMSQLIteSchema(private val database: SQLiteDatabase) {
 
     }
 
-    private fun quoted(aString:String):String{
+    private fun quoted(aString: String): String {
 
         return "[$aString]"
 
     }
 
-    private fun createIndexDDL(tableName:String, columnName:String):String{
+    private fun createIndexDDL(tableName: String, columnName: String): String {
 
         return "CREATE INDEX IF NOT EXISTS ${tableName}_$columnName on $tableName ($columnName);"
 
     }
 
-    private fun deleteEntity(entity:STMEntityDescription){
+    private fun deleteEntity(entity: STMEntityDescription) {
 
         STMFunctions.debugLog("STMSQLLiteSchema", "delete entity ${entity.entityName}")
         val tableName = STMFunctions.removePrefixFromEntityName(entity.entityName)
         val result = executeDDL(arrayListOf(dropTable(tableName)))
 
-        if (result){
+        if (result) {
 
             columnsDictionary!!.remove(tableName)
 
@@ -436,15 +436,15 @@ class STMSQLIteSchema(private val database: SQLiteDatabase) {
 
     }
 
-    private fun dropTable(tableName:String):String{
+    private fun dropTable(tableName: String): String {
 
         return "DROP TABLE IF EXISTS $tableName"
 
     }
 
-    private fun recreateEntityWithName(entityName:String){
+    private fun recreateEntityWithName(entityName: String) {
 
-        STMFunctions.debugLog("STMSQLiteSchema","recreateEntityWithName: $entityName")
+        STMFunctions.debugLog("STMSQLiteSchema", "recreateEntityWithName: $entityName")
         val tableName = STMFunctions.removePrefixFromEntityName(entityName)
         if (recreatedTables.contains(tableName)) return
         val entity = modelMapping!!.destinationModel.entitiesByName[entityName]
@@ -455,10 +455,10 @@ class STMSQLIteSchema(private val database: SQLiteDatabase) {
 
     }
 
-    private fun deleteToManyRelationshipDDL(relationship:STMRelationshipDescription, tableName:String):String?{
+    private fun deleteToManyRelationshipDDL(relationship: STMRelationshipDescription, tableName: String): String? {
 
-        if (!relationship.isToMany){
-            STMFunctions.debugLog("STMSQLiteSchema","attempt to delete non-to-many relationship with deleteToManyRelationshipDDL")
+        if (!relationship.isToMany) {
+            STMFunctions.debugLog("STMSQLiteSchema", "attempt to delete non-to-many relationship with deleteToManyRelationshipDDL")
             return null
         }
 
@@ -470,7 +470,7 @@ class STMSQLIteSchema(private val database: SQLiteDatabase) {
 
     }
 
-    private fun addPropertiesArray(propertiesArray:ArrayList<STMPropertyDescription>, entityName:String){
+    private fun addPropertiesArray(propertiesArray: ArrayList<STMPropertyDescription>, entityName: String) {
 
         if (propertiesArray.count() == 0) return
 
@@ -503,9 +503,9 @@ class STMSQLIteSchema(private val database: SQLiteDatabase) {
 
     }
 
-    private fun fillRecreatedTablesWithFantom(){
+    private fun fillRecreatedTablesWithFantom() {
 
-        for (tableName in recreatedTables){
+        for (tableName in recreatedTables) {
 
             val entityName = STMFunctions.addPrefixToEntityName(tableName)
             val entity = modelMapping!!.destinationModel.entitiesByName[entityName]
@@ -514,7 +514,7 @@ class STMSQLIteSchema(private val database: SQLiteDatabase) {
         }
     }
 
-    private fun fillWithFantoms(entity:STMEntityDescription){
+    private fun fillWithFantoms(entity: STMEntityDescription) {
 
         STMFunctions.debugLog("STMSQLiteSchema", "fillWithFantoms: ${entity.entityName}")
 
@@ -527,9 +527,9 @@ class STMSQLIteSchema(private val database: SQLiteDatabase) {
 
         })
 
-        relationships.forEach{
+        relationships.forEach {
 
-            STMFunctions.debugLog("STMSQLiteSchema","${entity.entityName} fill with fantoms")
+            STMFunctions.debugLog("STMSQLiteSchema", "${entity.entityName} fill with fantoms")
             val toOneRelName = modelMapping!!.destinationModel.entitiesByName[it.destinationEntityName]!!.relationshipsByName[it.inverseRelationshipName]!!.relationshipName
             val toManyRelTableName = STMFunctions.removePrefixFromEntityName(it.destinationEntityName)
             val insertFantomsDDL = "INSERT INTO $tableName (id, isFantom, deviceCts) SELECT DISTINCT $toOneRelName, 1, null FROM $toManyRelTableName"
@@ -539,9 +539,9 @@ class STMSQLIteSchema(private val database: SQLiteDatabase) {
 
     }
 
-    private fun eTagReseting(){
+    private fun eTagReseting() {
 
-        if (tablesToReload.count() == 0){
+        if (tablesToReload.count() == 0) {
 
             return
 
@@ -549,7 +549,7 @@ class STMSQLIteSchema(private val database: SQLiteDatabase) {
 
         val questionMarks = arrayListOf<String>()
 
-        tablesToReload.forEach{
+        tablesToReload.forEach {
 
             questionMarks.add("?")
 
@@ -565,7 +565,7 @@ class STMSQLIteSchema(private val database: SQLiteDatabase) {
 
             database.update("ClientEntity", cv, "[name] IN ($formatString)", tablesToReload.toArray(arrayOf()))
 
-        }catch(e:Exception) {
+        } catch (e: Exception) {
 
             migrationSuccessful = false
 

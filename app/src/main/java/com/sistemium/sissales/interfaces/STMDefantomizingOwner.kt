@@ -5,7 +5,7 @@ package com.sistemium.sissales.interfaces
  */
 interface STMDefantomizingOwner {
 
-    fun defantomizeEntityName(entityName:String, identifier:String)
+    fun defantomizeEntityName(entityName: String, identifier: String)
 
     fun defantomizingFinished()
 

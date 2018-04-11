@@ -5,7 +5,7 @@ package com.sistemium.sissales.interfaces
  */
 interface STMFiling {
 
-    fun persistencePath(folderName:String):String
-    fun bundledModelJSON(modelName:String):String
+    fun persistencePath(folderName: String): String
+    fun bundledModelJSON(modelName: String): String
 
 }

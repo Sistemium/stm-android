@@ -13,7 +13,7 @@ import java.util.*
 /**
  * Created by edgarjanvuicik on 23/03/2018.
  */
-class ProfileAdapter(val context: Context, private val tabs:ArrayList<Map<*,*>>) : BaseAdapter() {
+class ProfileAdapter(val context: Context, private val tabs: ArrayList<Map<*, *>>) : BaseAdapter() {
 
     override fun getView(p0: Int, p1: View?, p2: ViewGroup?): View {
 
@@ -31,11 +31,11 @@ class ProfileAdapter(val context: Context, private val tabs:ArrayList<Map<*,*>>)
 
         var imageName = tab["imageName"] as? String
 
-        if (imageName != null){
+        if (imageName != null) {
 
             imageName = imageName.replace("-", "_").replace(" ", "_").toLowerCase().removeSuffix(".png")
 
-            if (imageName[0].isDigit()){
+            if (imageName[0].isDigit()) {
 
                 imageName = "drawable_$imageName"
 

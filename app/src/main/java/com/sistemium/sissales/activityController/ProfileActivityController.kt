@@ -9,7 +9,7 @@ import kotlinx.android.synthetic.main.content_profile.*
 /**
  * Created by edgarjanvuicik on 20/03/2018.
  */
-class ProfileActivityController(private var activity:ProfileActivity) {
+class ProfileActivityController(private var activity: ProfileActivity) {
 
     companion object {
 
@@ -17,15 +17,15 @@ class ProfileActivityController(private var activity:ProfileActivity) {
 
     }
 
-    fun setMaxProgress(max:Int){
+    fun setMaxProgress(max: Int) {
 
-        activity.runOnUiThread{
+        activity.runOnUiThread {
 
             activity.progressBar!!.max = max
 
             activity.progressBar!!.progress = 0
 
-            if (max > 0){
+            if (max > 0) {
 
                 activity.progressBar!!.visibility = View.VISIBLE
 
@@ -35,13 +35,13 @@ class ProfileActivityController(private var activity:ProfileActivity) {
 
     }
 
-    fun addProgress(progress:Int){
+    fun addProgress(progress: Int) {
 
-        activity.runOnUiThread{
+        activity.runOnUiThread {
 
             activity.progressBar!!.progress += progress
 
-            if (activity.progressBar!!.progress >= activity.progressBar!!.max){
+            if (activity.progressBar!!.progress >= activity.progressBar!!.max) {
 
                 activity.progressBar!!.visibility = View.INVISIBLE
 
@@ -51,9 +51,9 @@ class ProfileActivityController(private var activity:ProfileActivity) {
 
     }
 
-    fun hideGridView(){
+    fun hideGridView() {
 
-        activity.runOnUiThread{
+        activity.runOnUiThread {
 
             activity.gridView.visibility = View.INVISIBLE
 
@@ -61,9 +61,9 @@ class ProfileActivityController(private var activity:ProfileActivity) {
 
     }
 
-    fun showGridView(){
+    fun showGridView() {
 
-        activity.runOnUiThread{
+        activity.runOnUiThread {
 
             activity.gridView.visibility = View.VISIBLE
 
@@ -71,9 +71,9 @@ class ProfileActivityController(private var activity:ProfileActivity) {
 
     }
 
-    fun setProgressInfo(info:Int){
+    fun setProgressInfo(info: Int) {
 
-        activity.runOnUiThread{
+        activity.runOnUiThread {
 
             got += info
 
@@ -81,7 +81,7 @@ class ProfileActivityController(private var activity:ProfileActivity) {
 
             activity.progressInfo?.text = text
 
-            if (info == -1){
+            if (info == -1) {
 
                 got = 0
 

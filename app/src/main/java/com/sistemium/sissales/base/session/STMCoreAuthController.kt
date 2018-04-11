@@ -18,9 +18,6 @@ import nl.komponents.kovenant.task
 import nl.komponents.kovenant.then
 
 
-
-
-
 /**
  * Created by edgarjanvuicik on 05/02/2018.
  */
@@ -30,7 +27,7 @@ class STMCoreAuthController {
 
     companion object {
 
-        var accessToken:String?
+        var accessToken: String?
             get() {
 
                 val prefStore = SecuredPreferenceStore.getSharedInstance()
@@ -45,12 +42,12 @@ class STMCoreAuthController {
 
             }
 
-        var rolesResponse:Map<*,*>?
+        var rolesResponse: Map<*, *>?
             get() {
 
                 val prefStore = MyApplication.appContext?.getSharedPreferences("Sistemium", Context.MODE_PRIVATE)
 
-                val rolesResponseJSON =  prefStore?.getString("rolesResponse", null)
+                val rolesResponseJSON = prefStore?.getString("rolesResponse", null)
 
                 return STMFunctions.gson.fromJson(rolesResponseJSON, Map::class.java)
 
@@ -59,7 +56,7 @@ class STMCoreAuthController {
 
                 val prefStore = MyApplication.appContext?.getSharedPreferences("Sistemium", Context.MODE_PRIVATE)
 
-                val rolesResponseJSON =  STMFunctions.gson.toJson(value)
+                val rolesResponseJSON = STMFunctions.gson.toJson(value)
 
                 prefStore?.edit()?.putString("rolesResponse", rolesResponseJSON)?.apply()
 
@@ -70,7 +67,7 @@ class STMCoreAuthController {
 
                 val prefStore = MyApplication.appContext?.getSharedPreferences("Sistemium", Context.MODE_PRIVATE)
 
-                val rolesResponseJSON =  prefStore?.getString("stcTabs", null)
+                val rolesResponseJSON = prefStore?.getString("stcTabs", null)
 
                 return STMFunctions.gson.fromJson(rolesResponseJSON, ArrayList::class.java)
 
@@ -79,13 +76,13 @@ class STMCoreAuthController {
 
                 val prefStore = MyApplication.appContext?.getSharedPreferences("Sistemium", Context.MODE_PRIVATE)
 
-                val stcTabsResponseJSON =  STMFunctions.gson.toJson(value)
+                val stcTabsResponseJSON = STMFunctions.gson.toJson(value)
 
                 prefStore?.edit()?.putString("stcTabs", stcTabsResponseJSON)?.apply()
 
             }
 
-        var accountOrg:String?
+        var accountOrg: String?
             get() {
 
                 val prefStore = MyApplication.appContext?.getSharedPreferences("Sistemium", Context.MODE_PRIVATE)
@@ -101,7 +98,7 @@ class STMCoreAuthController {
 
             }
 
-        var iSisDB:String?
+        var iSisDB: String?
             get() {
 
                 val prefStore = MyApplication.appContext?.getSharedPreferences("Sistemium", Context.MODE_PRIVATE)
@@ -117,7 +114,7 @@ class STMCoreAuthController {
 
             }
 
-        var requestID:String?
+        var requestID: String?
             get() {
 
                 val prefStore = MyApplication.appContext?.getSharedPreferences("Sistemium", Context.MODE_PRIVATE)
@@ -133,7 +130,7 @@ class STMCoreAuthController {
 
             }
 
-        var entityResource:String?
+        var entityResource: String?
             get() {
 
                 val prefStore = MyApplication.appContext?.getSharedPreferences("Sistemium", Context.MODE_PRIVATE)
@@ -149,7 +146,7 @@ class STMCoreAuthController {
 
             }
 
-        var socketURL:String?
+        var socketURL: String?
             get() {
 
                 val prefStore = MyApplication.appContext?.getSharedPreferences("Sistemium", Context.MODE_PRIVATE)
@@ -165,7 +162,7 @@ class STMCoreAuthController {
 
             }
 
-        var userID:String?
+        var userID: String?
             get() {
 
                 val prefStore = MyApplication.appContext?.getSharedPreferences("Sistemium", Context.MODE_PRIVATE)
@@ -181,7 +178,7 @@ class STMCoreAuthController {
 
             }
 
-        var userName:String?
+        var userName: String?
             get() {
 
                 val prefStore = MyApplication.appContext?.getSharedPreferences("Sistemium", Context.MODE_PRIVATE)
@@ -197,7 +194,7 @@ class STMCoreAuthController {
 
             }
 
-        var phoneNumber:String?
+        var phoneNumber: String?
             get() {
 
                 val prefStore = MyApplication.appContext?.getSharedPreferences("Sistemium", Context.MODE_PRIVATE)
@@ -215,9 +212,9 @@ class STMCoreAuthController {
 
         val dataModelName = "iSisSales"
 
-        fun requestNewSMSCode(phoneNumber:String):Promise<String?, Exception>{
+        fun requestNewSMSCode(phoneNumber: String): Promise<String?, Exception> {
 
-            return task{
+            return task {
 
                 val (_, _, result) = Fuel.get("https://api.sistemium.com/pha/auth", listOf("mobileNumber" to phoneNumber)).responseJson()
 
@@ -236,7 +233,7 @@ class STMCoreAuthController {
 
                     is Result.Failure -> {
 
-                        if (result.error.localizedMessage.startsWith("java.net.UnknownHostException: Unable to resolve host")){
+                        if (result.error.localizedMessage.startsWith("java.net.UnknownHostException: Unable to resolve host")) {
 
                             throw Exception(MyApplication.appContext!!.getString(R.string.no_internet))
 
@@ -252,13 +249,13 @@ class STMCoreAuthController {
 
         }
 
-        fun requestAccessToken(id:String, smsCode:String):Promise<String, Exception>{
+        fun requestAccessToken(id: String, smsCode: String): Promise<String, Exception> {
 
-            return task{
+            return task {
 
                 FuelManager.instance.baseHeaders = mapOf("user-agent" to STMConstants.userAgent, "DeviceUUID" to STMFunctions.deviceUUID())
 
-                val (_,_, result) = Fuel.get("https://api.sistemium.com/pha/auth", listOf("ID" to id, "smsCode" to smsCode)).responseJson()
+                val (_, _, result) = Fuel.get("https://api.sistemium.com/pha/auth", listOf("ID" to id, "smsCode" to smsCode)).responseJson()
 
                 when (result) {
                     is Result.Success -> {
@@ -277,7 +274,7 @@ class STMCoreAuthController {
 
                     is Result.Failure -> {
 
-                        if (result.error.localizedMessage.startsWith("java.net.UnknownHostException: Unable to resolve host")){
+                        if (result.error.localizedMessage.startsWith("java.net.UnknownHostException: Unable to resolve host")) {
 
                             throw Exception(MyApplication.appContext!!.getString(R.string.no_internet))
 
@@ -292,11 +289,11 @@ class STMCoreAuthController {
 
         }
 
-        fun logIn():Promise<Map<*,*>, Exception>{
+        fun logIn(): Promise<Map<*, *>, Exception> {
 
             val accessToken = STMCoreAuthController.accessToken
 
-            if (accessToken != null){
+            if (accessToken != null) {
 
                 val myIntent = Intent(MyApplication.appContext, ProfileActivity::class.java)
 
@@ -319,7 +316,7 @@ class STMCoreAuthController {
 
             }
 
-            return task{
+            return task {
 
                 throw Exception("no accessToken")
 
@@ -327,7 +324,7 @@ class STMCoreAuthController {
 
         }
 
-        private fun startSession(){
+        private fun startSession() {
 
             STMFunctions.debugLog("STMCoreAuthController", "socketURL $socketURL")
             STMFunctions.debugLog("STMCoreAuthController", "entity resource $entityResource")
@@ -340,13 +337,13 @@ class STMCoreAuthController {
 
         }
 
-        private fun requestRoles():Promise<Map<*,*>,Exception>{
+        private fun requestRoles(): Promise<Map<*, *>, Exception> {
 
             FuelManager.instance.baseHeaders = mapOf("user-agent" to "iSisSales/360", "DeviceUUID" to STMFunctions.deviceUUID(), "Authorization" to accessToken!!)
 
-            if (rolesResponse != null){
+            if (rolesResponse != null) {
 
-                return task{
+                return task {
 
                     startSession()
 
@@ -356,9 +353,9 @@ class STMCoreAuthController {
 
             }
 
-            return task{
+            return task {
 
-                val (_,_, result) = Fuel.get("https://api.sistemium.com/pha/roles", listOf("access_token" to accessToken)).responseJson()
+                val (_, _, result) = Fuel.get("https://api.sistemium.com/pha/roles", listOf("access_token" to accessToken)).responseJson()
 
                 when (result) {
                     is Result.Success -> {
@@ -367,19 +364,19 @@ class STMCoreAuthController {
 
                         rolesResponse = roles
 
-                        accountOrg = (roles["roles"] as? Map<*,*>)?.get("org") as? String
+                        accountOrg = (roles["roles"] as? Map<*, *>)?.get("org") as? String
 
-                        iSisDB = (roles["roles"] as? Map<*,*>)?.get("iSisDB") as? String
+                        iSisDB = (roles["roles"] as? Map<*, *>)?.get("iSisDB") as? String
 
-                        val tabs = (roles["roles"] as? Map<*,*>)?.get("stcTabs") as? ArrayList<*>
+                        val tabs = (roles["roles"] as? Map<*, *>)?.get("stcTabs") as? ArrayList<*>
 
-                        if (tabs != null){
+                        if (tabs != null) {
 
                             stcTabs = tabs
 
-                        }else{
+                        } else {
 
-                            val tab = (roles["roles"] as? Map<*,*>)?.get("stcTabs") as? Map<*,*>
+                            val tab = (roles["roles"] as? Map<*, *>)?.get("stcTabs") as? Map<*, *>
 
                             if (tab != null) {
 

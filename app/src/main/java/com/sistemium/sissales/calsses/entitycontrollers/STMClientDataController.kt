@@ -10,7 +10,7 @@ class STMClientDataController {
 
     companion object {
 
-        val clientData:Map<*,*>
+        val clientData: Map<*, *>
             get() {
 
                 val entityName = "STMClientData"
@@ -21,7 +21,7 @@ class STMClientDataController {
 
                 if (clientData == null) {
 
-                    clientData = hashMapOf<Any,Any>()
+                    clientData = hashMapOf<Any, Any>()
 
                 }
 

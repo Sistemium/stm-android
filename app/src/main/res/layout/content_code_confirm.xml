@@ -19,8 +19,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:labelFor="@+id/editText"
-        />
+        android:labelFor="@+id/editText" />
 
     <EditText
         android:id="@+id/editText"
@@ -37,8 +36,7 @@
         app:layout_constraintTop_toBottomOf="@+id/textView2"
         android:hint="@string/passwordHint"
         android:gravity="center"
-        android:background="@android:color/transparent"
-        />
+        android:background="@android:color/transparent" />
 
     <Button
         android:id="@+id/button"

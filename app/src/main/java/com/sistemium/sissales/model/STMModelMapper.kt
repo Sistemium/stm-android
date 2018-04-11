@@ -8,7 +8,7 @@ import kotlin.collections.ArrayList
 /**
  * Created by edgarjanvuicik on 28/11/2017.
  */
-class STMModelMapper(savedModel:STMManagedObjectModel?, override var destinationModel:STMManagedObjectModel):STMModelMapping {
+class STMModelMapper(savedModel: STMManagedObjectModel?, override var destinationModel: STMManagedObjectModel) : STMModelMapping {
 
     override val addedEntities: ArrayList<STMEntityDescription> by lazy {
 
@@ -66,22 +66,22 @@ class STMModelMapper(savedModel:STMManagedObjectModel?, override var destination
 
     }
 
-    var needToMigrate:Boolean = false
+    var needToMigrate: Boolean = false
 
     init {
 
-        if (savedModel != destinationModel){
+        if (savedModel != destinationModel) {
 
             val changes = addedEntities.size + removedEntities.size + addedAttributes.size + removedAttributes.size +
                     addedProperties.size + removedProperties.size + addedRelationships.size + removedRelationships.size
 
             if (changes > 0) {
 
-                STMFunctions.debugLog("STMModelMapper","ModelMapper need to migrate")
+                STMFunctions.debugLog("STMModelMapper", "ModelMapper need to migrate")
 
                 needToMigrate = true
 
-                STMFunctions.debugLog("STMModelMapper","Summ of changes: $changes")
+                STMFunctions.debugLog("STMModelMapper", "Summ of changes: $changes")
 
             }
 

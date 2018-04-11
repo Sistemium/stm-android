@@ -3,7 +3,7 @@ package com.sistemium.sissales.enums
 /**
  * Created by edgarjanvuicik on 31/01/2018.
  */
-enum class STMLogMessageType(private val type:String) {
+enum class STMLogMessageType(private val type: String) {
 
     STMLogMessageTypeImportant("important"),
     STMLogMessageTypeError("error"),
@@ -11,7 +11,7 @@ enum class STMLogMessageType(private val type:String) {
     STMLogMessageTypeInfo("info"),
     STMLogMessageTypeDebug("debug");
 
-    override fun toString():String{
+    override fun toString(): String {
 
         return type
 

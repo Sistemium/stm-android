@@ -9,7 +9,7 @@ import com.sistemium.sissales.interfaces.STMModelling
  * Created by edgarjanvuicik on 10/11/2017.
  */
 
-class STMModeller(modelJSON:String) : STMModelling {
+class STMModeller(modelJSON: String) : STMModelling {
 
     override var persistanceDelegate: STMFullStackPersisting? = null
 
@@ -33,7 +33,7 @@ class STMModeller(modelJSON:String) : STMModelling {
 
     override fun storageForEntityName(entityName: String): STMStorageType {
 
-        if (_storageForEntityName[entityName] != null){
+        if (_storageForEntityName[entityName] != null) {
 
             return _storageForEntityName[entityName]!!
 
@@ -43,7 +43,8 @@ class STMModeller(modelJSON:String) : STMModelling {
 
         val prefixedEntityName = STMFunctions.addPrefixToEntityName(entityName)
 
-        val entity = entitiesByName[prefixedEntityName] ?: return _storageForEntityName[entityName]!!
+        val entity = entitiesByName[prefixedEntityName]
+                ?: return _storageForEntityName[entityName]!!
 
         val storeOption = entity.userInfo["STORE"]
 
@@ -53,7 +54,7 @@ class STMModeller(modelJSON:String) : STMModelling {
             return _storageForEntityName[entityName]!!
         }
 
-        if (storeOption == null || storeOption == "FMDB" || storeOption == "STMSQLiteDatabaseOperation"){
+        if (storeOption == null || storeOption == "FMDB" || storeOption == "STMSQLiteDatabaseOperation") {
 
             _storageForEntityName[entityName] = STMStorageType.STMStorageTypeSQLiteDatabase
 
@@ -74,7 +75,7 @@ class STMModeller(modelJSON:String) : STMModelling {
 
     override fun fieldsForEntityName(entityName: String): Map<String, STMAttributeDescription> {
 
-        if (_fieldsForEntityName[entityName] != null){
+        if (_fieldsForEntityName[entityName] != null) {
 
             return _fieldsForEntityName[entityName]!!
 
@@ -84,7 +85,7 @@ class STMModeller(modelJSON:String) : STMModelling {
 
         _fieldsForEntityName[entityName] = entitiesByName[_entityName]?.attributesByName ?: hashMapOf()
 
-        if (entitiesByName[_entityName]?.parentEntity != null){
+        if (entitiesByName[_entityName]?.parentEntity != null) {
             _fieldsForEntityName[entityName] = _fieldsForEntityName[entityName]!!.plus(fieldsForEntityName(entitiesByName[_entityName]?.parentEntity!!))
 
         }
@@ -95,7 +96,7 @@ class STMModeller(modelJSON:String) : STMModelling {
 
     override fun objectRelationshipsForEntityName(entityName: String, isToMany: Boolean?, cascade: Boolean?, optional: Boolean?): Map<String, STMRelationshipDescription> {
 
-        if (_objectRelationshipsForEntityName["$entityName$isToMany$cascade$optional"] != null){
+        if (_objectRelationshipsForEntityName["$entityName$isToMany$cascade$optional"] != null) {
 
             return _objectRelationshipsForEntityName["$entityName$isToMany$cascade$optional"]!!
 
@@ -105,7 +106,7 @@ class STMModeller(modelJSON:String) : STMModelling {
 
         _objectRelationshipsForEntityName["$entityName$isToMany$cascade$optional"] = entitiesByName[_entityName]?.relationshipsByName ?: hashMapOf()
 
-        if (entitiesByName[_entityName]?.parentEntity != null){
+        if (entitiesByName[_entityName]?.parentEntity != null) {
             _objectRelationshipsForEntityName["$entityName$isToMany$cascade$optional"] = _objectRelationshipsForEntityName["$entityName$isToMany$cascade$optional"]!!.plus(objectRelationshipsForEntityName(entitiesByName[_entityName]?.parentEntity!!))
 
         }

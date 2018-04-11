@@ -5,7 +5,9 @@ package com.sistemium.sissales.calsses.entitycontrollers
  */
 class STMCorePicturesController {
 
-    private object Holder { val INSTANCE = STMCorePicturesController() }
+    private object Holder {
+        val INSTANCE = STMCorePicturesController()
+    }
 
     companion object {
 
@@ -13,7 +15,7 @@ class STMCorePicturesController {
 
     }
 
-    fun checkNotUploadedPhotos(){
+    fun checkNotUploadedPhotos() {
 
         //TODO not implemented
 

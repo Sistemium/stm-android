@@ -7,28 +7,30 @@ import com.sistemium.sissales.interfaces.STMSessionManager
 /**
  * Created by edgarjanvuicik on 08/02/2018.
  */
-class STMCoreSessionManager private constructor():STMSessionManager {
+class STMCoreSessionManager private constructor() : STMSessionManager {
 
-    private object Holder { val INSTANCE = STMCoreSessionManager() }
+    private object Holder {
+        val INSTANCE = STMCoreSessionManager()
+    }
 
     companion object {
         val sharedManager: STMCoreSessionManager by lazy { Holder.INSTANCE }
     }
 
-    var currentSession:STMSession? = null
+    var currentSession: STMSession? = null
         get() = sessions[currentSessionUID]
 
     private val sessions = hashMapOf<String, STMCoreSession>()
 
-    private var currentSessionUID:String? = null
+    private var currentSessionUID: String? = null
 
-    fun startSession(trackers:ArrayList<String>): STMSession?{
+    fun startSession(trackers: ArrayList<String>): STMSession? {
 
         val uid = STMCoreAuthController.userID
 
-        if (uid == null){
+        if (uid == null) {
 
-            Log.d("STMCoreSessionManager","no uid")
+            Log.d("STMCoreSessionManager", "no uid")
 
             return null
 

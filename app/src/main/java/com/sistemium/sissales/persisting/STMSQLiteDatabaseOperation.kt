@@ -7,15 +7,15 @@ import com.sistemium.sissales.model.STMSQLiteDatabaseAdapter
  * Created by edgarjanvuicik on 24/11/2017.
  */
 
-class STMSQLiteDatabaseOperation(val readOnly:Boolean, private var adapter: STMSQLiteDatabaseAdapter) :Runnable {
+class STMSQLiteDatabaseOperation(val readOnly: Boolean, private var adapter: STMSQLiteDatabaseAdapter) : Runnable {
 
     var success = false
 
-    val transaction:STMSQLiteDatabaseTransaction by lazy {
+    val transaction: STMSQLiteDatabaseTransaction by lazy {
 
-        synchronized(lock1){
+        synchronized(lock1) {
 
-            while (_transaction == null){
+            while (_transaction == null) {
 
                 lock1.wait()
 
@@ -31,7 +31,7 @@ class STMSQLiteDatabaseOperation(val readOnly:Boolean, private var adapter: STMS
 
     private val lock2 = Object()
 
-    private var database:SQLiteDatabase? = null
+    private var database: SQLiteDatabase? = null
 
     private var _transaction: STMSQLiteDatabaseTransaction? = null
 
@@ -39,15 +39,15 @@ class STMSQLiteDatabaseOperation(val readOnly:Boolean, private var adapter: STMS
 
 //        STMFunctions.debugLog("Syncer", "operation started")
 
-        if (readOnly){
+        if (readOnly) {
 //            STMFunctions.debugLog("DEBUG", "removing pool database from array")
 //            STMFunctions.debugLog("DEBUG", "pool database count before remove: ${adapter.poolDatabases.size}")
 
-            synchronized(adapter.poolDatabases){
+            synchronized(adapter.poolDatabases) {
                 database = adapter.poolDatabases.removeAt(0)
             }
 
-        }else{
+        } else {
 
             database = adapter.database
 
@@ -57,11 +57,11 @@ class STMSQLiteDatabaseOperation(val readOnly:Boolean, private var adapter: STMS
 
         _transaction!!.operation = this
 
-        synchronized(lock1){
+        synchronized(lock1) {
             lock1.notify()
         }
 
-        synchronized(lock2){
+        synchronized(lock2) {
 
             lock2.wait()
 
@@ -69,13 +69,13 @@ class STMSQLiteDatabaseOperation(val readOnly:Boolean, private var adapter: STMS
 
     }
 
-    fun finish(){
+    fun finish() {
 
-        if (readOnly){
+        if (readOnly) {
 
 //            STMFunctions.debugLog("SQLite", "returning pool database to array")
 
-            synchronized(adapter.poolDatabases){
+            synchronized(adapter.poolDatabases) {
                 adapter.poolDatabases.add(database!!)
             }
 
@@ -86,7 +86,7 @@ class STMSQLiteDatabaseOperation(val readOnly:Boolean, private var adapter: STMS
 
 //        STMFunctions.debugLog("Syncer", "operation ended")
 
-        synchronized(lock2){
+        synchronized(lock2) {
 
             lock2.notify()
 

@@ -8,13 +8,13 @@ import com.sistemium.sissales.enums.STMStorageType
 
 interface STMAdapting {
 
-    var model:STMModelling
-    var storageType:STMStorageType
-    var ignoredAttributeNames:Array<String>
-    var builtInAttributeNames:Array<String>
-    var columnsByTable:Map<String, Map<String, String>>?
+    var model: STMModelling
+    var storageType: STMStorageType
+    var ignoredAttributeNames: Array<String>
+    var builtInAttributeNames: Array<String>
+    var columnsByTable: Map<String, Map<String, String>>?
 
-    fun beginTransaction(readOnly:Boolean = false):STMPersistingTransaction
-    fun endTransactionWithSuccess(transaction:STMPersistingTransaction, success:Boolean = false)
+    fun beginTransaction(readOnly: Boolean = false): STMPersistingTransaction
+    fun endTransactionWithSuccess(transaction: STMPersistingTransaction, success: Boolean = false)
 
 }

@@ -18,22 +18,23 @@ import kotlin.collections.ArrayList
 /**
  * Created by edgarjanvuicik on 09/02/2018.
  */
-class STMSyncerHelper: STMDefantomizing, STMDataDownloading {
-    
+class STMSyncerHelper : STMDefantomizing, STMDataDownloading {
+
     override var downloadingQueue: ExecutorService? = null
     override var persistenceFantomsDelegate: STMPersistingFantoms? = null
     override var dataDownloadingOwner: STMDataDownloadingOwner? = null
-    override var defantomizingOwner:STMDefantomizingOwner? = null
-    @Volatile private var downloadingOperations = hashMapOf<String, STMDownloadingOperation>()
-    private var defantomizing:STMSyncerHelperDefantomizing? = null
+    override var defantomizingOwner: STMDefantomizingOwner? = null
+    @Volatile
+    private var downloadingOperations = hashMapOf<String, STMDownloadingOperation>()
+    private var defantomizing: STMSyncerHelperDefantomizing? = null
 
-    override fun startDownloading(entitiesNames:ArrayList<String>?) {
+    override fun startDownloading(entitiesNames: ArrayList<String>?) {
 
         ProfileActivity.profileActivityController?.hideGridView()
 
         var _entitiesNames = entitiesNames
 
-        if (downloadingQueue != null){
+        if (downloadingQueue != null) {
 
             return
 
@@ -41,12 +42,12 @@ class STMSyncerHelper: STMDefantomizing, STMDataDownloading {
 
         downloadingQueue = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors())
 
-        if(_entitiesNames == null) {
+        if (_entitiesNames == null) {
 
             val names = hashSetOf(STM_ENTITY_NAME)
             names.addAll(STMEntityController.sharedInstance.downloadableEntityNames())
 
-            if (STMEntityController.sharedInstance.entityWithName("STMSetting") != null){
+            if (STMEntityController.sharedInstance.entityWithName("STMSetting") != null) {
 
                 names.add("STMSetting")
 
@@ -58,7 +59,7 @@ class STMSyncerHelper: STMDefantomizing, STMDataDownloading {
 
         ProfileActivity.profileActivityController!!.setMaxProgress(_entitiesNames.size)
 
-        for (entityName in _entitiesNames){
+        for (entityName in _entitiesNames) {
 
             val operation = STMDownloadingOperation(entityName)
 
@@ -70,9 +71,9 @@ class STMSyncerHelper: STMDefantomizing, STMDataDownloading {
 
                 downloadingOperations[entityName] = operation
 
-            }catch (e:Exception){
+            } catch (e: Exception) {
 
-                STMFunctions.debugLog("STMSyncerHelper","Rejecting execution")
+                STMFunctions.debugLog("STMSyncerHelper", "Rejecting execution")
 
             }
 
@@ -82,13 +83,13 @@ class STMSyncerHelper: STMDefantomizing, STMDataDownloading {
 
     override fun stopDownloading() {
 
-        STMFunctions.debugLog("STMSyncerHelper","stopDownloading")
+        STMFunctions.debugLog("STMSyncerHelper", "stopDownloading")
 
         ProfileActivity.profileActivityController!!.setProgressInfo(-1)
 
         downloadingQueue?.shutdown()
 
-        for (operation in downloadingOperations.values){
+        for (operation in downloadingOperations.values) {
 
             operation.finish()
 
@@ -100,9 +101,9 @@ class STMSyncerHelper: STMDefantomizing, STMDataDownloading {
 
     }
 
-    override fun dataReceivedSuccessfully(entityName: String, dataRecieved: ArrayList<*>?, offset: String?, pageSize: Int?, error:Exception?) {
+    override fun dataReceivedSuccessfully(entityName: String, dataRecieved: ArrayList<*>?, offset: String?, pageSize: Int?, error: Exception?) {
 
-        if (error != null){
+        if (error != null) {
 
             return doneDownloadingEntityName(entityName, error.localizedMessage)
 
@@ -110,7 +111,7 @@ class STMSyncerHelper: STMDefantomizing, STMDataDownloading {
 
         var currentEtag = STMClientEntityController.clientEntityWithName(entityName)["eTag"]
 
-        if (currentEtag == null){
+        if (currentEtag == null) {
 
             currentEtag = ""
 
@@ -122,7 +123,7 @@ class STMSyncerHelper: STMDefantomizing, STMDataDownloading {
 
         }
 
-        if (dataRecieved.size == 0){
+        if (dataRecieved.size == 0) {
 
             return doneDownloadingEntityName(entityName, null)
 
@@ -159,21 +160,21 @@ class STMSyncerHelper: STMDefantomizing, STMDataDownloading {
 
         this.defantomizing = defantomizing
 
-        for (entityName in STMEntityController.sharedInstance.entityNamesWithResolveFantoms()){
+        for (entityName in STMEntityController.sharedInstance.entityNamesWithResolveFantoms()) {
 
             val entity = STMEntityController.sharedInstance.stcEntities!![entityName]
 
-            if (entity?.get("url") == null){
+            if (entity?.get("url") == null) {
 
-                STMFunctions.debugLog("STMSyncerHelper","have no url for entity name: $entityName, fantoms will not to be resolved")
+                STMFunctions.debugLog("STMSyncerHelper", "have no url for entity name: $entityName, fantoms will not to be resolved")
                 continue
             }
 
             val results = persistenceFantomsDelegate!!.findAllFantomsIdsSync(entityName, defantomizing.failToResolveIds)
 
             if (results.count() == 0) continue
-            STMFunctions.debugLog("STMSyncerHelper","${results.count()} $entityName fantom(s)")
-            for (identifier in results){
+            STMFunctions.debugLog("STMSyncerHelper", "${results.count()} $entityName fantom(s)")
+            for (identifier in results) {
 
                 defantomizing.addDefantomizationOfEntityName(entityName, identifier)
 
@@ -183,7 +184,7 @@ class STMSyncerHelper: STMDefantomizing, STMDataDownloading {
 
         val count = defantomizing.operations.count()
 
-        STMFunctions.debugLog("STMSyncerHelper","DEFANTOMIZING_START with queue of $count")
+        STMFunctions.debugLog("STMSyncerHelper", "DEFANTOMIZING_START with queue of $count")
 
         ProfileActivity.profileActivityController!!.setMaxProgress(count)
 
@@ -194,7 +195,7 @@ class STMSyncerHelper: STMDefantomizing, STMDataDownloading {
     override fun stopDefantomization() {
 
         defantomizing?.operationQueue?.shutdown()
-        for (operation in defantomizing?.operations?.values ?: arrayListOf()){
+        for (operation in defantomizing?.operations?.values ?: arrayListOf()) {
 
             operation.finish()
 
@@ -207,9 +208,9 @@ class STMSyncerHelper: STMDefantomizing, STMDataDownloading {
 
     override fun defantomizedEntityName(entityName: String, identifier: String, attributes: Map<*, *>?, error: Exception?) {
 
-        if (error != null){
+        if (error != null) {
 
-            if (!error.localizedMessage.startsWith("socket is not ready")){
+            if (!error.localizedMessage.startsWith("socket is not ready")) {
 
                 STMFunctions.debugLog("STMSyncerHelper", "defantomize $entityName $identifier error: ${error.localizedMessage}")
 
@@ -233,7 +234,7 @@ class STMSyncerHelper: STMDefantomizing, STMDataDownloading {
 
             }
 
-        }else{
+        } else {
 
             persistenceFantomsDelegate!!.mergeFantomAsync(entityName, attributes!!).then {
 
@@ -245,7 +246,7 @@ class STMSyncerHelper: STMDefantomizing, STMDataDownloading {
 
     }
 
-    private fun doneDownloadingEntityName(entityName:String, errorMessage:String?){
+    private fun doneDownloadingEntityName(entityName: String, errorMessage: String?) {
 
         if (errorMessage != null) {
 
@@ -263,7 +264,7 @@ class STMSyncerHelper: STMDefantomizing, STMDataDownloading {
 
         ProfileActivity.profileActivityController!!.addProgress(1)
 
-        if (downloadingOperations.size > 0){
+        if (downloadingOperations.size > 0) {
 
             return
 
@@ -275,13 +276,13 @@ class STMSyncerHelper: STMDefantomizing, STMDataDownloading {
 
     }
 
-    private fun findAllResultMergedWithSuccess(result:ArrayList<*>, entityName:String, offset:String, pageSize:Int){
+    private fun findAllResultMergedWithSuccess(result: ArrayList<*>, entityName: String, offset: String, pageSize: Int) {
 
-        STMFunctions.debugLog("STMSyncerHelper","    $entityName: got ${result.size} objects")
+        STMFunctions.debugLog("STMSyncerHelper", "    $entityName: got ${result.size} objects")
 
         ProfileActivity.profileActivityController!!.setProgressInfo(result.size)
 
-        if (result.size < pageSize){
+        if (result.size < pageSize) {
 
             STMClientEntityController.setEtag(entityName, offset)
             return doneDownloadingEntityName(entityName, null)
@@ -292,9 +293,9 @@ class STMSyncerHelper: STMDefantomizing, STMDataDownloading {
 
     }
 
-    private fun defantomizingFinished(){
+    private fun defantomizingFinished() {
 
-        STMFunctions.debugLog("STMSyncedHelper","DEFANTOMIZING_FINISHED")
+        STMFunctions.debugLog("STMSyncedHelper", "DEFANTOMIZING_FINISHED")
         ProfileActivity.profileActivityController!!.setProgressInfo(-1)
         this.defantomizing = null
         defantomizingOwner!!.defantomizingFinished()
@@ -302,7 +303,7 @@ class STMSyncerHelper: STMDefantomizing, STMDataDownloading {
 
     }
 
-    private fun doneWithEntityName(entityName: String, identifier: String){
+    private fun doneWithEntityName(entityName: String, identifier: String) {
 
         defantomizing!!.operations[Pair(entityName, identifier)]!!.finish()
 
@@ -314,7 +315,7 @@ class STMSyncerHelper: STMDefantomizing, STMDataDownloading {
 
         ProfileActivity.profileActivityController!!.addProgress(1)
 
-        if (count == 0){
+        if (count == 0) {
 
             startDefantomization()
 

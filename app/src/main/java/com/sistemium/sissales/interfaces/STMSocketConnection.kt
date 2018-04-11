@@ -8,12 +8,12 @@ import nl.komponents.kovenant.Promise
  */
 interface STMSocketConnection {
 
-    var isReady:Boolean
+    var isReady: Boolean
 
-    fun socketSendEvent(event: STMSocketEvent, value:Any?): Promise<Array<*>, Exception>
+    fun socketSendEvent(event: STMSocketEvent, value: Any?): Promise<Array<*>, Exception>
 
-    fun mergeAsync(entityName:String, attributes:Map<*,*>, options:Map<*,*>?) : Promise<Map<*, *>, Exception>
+    fun mergeAsync(entityName: String, attributes: Map<*, *>, options: Map<*, *>?): Promise<Map<*, *>, Exception>
 
-    fun findAllAsync(entityName:String, options:Map<*,*>?, identifier:String?): Promise<Map<*, *>, Exception>
+    fun findAllAsync(entityName: String, options: Map<*, *>?, identifier: String?): Promise<Map<*, *>, Exception>
 
 }

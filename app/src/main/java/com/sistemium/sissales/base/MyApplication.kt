@@ -17,7 +17,6 @@ import io.fabric.sdk.android.Fabric
 import kotlin.properties.Delegates
 
 
-
 /**
  * Created by edgarjanvuicik on 02/02/2018.
  */
@@ -35,9 +34,8 @@ class MyApplication : Application(), Application.ActivityLifecycleCallbacks, Com
         var appContext: Context? = null
             private set
 
-        var inBackground : Boolean by Delegates.observable(false) {
-            _, oldValue, newValue ->
-            if (oldValue != newValue){
+        var inBackground: Boolean by Delegates.observable(false) { _, oldValue, newValue ->
+            if (oldValue != newValue) {
 
                 if (newValue) {
 
@@ -74,11 +72,13 @@ class MyApplication : Application(), Application.ActivityLifecycleCallbacks, Com
         }
 
     }
+
     override fun onActivityResumed(p0: Activity?) {
 
         MyApplication.inBackground = false
 
     }
+
     override fun onCreate() {
         super.onCreate()
         appContext = applicationContext
@@ -87,6 +87,7 @@ class MyApplication : Application(), Application.ActivityLifecycleCallbacks, Com
         Fabric.with(this, Crashlytics())
 
     }
+
     override fun onActivityPaused(p0: Activity?) {}
     override fun onActivityStarted(p0: Activity?) {}
     override fun onActivityDestroyed(p0: Activity?) {}

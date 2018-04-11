@@ -10,8 +10,8 @@ interface STMDataDownloading {
     var dataDownloadingOwner: STMDataDownloadingOwner?
     var downloadingQueue: ExecutorService?
 
-    fun startDownloading(entitiesNames:ArrayList<String>?)
+    fun startDownloading(entitiesNames: ArrayList<String>?)
     fun stopDownloading()
-    fun dataReceivedSuccessfully(entityName:String, dataRecieved:ArrayList<*>?, offset:String?, pageSize:Int?, error:Exception?)
+    fun dataReceivedSuccessfully(entityName: String, dataRecieved: ArrayList<*>?, offset: String?, pageSize: Int?, error: Exception?)
 
 }

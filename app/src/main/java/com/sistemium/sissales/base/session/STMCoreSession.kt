@@ -19,21 +19,22 @@ import com.sistemium.sissales.persisting.STMPersistingInterceptorUniqueProperty
 /**
  * Created by edgarjanvuicik on 08/02/2018.
  */
-class STMCoreSession(var trackers: ArrayList<String>) :STMSession {
+class STMCoreSession(var trackers: ArrayList<String>) : STMSession {
 
-    override var uid:String = STMCoreAuthController.userID!!
-    override var filing: STMFiling = STMCoreSessionFiler(STMCoreAuthController.accountOrg!!, STMCoreAuthController.iSisDB ?: uid)
+    override var uid: String = STMCoreAuthController.userID!!
+    override var filing: STMFiling = STMCoreSessionFiler(STMCoreAuthController.accountOrg!!, STMCoreAuthController.iSisDB
+            ?: uid)
     override var status: STMSessionStatus = STMSessionStatus.STMSessionStarting
     override lateinit var persistenceDelegate: STMFullStackPersisting
     override var logger: STMLogger? = null
     override var settingsController: STMSettingsController? = null
-    override var syncer:STMSyncer? = null
+    override var syncer: STMSyncer? = null
 
     var manager: STMSessionManager? = null
 
-    private var startTrackers:ArrayList<String> = ArrayList(trackers)
+    private var startTrackers: ArrayList<String> = ArrayList(trackers)
 
-    init{
+    init {
 
         val dataModelName = STMCoreAuthController.dataModelName
 
@@ -82,22 +83,22 @@ class STMCoreSession(var trackers: ArrayList<String>) :STMSession {
 
     }
 
-    fun stopSession(){
+    fun stopSession() {
 
         TODO("not implemented")
 
     }
 
-    fun dismissSession(){
+    fun dismissSession() {
 
         TODO("not implemented")
 
     }
 
-    private fun checkTrackersToStart(){
+    private fun checkTrackersToStart() {
 
         //TODO check trackers
-        if (startTrackers.contains("location")){
+        if (startTrackers.contains("location")) {
 
 //            val locationTracker = STMCoreLocationTracker()
 //            self.trackers[self.locationTracker.group] = self.locationTracker;
@@ -105,7 +106,7 @@ class STMCoreSession(var trackers: ArrayList<String>) :STMSession {
 
         }
 
-        if(startTrackers.contains("battery")){
+        if (startTrackers.contains("battery")) {
 
 //            self.batteryTracker = [[[self batteryTrackerClass] alloc] init];
 //            self.trackers[self.batteryTracker.group] = self.batteryTracker;
@@ -115,7 +116,7 @@ class STMCoreSession(var trackers: ArrayList<String>) :STMSession {
 
     }
 
-    private fun setupSyncer(){
+    private fun setupSyncer() {
 
         val syncer = STMSyncer()
         val syncerHelper = STMSyncerHelper()
@@ -128,7 +129,7 @@ class STMCoreSession(var trackers: ArrayList<String>) :STMSession {
         val unsyncedHelper = STMUnsyncedDataHelper()
         unsyncedHelper.session = this
         STMEntityController.sharedInstance.owner = syncer
-        unsyncedHelper.subscriberDelegate = syncer
+        unsyncedHelper.subscriberDelegate = this.syncer
         syncer.dataSyncingDelegate = unsyncedHelper
         syncer.session = this
         this.syncer = syncer

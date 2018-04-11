@@ -10,11 +10,11 @@ import java.util.*
 /**
  * Created by edgarjanvuicik on 09/02/2018.
  */
-class STMPersisterFantoms:STMPersistingFantoms {
+class STMPersisterFantoms : STMPersistingFantoms {
 
-    override fun findAllFantomsIdsSync(entityName: String, excludingIds: ArrayList<*>):ArrayList<String> {
+    override fun findAllFantomsIdsSync(entityName: String, excludingIds: ArrayList<*>): ArrayList<String> {
 
-        val result =  STMCoreSessionManager.sharedManager.currentSession!!.persistenceDelegate.findAllSync(entityName, null, hashMapOf(STMConstants.STMPersistingOptionFantoms to true))
+        val result = STMCoreSessionManager.sharedManager.currentSession!!.persistenceDelegate.findAllSync(entityName, null, hashMapOf(STMConstants.STMPersistingOptionFantoms to true))
 
         val _result = ArrayList(result.map {
 

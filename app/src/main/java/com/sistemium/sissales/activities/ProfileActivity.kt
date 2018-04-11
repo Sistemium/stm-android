@@ -21,11 +21,11 @@ class ProfileActivity : AppCompatActivity() {
 
     }
 
-    var progressBar:ProgressBar? = null
+    var progressBar: ProgressBar? = null
 
-    var progressInfo:TextView? = null
+    var progressInfo: TextView? = null
 
-    var currentTab:Map<*,*>? = null
+    var currentTab: Map<*, *>? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,21 +39,21 @@ class ProfileActivity : AppCompatActivity() {
 
         progressInfo = findViewById(R.id.progress_info)
 
-        val profileName:TextView = findViewById(R.id.profileName)
+        val profileName: TextView = findViewById(R.id.profileName)
 
         profileName.text = "${STMCoreAuthController.userName}"
 
-        val phoneNumber:TextView = findViewById(R.id.phoneNumber)
+        val phoneNumber: TextView = findViewById(R.id.phoneNumber)
 
         phoneNumber.text = "${STMCoreAuthController.phoneNumber}"
 
         val gridView = findViewById<GridView>(R.id.gridView)
 
-        val tabs = arrayListOf<Map<*,*>>()
+        val tabs = arrayListOf<Map<*, *>>()
 
-        for (tab in STMCoreAuthController.stcTabs!!){
+        for (tab in STMCoreAuthController.stcTabs!!) {
 
-            if (tab is Map<*,*> && tab["name"] == "STMWKWebView"){
+            if (tab is Map<*, *> && tab["name"] == "STMWKWebView") {
 
                 tabs.add(tab)
 
@@ -80,7 +80,7 @@ class ProfileActivity : AppCompatActivity() {
             manifest = manifest?.replace("http://lamac.local:3000", "http://10.0.1.5:3000")
             manifest = "$url/app.manifest"
 
-            if (manifest != null){
+            if (manifest != null) {
 
                 intent.putExtra("manifest", manifest)
 

@@ -12,19 +12,20 @@ import com.sistemium.sissales.interfaces.STMSession
 import com.sistemium.sissales.persisting.STMPredicate
 import java.util.*
 import kotlin.collections.ArrayList
+import kotlin.collections.HashSet
 
 /**
  * Created by edgarjanvuicik on 09/02/2018.
  */
-class STMUnsyncedDataHelper: STMDataSyncing {
+class STMUnsyncedDataHelper : STMDataSyncing {
 
     override var subscriberDelegate: STMDataSyncingSubscriber? = null
-    set(value) {
-        isPaused = true
-        field = value
-        if (value != null) subscribeUnsynced() else unsubscribeUnsynced()
-    }
-    var session:STMSession? = null
+        set(value) {
+            isPaused = true
+            field = value
+            if (value != null) subscribeUnsynced() else unsubscribeUnsynced()
+        }
+    var session: STMSession? = null
     private var isPaused = false
     private var syncingState = false
     private var erroredObjectsByEntity = hashMapOf<String, HashSet<String>>()
@@ -66,27 +67,33 @@ class STMUnsyncedDataHelper: STMDataSyncing {
 
     }
 
-    private fun declineFromSync(obj:Map<*,*>, entityName: String){
+    private fun declineFromSync(obj: Map<*, *>, entityName: String) {
 
         val pk = obj[STMConstants.DEFAULT_PERSISTING_PRIMARY_KEY] as? String
 
-        if (pk == null){
+        if (pk == null) {
 
-            STMFunctions.debugLog("STMUnsyncedDataHelper","have no object id")
+            STMFunctions.debugLog("STMUnsyncedDataHelper", "have no object id")
 
             return
 
         }
 
-        STMFunctions.debugLog("","declineFromSync: $entityName $pk")
+        STMFunctions.debugLog("", "declineFromSync: $entityName $pk")
+
+        if (erroredObjectsByEntity[entityName] == null) {
+
+            erroredObjectsByEntity[entityName] = HashSet()
+
+        }
 
         erroredObjectsByEntity[entityName]!!.add(pk)
 
     }
 
-    private fun startHandleUnsyncedObjects(){
+    private fun startHandleUnsyncedObjects() {
 
-        if (!syncingState){
+        if (!syncingState) {
 
             syncingState = true
             sendNextUnsyncedObject()
@@ -95,13 +102,13 @@ class STMUnsyncedDataHelper: STMDataSyncing {
 
     }
 
-    private fun anyObjectToSend():Map<*,*>?{
+    private fun anyObjectToSend(): Map<*, *>? {
 
-        for (entityName in STMEntityController.sharedInstance.uploadableEntitiesNames!!){
+        for (entityName in STMEntityController.sharedInstance.uploadableEntitiesNames!!) {
 
             val anyObjectToSend = findSyncableObjectWithEntityName(entityName)
 
-            if (anyObjectToSend != null){
+            if (anyObjectToSend != null) {
 
                 return hashMapOf(
                         "entityName" to entityName,
@@ -116,9 +123,9 @@ class STMUnsyncedDataHelper: STMDataSyncing {
 
     }
 
-    private fun sendNextUnsyncedObject(){
+    private fun sendNextUnsyncedObject() {
 
-        if (!syncingState){
+        if (!syncingState) {
 
             finishHandleUnsyncedObjects()
 
@@ -130,7 +137,7 @@ class STMUnsyncedDataHelper: STMDataSyncing {
 
     }
 
-    private fun sendUnsyncedObject(objectToSend:Map<*,*>?){
+    private fun sendUnsyncedObject(objectToSend: Map<*, *>?) {
 
         if (objectToSend == null) {
 
@@ -139,7 +146,7 @@ class STMUnsyncedDataHelper: STMDataSyncing {
         }
 
         val entityName = objectToSend["entityName"] as String
-        val itemData = objectToSend["object"] as Map<*,*>
+        val itemData = objectToSend["object"] as Map<*, *>
 
         STMFunctions.debugLog("STMUnsyncedDataHelper", "syncing entityName: $entityName xid:${itemData["id"]} ")
 
@@ -149,7 +156,7 @@ class STMUnsyncedDataHelper: STMDataSyncing {
 
     }
 
-    private fun finishHandleUnsyncedObjects(){
+    private fun finishHandleUnsyncedObjects() {
 
         syncingState = false
         initPrivateData()
@@ -157,7 +164,7 @@ class STMUnsyncedDataHelper: STMDataSyncing {
 
     }
 
-    private fun initPrivateData(){
+    private fun initPrivateData() {
 
         erroredObjectsByEntity = hashMapOf()
 
@@ -197,7 +204,7 @@ class STMUnsyncedDataHelper: STMDataSyncing {
 
     }
 
-    private fun unsyncedObjectWithEntityName(entityName:String, exclude:ArrayList<String> = ArrayList()):Map<*,*>?{
+    private fun unsyncedObjectWithEntityName(entityName: String, exclude: ArrayList<String> = ArrayList()): Map<*, *>? {
 
         val subpredicates = arrayListOf<STMPredicate>()
         val unsyncedPredicate = predicateForUnsyncedObjectsWithEntityName(entityName)
@@ -212,13 +219,13 @@ class STMUnsyncedDataHelper: STMDataSyncing {
                 STMConstants.STMPersistingOptionOrderDirection to STMConstants.STMPersistingOptionOrderDirectionAscValue
         )
 
-        return try{
+        return try {
 
             val result = session!!.persistenceDelegate.findAllSync(entityName, predicate, options)
 
-            for (obj in result){
+            for (obj in result) {
 
-                if (!exclude.contains(obj[STMConstants.DEFAULT_PERSISTING_PRIMARY_KEY] as String)){
+                if (!exclude.contains(obj[STMConstants.DEFAULT_PERSISTING_PRIMARY_KEY] as String)) {
 
                     return obj
 
@@ -228,9 +235,9 @@ class STMUnsyncedDataHelper: STMDataSyncing {
 
             null
 
-        }catch (e:Exception){
+        } catch (e: Exception) {
 
-            STMFunctions.debugLog("STMUnsyncedDataHelper",e.toString())
+            STMFunctions.debugLog("STMUnsyncedDataHelper", e.toString())
 
             null
 
@@ -238,11 +245,11 @@ class STMUnsyncedDataHelper: STMDataSyncing {
 
     }
 
-    private fun predicateForUnsyncedObjectsWithEntityName(entityName:String):STMPredicate{
+    private fun predicateForUnsyncedObjectsWithEntityName(entityName: String): STMPredicate {
 
         val subpredicates = arrayListOf<STMPredicate>()
 
-        if (entityName == "STMLogMessage"){
+        if (entityName == "STMLogMessage") {
 
             val uploadLogType = session?.settingsController?.stringValueForSettings("uploadLog.type", "syncer")
             val logMessageSyncTypes = STMLogger.sharedLogger.syncingTypesForSettingType(uploadLogType).map {
@@ -267,9 +274,9 @@ class STMUnsyncedDataHelper: STMDataSyncing {
 
     }
 
-    private fun subscribeUnsynced(){
+    private fun subscribeUnsynced() {
 
-        subscriptions.forEach{
+        subscriptions.forEach {
 
             session!!.persistenceDelegate.cancelSubscription(it)
 
@@ -281,15 +288,15 @@ class STMUnsyncedDataHelper: STMDataSyncing {
 
         STMEntityController.sharedInstance.persistenceDelegate = session!!.persistenceDelegate
 
-        for (entityName in STMEntityController.sharedInstance.uploadableEntitiesNames!!){
+        for (entityName in STMEntityController.sharedInstance.uploadableEntitiesNames!!) {
 
             val onlyLocalChanges = hashMapOf(STMPersistingOptionLts to false)
 
             val sid = session!!.persistenceDelegate.observeEntity(entityName, {
 
-                val obj = it as Map<*,*>
+                val obj = it as Map<*, *>
 
-                if (entityName == "STMLogMessage"){
+                if (entityName == "STMLogMessage") {
 
                     //TODO not implemented
 
@@ -306,15 +313,15 @@ class STMUnsyncedDataHelper: STMDataSyncing {
 
                 }
 
-                if (obj["deviceTs"] != null && (obj["deviceTs"] as String > obj["lts"] as String || obj["lts"] == null)){
+                if (obj["deviceTs"] != null && (obj["deviceTs"] as String > obj["lts"] as String || obj["lts"] == null)) {
                     return@observeEntity true
                 }
 
                 return@observeEntity false
 
-            } , onlyLocalChanges, {
+            }, onlyLocalChanges, {
 
-                STMFunctions.debugLog("STMUnsyncedDataHelper","observeEntity $entityName data count ${it.size}")
+                STMFunctions.debugLog("STMUnsyncedDataHelper", "observeEntity $entityName data count ${it.size}")
 
                 startHandleUnsyncedObjects()
 
@@ -326,9 +333,9 @@ class STMUnsyncedDataHelper: STMDataSyncing {
 
     }
 
-    private fun unsubscribeUnsynced(){
+    private fun unsubscribeUnsynced() {
 
-        STMFunctions.debugLog("STMUnsyncedDataHelper","unsubscribeUnsynced")
+        STMFunctions.debugLog("STMUnsyncedDataHelper", "unsubscribeUnsynced")
 
         initPrivateData()
 

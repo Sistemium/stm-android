@@ -6,10 +6,10 @@ package com.sistemium.sissales.interfaces
 interface STMDefantomizing {
 
     var persistenceFantomsDelegate: STMPersistingFantoms?
-    var defantomizingOwner:STMDefantomizingOwner?
+    var defantomizingOwner: STMDefantomizingOwner?
 
     fun stopDefantomization()
     fun startDefantomization()
-    fun defantomizedEntityName(entityName:String, identifier:String, attributes:Map<*,*>?, error:Exception?)
+    fun defantomizedEntityName(entityName: String, identifier: String, attributes: Map<*, *>?, error: Exception?)
 
 }

@@ -7,9 +7,9 @@ import com.sistemium.sissales.calsses.entitycontrollers.STMClientEntityControlle
  * Created by edgarjanvuicik on 24/11/2017.
  */
 
-class STMDownloadingOperation(var entityName:String) :Runnable {
+class STMDownloadingOperation(var entityName: String) : Runnable {
 
-    var owner:STMSyncerHelper? = null
+    var owner: STMSyncerHelper? = null
 
     private val lock = Object()
 
@@ -17,13 +17,13 @@ class STMDownloadingOperation(var entityName:String) :Runnable {
 
         STMFunctions.debugLog("STMDownloadingOperation", "start downloadEntityName: $entityName")
 
-        var lastKnownEtag:String? = STMClientEntityController.clientEntityWithName(entityName)["eTag"] as? String
+        var lastKnownEtag: String? = STMClientEntityController.clientEntityWithName(entityName)["eTag"] as? String
 
         if (lastKnownEtag == null) lastKnownEtag = "*"
 
         owner!!.dataDownloadingOwner!!.receiveData(entityName, lastKnownEtag)
 
-        synchronized(lock){
+        synchronized(lock) {
 
             lock.wait()
 
@@ -31,9 +31,9 @@ class STMDownloadingOperation(var entityName:String) :Runnable {
 
     }
 
-    fun finish(){
+    fun finish() {
 
-        synchronized(lock){
+        synchronized(lock) {
 
             lock.notify()
 

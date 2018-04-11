@@ -13,7 +13,9 @@ import com.sistemium.sissales.persisting.STMPredicate
  */
 class STMEntityController private constructor() {
 
-    private object Holder { val INSTANCE = STMEntityController() }
+    private object Holder {
+        val INSTANCE = STMEntityController()
+    }
 
     companion object {
 
@@ -22,66 +24,66 @@ class STMEntityController private constructor() {
     }
 
     var persistenceDelegate: STMFullStackPersisting? = null
-    set(value) {
-        if (field == null && value != null){
+        set(value) {
+            if (field == null && value != null) {
 
-            field = value
-            field?.observeEntity(STMConstants.STM_ENTITY_NAME, null, hashMapOf<Any,Any>()){
+                field = value
+                field?.observeEntity(STMConstants.STM_ENTITY_NAME, null, hashMapOf<Any, Any>()) {
 
-                stcEntities = null
-                entitiesArray = null
-                uploadableEntitiesNames = null
+                    stcEntities = null
+                    entitiesArray = null
+                    uploadableEntitiesNames = null
 
-                owner!!.entitiesChanged()
+                    owner!!.entitiesChanged()
 
-                STMFunctions.debugLog("STMEntityController", "checkStcEntities got called back with ${it.count()} items")
-            }
-
-        }
-    }
-
-    var owner: STMDataDownloadingOwner? = null
-
-    var stcEntities:Map<String,Map<*,*>>? = null
-    get() {
-
-        if (field == null){
-
-            val stc = hashMapOf<String, Map<*,*>>()
-
-            entitiesArray?.forEach{
-
-                val entityName = it["name"] as? String
-
-                val capEntityName = entityName?.capitalize()
-
-                if (capEntityName != null){
-
-                    stc[STMFunctions.addPrefixToEntityName(entityName)] = it
-
+                    STMFunctions.debugLog("STMEntityController", "checkStcEntities got called back with ${it.count()} items")
                 }
 
             }
+        }
 
-            field = if (stc.count() > 0) stc else null
+    var owner: STMDataDownloadingOwner? = null
 
+    var stcEntities: Map<String, Map<*, *>>? = null
+        get() {
+
+            if (field == null) {
+
+                val stc = hashMapOf<String, Map<*, *>>()
+
+                entitiesArray?.forEach {
+
+                    val entityName = it["name"] as? String
+
+                    val capEntityName = entityName?.capitalize()
+
+                    if (capEntityName != null) {
+
+                        stc[STMFunctions.addPrefixToEntityName(entityName)] = it
+
+                    }
+
+                }
+
+                field = if (stc.count() > 0) stc else null
+
+
+            }
+
+            return field
 
         }
 
-        return field
-
-    }
-
-    var uploadableEntitiesNames:ArrayList<String>? = null
+    var uploadableEntitiesNames: ArrayList<String>? = null
         get() {
 
-            if (field == null){
+            if (field == null) {
 
                 val filteredKeys = arrayListOf<String>()
 
-                stcEntities?.forEach{
+                stcEntities?.forEach {
 
-                    if (it.value["isUploadable"] == true){
+                    if (it.value["isUploadable"] == true) {
 
                         filteredKeys.add(it.key)
 
@@ -97,10 +99,10 @@ class STMEntityController private constructor() {
 
         }
 
-    private var entitiesArray:ArrayList<Map<*,*>>? = null
+    private var entitiesArray: ArrayList<Map<*, *>>? = null
         get() {
 
-            if (field == null){
+            if (field == null) {
 
                 val options = hashMapOf(STMConstants.STMPersistingOptionOrder to "name")
                 val result = persistenceDelegate?.findAllSync(STMConstants.STM_ENTITY_NAME, null, options)
@@ -113,7 +115,7 @@ class STMEntityController private constructor() {
 
         }
 
-    fun checkEntitiesForDuplicates(){
+    fun checkEntitiesForDuplicates() {
 
         val names = entitiesArray?.map {
 
@@ -133,7 +135,7 @@ class STMEntityController private constructor() {
 
             }
 
-            if (result == null || result.size < 2){
+            if (result == null || result.size < 2) {
 
                 return
 
@@ -160,7 +162,7 @@ class STMEntityController private constructor() {
 
         }
 
-        if (totalDuplicates == 0){
+        if (totalDuplicates == 0) {
 
             STMLogger.sharedLogger.infoMessage("stc.entity duplicates not found")
 
@@ -168,15 +170,15 @@ class STMEntityController private constructor() {
 
     }
 
-    fun downloadableEntityNames():ArrayList<String> {
+    fun downloadableEntityNames(): ArrayList<String> {
 
-        return ArrayList(stcEntities!!.filter{
+        return ArrayList(stcEntities!!.filter {
             return@filter it.value["url"] != null
         }.keys)
 
     }
 
-    fun resourceForEntity(entityName:String):String{
+    fun resourceForEntity(entityName: String): String {
 
         val entity = stcEntities?.get(entityName)
 
@@ -184,7 +186,7 @@ class STMEntityController private constructor() {
 
     }
 
-    fun entityWithName(name:String):Map<*,*>?{
+    fun entityWithName(name: String): Map<*, *>? {
 
         val _name = STMFunctions.removePrefixFromEntityName(name)
         val predicate = STMPredicate("=", STMPredicate("name"), STMPredicate("\"$_name\""))
@@ -192,7 +194,7 @@ class STMEntityController private constructor() {
 
     }
 
-    fun entityNamesWithResolveFantoms():ArrayList<String>{
+    fun entityNamesWithResolveFantoms(): ArrayList<String> {
 
         val filteredKeys = stcEntities!!.filter {
 

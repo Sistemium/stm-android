@@ -18,22 +18,22 @@ interface STMModelling {
 
     }
 
-    var persistanceDelegate:STMFullStackPersisting?
+    var persistanceDelegate: STMFullStackPersisting?
 
     val managedObjectModel: STMManagedObjectModel
 
-    val concreteEntities: Map <String, STMEntityDescription>
+    val concreteEntities: Map<String, STMEntityDescription>
 
-    val entitiesByName:Map<String, STMEntityDescription>
+    val entitiesByName: Map<String, STMEntityDescription>
 
-    fun storageForEntityName(entityName:String): STMStorageType
+    fun storageForEntityName(entityName: String): STMStorageType
 
-    fun isConcreteEntityName(entityName:String): Boolean
+    fun isConcreteEntityName(entityName: String): Boolean
 
-    fun fieldsForEntityName(entityName:String):Map<String, STMAttributeDescription>
+    fun fieldsForEntityName(entityName: String): Map<String, STMAttributeDescription>
 
-    fun objectRelationshipsForEntityName(entityName:String, isToMany:Boolean? = null, cascade:Boolean? = null, optional:Boolean? = null):Map<String, STMRelationshipDescription>
+    fun objectRelationshipsForEntityName(entityName: String, isToMany: Boolean? = null, cascade: Boolean? = null, optional: Boolean? = null): Map<String, STMRelationshipDescription>
 
-    fun toOneRelationshipsForEntityName(entityName:String): Map<String, STMRelationshipDescription>
+    fun toOneRelationshipsForEntityName(entityName: String): Map<String, STMRelationshipDescription>
 
 }

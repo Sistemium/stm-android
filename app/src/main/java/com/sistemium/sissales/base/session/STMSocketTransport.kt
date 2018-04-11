@@ -24,16 +24,16 @@ import java.net.URI
  * Created by edgarjanvuicik on 14/02/2018.
  */
 
-class STMSocketTransport(var socketUrlString:String, var entityResource:String, var owner:STMSocketConnectionOwner, var remoteDataEventHandling: STMRemoteDataEventHandling):STMSocketConnection {
+class STMSocketTransport(var socketUrlString: String, var entityResource: String, var owner: STMSocketConnectionOwner, var remoteDataEventHandling: STMRemoteDataEventHandling) : STMSocketConnection {
 
-    override var isReady:Boolean = false
+    override var isReady: Boolean = false
         get() {
 
             return socket?.connected() == true && isAuthorized
 
         }
 
-    private var socket:Socket? = null
+    private var socket: Socket? = null
 
     private var isAuthorized = false
 
@@ -59,17 +59,17 @@ class STMSocketTransport(var socketUrlString:String, var entityResource:String, 
         socketSendEvent(STMSocketEvent.STMSocketEventJSData, value)
                 .then {
 
-                        val (result, error) =  respondOnData(it)
+                    val (result, error) = respondOnData(it)
 
-                        if (error != null){
+                    if (error != null) {
 
-                            deferred.reject(error)
+                        deferred.reject(error)
 
-                        }else{
+                    } else {
 
-                            deferred.resolve(result!!)
+                        deferred.resolve(result!!)
 
-                        }
+                    }
 
                 }.fail {
 
@@ -81,13 +81,13 @@ class STMSocketTransport(var socketUrlString:String, var entityResource:String, 
 
     }
 
-    override fun findAllAsync(entityName: String, options: Map<*, *>?, identifier:String?): Promise<Map<*, *>, Exception> {
+    override fun findAllAsync(entityName: String, options: Map<*, *>?, identifier: String?): Promise<Map<*, *>, Exception> {
 
-        val deferred = deferred<Map<*,*>, Exception>()
+        val deferred = deferred<Map<*, *>, Exception>()
 
         val resource = STMEntityController.sharedInstance.resourceForEntity(entityName)
 
-        val value = if (identifier != null){
+        val value = if (identifier != null) {
 
             hashMapOf(
                     "method" to STMConstants.kSocketFindMethod,
@@ -109,13 +109,13 @@ class STMSocketTransport(var socketUrlString:String, var entityResource:String, 
         socketSendEvent(STMSocketEvent.STMSocketEventJSData, value)
                 .then {
 
-                    val (result, error) =  respondOnData(it)
+                    val (result, error) = respondOnData(it)
 
-                    if (error != null){
+                    if (error != null) {
 
                         deferred.reject(error)
 
-                    }else{
+                    } else {
 
                         deferred.resolve(result!!)
 
@@ -133,11 +133,11 @@ class STMSocketTransport(var socketUrlString:String, var entityResource:String, 
 
     override fun socketSendEvent(event: STMSocketEvent, value: Any?): Promise<Array<*>, Exception> {
 
-        val deferred = deferred<Array<*>,Exception>()
+        val deferred = deferred<Array<*>, Exception>()
 
-        val _value:Any? = if (value is HashMap<*, *>) JSONObject(value) else if (value is ArrayList<*>) JSONArray(value) else value as? JSONObject
+        val _value: Any? = if (value is HashMap<*, *>) JSONObject(value) else if (value is ArrayList<*>) JSONArray(value) else value as? JSONObject
 
-        if (!isReady){
+        if (!isReady) {
 
             val errorMessage = "socket not connected while sendEvent"
             socketLostConnection(errorMessage)
@@ -148,9 +148,9 @@ class STMSocketTransport(var socketUrlString:String, var entityResource:String, 
 
         }
 
-        if (event == STMSocketEvent.STMSocketEventJSData){
+        if (event == STMSocketEvent.STMSocketEventJSData) {
 
-            if (_value !is JSONObject){
+            if (_value !is JSONObject) {
 
                 deferred.reject(Exception("STMSocketEventJSData value is not JSONObject"))
 
@@ -158,9 +158,9 @@ class STMSocketTransport(var socketUrlString:String, var entityResource:String, 
 
             }
 
-            socket!!.emit(event.toString(), _value, Ack{
+            socket!!.emit(event.toString(), _value, Ack {
 
-                if (it.firstOrNull() == "NO ACK"){
+                if (it.firstOrNull() == "NO ACK") {
 
                     deferred.reject(Exception("ack timeout"))
 
@@ -186,7 +186,7 @@ class STMSocketTransport(var socketUrlString:String, var entityResource:String, 
         } else if (_value != null) {
             socket!!.emit(event.toString(), arrayOf(_value), {
 
-                if (it.firstOrNull() == "NO ACK"){
+                if (it.firstOrNull() == "NO ACK") {
 
                     deferred.reject(Exception("ack timeout"))
 
@@ -199,7 +199,7 @@ class STMSocketTransport(var socketUrlString:String, var entityResource:String, 
 
             socket!!.emit(event.toString(), Ack {
 
-                if (it.firstOrNull() == "NO ACK"){
+                if (it.firstOrNull() == "NO ACK") {
 
                     deferred.reject(Exception("ack timeout"))
 
@@ -215,21 +215,22 @@ class STMSocketTransport(var socketUrlString:String, var entityResource:String, 
 
     }
 
-    private fun respondOnData(array: Array<*>): Pair<Map<*, *>?, Exception?>{
+    private fun respondOnData(array: Array<*>): Pair<Map<*, *>?, Exception?> {
 
-        if (array.size != 1){
+        if (array.size != 1) {
 
             return Pair(null, Exception("Response length is not 1"))
 
         }
 
-        val stResponse = array.firstOrNull() as? JSONObject ?: return Pair(null, Exception("No stResponse "))
+        val stResponse = array.firstOrNull() as? JSONObject
+                ?: return Pair(null, Exception("No stResponse "))
 
         return Pair(STMFunctions.gson.fromJson(stResponse.toString(), Map::class.java), null)
 
     }
 
-    private fun startSocket(){
+    private fun startSocket() {
 
         STMLogger.sharedLogger.infoMessage("STMSocketTransport")
 
@@ -249,61 +250,61 @@ class STMSocketTransport(var socketUrlString:String, var entityResource:String, 
 
     }
 
-    private fun addEventObservers(){
+    private fun addEventObservers() {
 
         socket?.off()
 
         STMLogger.sharedLogger.infoMessage("addEventObserversToSocket")
 
-        socket!!.on(STMSocketEvent.STMSocketEventConnect.toString()){
+        socket!!.on(STMSocketEvent.STMSocketEventConnect.toString()) {
 
             emitAuthorization()
 
         }
 
-        socket!!.on(STMSocketEvent.STMSocketEventDisconnect.toString()){
+        socket!!.on(STMSocketEvent.STMSocketEventDisconnect.toString()) {
 
             owner.socketWillClosed()
 
         }
 
-        socket!!.on(STMSocketEvent.STMSocketEventError.toString()){
+        socket!!.on(STMSocketEvent.STMSocketEventError.toString()) {
 
             reconnectSocket()
 
         }
 
-        socket!!.on(STMSocketEvent.STMSocketEventReconnect.toString()){
+        socket!!.on(STMSocketEvent.STMSocketEventReconnect.toString()) {
 
             reconnectSocket()
 
         }
 
-        socket!!.on(STMSocketEvent.STMSocketEventRemoteCommands.toString()){
+        socket!!.on(STMSocketEvent.STMSocketEventRemoteCommands.toString()) {
 
             TODO("not implemented")
 
         }
 
-        socket!!.on(STMSocketEvent.STMSocketEventRemoteRequests.toString()){
+        socket!!.on(STMSocketEvent.STMSocketEventRemoteRequests.toString()) {
 
             TODO("not implemented")
 
         }
 
-        socket!!.on(STMSocketEvent.STMSocketEventUpdate.toString()){
+        socket!!.on(STMSocketEvent.STMSocketEventUpdate.toString()) {
 
             updateEventHandleWithData(it)
 
         }
 
-        socket!!.on(STMSocketEvent.STMSocketEventUpdateCollection.toString()){
+        socket!!.on(STMSocketEvent.STMSocketEventUpdateCollection.toString()) {
 
             updateEventHandleWithData(it)
 
         }
 
-        socket!!.on(STMSocketEvent.STMSocketEventDestroy.toString()){
+        socket!!.on(STMSocketEvent.STMSocketEventDestroy.toString()) {
 
             destroyEventHandleWithData(it)
 
@@ -311,14 +312,14 @@ class STMSocketTransport(var socketUrlString:String, var entityResource:String, 
 
     }
 
-    private fun reconnectSocket(){
+    private fun reconnectSocket() {
 
         closeSocket()
         startSocket()
 
     }
 
-    private fun closeSocket(){
+    private fun closeSocket() {
 
         STMLogger.sharedLogger.infoMessage("close Socket")
         socket!!.off()
@@ -329,7 +330,7 @@ class STMSocketTransport(var socketUrlString:String, var entityResource:String, 
 
     }
 
-    private fun emitAuthorization(){
+    private fun emitAuthorization() {
 
         //TODO clientData is empty
         var dataDic = STMClientDataController.clientData
@@ -352,7 +353,7 @@ class STMSocketTransport(var socketUrlString:String, var entityResource:String, 
 
         val event = eventNum.toString()
 
-        socket!!.emit(event, JSONObject(dataDic), Ack{
+        socket!!.emit(event, JSONObject(dataDic), Ack {
 
             receiveAuthorizationAckWithData(it)
 
@@ -360,9 +361,9 @@ class STMSocketTransport(var socketUrlString:String, var entityResource:String, 
 
     }
 
-    private fun receiveAuthorizationAckWithData(data:Array<*>){
+    private fun receiveAuthorizationAckWithData(data: Array<*>) {
 
-        if (data.firstOrNull() == "NO ACK"){
+        if (data.firstOrNull() == "NO ACK") {
 
             notAuthorizedWithError("receiveAuthorizationAckWithData authorization timeout")
 
@@ -372,9 +373,10 @@ class STMSocketTransport(var socketUrlString:String, var entityResource:String, 
 
         STMLogger.sharedLogger.infoMessage(logMessage)
 
-        val dataDic = data.firstOrNull() as? JSONObject ?: return notAuthorizedWithError("socket receiveAuthorizationAck with data.firstOrNull() is not a JSONObject")
+        val dataDic = data.firstOrNull() as? JSONObject
+                ?: return notAuthorizedWithError("socket receiveAuthorizationAck with data.firstOrNull() is not a JSONObject")
 
-        if (!dataDic.has("isAuthorized")){
+        if (!dataDic.has("isAuthorized")) {
 
             STMFunctions.debugLog("STMSocketTransport", dataDic.toString())
 
@@ -384,7 +386,7 @@ class STMSocketTransport(var socketUrlString:String, var entityResource:String, 
 
         isAuthorized = dataDic.getBoolean("isAuthorized")
 
-        if (!isAuthorized){
+        if (!isAuthorized) {
 
             notAuthorizedWithError("socket receiveAuthorizationAck with dataDic.isAuthorized == false")
 
@@ -400,13 +402,13 @@ class STMSocketTransport(var socketUrlString:String, var entityResource:String, 
 
     }
 
-    private fun notAuthorizedWithError(errorString:String){
+    private fun notAuthorizedWithError(errorString: String) {
 
         TODO("not implemented")
 
     }
 
-    private fun delayedAuthorization(){
+    private fun delayedAuthorization() {
 
         android.os.Handler(MyApplication.appContext!!.mainLooper).postDelayed({
 
@@ -416,7 +418,7 @@ class STMSocketTransport(var socketUrlString:String, var entityResource:String, 
 
     }
 
-    private fun checkAppState(){
+    private fun checkAppState() {
 
         val appState = if (MyApplication.inBackground) "UIApplicationStateBackground" else "UIApplicationStateActive"
 
@@ -424,21 +426,21 @@ class STMSocketTransport(var socketUrlString:String, var entityResource:String, 
 
     }
 
-    private fun socketLostConnection(infoString:String){
+    private fun socketLostConnection(infoString: String) {
 
         STMLogger.sharedLogger.infoMessage("Socket lost connection: $infoString")
 
     }
 
-    private fun primaryKeyForEvent(event: STMSocketEvent):String?{
+    private fun primaryKeyForEvent(event: STMSocketEvent): String? {
 
-        if (event == STMSocketEvent.STMSocketEventSubscribe){
+        if (event == STMSocketEvent.STMSocketEventSubscribe) {
 
             return null
 
         }
 
-        if (event == STMSocketEvent.STMSocketEventData){
+        if (event == STMSocketEvent.STMSocketEventData) {
 
             return "data"
 
@@ -448,11 +450,11 @@ class STMSocketTransport(var socketUrlString:String, var entityResource:String, 
 
     }
 
-    private fun updateEventHandleWithData(data:Array<*>){
+    private fun updateEventHandleWithData(data: Array<*>) {
 
         val receivedData = data.firstOrNull() as? JSONObject
 
-        if (receivedData?.get("resource") != null){
+        if (receivedData?.get("resource") != null) {
 
             val entityName = (receivedData["resource"] as String).split("/").last()
 
@@ -472,11 +474,13 @@ class STMSocketTransport(var socketUrlString:String, var entityResource:String, 
 
     }
 
-    private fun destroyEventHandleWithData(data:Array<*>){
+    private fun destroyEventHandleWithData(data: Array<*>) {
+
+        STMFunctions.debugLog("STMSocketTransport", "destroyEventHandleWithData")
 
         val receivedData = data.firstOrNull() as? JSONObject
 
-        if (receivedData?.get("resource") != null){
+        if (receivedData?.get("resource") != null) {
 
             val entityName = (receivedData["resource"] as String).split("/").last()
 

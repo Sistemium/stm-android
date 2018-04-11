@@ -1,10 +1,11 @@
 package com.sistemium.sissales.base.session
+
 import com.sistemium.sissales.interfaces.STMDefantomizingOwner
 
 /**
  * Created by edgarjanvuicik on 05/03/2018.
  */
-class STMDefantomizingOperation(var entityName:String, var identifier: String, var defantomizingOwner:STMDefantomizingOwner):Runnable {
+class STMDefantomizingOperation(var entityName: String, var identifier: String, var defantomizingOwner: STMDefantomizingOwner) : Runnable {
 
     private val lock = Object()
 
@@ -12,16 +13,16 @@ class STMDefantomizingOperation(var entityName:String, var identifier: String, v
 
         defantomizingOwner.defantomizeEntityName(entityName, identifier)
 
-        synchronized(lock){
+        synchronized(lock) {
 
             lock.wait()
 
         }
     }
 
-    fun finish(){
+    fun finish() {
 
-        synchronized(lock){
+        synchronized(lock) {
 
             lock.notify()
 

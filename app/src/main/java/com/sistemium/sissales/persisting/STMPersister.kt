@@ -9,7 +9,7 @@ import nl.komponents.kovenant.task
 /**
  * Created by edgarjanvuicik on 20/11/2017.
  */
-class STMPersister(private val runner:STMPersistingRunning): STMFullStackPersisting, STMPersistingIntercepting {
+class STMPersister(private val runner: STMPersistingRunning) : STMFullStackPersisting, STMPersistingIntercepting {
 
     @Throws(Exception::class)
     override fun findSync(entityName: String, identifier: String, options: Map<*, *>?): Map<*, *>? {
@@ -33,7 +33,7 @@ class STMPersister(private val runner:STMPersistingRunning): STMFullStackPersist
 
     override fun find(entityName: String, identifier: String, options: Map<*, *>?): Promise<Map<*, *>?, Exception> {
 
-        return task{
+        return task {
 
             return@task findSync(entityName, identifier, options)
 
@@ -43,7 +43,7 @@ class STMPersister(private val runner:STMPersistingRunning): STMFullStackPersist
 
     override fun findAll(entityName: String, predicate: STMPredicate?, options: Map<*, *>?): Promise<ArrayList<Map<*, *>>, Exception> {
 
-        return task{
+        return task {
 
             return@task findAllSync(entityName, predicate, options)
 
@@ -54,7 +54,7 @@ class STMPersister(private val runner:STMPersistingRunning): STMFullStackPersist
     @Throws(Exception::class)
     override fun mergeSync(entityName: String, attributes: Map<*, *>, options: Map<*, *>?): Map<*, *> {
 
-        var result:Map<*,*>? = null
+        var result: Map<*, *>? = null
 
         runner.execute {
 
@@ -81,7 +81,8 @@ class STMPersister(private val runner:STMPersistingRunning): STMFullStackPersist
 
             for (attributes in attributeArray) {
 
-                var merged: Map<*, *>? = applyMergeInterceptors(entityName, attributes as Map<*, *>, options, it) ?: continue
+                var merged: Map<*, *>? = applyMergeInterceptors(entityName, attributes as Map<*, *>, options, it)
+                        ?: continue
 
                 merged = it.mergeWithoutSave(entityName, merged!!, options)
 
@@ -96,15 +97,17 @@ class STMPersister(private val runner:STMPersistingRunning): STMFullStackPersist
 
         }
 
-        notifyObservingEntityName(STMFunctions.addPrefixToEntityName(entityName), if (result.count() != 0)  result else attributeArray, options)
+        val res = if (result.count() != 0) result else attributeArray
+
+        notifyObservingEntityName(STMFunctions.addPrefixToEntityName(entityName), res, options)
 
         return result
 
     }
 
-    override fun merge(entityName: String, attributes: Map<*, *>, options: Map<*, *>?): Promise<Map<*, *>, Exception> {
+    override fun merge(entityName: String, attributes: Map<*, *>, options: Map<*, *>?): Promise<Map<*, *>?, Exception> {
 
-        return task{
+        return task {
 
             return@task mergeSync(entityName, attributes, options)
 
@@ -114,7 +117,7 @@ class STMPersister(private val runner:STMPersistingRunning): STMFullStackPersist
 
     override fun mergeMany(entityName: String, attributeArray: ArrayList<*>, options: Map<*, *>?): Promise<ArrayList<Map<*, *>>, Exception> {
 
-        return task{
+        return task {
 
             return@task mergeManySync(entityName, attributeArray, options)
 
@@ -124,7 +127,7 @@ class STMPersister(private val runner:STMPersistingRunning): STMFullStackPersist
 
     override fun destroy(entityName: String, identifier: String, options: Map<*, *>?): Promise<Boolean, Exception> {
 
-        return task{
+        return task {
 
             return@task destroySync(entityName, identifier, options)
 
@@ -164,11 +167,11 @@ class STMPersister(private val runner:STMPersistingRunning): STMFullStackPersist
 
     override fun beforeMergeEntityName(entityName: String, interceptor: STMPersistingMergeInterceptor?) {
 
-        if (interceptor != null){
+        if (interceptor != null) {
 
             beforeMergeInterceptors[entityName] = interceptor
 
-        }else{
+        } else {
 
             beforeMergeInterceptors.remove(entityName)
 
@@ -176,11 +179,11 @@ class STMPersister(private val runner:STMPersistingRunning): STMFullStackPersist
 
     }
 
-    override fun applyMergeInterceptors(entityName:String, attributes:Map<*,*>, options:Map<*,*>?, persistingTransaction: STMPersistingTransaction?): Map<*, *>?{
+    override fun applyMergeInterceptors(entityName: String, attributes: Map<*, *>, options: Map<*, *>?, persistingTransaction: STMPersistingTransaction?): Map<*, *>? {
 
         val interceptor = beforeMergeInterceptors[entityName] ?: return attributes
 
-        return interceptor.interceptedAttributes(attributes,options,persistingTransaction)
+        return interceptor.interceptedAttributes(attributes, options, persistingTransaction)
 
     }
 
@@ -188,7 +191,7 @@ class STMPersister(private val runner:STMPersistingRunning): STMFullStackPersist
 
     private val subscriptions = hashMapOf<String, STMPersistingObservingSubscription>()
 
-    override fun notifyObservingEntityName(entityName:String, items: ArrayList<*>, options:Map<*,*>?){
+    override fun notifyObservingEntityName(entityName: String, items: ArrayList<*>, options: Map<*, *>?) {
 
         for (subscription in this.subscriptions.values) {
 
@@ -196,7 +199,7 @@ class STMPersister(private val runner:STMPersistingRunning): STMFullStackPersist
 
             val unmatchedOptions = subscription.options?.filter {
 
-                if (it.value is Boolean){
+                if (it.value is Boolean) {
 
                     return@filter it.value != (options?.get(it.key) != null)
 
@@ -206,13 +209,13 @@ class STMPersister(private val runner:STMPersistingRunning): STMFullStackPersist
 
             }
 
-            if (unmatchedOptions?.count() != null && unmatchedOptions.count() != 0){
+            if (unmatchedOptions?.count() != null && unmatchedOptions.count() != 0) {
 
                 continue
 
             }
 
-            if (subscription.predicate != null){
+            if (subscription.predicate != null) {
 
                 items.filter(subscription.predicate!!)
 
@@ -220,11 +223,11 @@ class STMPersister(private val runner:STMPersistingRunning): STMFullStackPersist
 
             if (items.count() == 0) continue
 
-            if (subscription.entityName != null){
+            if (subscription.entityName != null) {
 
                 subscription.callback?.invoke(items)
 
-            }else{
+            } else {
 
                 subscription.callbackWithEntityName?.invoke(entityName, items)
 
@@ -258,7 +261,7 @@ class STMPersister(private val runner:STMPersistingRunning): STMFullStackPersist
 
         val result = subscriptions[subscriptionId] != null
 
-        if (result){
+        if (result) {
 
             subscriptions.remove(subscriptionId)
 

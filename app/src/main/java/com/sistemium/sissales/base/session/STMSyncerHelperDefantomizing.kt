@@ -12,9 +12,10 @@ class STMSyncerHelperDefantomizing {
 
     var failToResolveIds = ArrayList<Any>()
 
-    @Volatile var operations = HashMap<Pair<String, String>, STMDefantomizingOperation>()
+    @Volatile
+    var operations = HashMap<Pair<String, String>, STMDefantomizingOperation>()
 
-    fun addDefantomizationOfEntityName(entityName:String, identifier:String){
+    fun addDefantomizationOfEntityName(entityName: String, identifier: String) {
 
         val op = STMDefantomizingOperation(entityName, identifier, STMCoreSessionManager.sharedManager.currentSession!!.syncer!!)
 
@@ -24,9 +25,9 @@ class STMSyncerHelperDefantomizing {
 
             operations[Pair(entityName, identifier)] = op
 
-        }catch (e:Exception){
+        } catch (e: Exception) {
 
-            STMFunctions.debugLog("STMSyncerHelperDefantomizing","Rejecting defantomizing execution")
+            STMFunctions.debugLog("STMSyncerHelperDefantomizing", "Rejecting defantomizing execution")
 
         }
 

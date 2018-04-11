@@ -4,17 +4,17 @@ package com.sistemium.sissales.model
  * Created by edgarjanvuicik on 09/11/2017.
  */
 
-class STMEntityDescription(entity: Map<*,*>){
+class STMEntityDescription(entity: Map<*, *>) {
 
-    val entityName:String = entity["name"] as? String ?: throw Exception("Wrong entity name")
+    val entityName: String = entity["name"] as? String ?: throw Exception("Wrong entity name")
 
     val abstract = entity["isAbstract"] == "YES"
 
-    val attributesByName:MutableMap<String, STMAttributeDescription> = hashMapOf()
+    val attributesByName: MutableMap<String, STMAttributeDescription> = hashMapOf()
 
-    val relationshipsByName:MutableMap<String, STMRelationshipDescription> = hashMapOf()
+    val relationshipsByName: MutableMap<String, STMRelationshipDescription> = hashMapOf()
 
-    val userInfo:Map<*, *>
+    val userInfo: Map<*, *>
         get() = attributesByName["userInfo"] as? Map<*, *> ?: hashMapOf<Any, Any>()
 
     val parentEntity = entity["parentEntity"] as? String
@@ -23,9 +23,9 @@ class STMEntityDescription(entity: Map<*,*>){
 
         var array = entity["attribute"] as? ArrayList<*>
 
-        if (entity["attribute"] is Map<*,*>){
+        if (entity["attribute"] is Map<*, *>) {
 
-            array = arrayListOf(entity["attribute"] as Map<*,*>)
+            array = arrayListOf(entity["attribute"] as Map<*, *>)
 
         }
 
@@ -33,9 +33,9 @@ class STMEntityDescription(entity: Map<*,*>){
 
         array = entity["relationship"] as? ArrayList<*>
 
-        if (entity["relationship"] is Map<*,*>){
+        if (entity["relationship"] is Map<*, *>) {
 
-            array = arrayListOf(entity["relationship"] as Map<*,*>)
+            array = arrayListOf(entity["relationship"] as Map<*, *>)
 
         }
 
@@ -45,7 +45,7 @@ class STMEntityDescription(entity: Map<*,*>){
 
     override fun equals(other: Any?): Boolean {
 
-        if (other !is STMEntityDescription){
+        if (other !is STMEntityDescription) {
 
             return false
 

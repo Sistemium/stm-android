@@ -13,36 +13,36 @@ class STMPredicate {
     companion object {
 
         @JvmStatic
-        fun primaryKeyPredicate(values:Array<*>):STMPredicate {
+        fun primaryKeyPredicate(values: Array<*>): STMPredicate {
 
             return if (values.size == 1) {
 
                 STMPredicate("=", STMPredicate(STMConstants.DEFAULT_PERSISTING_PRIMARY_KEY), STMPredicate("\"${values.first().toString()}\""))
 
-            }else {
+            } else {
 
                 val valueArray = values.map { value -> STMPredicate("\"${value.toString()}\"") }
 
-                STMPredicate(" IN ", STMPredicate(STMConstants.DEFAULT_PERSISTING_PRIMARY_KEY), STMPredicate(", " ,valueArray))
+                STMPredicate(" IN ", STMPredicate(STMConstants.DEFAULT_PERSISTING_PRIMARY_KEY), STMPredicate(", ", valueArray))
 
             }
 
         }
 
         @JvmStatic
-        fun comparatorPredicate(map: Map<*,*>):STMPredicate{
+        fun comparatorPredicate(map: Map<*, *>): STMPredicate {
 
             val key = map.keys.first() as String
 
-            var value = map[key] as Map<*,*>
+            var value = map[key] as Map<*, *>
 
-            if (value[value.keys.first()] == null && value.keys.first() == "=="){
+            if (value[value.keys.first()] == null && value.keys.first() == "==") {
 
                 value = hashMapOf("IS" to "NULL")
 
             }
 
-            if (value[value.keys.first()] == null && value.keys.first() == "!="){
+            if (value[value.keys.first()] == null && value.keys.first() == "!=") {
 
                 value = hashMapOf("IS NOT" to "NULL")
 
@@ -71,12 +71,12 @@ class STMPredicate {
         }
 
         @JvmStatic
-        fun filterPredicate(filter:Map<*,*>?, where:Map<*,*>?):STMPredicate? {
+        fun filterPredicate(filter: Map<*, *>?, where: Map<*, *>?): STMPredicate? {
 
-            val filterMap:MutableMap<String,Map<*,*>> = hashMapOf()
+            val filterMap: MutableMap<String, Map<*, *>> = hashMapOf()
 
             if (where != null) {
-                for ((key,value) in where){
+                for ((key, value) in where) {
                     filterMap[key as String] = value as Map<*, *>
                 }
             }
@@ -91,7 +91,7 @@ class STMPredicate {
 
             val subPredicates = arrayListOf<STMPredicate>()
 
-            for ((key,value) in filterMap){
+            for ((key, value) in filterMap) {
 
                 if (key.startsWith("ANY")) {
 
@@ -104,17 +104,17 @@ class STMPredicate {
                             STMPredicate(" where "),
                             whereVal,
                             STMPredicate(" and "),
-                            if (anyValue.endsWith("s")) STMPredicate("?", "uncapitalizedTableName") else  STMPredicate(""),
+                            if (anyValue.endsWith("s")) STMPredicate("?", "uncapitalizedTableName") else STMPredicate(""),
                             STMPredicate("Id = "),
                             if (anyValue.endsWith("s")) STMPredicate("?", "capitalizedTableName") else STMPredicate(anyValue + STMConstants.RELATIONSHIP_SUFFIX),
-                            if (anyValue.endsWith("s")) STMPredicate(".id )") else  STMPredicate(" )")
+                            if (anyValue.endsWith("s")) STMPredicate(".id )") else STMPredicate(" )")
                     ))
 
                     subPredicates.add(predicate)
 
-                }  else {
+                } else {
 
-                    if (key.endsWith(STMConstants.RELATIONSHIP_SUFFIX) && value.values.first() != null){
+                    if (key.endsWith(STMConstants.RELATIONSHIP_SUFFIX) && value.values.first() != null) {
 
                         val xid = value.values.first() as String?
 
@@ -127,7 +127,7 @@ class STMPredicate {
 
                         subPredicates.add(predicate)
 
-                    }else{
+                    } else {
 
                         val predicate = comparatorPredicate(hashMapOf(key to value))
 
@@ -144,9 +144,10 @@ class STMPredicate {
         }
 
         @JvmStatic
-        fun predicateWithOptions(options:Map<*,*>?, predicate: STMPredicate?):STMPredicate?{
+        fun predicateWithOptions(options: Map<*, *>?, predicate: STMPredicate?): STMPredicate? {
 
-            val isFantom = options?.get(STMConstants.STMPersistingOptionFantoms) as? Boolean ?: false
+            val isFantom = options?.get(STMConstants.STMPersistingOptionFantoms) as? Boolean
+                    ?: false
 
             val phantomPredicate = STMPredicate("=", STMPredicate("isFantom"), STMPredicate("${if (isFantom) 1 else 0}"))
 
@@ -158,9 +159,9 @@ class STMPredicate {
         }
 
         @JvmStatic
-        fun combinePredicates(subPredicates:ArrayList<STMPredicate>):STMPredicate{
+        fun combinePredicates(subPredicates: ArrayList<STMPredicate>): STMPredicate {
 
-            if (subPredicates.size == 1){
+            if (subPredicates.size == 1) {
 
                 return subPredicates.first()
 
@@ -172,35 +173,35 @@ class STMPredicate {
 
     }
 
-    private enum class PredicateType{
+    private enum class PredicateType {
         Value, PredicateArray, Comparison
     }
 
-    private var value:String? = null
-    private var predicateArray:List<STMPredicate>? = null
-    private var leftPredicate:STMPredicate? = null
-    private var rightPredicate:STMPredicate? = null
-    private var relation:String? = null
-    private var type:PredicateType
+    private var value: String? = null
+    private var predicateArray: List<STMPredicate>? = null
+    private var leftPredicate: STMPredicate? = null
+    private var rightPredicate: STMPredicate? = null
+    private var relation: String? = null
+    private var type: PredicateType
 
-    constructor(relation: String, value:String){
+    constructor(relation: String, value: String) {
         this.relation = relation
         this.value = value
         this.type = PredicateType.Value
     }
 
-    constructor(value:String){
+    constructor(value: String) {
         this.value = value
         this.type = PredicateType.Value
     }
 
-    constructor(relation:String, predicateArray:List<STMPredicate>){
+    constructor(relation: String, predicateArray: List<STMPredicate>) {
         this.relation = relation
         this.predicateArray = predicateArray
         this.type = PredicateType.PredicateArray
     }
 
-    constructor(relation:String, leftPredicate:STMPredicate, rightPredicate:STMPredicate){
+    constructor(relation: String, leftPredicate: STMPredicate, rightPredicate: STMPredicate) {
         this.relation = relation
         this.leftPredicate = leftPredicate
         this.rightPredicate = rightPredicate
@@ -209,13 +210,13 @@ class STMPredicate {
 
     override fun toString(): String = throw Exception("should not, use predicateForAdapter instead")
 
-    fun predicateForAdapter(adapter:STMAdapting?, entityName:String?):String?{
+    fun predicateForAdapter(adapter: STMAdapting?, entityName: String?): String? {
 
-        when(type){
+        when (type) {
 
             STMPredicate.PredicateType.Value -> {
 
-                if (relation == "?" && adapter != null && entityName != null){
+                if (relation == "?" && adapter != null && entityName != null) {
 
                     if (value == "uncapitalizedTableName") return STMFunctions.removePrefixFromEntityName(entityName).decapitalize()
 
@@ -235,7 +236,7 @@ class STMPredicate {
 
                 }
 
-                if (relation == "relation"  && adapter != null && entityName != null) {
+                if (relation == "relation" && adapter != null && entityName != null) {
 
                     val relationships = adapter.model.entitiesByName[STMFunctions.addPrefixToEntityName(entityName)]?.relationshipsByName
 
@@ -252,13 +253,13 @@ class STMPredicate {
 
                 }
 
-                if (value == "false"){
+                if (value == "false") {
 
                     return "0"
 
                 }
 
-                if (value == "true"){
+                if (value == "true") {
 
                     return "1"
 
@@ -277,13 +278,13 @@ class STMPredicate {
 
                 }
 
-                if (relation == "nonNull"){
+                if (relation == "nonNull") {
 
-                    return if (predicateArray!!.size == array.size){
+                    return if (predicateArray!!.size == array.size) {
 
                         "(${array.joinToString("")})"
 
-                    }else{
+                    } else {
 
                         null
 
@@ -303,7 +304,7 @@ class STMPredicate {
 
                 val valid = entityName == null || adapter == null || adapter.model.fieldsForEntityName(entityName).containsKey(left) || adapter.model.objectRelationshipsForEntityName(entityName).containsKey(left?.removeSuffix(STMConstants.RELATIONSHIP_SUFFIX))
 
-                if (left != null && right != null && valid){
+                if (left != null && right != null && valid) {
 
                     return "$left $relation $right"
 
