@@ -32,6 +32,7 @@ class WebViewActivity : Activity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.webview)
+        WebView.setWebContentsDebuggingEnabled(true)
 
         webView = findViewById(R.id.webView1)
         webView?.settings?.javaScriptEnabled = true
