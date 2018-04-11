@@ -29,21 +29,6 @@ class WebViewActivity : Activity() {
 
     var webView: WebView? = null
 
-    var manifestEtag: String?
-        get() {
-
-            val prefStore = SecuredPreferenceStore.getSharedInstance()
-            return prefStore.getString("manifestEtag", null)
-
-        }
-        set(value) {
-
-            val prefStore = SecuredPreferenceStore.getSharedInstance()
-
-            prefStore.edit().putString("manifestEtag", value).apply()
-
-        }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.webview)
@@ -58,56 +43,11 @@ class WebViewActivity : Activity() {
 
         val url = intent.getStringExtra("url")
 
-        val manifest = intent.getStringExtra("manifest")
-
         task {
 
-            if (manifest != null) {
+            runOnUiThread {
 
-                FuelManager.instance.baseHeaders = mapOf("user-agent" to "iSisSales/360", "DeviceUUID" to STMFunctions.deviceUUID(), "Authorization" to STMCoreAuthController.accessToken!!)
-
-                val (_, response, result) = Fuel.get(manifest).responseJson()
-
-                when (result) {
-                    is Result.Success -> {
-
-                        val responseETag = response.headers["ETag"]!!.first()
-
-                        if (responseETag == manifestEtag){
-
-                            runOnUiThread{
-
-                                webView?.settings!!.cacheMode = WebSettings.LOAD_CACHE_ONLY
-
-                            }
-
-                        } else {
-
-                            manifestEtag = responseETag
-
-                            runOnUiThread{
-
-                                webView?.settings!!.cacheMode = WebSettings.LOAD_NO_CACHE
-
-                            }
-
-                        }
-
-                    }
-                    else -> {
-
-                        runOnUiThread{
-
-                            webView?.settings!!.cacheMode = WebSettings.LOAD_CACHE_ONLY
-
-                        }
-
-                    }
-                }
-
-            }
-
-            runOnUiThread{
+                webView?.settings!!.cacheMode = WebSettings.LOAD_CACHE_ELSE_NETWORK
 
                 val appCachePath = applicationContext.cacheDir
                         .absolutePath
