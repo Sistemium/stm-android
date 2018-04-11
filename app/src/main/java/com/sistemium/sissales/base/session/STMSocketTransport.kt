@@ -452,6 +452,8 @@ class STMSocketTransport(var socketUrlString: String, var entityResource: String
 
     private fun updateEventHandleWithData(data: Array<*>) {
 
+        STMFunctions.debugLog("STMSocketTransport", "updateEventHandleWithData")
+
         val receivedData = data.firstOrNull() as? JSONObject
 
         if (receivedData?.get("resource") != null) {
@@ -460,7 +462,7 @@ class STMSocketTransport(var socketUrlString: String, var entityResource: String
 
             val d = receivedData["data"] as? JSONObject
 
-            if (d != null && d["id"] != null){
+            if (d != null && d.has("id")) {
 
                 remoteDataEventHandling.remoteUpdated(entityName, STMFunctions.gson.fromJson(d.toString(), Map::class.java))
 
@@ -486,7 +488,7 @@ class STMSocketTransport(var socketUrlString: String, var entityResource: String
 
             val d = receivedData["data"] as? JSONObject?
 
-            if (d != null && d["id"] != null){
+            if (d != null && d.has("id")) {
 
                 remoteDataEventHandling.remoteDestroyed(entityName, d["id"] as String)
 
