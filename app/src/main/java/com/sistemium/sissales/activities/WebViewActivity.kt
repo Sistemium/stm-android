@@ -56,6 +56,8 @@ class WebViewActivity : Activity() {
                 webView?.settings?.setAppCachePath(appCachePath)
                 webView?.settings?.allowFileAccess = true
                 webView?.settings?.setAppCacheEnabled(true)
+                webView?.settings?.mixedContentMode = MIXED_CONTENT_ALWAYS_ALLOW
+
                 webView?.webViewClient = object : WebViewClient() {
 
                     override fun shouldOverrideUrlLoading(view: WebView?, request: WebResourceRequest?): Boolean {
