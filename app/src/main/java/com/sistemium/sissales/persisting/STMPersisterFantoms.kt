@@ -30,7 +30,7 @@ class STMPersisterFantoms : STMPersistingFantoms {
 
     }
 
-    override fun mergeFantomAsync(entityName: String, attributes: Map<*, *>): Promise<Map<*, *>, Exception> {
+    override fun mergeFantomAsync(entityName: String, attributes: Map<*, *>): Promise<Map<*, *>?, Exception> {
 
         return STMCoreSessionManager.sharedManager.currentSession!!.persistenceDelegate.merge(entityName, attributes, hashMapOf(STMConstants.STMPersistingOptionLts to STMFunctions.stringFrom(Date())))
 

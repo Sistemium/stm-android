@@ -14,7 +14,7 @@ interface STMPersistingSync {
     fun findAllSync(entityName: String, predicate: STMPredicate?, options: Map<*, *>?): ArrayList<Map<*, *>>
 
     @Throws(Exception::class)
-    fun mergeSync(entityName:String, attributes:Map<*,*>, options:Map<*,*>?):Map<*,*>
+    fun mergeSync(entityName: String, attributes: Map<*, *>, options: Map<*, *>?): Map<*, *>?
 
     @Throws(Exception::class)
     fun mergeManySync(entityName: String, attributeArray: ArrayList<*>, options: Map<*, *>?): ArrayList<Map<*, *>>

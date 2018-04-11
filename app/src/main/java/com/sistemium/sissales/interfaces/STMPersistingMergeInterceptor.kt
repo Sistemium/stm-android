@@ -5,6 +5,6 @@ package com.sistemium.sissales.interfaces
  */
 interface STMPersistingMergeInterceptor {
 
-    fun interceptedAttributes(attributes:Map<*,*>, options:Map<*,*>?, persistingTransaction: STMPersistingTransaction?):Map<*, *>?
+    fun interceptedAttributes(attributes: Map<*, *>, options: Map<*, *>?, persistingTransaction: STMPersistingTransaction?): Map<*, *>?
 
 }

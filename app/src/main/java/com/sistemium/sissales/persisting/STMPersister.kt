@@ -52,7 +52,7 @@ class STMPersister(private val runner: STMPersistingRunning) : STMFullStackPersi
     }
 
     @Throws(Exception::class)
-    override fun mergeSync(entityName: String, attributes: Map<*, *>, options: Map<*, *>?): Map<*, *> {
+    override fun mergeSync(entityName: String, attributes: Map<*, *>, options: Map<*, *>?): Map<*, *>? {
 
         var result: Map<*, *>? = null
 
@@ -68,7 +68,7 @@ class STMPersister(private val runner: STMPersistingRunning) : STMFullStackPersi
 
         notifyObservingEntityName(STMFunctions.addPrefixToEntityName(entityName), if (result?.count() != 0) result!! else null, options)
 
-        return result!!
+        return result
 
     }
 
