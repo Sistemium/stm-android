@@ -27,6 +27,12 @@ import nl.komponents.kovenant.task
 @SuppressLint("SetJavaScriptEnabled")
 class WebViewActivity : Activity() {
 
+    companion object {
+
+        var webInterface: WebAppInterface? = null
+
+    }
+
     var webView: WebView? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -38,7 +44,7 @@ class WebViewActivity : Activity() {
         webView?.settings?.javaScriptEnabled = true
         webView?.settings?.domStorageEnabled = true
 
-        val webInterface = WebAppInterface(this)
+        webInterface = WebAppInterface(this)
 
         webView?.addJavascriptInterface(webInterface, "stmAndroid")
 

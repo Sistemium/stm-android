@@ -23,6 +23,8 @@ class WebAppInterface internal constructor(private var webViewActivity: WebViewA
 
     private val errorCallback = "iSistemiumIOSErrorCallback"
 
+    private var unsyncedInfoJSFunction:String? = null
+
     private var persistenceDelegate: STMFullStackPersisting = STMCoreSessionManager.sharedManager.currentSession!!.persistenceDelegate
 
     @JavascriptInterface
@@ -309,7 +311,7 @@ class WebAppInterface internal constructor(private var webViewActivity: WebViewA
 
         val mapParameters = gson.fromJson(parameters, Map::class.java)
 
-        // TODO implement unsyncedInfoService
+        unsyncedInfoJSFunction = mapParameters["unsyncedInfoCallback"] as? String
 
     }
 
@@ -370,6 +372,14 @@ class WebAppInterface internal constructor(private var webViewActivity: WebViewA
         val callback = mapParameters["callback"]
 
         return javascriptCallback(arrayOf<Any>(), mapParameters, callback as String)
+
+    }
+
+    fun postJSNotification(notification:String){
+
+        if (unsyncedInfoJSFunction == null) return
+
+        javascriptCallback(arrayListOf(notification), null, unsyncedInfoJSFunction!!)
 
     }
 

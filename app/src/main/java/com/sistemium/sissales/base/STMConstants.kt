@@ -53,6 +53,9 @@ class STMConstants {
         const val SQLiteDefaultNow = "DEFAULT(STRFTIME('%Y-%m-%d %H:%M:%f', 'NOW'))"
         const val fetchLimit = 500
         const val userAgent = "iSisSales/360"
+        const val NOTIFICATION_SYNCER_HAVE_UNSYNCED_OBJECTS = "haveUnsyncedObjects"
+        const val NOTIFICATION_SYNCER_HAVE_NO_UNSYNCED_OBJECTS = "haveNoUnsyncedObjects"
+        const val NOTIFICATION_SYNCER_SENDIG_DATA = "syncerIsSendingData"
 
     }
 

@@ -1,6 +1,8 @@
 package com.sistemium.sissales.base.session
 
+import com.sistemium.sissales.activities.WebViewActivity
 import com.sistemium.sissales.base.STMConstants
+import com.sistemium.sissales.base.STMConstants.Companion.NOTIFICATION_SYNCER_SENDIG_DATA
 import com.sistemium.sissales.base.STMFunctions
 import com.sistemium.sissales.base.helper.logger.STMLogger
 import com.sistemium.sissales.calsses.entitycontrollers.STMCorePicturesController
@@ -25,6 +27,17 @@ class STMSyncer : STMDefantomizingOwner, STMDataDownloadingOwner, STMDataSyncing
     private var isRunning = false
     private var socketTransport: STMSocketConnection? = null
     private var isSendingData = false
+    set(value) {
+
+        if (value){
+
+            WebViewActivity.webInterface?.postJSNotification(NOTIFICATION_SYNCER_SENDIG_DATA)
+
+        }
+
+        field = value
+
+    }
     private var syncTimer: Timer? = null
     private var settings: Map<*, *>? = null
         get() {
