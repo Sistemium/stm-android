@@ -223,8 +223,12 @@ class STMUnsyncedDataHelper : STMDataSyncing {
             val result = session!!.persistenceDelegate.findAllSync(entityName, predicate, options)
 
             for (obj in result) {
+                
+                val pk = obj[STMConstants.DEFAULT_PERSISTING_PRIMARY_KEY] as String
+                
+                val isErrored = erroredObjectsByEntity[entityName]?.contains(pk)
 
-                if (!exclude.contains(obj[STMConstants.DEFAULT_PERSISTING_PRIMARY_KEY] as String)) {
+                if (!exclude.contains(pk) && (isErrored == null || isErrored == false)) {
 
                     return obj
 
