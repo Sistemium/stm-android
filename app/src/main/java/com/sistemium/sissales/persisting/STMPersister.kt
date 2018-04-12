@@ -190,6 +190,7 @@ class STMPersister(private val runner: STMPersistingRunning) : STMFullStackPersi
     //STMPersistingObservable
 
     private val subscriptions = hashMapOf<String, STMPersistingObservingSubscription>()
+    @Synchronized get
 
     override fun notifyObservingEntityName(entityName: String, items: ArrayList<*>, options: Map<*, *>?) {
 
