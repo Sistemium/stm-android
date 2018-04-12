@@ -152,7 +152,7 @@ class STMUnsyncedDataHelper : STMDataSyncing {
 
         val itemVersion = itemData[STMConstants.STMPersistingKeyVersion] as String
 
-        subscriberDelegate!!.haveUnsynced(entityName, itemData, itemVersion)
+        subscriberDelegate?.haveUnsynced(entityName, itemData, itemVersion)
 
     }
 
