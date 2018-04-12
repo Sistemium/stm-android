@@ -177,8 +177,6 @@ class STMSyncer : STMDefantomizingOwner, STMDataDownloadingOwner, STMDataSyncing
 
     override fun socketWillClosed() {
 
-        STMFunctions.debugLog("STMSyncer", "socketWillClosed")
-
         stopSyncerActivity()
 
     }
@@ -373,11 +371,15 @@ class STMSyncer : STMDefantomizingOwner, STMDataDownloadingOwner, STMDataSyncing
 
     private fun stopSyncerActivity() {
 
-        releaseTimer()
-        unsubscribeFromUnsyncedObjects()
-        isSendingData = false
-        dataDownloadingDelegate!!.stopDownloading()
-        defantomizingDelegate!!.stopDefantomization()
+        if (dataSyncingDelegate!!.subscriberDelegate != null) {
+
+            releaseTimer()
+            unsubscribeFromUnsyncedObjects()
+            isSendingData = false
+            dataDownloadingDelegate!!.stopDownloading()
+            defantomizingDelegate!!.stopDefantomization()
+
+        }
 
     }
 

@@ -310,6 +310,12 @@ class STMSocketTransport(var socketUrlString: String, var entityResource: String
 
         }
 
+        socket!!.on(Socket.EVENT_CONNECT_ERROR){
+
+            owner.socketWillClosed()
+
+        }
+
     }
 
     private fun reconnectSocket() {
@@ -429,6 +435,8 @@ class STMSocketTransport(var socketUrlString: String, var entityResource: String
     private fun socketLostConnection(infoString: String) {
 
         STMLogger.sharedLogger.infoMessage("Socket lost connection: $infoString")
+
+        owner.socketWillClosed()
 
     }
 
