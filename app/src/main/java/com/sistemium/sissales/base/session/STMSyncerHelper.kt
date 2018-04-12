@@ -117,7 +117,7 @@ class STMSyncerHelper : STMDefantomizing, STMDataDownloading {
 
         }
 
-        if (dataRecieved!!.count() > 0 && offset!! != currentEtag) {
+        if (dataRecieved!!.count() == 0 && offset!! != currentEtag) {
 
             STMClientEntityController.setEtag(entityName, offset)
 
