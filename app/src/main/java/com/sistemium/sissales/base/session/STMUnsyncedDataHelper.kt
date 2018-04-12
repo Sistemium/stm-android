@@ -127,7 +127,7 @@ class STMUnsyncedDataHelper : STMDataSyncing {
 
         if (!syncingState) {
 
-            finishHandleUnsyncedObjects()
+            return finishHandleUnsyncedObjects()
 
         }
 
