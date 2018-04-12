@@ -74,6 +74,12 @@ class ProfileActivity : AppCompatActivity() {
 
             var manifest = currentTab!!["appManifestURI"] as? String
 
+            if (url == null && manifest != null){
+
+                url = manifest.replace("/app.manifest", "")
+
+            }
+
 
             //debug
             url = url?.replace("http://lamac.local:3000", "http://10.0.1.5:3000")
