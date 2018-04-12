@@ -30,8 +30,6 @@ class STMSyncerHelper : STMDefantomizing, STMDataDownloading {
 
     override fun startDownloading(entitiesNames: ArrayList<String>?) {
 
-        ProfileActivity.profileActivityController?.hideGridView()
-
         var _entitiesNames = entitiesNames
 
         if (downloadingQueue != null) {
@@ -145,8 +143,6 @@ class STMSyncerHelper : STMDefantomizing, STMDataDownloading {
     }
 
     override fun startDefantomization() {
-
-        ProfileActivity.profileActivityController?.hideGridView()
 
         var defantomizing = this.defantomizing
 
@@ -299,11 +295,11 @@ class STMSyncerHelper : STMDefantomizing, STMDataDownloading {
         ProfileActivity.profileActivityController!!.setProgressInfo(-1)
         this.defantomizing = null
         defantomizingOwner!!.defantomizingFinished()
-        ProfileActivity.profileActivityController?.showGridView()
 
     }
 
     private fun doneWithEntityName(entityName: String, identifier: String) {
+
 
         defantomizing!!.operations[Pair(entityName, identifier)]!!.finish()
 

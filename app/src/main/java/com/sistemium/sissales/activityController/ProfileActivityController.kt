@@ -4,6 +4,7 @@ import android.view.View
 import com.sistemium.sissales.R
 import com.sistemium.sissales.activities.ProfileActivity
 import com.sistemium.sissales.base.MyApplication
+import com.sistemium.sissales.calsses.entitycontrollers.STMEntityController
 import kotlinx.android.synthetic.main.content_profile.*
 
 /**
@@ -20,6 +21,8 @@ class ProfileActivityController(private var activity: ProfileActivity) {
     fun setMaxProgress(max: Int) {
 
         activity.runOnUiThread {
+
+            activity.gridView.visibility = if (STMEntityController.downloadableEntityReady()) View.VISIBLE else View.INVISIBLE
 
             activity.progressBar!!.max = max
 
@@ -51,26 +54,6 @@ class ProfileActivityController(private var activity: ProfileActivity) {
 
     }
 
-    fun hideGridView() {
-
-        activity.runOnUiThread {
-
-            activity.gridView.visibility = View.INVISIBLE
-
-        }
-
-    }
-
-    fun showGridView() {
-
-        activity.runOnUiThread {
-
-            activity.gridView.visibility = View.VISIBLE
-
-        }
-
-    }
-
     fun setProgressInfo(info: Int) {
 
         activity.runOnUiThread {
@@ -82,6 +65,8 @@ class ProfileActivityController(private var activity: ProfileActivity) {
             activity.progressInfo?.text = text
 
             if (info == -1) {
+
+                activity.gridView.visibility = if (STMEntityController.downloadableEntityReady()) View.VISIBLE else View.INVISIBLE
 
                 got = 0
 

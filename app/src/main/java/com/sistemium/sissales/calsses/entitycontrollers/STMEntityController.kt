@@ -21,6 +21,46 @@ class STMEntityController private constructor() {
 
         val sharedInstance: STMEntityController by lazy { Holder.INSTANCE }
 
+        private var downloadableEntityReady = false
+
+        fun downloadableEntityReady():Boolean{
+
+            if (!downloadableEntityReady){
+
+                var result = true
+
+                val persisting = sharedInstance.persistenceDelegate ?: return false
+
+                val clientEntities = persisting.findAllSync("ClientEntity", null, null)
+
+                val downloadableEntityNames = sharedInstance.downloadableEntityNames()
+
+                val downloaded = arrayListOf<String>()
+
+                for (clientEntity in clientEntities){
+
+                    downloaded.add(STMFunctions.addPrefixToEntityName(clientEntity["name"] as String))
+
+                }
+
+                for (downloadableEntityName in downloadableEntityNames){
+
+                    if (!downloaded.contains(downloadableEntityName)){
+
+                        result = false
+
+                    }
+
+                }
+
+                downloadableEntityReady = result
+
+            }
+
+            return downloadableEntityReady
+
+        }
+
     }
 
     var persistenceDelegate: STMFullStackPersisting? = null
