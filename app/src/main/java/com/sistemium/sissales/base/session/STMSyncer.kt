@@ -53,6 +53,23 @@ class STMSyncer : STMDefantomizingOwner, STMDataDownloadingOwner, STMDataSyncing
         }
     private var isDefantomizing = false
 
+    fun prepareToDestroy(){
+
+        unsubscribeFromUnsyncedObjects()
+
+        if (isRunning) {
+
+            socketTransport?.closeSocket()
+
+            releaseTimer()
+
+            isRunning = false
+
+        }
+
+
+    }
+
     override fun socketReceiveAuthorization() {
 
         subscribeToUnsyncedObjects()

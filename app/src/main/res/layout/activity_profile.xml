@@ -18,6 +18,18 @@
             android:background="?attr/colorPrimary"
             app:popupTheme="@style/AppTheme.PopupOverlay">
 
+            <ImageButton
+                android:id="@+id/logout"
+                android:layout_width="56dp"
+                android:layout_height="?attr/actionBarSize"
+                android:layout_gravity="left"
+                android:adjustViewBounds="false"
+                android:backgroundTint="@color/colorPrimary"
+                android:fadingEdge="none"
+                android:scaleType="fitCenter"
+                android:src="@drawable/exit_128"
+                android:translationX="-15dp" />
+
             <TextView
                 android:id="@+id/toolbar_title"
                 android:layout_width="wrap_content"

@@ -1,16 +1,16 @@
 package com.sistemium.sissales.activities
 
+import android.app.AlertDialog
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.view.View
-import android.widget.AdapterView
-import android.widget.GridView
-import android.widget.ProgressBar
-import android.widget.TextView
+import android.widget.*
 import com.sistemium.sissales.R
 import com.sistemium.sissales.activityController.ProfileActivityController
 import com.sistemium.sissales.base.session.STMCoreAuthController
+import com.sistemium.sissales.base.session.STMCoreSessionManager
 import kotlinx.android.synthetic.main.activity_profile.*
 
 class ProfileActivity : AppCompatActivity() {
@@ -61,6 +61,39 @@ class ProfileActivity : AppCompatActivity() {
 
         }
 
+        val logout:ImageButton = findViewById(R.id.logout)
+
+        logout.setOnClickListener{
+
+            runOnUiThread {
+
+                val builder: AlertDialog.Builder = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    AlertDialog.Builder(this, android.R.style.Theme_Material_Dialog_Alert)
+                } else {
+                    AlertDialog.Builder(this)
+                }
+                builder.setTitle(this.resources.getString(R.string.logout))
+                        .setMessage(this.resources.getString(R.string.you_sure))
+                        .setPositiveButton(android.R.string.ok, { _, _ ->
+
+                            runOnUiThread {
+
+                                startActivity(Intent(this@ProfileActivity, AuthActivity::class.java))
+
+                                STMCoreAuthController.logout()
+
+                                finish()
+
+                            }
+
+                        })
+                        .setNegativeButton(android.R.string.cancel, { _, _ -> })
+                        .show()
+
+            }
+
+        }
+
         val profileAdapter = ProfileAdapter(this, tabs)
 
         gridView.adapter = profileAdapter
@@ -79,7 +112,6 @@ class ProfileActivity : AppCompatActivity() {
                 url = manifest.replace("/app.manifest", "")
 
             }
-
 
             //debug
             url = url?.replace("http://lamac.local:3000", "http://10.0.1.5:3000")

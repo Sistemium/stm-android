@@ -12,6 +12,8 @@ import com.sistemium.sissales.activities.ProfileActivity
 import com.sistemium.sissales.base.MyApplication
 import com.sistemium.sissales.base.STMConstants
 import com.sistemium.sissales.base.STMFunctions
+import com.sistemium.sissales.base.helper.logger.STMLogger
+import com.sistemium.sissales.enums.STMLogMessageType
 import devliving.online.securedpreferencestore.SecuredPreferenceStore
 import nl.komponents.kovenant.Promise
 import nl.komponents.kovenant.task
@@ -211,6 +213,28 @@ class STMCoreAuthController {
             }
 
         val dataModelName = "iSisSales"
+
+        fun logout(){
+
+            val sessionManager = STMCoreSessionManager.sharedManager
+            sessionManager.currentSession?.syncer?.prepareToDestroy()
+            STMLogger.sharedLogger.saveLogMessageWithText("logout", STMLogMessageType.STMLogMessageTypeImportant)
+
+            sessionManager.stopSessionForUID(userID)
+
+            userID = null
+            accessToken = null
+            stcTabs = null
+            iSisDB = null
+            phoneNumber = null
+            userName = null
+            socketURL = null
+            entityResource = null
+            requestID = null
+            accountOrg = null
+            rolesResponse = null
+
+        }
 
         fun requestNewSMSCode(phoneNumber: String): Promise<String?, Exception> {
 

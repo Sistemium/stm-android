@@ -38,7 +38,7 @@ class STMCoreSession(var trackers: ArrayList<String>) : STMSession {
 
         val dataModelName = STMCoreAuthController.dataModelName
 
-        val databaseFile = dataModelName + ".db"
+        val databaseFile = "$dataModelName.db"
 
         val databasePath = filing.persistencePath(STMConstants.SQL_LITE_PATH) + "/" + databaseFile
 
@@ -85,13 +85,17 @@ class STMCoreSession(var trackers: ArrayList<String>) : STMSession {
 
     fun stopSession() {
 
-        TODO("not implemented")
+        status = if  (status === STMSessionStatus.STMSessionRemoving) status else STMSessionStatus.STMSessionStopped
 
-    }
+        logger?.session = null
 
-    fun dismissSession() {
+        settingsController = null
 
-        TODO("not implemented")
+        logger = null
+
+        syncer = null
+
+        manager?.sessionStopped(this)
 
     }
 

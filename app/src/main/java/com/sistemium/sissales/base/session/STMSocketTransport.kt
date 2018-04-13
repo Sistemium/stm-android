@@ -215,6 +215,17 @@ class STMSocketTransport(var socketUrlString: String, var entityResource: String
 
     }
 
+    override fun closeSocket() {
+
+        STMLogger.sharedLogger.infoMessage("close Socket")
+        socket!!.off()
+        socket!!.disconnect()
+        owner.socketWillClosed()
+        socket = null
+        isAuthorized = false
+
+    }
+
     private fun respondOnData(array: Array<*>): Pair<Map<*, *>?, Exception?> {
 
         if (array.size != 1) {
@@ -322,17 +333,6 @@ class STMSocketTransport(var socketUrlString: String, var entityResource: String
 
         closeSocket()
         startSocket()
-
-    }
-
-    private fun closeSocket() {
-
-        STMLogger.sharedLogger.infoMessage("close Socket")
-        socket!!.off()
-        socket!!.disconnect()
-        owner.socketWillClosed()
-        socket = null
-        isAuthorized = false
 
     }
 

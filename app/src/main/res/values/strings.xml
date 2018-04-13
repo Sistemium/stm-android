@@ -15,4 +15,6 @@
     <string name="wrong_sms">Wrong SMS Code</string>
     <string name="receive">Receive</string>
     <string name="objects">objects</string>
+    <string name="logout">Logout</string>
+    <string name="you_sure">Are you sure to logout?</string>
 </resources>

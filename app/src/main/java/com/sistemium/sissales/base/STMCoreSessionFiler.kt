@@ -12,10 +12,7 @@ import java.util.*
 class STMCoreSessionFiler(org: String, uid: String) : STMFiling, STMDirectoring {
 
     private val userDocuments = MyApplication.appContext!!.filesDir.absolutePath + "/" + org + "/" + uid
-    private val sharedDocuments = MyApplication.appContext!!.filesDir.absolutePath + "/" + org + "/" + SHARED_PATH
-    private val directoring: STMDirectoring = this
-    private val persistenceBasePath = (testPersistencePath()
-            ?: userDocuments) + "/" + STMConstants.PERSISTENCE_PATH
+    private val persistenceBasePath = userDocuments + "/" + STMConstants.PERSISTENCE_PATH
 
     override fun bundledModelJSON(modelName: String): String {
 
@@ -36,42 +33,12 @@ class STMCoreSessionFiler(org: String, uid: String) : STMFiling, STMDirectoring 
 
     override fun persistencePath(folderName: String): String {
 
-        val path = persistenceBasePath + "/" + folderName
+        val path = "$persistenceBasePath/$folderName"
 
         File(path).mkdirs()
 
         return path
 
-    }
-
-    private fun testPersistencePath(): String? {
-        return try {
-
-            val assetManager = MyApplication.appContext!!.assets
-            var stream = assetManager.open("model/iSisSales.json")
-            var file = File(MyApplication.appContext!!.filesDir.absolutePath + "/testPersistenceFile/${STMConstants.PERSISTENCE_PATH}/${STMConstants.SQL_LITE_PATH}/iSisSales.json")
-            file.parentFile.mkdirs()
-            file.createNewFile()
-            file.writeBytes(stream.readBytes())
-
-            stream = assetManager.open("iSisSales.db")
-            file = File(MyApplication.appContext!!.filesDir.absolutePath + "/testPersistenceFile/${STMConstants.PERSISTENCE_PATH}/${STMConstants.SQL_LITE_PATH}/iSisSales.db")
-
-            if (!file.exists()) {
-
-                file.parentFile.mkdirs()
-                file.createNewFile()
-                file.writeBytes(stream.readBytes())
-
-            }
-
-            MyApplication.appContext!!.filesDir.absolutePath + "/testPersistenceFile"
-
-        } catch (e: Exception) {
-
-            null
-
-        }
     }
 
 }

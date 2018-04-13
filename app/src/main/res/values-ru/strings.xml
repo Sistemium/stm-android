@@ -15,4 +15,6 @@
     <string name="wrong_sms">Неверный код</string>
     <string name="receive">Получено</string>
     <string name="objects">объектов</string>
+    <string name="logout">Выйти</string>
+    <string name="you_sure">Выйти из аккаунта?</string>
 </resources>

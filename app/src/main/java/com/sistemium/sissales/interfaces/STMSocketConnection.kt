@@ -16,4 +16,6 @@ interface STMSocketConnection {
 
     fun findAllAsync(entityName: String, options: Map<*, *>?, identifier: String?): Promise<Map<*, *>, Exception>
 
+    fun closeSocket()
+
 }
