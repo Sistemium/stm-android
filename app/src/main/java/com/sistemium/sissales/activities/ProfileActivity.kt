@@ -1,16 +1,20 @@
 package com.sistemium.sissales.activities
 
+import android.Manifest
+import android.annotation.TargetApi
 import android.app.AlertDialog
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
+import android.support.v4.app.ActivityCompat
+import android.support.v4.content.ContextCompat
 import android.support.v7.app.AppCompatActivity
 import android.view.View
 import android.widget.*
 import com.sistemium.sissales.R
 import com.sistemium.sissales.activityController.ProfileActivityController
 import com.sistemium.sissales.base.session.STMCoreAuthController
-import com.sistemium.sissales.base.session.STMCoreSessionManager
 import kotlinx.android.synthetic.main.activity_profile.*
 
 class ProfileActivity : AppCompatActivity() {
@@ -32,6 +36,8 @@ class ProfileActivity : AppCompatActivity() {
         profileActivityController = ProfileActivityController(this)
         setContentView(R.layout.activity_profile)
         setSupportActionBar(toolbar)
+
+        initPermissions()
 
         progressBar = findViewById(R.id.progressBar)
 
@@ -134,6 +140,43 @@ class ProfileActivity : AppCompatActivity() {
 
     override fun onBackPressed() {
         this.moveTaskToBack(true)
+    }
+
+    private fun initPermissions(){
+
+        val permissions = arrayListOf<String>()
+
+        if (ContextCompat.checkSelfPermission(this,
+                        Manifest.permission.CAMERA)
+                != PackageManager.PERMISSION_GRANTED) {
+
+            permissions.add(Manifest.permission.CAMERA)
+
+        }
+
+        if (ContextCompat.checkSelfPermission(this,
+                        Manifest.permission.READ_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_GRANTED) {
+
+            permissions.add(Manifest.permission.READ_EXTERNAL_STORAGE)
+        }
+
+        if (ContextCompat.checkSelfPermission(this,
+                        Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_GRANTED) {
+
+            permissions.add(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+
+        }
+
+        if (permissions.isNotEmpty()){
+
+            ActivityCompat.requestPermissions(this,
+                    permissions.toTypedArray(),
+                    0)
+
+        }
+
     }
 
 }
