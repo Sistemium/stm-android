@@ -3,16 +3,14 @@ package com.sistemium.sissales.activities
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.graphics.Bitmap
+import android.net.Uri
 import android.os.Bundle
 import android.support.constraint.ConstraintLayout
 import android.view.View
-import android.webkit.WebResourceRequest
-import android.webkit.WebSettings
+import android.webkit.*
 import android.webkit.WebSettings.MIXED_CONTENT_ALWAYS_ALLOW
-import android.webkit.WebView
 import com.sistemium.sissales.R
 import com.sistemium.sissales.webInterface.WebAppInterface
-import android.webkit.WebViewClient
 import com.github.kittinunf.fuel.Fuel
 import com.github.kittinunf.fuel.android.extension.responseJson
 import com.github.kittinunf.fuel.core.FuelManager
@@ -22,6 +20,17 @@ import com.sistemium.sissales.R.id.webView1
 import com.sistemium.sissales.base.STMFunctions
 import devliving.online.securedpreferencestore.SecuredPreferenceStore
 import nl.komponents.kovenant.task
+import com.sistemium.sissales.R.layout.webview
+import android.content.Intent
+import android.os.Build
+import android.os.Environment
+import android.provider.MediaStore
+import java.io.File
+import java.io.IOException
+import android.os.Environment.DIRECTORY_PICTURES
+import android.os.Environment.getExternalStoragePublicDirectory
+import java.text.SimpleDateFormat
+import java.util.*
 
 
 @SuppressLint("SetJavaScriptEnabled")
@@ -35,6 +44,10 @@ class WebViewActivity : Activity() {
 
     var webView: WebView? = null
 
+    private var mUMA:ValueCallback<Array<Uri>>? = null
+    private var mCM: String? = null
+    private val FCR = 1
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.webview)
@@ -43,10 +56,63 @@ class WebViewActivity : Activity() {
         webView = findViewById(R.id.webView1)
         webView?.settings?.javaScriptEnabled = true
         webView?.settings?.domStorageEnabled = true
+//        webView?.settings?.pluginState = WebSettings.PluginState.ON
 
         webInterface = WebAppInterface(this)
 
         webView?.addJavascriptInterface(webInterface, "stmAndroid")
+        webView?.settings?.mediaPlaybackRequiresUserGesture = false
+        webView?.webChromeClient = object : WebChromeClient() {
+            override fun onPermissionRequest(request: PermissionRequest) {
+                runOnUiThread{
+
+                    request.grant(request.resources)
+
+                }
+            }
+
+            override fun onShowFileChooser(webView: WebView?, filePathCallback: ValueCallback<Array<Uri>>?, fileChooserParams: FileChooserParams?): Boolean {
+
+                if (mUMA != null) {
+                    mUMA!!.onReceiveValue(null)
+                }
+                mUMA = filePathCallback
+                var takePictureIntent: Intent? = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+                if (takePictureIntent!!.resolveActivity(this@WebViewActivity.packageManager) != null) {
+                    var photoFile: File? = null
+                    try {
+                        photoFile = createImageFile()
+                        takePictureIntent.putExtra("PhotoPath", mCM)
+                    } catch (ex: IOException) {
+                        STMFunctions.debugLog("WebViewActivity", "Image file creation failed")
+                    }
+
+                    if (photoFile != null) {
+                        mCM = "file:" + photoFile.absolutePath
+                        takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(photoFile))
+                    } else {
+                        takePictureIntent = null
+                    }
+                }
+                val contentSelectionIntent = Intent(Intent.ACTION_GET_CONTENT)
+                contentSelectionIntent.addCategory(Intent.CATEGORY_OPENABLE)
+                contentSelectionIntent.type = "*/*"
+                val intentArray: Array<Intent?>
+                intentArray = if (takePictureIntent != null) {
+                    arrayOf(takePictureIntent)
+                } else {
+                    arrayOfNulls(0)
+                }
+                val chooserIntent = Intent(Intent.ACTION_CHOOSER)
+                chooserIntent.putExtra(Intent.EXTRA_INTENT, contentSelectionIntent)
+                chooserIntent.putExtra(Intent.EXTRA_TITLE, "Image Chooser")
+                chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, intentArray)
+                startActivityForResult(chooserIntent, FCR)
+
+                return true
+
+            }
+        }
 
         val url = intent.getStringExtra("url")
 
@@ -62,7 +128,7 @@ class WebViewActivity : Activity() {
                 webView?.settings?.setAppCachePath(appCachePath)
                 webView?.settings?.allowFileAccess = true
                 webView?.settings?.setAppCacheEnabled(true)
-                webView?.settings?.mixedContentMode = MIXED_CONTENT_ALWAYS_ALLOW
+//                webView?.settings?.mixedContentMode = MIXED_CONTENT_ALWAYS_ALLOW
 
                 webView?.webViewClient = object : WebViewClient() {
 
@@ -84,6 +150,31 @@ class WebViewActivity : Activity() {
 
     }
 
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+
+        var results: Array<Uri>? = null
+        if (resultCode === Activity.RESULT_OK) {
+            if (requestCode === FCR) {
+                if (null == mUMA) {
+                    return
+                }
+                if (intent == null || intent.data == null) {
+                    if (mCM != null) {
+                        results = arrayOf(Uri.parse(mCM))
+                    }
+                } else {
+                    val dataString = intent.dataString
+                    if (dataString != null) {
+                        results = arrayOf(Uri.parse(dataString))
+                    }
+                }
+            }
+        }
+        mUMA?.onReceiveValue(results)
+        mUMA = null
+
+    }
+
     fun goBack() {
 
         runOnUiThread {
@@ -92,6 +183,14 @@ class WebViewActivity : Activity() {
 
         }
 
+    }
+
+    @Throws(IOException::class)
+    private fun createImageFile(): File {
+        @SuppressLint("SimpleDateFormat") val timeStamp = SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())
+        val imageFileName = "img_" + timeStamp + "_"
+        val storageDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)
+        return File.createTempFile(imageFileName, ".jpg", storageDir)
     }
 
 }
