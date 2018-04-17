@@ -5,6 +5,7 @@ import com.sistemium.sissales.base.STMFunctions
 import com.sistemium.sissales.interfaces.*
 import nl.komponents.kovenant.Promise
 import nl.komponents.kovenant.task
+import java.util.concurrent.ConcurrentHashMap
 
 /**
  * Created by edgarjanvuicik on 20/11/2017.
@@ -189,8 +190,7 @@ class STMPersister(private val runner: STMPersistingRunning) : STMFullStackPersi
 
     //STMPersistingObservable
 
-    private val subscriptions = hashMapOf<String, STMPersistingObservingSubscription>()
-    @Synchronized get
+    private val subscriptions = ConcurrentHashMap<String, STMPersistingObservingSubscription>()
 
     override fun notifyObservingEntityName(entityName: String, items: ArrayList<*>, options: Map<*, *>?) {
 
