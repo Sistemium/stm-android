@@ -55,21 +55,14 @@ class WebViewActivity : Activity() {
 
         webView = findViewById(R.id.webView1)
         webView?.settings?.javaScriptEnabled = true
+
         webView?.settings?.domStorageEnabled = true
-//        webView?.settings?.pluginState = WebSettings.PluginState.ON
 
         webInterface = WebAppInterface(this)
 
         webView?.addJavascriptInterface(webInterface, "stmAndroid")
         webView?.settings?.mediaPlaybackRequiresUserGesture = false
         webView?.webChromeClient = object : WebChromeClient() {
-            override fun onPermissionRequest(request: PermissionRequest) {
-                runOnUiThread{
-
-                    request.grant(request.resources)
-
-                }
-            }
 
             override fun onShowFileChooser(webView: WebView?, filePathCallback: ValueCallback<Array<Uri>>?, fileChooserParams: FileChooserParams?): Boolean {
 
@@ -128,7 +121,6 @@ class WebViewActivity : Activity() {
                 webView?.settings?.setAppCachePath(appCachePath)
                 webView?.settings?.allowFileAccess = true
                 webView?.settings?.setAppCacheEnabled(true)
-//                webView?.settings?.mixedContentMode = MIXED_CONTENT_ALWAYS_ALLOW
 
                 webView?.webViewClient = object : WebViewClient() {
 
@@ -158,12 +150,12 @@ class WebViewActivity : Activity() {
                 if (null == mUMA) {
                     return
                 }
-                if (intent == null || intent.data == null) {
+                if (data == null || data.data == null) {
                     if (mCM != null) {
                         results = arrayOf(Uri.parse(mCM))
                     }
                 } else {
-                    val dataString = intent.dataString
+                    val dataString = data.dataString
                     if (dataString != null) {
                         results = arrayOf(Uri.parse(dataString))
                     }
