@@ -36,6 +36,12 @@ android {
         }
     }
 
+    lintOptions {
+
+        checkReleaseBuilds false
+
+    }
+
 }
 
 apply plugin: 'io.fabric'
