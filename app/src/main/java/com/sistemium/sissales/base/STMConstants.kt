@@ -1,5 +1,7 @@
 package com.sistemium.sissales.base
 
+import com.sistemium.sissales.BuildConfig
+
 /**
  * Created by edgarjanvuicik on 14/11/2017.
  */
@@ -52,7 +54,7 @@ class STMConstants {
         const val SQLiteStatementSeparator = "; "
         const val SQLiteDefaultNow = "DEFAULT(STRFTIME('%Y-%m-%d %H:%M:%f', 'NOW'))"
         const val fetchLimit = 500
-        const val userAgent = "iSisSales/360"
+        const val userAgent = "iSisSales/${BuildConfig.VERSION_CODE}"
         const val NOTIFICATION_SYNCER_HAVE_UNSYNCED_OBJECTS = "haveUnsyncedObjects"
         const val NOTIFICATION_SYNCER_HAVE_NO_UNSYNCED_OBJECTS = "haveNoUnsyncedObjects"
         const val NOTIFICATION_SYNCER_SENDIG_DATA = "syncerIsSendingData"
