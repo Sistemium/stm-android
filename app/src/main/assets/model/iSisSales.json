@@ -2,8 +2,8 @@
   "model": {
     "type": "com.apple.IDECoreDataModeler.DataModel",
     "documentVersion": "1.0",
-    "lastSavedToolsVersion": "13772",
-    "systemVersion": "17D102",
+    "lastSavedToolsVersion": "14133",
+    "systemVersion": "17E199",
     "minimumToolsVersion": "Xcode 7.3",
     "sourceLanguage": "Objective-C",
     "entity": [
@@ -1403,6 +1403,12 @@
             "syncable": "YES"
           },
           {
+            "name": "documentId",
+            "optional": "YES",
+            "attributeType": "String",
+            "syncable": "YES"
+          },
+          {
             "name": "ndoc",
             "optional": "YES",
             "attributeType": "String",
@@ -2385,13 +2391,22 @@
         "name": "STMPartnerArticle",
         "parentEntity": "STMAbstract",
         "syncable": "YES",
-        "attribute": {
-          "name": "discount",
-          "optional": "YES",
-          "attributeType": "Decimal",
-          "defaultValueString": "0.0",
-          "syncable": "YES"
-        },
+        "attribute": [
+          {
+            "name": "discount",
+            "optional": "YES",
+            "attributeType": "Decimal",
+            "defaultValueString": "0.0",
+            "syncable": "YES"
+          },
+          {
+            "name": "discountDoc",
+            "optional": "YES",
+            "attributeType": "Decimal",
+            "defaultValueString": "0.0",
+            "syncable": "YES"
+          }
+        ],
         "relationship": [
           {
             "name": "article",
@@ -4399,7 +4414,7 @@
           "positionX": "1359",
           "positionY": "2124",
           "width": "128",
-          "height": "210"
+          "height": "225"
         },
         {
           "name": "STMDriver",
@@ -4518,7 +4533,7 @@
           "positionX": "1359",
           "positionY": "2124",
           "width": "128",
-          "height": "90"
+          "height": "105"
         },
         {
           "name": "STMPartnerPriceGroup",
@@ -4629,6 +4644,13 @@
           "name": "STMSchedulePurpose",
           "positionX": "342",
           "positionY": "765",
+          "width": "128",
+          "height": "105"
+        },
+        {
+          "name": "STMSearchQuery",
+          "positionX": "1368",
+          "positionY": "2133",
           "width": "128",
           "height": "105"
         },
@@ -4755,13 +4777,6 @@
           "name": "STMWorkflow",
           "positionX": "45",
           "positionY": "675",
-          "width": "128",
-          "height": "105"
-        },
-        {
-          "name": "STMSearchQuery",
-          "positionX": "1368",
-          "positionY": "2133",
           "width": "128",
           "height": "105"
         }
