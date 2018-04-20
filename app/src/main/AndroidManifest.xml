@@ -20,7 +20,10 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".activities.WebViewActivity" />
+        <activity
+            android:name=".activities.WebViewActivity"
+            android:configChanges="orientation|screenSize"
+            />
         <activity
             android:name=".activities.AuthActivity"
             android:theme="@style/AppTheme.NoActionBar"
