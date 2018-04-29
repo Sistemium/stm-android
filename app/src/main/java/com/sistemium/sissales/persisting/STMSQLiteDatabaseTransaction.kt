@@ -95,7 +95,7 @@ class STMSQLiteDatabaseTransaction(private var database: SQLiteDatabase, private
 
     override fun destroyWithoutSave(entityName: String, predicate: STMPredicate?, options: Map<*, *>?): Int {
 
-        var where = predicate?.predicateForAdapter(adapter, entityName) ?: ""
+        var where = predicate?.predicateForModel(adapter.model, entityName) ?: ""
 
         val tablename = STMFunctions.removePrefixFromEntityName(entityName)
 
@@ -156,7 +156,7 @@ class STMSQLiteDatabaseTransaction(private var database: SQLiteDatabase, private
         var where = ""
 
         if (predicate != null) {
-            where = predicate.predicateForAdapter(adapter, entityName) ?: ""
+            where = predicate.predicateForModel(adapter.model, entityName) ?: ""
 //            STMFunctions.debugLog("EntityName", entityName)
 //            STMFunctions.debugLog("PREDICATE", where)
 //            STMFunctions.debugLog("OPTIONS", options)

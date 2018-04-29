@@ -3,6 +3,7 @@ package com.sistemium.sissales.persisting
 import com.sistemium.sissales.base.STMConstants
 import com.sistemium.sissales.base.STMFunctions
 import com.sistemium.sissales.interfaces.STMAdapting
+import com.sistemium.sissales.interfaces.STMModelling
 
 /**
  * Created by edgarjanvuicik on 10/11/2017.
@@ -97,7 +98,7 @@ class STMPredicate {
 
                     val anyValue = key.split(" ").last()
 
-                    val whereVal = STMPredicate(comparatorPredicate(value).predicateForAdapter(null, null)!!)
+                    val whereVal = STMPredicate(comparatorPredicate(value).predicateForModel(null, null)!!)
 
                     val predicate = STMPredicate("", arrayListOf(STMPredicate("exists ( select * from "),
                             STMPredicate("?", anyValue),
@@ -210,19 +211,19 @@ class STMPredicate {
 
     override fun toString(): String = throw Exception("should not, use predicateForAdapter instead")
 
-    fun predicateForAdapter(adapter: STMAdapting?, entityName: String?): String? {
+    fun predicateForModel(model: STMModelling?, entityName: String?): String? {
 
         when (type) {
 
             STMPredicate.PredicateType.Value -> {
 
-                if (relation == "?" && adapter != null && entityName != null) {
+                if (relation == "?" && model != null && entityName != null) {
 
                     if (value == "uncapitalizedTableName") return STMFunctions.removePrefixFromEntityName(entityName).decapitalize()
 
                     if (value == "capitalizedTableName") return STMFunctions.removePrefixFromEntityName(entityName).capitalize()
 
-                    val relationships = adapter.model.entitiesByName[STMFunctions.addPrefixToEntityName(entityName)]?.relationshipsByName
+                    val relationships = model.entitiesByName[STMFunctions.addPrefixToEntityName(entityName)]?.relationshipsByName
 
                     return if (relationships?.containsKey(value) == true) {
 
@@ -236,9 +237,9 @@ class STMPredicate {
 
                 }
 
-                if (relation == "relation" && adapter != null && entityName != null) {
+                if (relation == "relation" && model != null && entityName != null) {
 
-                    val relationships = adapter.model.entitiesByName[STMFunctions.addPrefixToEntityName(entityName)]?.relationshipsByName
+                    val relationships = model.entitiesByName[STMFunctions.addPrefixToEntityName(entityName)]?.relationshipsByName
 
                     return if (relationships?.containsKey(value?.removeSuffix(STMConstants.RELATIONSHIP_SUFFIX)) == true) {
 
@@ -274,7 +275,7 @@ class STMPredicate {
 
                 val array = predicateArray!!.mapNotNull {
 
-                    it.predicateForAdapter(adapter, entityName)
+                    it.predicateForModel(model, entityName)
 
                 }
 
@@ -298,11 +299,11 @@ class STMPredicate {
 
             STMPredicate.PredicateType.Comparison -> {
 
-                val left = leftPredicate?.predicateForAdapter(adapter, entityName)
+                val left = leftPredicate?.predicateForModel(model, entityName)
 
-                val right = rightPredicate?.predicateForAdapter(adapter, entityName)
+                val right = rightPredicate?.predicateForModel(model, entityName)
 
-                val valid = entityName == null || adapter == null || adapter.model.fieldsForEntityName(entityName).containsKey(left) || adapter.model.objectRelationshipsForEntityName(entityName).containsKey(left?.removeSuffix(STMConstants.RELATIONSHIP_SUFFIX))
+                val valid = entityName == null || model == null || model.fieldsForEntityName(entityName).containsKey(left) || model.objectRelationshipsForEntityName(entityName).containsKey(left?.removeSuffix(STMConstants.RELATIONSHIP_SUFFIX))
 
                 if (left != null && right != null && valid) {
 
