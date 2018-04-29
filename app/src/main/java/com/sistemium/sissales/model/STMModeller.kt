@@ -111,6 +111,14 @@ class STMModeller(modelJSON: String) : STMModelling {
 
         }
 
+        _objectRelationshipsForEntityName["$entityName$isToMany$cascade$optional"] = _objectRelationshipsForEntityName["$entityName$isToMany$cascade$optional"]!!.filter {
+
+            (isToMany == it.value.isToMany || isToMany == null)
+                    && (optional == it.value.optional || optional == null)
+                    && (cascade == (it.value.deleteRule == "Cascade") || cascade == null)
+
+        }
+
         return _objectRelationshipsForEntityName["$entityName$isToMany$cascade$optional"]!!
 
     }

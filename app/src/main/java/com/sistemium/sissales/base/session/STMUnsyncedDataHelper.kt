@@ -184,18 +184,14 @@ class STMUnsyncedDataHelper : STMDataSyncing {
 
         val unsyncedObject = unsyncedObjectWithEntityName(entityName, exclude) ?: return null
 
-        val parentNames = STMModelling.sharedModeler!!.toOneRelationshipsForEntityName(entityName).keys.map {
+        val parentNames = STMModelling.sharedModeler!!.toOneRelationshipsForEntityName(entityName).values.filter {
 
-            it + STMConstants.RELATIONSHIP_SUFFIX
+            val column = it.relationshipName + STMConstants.RELATIONSHIP_SUFFIX
 
-        }.filter {
-
-            val capitalized = it.removeSuffix(STMConstants.RELATIONSHIP_SUFFIX).capitalize()
-
-            val pk = unsyncedObject[it] as? String ?: return@filter false
+            val pk = unsyncedObject[column] as? String ?: return@filter false
 
             val lts = session!!.persistenceDelegate
-                    .findSync(capitalized, pk, null)!![STMConstants.STMPersistingOptionLts]
+                    .findSync(it.destinationEntityName, pk, null)!![STMConstants.STMPersistingOptionLts]
 
             lts == null || lts.toString().isEmpty()
 
