@@ -25,7 +25,6 @@ class STMSyncerHelper : STMDefantomizing, STMDataDownloading {
     override var persistenceFantomsDelegate: STMPersistingFantoms? = null
     override var dataDownloadingOwner: STMDataDownloadingOwner? = null
     override var defantomizingOwner: STMDefantomizingOwner? = null
-    @Volatile
     private var downloadingOperations = ConcurrentHashMap<String, STMDownloadingOperation>()
     private var defantomizing: STMSyncerHelperDefantomizing? = null
 
