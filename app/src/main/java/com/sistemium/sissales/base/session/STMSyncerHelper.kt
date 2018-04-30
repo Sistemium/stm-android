@@ -11,6 +11,7 @@ import com.sistemium.sissales.calsses.entitycontrollers.STMEntityController
 import com.sistemium.sissales.interfaces.*
 import nl.komponents.kovenant.then
 import java.util.*
+import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 import kotlin.collections.ArrayList
@@ -25,7 +26,7 @@ class STMSyncerHelper : STMDefantomizing, STMDataDownloading {
     override var dataDownloadingOwner: STMDataDownloadingOwner? = null
     override var defantomizingOwner: STMDefantomizingOwner? = null
     @Volatile
-    private var downloadingOperations = hashMapOf<String, STMDownloadingOperation>()
+    private var downloadingOperations = ConcurrentHashMap<String, STMDownloadingOperation>()
     private var defantomizing: STMSyncerHelperDefantomizing? = null
 
     override fun startDownloading(entitiesNames: ArrayList<String>?) {
