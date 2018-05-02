@@ -20,9 +20,9 @@ class STMPersisterTransactionCoordinator(private val adapters: HashMap<STMStorag
 
         val predicateWithOptions = STMPredicate.predicateWithOptions(options, predicate)
 
-        val transaction = transactionForEntityName(entityName, options)
+        val transaction = transactionForEntityName(entityName, options) ?: throw Exception("wrong entity name: $entityName")
 
-        return transaction?.findAllSync(entityName, predicateWithOptions, options) ?: ArrayList()
+        return transaction.findAllSync(entityName, predicateWithOptions, options)
 
     }
 
