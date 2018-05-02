@@ -1,5 +1,6 @@
 package com.sistemium.sissales.base
 
+import android.content.Context
 import com.sistemium.sissales.base.STMConstants.Companion.SHARED_PATH
 import com.sistemium.sissales.interfaces.STMDirectoring
 import com.sistemium.sissales.interfaces.STMFiling
@@ -9,14 +10,15 @@ import java.util.*
 /**
  * Created by edgarjanvuicik on 27/11/2017.
  */
-class STMCoreSessionFiler(org: String, uid: String) : STMFiling, STMDirectoring {
+class STMCoreSessionFiler(org: String, uid: String, var context:Context? = MyApplication.appContext) : STMFiling, STMDirectoring {
 
-    private val userDocuments = MyApplication.appContext!!.filesDir.absolutePath + "/" + org + "/" + uid
+    private val userOrg = context!!.filesDir.absolutePath + "/" + org
+    private val userDocuments = "$userOrg/$uid"
     private val persistenceBasePath = userDocuments + "/" + STMConstants.PERSISTENCE_PATH
 
     override fun bundledModelJSON(modelName: String): String {
 
-        val assetManager = MyApplication.appContext!!.assets
+        val assetManager = context!!.assets
         val stream = assetManager.open("model/$modelName.json")
 
         val scanner = Scanner(stream)
@@ -39,6 +41,20 @@ class STMCoreSessionFiler(org: String, uid: String) : STMFiling, STMDirectoring 
 
         return path
 
+    }
+
+    override fun removeOrgDirectory() {
+
+        deleteRecursive(File(userOrg))
+
+    }
+
+    private fun deleteRecursive(fileOrDirectory: File) {
+        if (fileOrDirectory.isDirectory)
+            for (child in fileOrDirectory.listFiles())
+                deleteRecursive(child)
+
+        fileOrDirectory.delete()
     }
 
 }

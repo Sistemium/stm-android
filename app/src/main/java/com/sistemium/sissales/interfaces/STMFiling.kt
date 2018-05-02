@@ -7,5 +7,6 @@ interface STMFiling {
 
     fun persistencePath(folderName: String): String
     fun bundledModelJSON(modelName: String): String
+    fun removeOrgDirectory()
 
 }
