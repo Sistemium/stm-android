@@ -11,6 +11,7 @@ import com.sistemium.sissales.model.STMModeller
 import com.sistemium.sissales.model.STMSQLiteDatabaseAdapter
 import com.sistemium.sissales.persisting.STMPersister
 import com.sistemium.sissales.persisting.STMPersisterRunner
+import nl.komponents.kovenant.Promise
 import nl.komponents.kovenant.then
 import org.junit.AfterClass
 import org.junit.Assert.assertTrue
@@ -63,15 +64,29 @@ class PersistingAsyncTests {
     @Test
     fun testErrors(){
 
-        val lock = Object()
-        var error:Boolean? = null
-
         val entityName = "UnknownEntity"
-        persister!!.findAll(entityName, null, null).then {
+
+        expectError(persister!!.findAll(entityName, null, null))
+
+        expectError(persister!!.find(entityName, entityName, null))
+
+        expectError(persister!!.destroy(entityName, entityName, null))
+
+        expectError(persister!!.merge(entityName, hashMapOf<Any,Any>(), null))
+
+        expectError(persister!!.mergeMany(entityName, arrayListOf<Any>(""), null))
+
+    }
+
+    private fun expectError(promise: Promise<Any?,Exception>){
+
+        var error = false
+        val lock = Object()
+
+        promise.then {
 
             synchronized(lock) {
 
-                error = false
                 lock.notify()
 
             }
@@ -87,61 +102,13 @@ class PersistingAsyncTests {
 
         }
 
+
         synchronized (lock) {
-            lock.wait()
+            lock.wait(2000000)
         }
 
-        assertTrue(error!!)
+        assertTrue(error)
 
-
-//        completionHandler:PATExpectArrayError(findAllAsync)];
-//        PATExpectation(destroyAllAsync)
-//        [self.persister destroyAllAsync:entityName
-//                predicate:nil
-//        options:nil
-//        completionHandler:PATExpectIntegerError(destroyAllAsync)];
-//        PATExpectation(findAsync)
-//        [self.persister findAsync:entityName
-//                identifier:entityName
-//        options:nil
-//        completionHandler:PATExpectDictionaryError(findAsync)];
-//        PATExpectation(destroyAsync)
-//        [self.persister destroyAsync:entityName
-//                identifier:entityName
-//        options:nil
-//        completionHandler:PATExpectError(destroyAsync)];
-//        PATExpectation(mergeAsync)
-//        [self.persister mergeAsync:entityName
-//                attributes:@{}
-//        options:nil
-//        completionHandler:PATExpectDictionaryError(mergeAsync)];
-//        PATExpectation(mergeManyAsync)
-//        [self.persister mergeManyAsync:entityName
-//                attributeArray:@[@{}]
-//        options:nil
-//        completionHandler:PATExpectArrayError(mergeManyAsync)];
-//        PATExpectation(updateAsync)
-//        [self.persister updateAsync:entityName
-//                attributes:@{}
-//        options:nil
-//        completionHandler:PATExpectDictionaryError(updateAsync)];
-//        PATExpectation(updateAsyncNoCallback)
-//        [self.persister updateAsync:entityName
-//                attributes:@{}
-//        options:nil
-//        completionHandler:nil];
-//        [updateAsyncNoCallback fulfill];
-//        if (self.fakePersistingOptions) {
-//            PATExpectation(updateAsyncNoName)
-//            [self.persister updateAsync:nil
-//                    attributes:@{}
-//            options:nil
-//            completionHandler:^(STMP_ASYNC_DICTIONARY_RESULT_CALLBACK_ARGS) {
-//                PATExpectErrorBody(updateAsyncNoName)
-//                XCTAssertEqualObjects(error.localizedDescription, @"Entity name can not be null");
-//            }];
-//        }
-//        [self waitForExpectationsWithTimeout:1 handler:nil];
 
     }
 
