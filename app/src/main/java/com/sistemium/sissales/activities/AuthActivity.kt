@@ -25,6 +25,11 @@ class AuthActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        if (!isTaskRoot) {
+            finish()
+            return
+        }
+
         window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN)
 
         STMCoreAuthController.logIn() then {
