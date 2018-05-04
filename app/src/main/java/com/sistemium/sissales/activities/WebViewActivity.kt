@@ -29,6 +29,8 @@ import java.io.File
 import java.io.IOException
 import android.os.Environment.DIRECTORY_PICTURES
 import android.os.Environment.getExternalStoragePublicDirectory
+import com.sistemium.sissales.base.session.STMCoreSessionManager
+import com.sistemium.sissales.enums.STMSocketEvent
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -168,8 +170,10 @@ class WebViewActivity : Activity() {
     }
 
     fun goBack() {
-
+        
         runOnUiThread {
+
+            webView?.destroy()
 
             super.onBackPressed()
 
