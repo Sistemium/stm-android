@@ -174,6 +174,24 @@ class STMSocketTransport(var socketUrlString: String, var entityResource: String
 
         }
 
+        if (event == STMSocketEvent.STMSocketEventInfo){
+
+            socket!!.emit(event.toString(), value, Ack {
+
+                if (it.firstOrNull() == "NO ACK") {
+
+                    deferred.reject(Exception("ack timeout"))
+
+                }
+
+                deferred.resolve(it)
+
+            })
+
+            return deferred.promise
+
+        }
+
         val primaryKey = primaryKeyForEvent(event)
 
         if (primaryKey != null && _value != null) {
