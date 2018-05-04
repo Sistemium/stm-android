@@ -34,10 +34,12 @@ class MyApplication : Application(), Application.ActivityLifecycleCallbacks, Com
         var appContext: Context? = null
             private set
 
-        var inBackground: Boolean by Delegates.observable(false) { _, oldValue, newValue ->
-            if (oldValue != newValue) {
+        var inBackground: Boolean = false
+        set(value) {
 
-                if (newValue) {
+            if (field != value) {
+
+                if (value) {
 
                     val logMessage = "application did enter background"
 
@@ -59,6 +61,7 @@ class MyApplication : Application(), Application.ActivityLifecycleCallbacks, Com
                 }
 
             }
+
         }
     }
 
