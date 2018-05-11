@@ -58,6 +58,7 @@ class STMConstants {
         const val NOTIFICATION_SYNCER_HAVE_UNSYNCED_OBJECTS = "haveUnsyncedObjects"
         const val NOTIFICATION_SYNCER_HAVE_NO_UNSYNCED_OBJECTS = "haveNoUnsyncedObjects"
         const val NOTIFICATION_SYNCER_SENDIG_DATA = "syncerIsSendingData"
+        const val BUNDLE_DISPLAY_NAME = "SisSales"
 
     }
 

@@ -4,6 +4,7 @@ import com.sistemium.sissales.base.MyApplication
 import com.sistemium.sissales.base.STMConstants
 import com.sistemium.sissales.base.STMCoreSessionFiler
 import com.sistemium.sissales.base.helper.logger.STMLogger
+import com.sistemium.sissales.calsses.entitycontrollers.STMClientDataController
 import com.sistemium.sissales.calsses.entitycontrollers.STMEntityController
 import com.sistemium.sissales.calsses.entitycontrollers.STMRecordStatusController
 import com.sistemium.sissales.enums.STMSessionStatus
@@ -66,6 +67,7 @@ class STMCoreSession(var trackers: ArrayList<String>) : STMSession {
 
         val settings = STMCoreSettingsController()
         settings.persistenceDelegate = persistenceDelegate
+        STMClientDataController.persistenceDelegate = persistenceDelegate
         settingsController = settings
         val settingsInterceptor = settingsController as STMPersistingMergeInterceptor
         persister.beforeMergeEntityName(STMConstants.STM_SETTING_NAME, settingsInterceptor)

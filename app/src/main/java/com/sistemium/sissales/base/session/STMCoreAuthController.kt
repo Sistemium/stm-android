@@ -18,6 +18,7 @@ import devliving.online.securedpreferencestore.SecuredPreferenceStore
 import nl.komponents.kovenant.Promise
 import nl.komponents.kovenant.task
 import nl.komponents.kovenant.then
+import java.util.*
 
 
 /**
@@ -41,6 +42,8 @@ class STMCoreAuthController {
                 val prefStore = SecuredPreferenceStore.getSharedInstance()
 
                 prefStore.edit().putString("accessToken", value).apply()
+
+                lastAuth = Date().toString()
 
             }
 
@@ -209,6 +212,22 @@ class STMCoreAuthController {
                 val prefStore = MyApplication.appContext?.getSharedPreferences("Sistemium", Context.MODE_PRIVATE)
 
                 prefStore?.edit()?.putString("phoneNumber", value)?.apply()
+
+            }
+
+        var lastAuth: String?
+            get() {
+
+                val prefStore = MyApplication.appContext?.getSharedPreferences("Sistemium", Context.MODE_PRIVATE)
+
+                return prefStore?.getString("lastAuth", null)
+
+            }
+            set(value) {
+
+                val prefStore = MyApplication.appContext?.getSharedPreferences("Sistemium", Context.MODE_PRIVATE)
+
+                prefStore?.edit()?.putString("lastAuth", value)?.apply()
 
             }
 

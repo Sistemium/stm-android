@@ -356,7 +356,6 @@ class STMSocketTransport(var socketUrlString: String, var entityResource: String
 
     private fun emitAuthorization() {
 
-        //TODO clientData is empty
         var dataDic = STMClientDataController.clientData
 
         val authDic = hashMapOf(
