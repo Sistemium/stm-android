@@ -18,11 +18,11 @@ class STMPredicate {
 
             return if (values.size == 1) {
 
-                STMPredicate("=", STMPredicate(STMConstants.DEFAULT_PERSISTING_PRIMARY_KEY), STMPredicate("\"${values.first().toString()}\""))
+                STMPredicate("=", STMPredicate(STMConstants.DEFAULT_PERSISTING_PRIMARY_KEY), STMPredicate("'${values.first().toString()}'"))
 
             } else {
 
-                val valueArray = values.map { value -> STMPredicate("\"${value.toString()}\"") }
+                val valueArray = values.map { value -> STMPredicate("'${value.toString()}'") }
 
                 STMPredicate(" IN ", STMPredicate(STMConstants.DEFAULT_PERSISTING_PRIMARY_KEY), STMPredicate(", ", valueArray))
 
@@ -55,13 +55,13 @@ class STMPredicate {
 
             if (comparator == "!=") comparator = "<>"
 
-            var rightPredicateString = "\"${value[value.keys.first()]}\""
+            var rightPredicateString = "'${value[value.keys.first()]}'"
 
             if (value[value.keys.first()] is Boolean || value[value.keys.first()] is Number || value[value.keys.first()] == "NULL") rightPredicateString = "${value[value.keys.first()]}"
 
             if (value[value.keys.first()] is ArrayList<*>) {
 
-                val valueArray = (value[value.keys.first()] as ArrayList<*>).map { v -> STMPredicate("\"$v\"") }
+                val valueArray = (value[value.keys.first()] as ArrayList<*>).map { v -> STMPredicate("'$v'") }
 
                 return STMPredicate("IN", STMPredicate(key), STMPredicate(", ", valueArray))
 

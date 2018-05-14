@@ -94,7 +94,7 @@ class STMPersisterTransactionCoordinator(private val adapters: HashMap<STMStorag
 
     }
 
-    private fun transactionForEntityName(entityName: String, options: Map<*, *>?): STMPersistingTransaction? {
+    private fun transactionForEntityName(entityName: String, options: Map<*, *>?): STMPersistingTransaction {
 
         val storageType = storageForEntityName(entityName, options)
 
@@ -105,7 +105,13 @@ class STMPersisterTransactionCoordinator(private val adapters: HashMap<STMStorag
             transaction = transactions[storageType]
         }
 
-        return transaction
+        if (transaction == null && !adapters.keys.contains(storageType)){
+
+            throw Exception("Wrong entity name: $entityName")
+
+        }
+
+        return transaction!!
 
     }
 

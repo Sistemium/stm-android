@@ -67,7 +67,7 @@ class STMPersister(private val runner: STMPersistingRunning) : STMFullStackPersi
 
         }
 
-        notifyObservingEntityName(STMFunctions.addPrefixToEntityName(entityName), if (result?.count() != 0) result!! else null, options)
+        notifyObservingEntityName(STMFunctions.addPrefixToEntityName(entityName), if (result?.count() != 0 && result?.count() != null) result!! else null, options)
 
         return result
 

@@ -263,7 +263,7 @@ class STMUnsyncedDataHelper : STMDataSyncing {
             val uploadLogType = session?.settingsController?.stringValueForSettings("uploadLog.type", "syncer")
             val logMessageSyncTypes = STMLogger.sharedLogger.syncingTypesForSettingType(uploadLogType).map {
 
-                return@map STMPredicate("\"$it\"")
+                return@map STMPredicate("'$it'")
 
             }
 
@@ -273,7 +273,7 @@ class STMUnsyncedDataHelper : STMDataSyncing {
 
             date.time -= STMConstants.LOGMESSAGE_MAX_TIME_INTERVAL_TO_UPLOAD
 
-            subpredicates.add(STMPredicate(" > ", STMPredicate("deviceCts"), STMPredicate("\"${STMFunctions.stringFrom(date)}\"")))
+            subpredicates.add(STMPredicate(" > ", STMPredicate("deviceCts"), STMPredicate("'${STMFunctions.stringFrom(date)}'")))
 
         }
 
