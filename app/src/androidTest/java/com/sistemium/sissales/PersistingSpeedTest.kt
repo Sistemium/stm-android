@@ -11,10 +11,7 @@ import org.junit.runner.RunWith
 import java.util.*
 import kotlin.collections.ArrayList
 
-@RunWith(AndroidJUnit4::class)
 class PersistingSpeedTest:BaseInstrumentaltTest() {
-
-//    private val STMPersistingSpeedTestsCount = 500
 
     @Test
     fun testMergeSyncSpeed(){
@@ -80,34 +77,6 @@ class PersistingSpeedTest:BaseInstrumentaltTest() {
             assertEquals(totalItems.div(100), rez.size)
 
         }
-
-    }
-
-    fun sampleDataOf(entityName:String, count:Int):ArrayList<Map<*,*>>{
-
-        val result = arrayListOf<Map<*,*>>()
-
-        val now = STMFunctions.stringFrom(Date())
-
-        val source = "STMPersistingSpeedTest"
-
-        for (i in 1..count){
-
-            val name = "$entityName at $now - $i"
-
-            val item = hashMapOf(
-                    "ownerXid" to ownerXid,
-                    "name" to name,
-                    "text" to name,
-                    "type" to "debug",
-                    "source" to source
-            )
-
-            result.add(item)
-
-        }
-
-        return result
 
     }
 

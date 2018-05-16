@@ -12,7 +12,6 @@ import org.junit.BeforeClass
 import org.junit.Test
 import org.junit.runner.RunWith
 
-@RunWith(AndroidJUnit4::class)
 class PredicateUnitTest:BaseInstrumentaltTest() {
 
     @Test
@@ -51,4 +50,5 @@ class PredicateUnitTest:BaseInstrumentaltTest() {
                 "and outletId = Outlet.id ))", predicateString)
 
     }
+
 }

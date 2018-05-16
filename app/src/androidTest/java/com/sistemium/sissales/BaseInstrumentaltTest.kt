@@ -148,4 +148,36 @@ open class BaseInstrumentaltTest {
 
     }
 
+    fun sampleDataOf(entityName:String, count:Int, addArguments:((i:Int)->(Map<String,String>))? = null):ArrayList<Map<*,*>>{
+
+        val result = arrayListOf<Map<*,*>>()
+
+        val now = STMFunctions.stringFrom(Date())
+
+        for (i in 1..count){
+
+            val name = "$entityName at $now - $i"
+
+            val item = hashMapOf(
+                    "ownerXid" to ownerXid,
+                    "name" to name,
+                    "text" to name,
+                    "type" to "debug"
+            )
+
+            val arg = addArguments?.invoke(i)
+
+            if (arg != null){
+
+                item.putAll(arg)
+            }
+
+            result.add(item)
+
+        }
+
+        return result
+
+    }
+
 }
