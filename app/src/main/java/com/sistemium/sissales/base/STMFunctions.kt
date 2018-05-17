@@ -72,12 +72,6 @@ class STMFunctions {
 
         }
 
-        fun isCorrectPhoneNumber(phoneNumber: String): Boolean {
-
-            TODO("not implemented")
-
-        }
-
         fun handleError(activity: Activity?, message: String) {
 
             activity?.runOnUiThread {
