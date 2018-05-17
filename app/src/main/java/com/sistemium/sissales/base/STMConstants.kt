@@ -10,6 +10,7 @@ class STMConstants {
 
     companion object {
 
+        const val model = 365
         const val ISISTEMIUM_PREFIX = "STM"
         const val DEFAULT_PERSISTING_PRIMARY_KEY = "id"
         const val STMPersistingOptionFantoms = "fantoms"
@@ -54,7 +55,7 @@ class STMConstants {
         const val SQLiteStatementSeparator = "; "
         const val SQLiteDefaultNow = "DEFAULT(STRFTIME('%Y-%m-%d %H:%M:%f', 'NOW'))"
         const val fetchLimit = 500
-        const val userAgent = "iSisSales/${BuildConfig.VERSION_CODE}"
+        const val userAgent = "iSisSales/$model"
         const val NOTIFICATION_SYNCER_HAVE_UNSYNCED_OBJECTS = "haveUnsyncedObjects"
         const val NOTIFICATION_SYNCER_HAVE_NO_UNSYNCED_OBJECTS = "haveNoUnsyncedObjects"
         const val NOTIFICATION_SYNCER_SENDIG_DATA = "syncerIsSendingData"
