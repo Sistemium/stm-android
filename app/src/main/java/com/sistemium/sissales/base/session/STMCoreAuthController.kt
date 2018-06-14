@@ -43,7 +43,7 @@ class STMCoreAuthController {
 
                 prefStore.edit().putString("accessToken", value).apply()
 
-                lastAuth = Date().toString()
+                lastAuth = STMFunctions.stringFrom(Date())
 
             }
 
