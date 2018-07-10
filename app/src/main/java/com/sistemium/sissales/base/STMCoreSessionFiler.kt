@@ -45,16 +45,8 @@ class STMCoreSessionFiler(org: String, uid: String, var context:Context? = MyApp
 
     override fun removeOrgDirectory() {
 
-        deleteRecursive(File(userOrg))
+        STMFunctions.deleteRecursive(File(userOrg))
 
-    }
-
-    private fun deleteRecursive(fileOrDirectory: File) {
-        if (fileOrDirectory.isDirectory)
-            for (child in fileOrDirectory.listFiles())
-                deleteRecursive(child)
-
-        fileOrDirectory.delete()
     }
 
 }

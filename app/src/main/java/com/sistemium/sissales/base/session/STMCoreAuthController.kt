@@ -3,6 +3,7 @@ package com.sistemium.sissales.base.session
 import android.app.ActivityOptions
 import android.content.Context
 import android.content.Intent
+import android.webkit.WebView
 import com.github.kittinunf.fuel.Fuel
 import com.github.kittinunf.fuel.android.extension.responseJson
 import com.github.kittinunf.fuel.core.FuelManager
@@ -18,7 +19,10 @@ import devliving.online.securedpreferencestore.SecuredPreferenceStore
 import nl.komponents.kovenant.Promise
 import nl.komponents.kovenant.task
 import nl.komponents.kovenant.then
+import java.io.File
 import java.util.*
+import android.text.format.DateUtils
+
 
 
 /**
@@ -252,6 +256,9 @@ class STMCoreAuthController {
             requestID = null
             accountOrg = null
             rolesResponse = null
+
+            STMFunctions.deleteRecursive(File(MyApplication.appContext!!.cacheDir
+                    .absolutePath))
 
         }
 

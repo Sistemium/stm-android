@@ -8,6 +8,7 @@ import android.provider.Settings
 import android.util.Log
 import com.google.gson.GsonBuilder
 import com.sistemium.sissales.R
+import java.io.File
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -97,6 +98,14 @@ class STMFunctions {
 
             return Settings.Secure.getString(MyApplication.appContext!!.contentResolver, Settings.Secure.ANDROID_ID) + Settings.Secure.getString(MyApplication.appContext!!.contentResolver, Settings.Secure.ANDROID_ID)
 
+        }
+
+        fun deleteRecursive(fileOrDirectory: File) {
+            if (fileOrDirectory.isDirectory)
+                for (child in fileOrDirectory.listFiles())
+                    deleteRecursive(child)
+
+            fileOrDirectory.delete()
         }
 
     }
