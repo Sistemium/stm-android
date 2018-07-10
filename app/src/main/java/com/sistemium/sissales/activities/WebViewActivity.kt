@@ -29,6 +29,7 @@ import java.io.File
 import java.io.IOException
 import android.os.Environment.DIRECTORY_PICTURES
 import android.os.Environment.getExternalStoragePublicDirectory
+import com.sistemium.sissales.base.MyApplication
 import com.sistemium.sissales.base.session.STMCoreSessionManager
 import com.sistemium.sissales.enums.STMSocketEvent
 import java.text.SimpleDateFormat
@@ -49,6 +50,8 @@ class WebViewActivity : Activity() {
     private var mUMA:ValueCallback<Array<Uri>>? = null
     private var mCM: String? = null
     private val FCR = 1
+
+    private var error:String?  = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -124,10 +127,26 @@ class WebViewActivity : Activity() {
                 webView?.settings?.allowFileAccess = true
                 webView?.settings?.setAppCacheEnabled(true)
 
+
                 webView?.webViewClient = object : WebViewClient() {
+
+                    override fun onReceivedError(view: WebView?, request: WebResourceRequest?, error: WebResourceError?) {
+                        STMFunctions.debugLog("CHROME", error.toString())
+                    }
 
                     override fun shouldOverrideUrlLoading(view: WebView?, request: WebResourceRequest?): Boolean {
                         return false
+                    }
+
+                }
+
+                webView?.webChromeClient = object : WebChromeClient() {
+
+                    override fun onConsoleMessage(consoleMessage: ConsoleMessage?): Boolean {
+                        if (consoleMessage!!.message().startsWith("Uncaught Error")){
+                            error = consoleMessage.message()
+                        }
+                        return super.onConsoleMessage(consoleMessage)
                     }
 
                 }
@@ -141,6 +160,12 @@ class WebViewActivity : Activity() {
     }
 
     override fun onBackPressed() {
+
+        if (error != null){
+
+            this.goBack()
+
+        }
 
     }
 
