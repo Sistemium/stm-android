@@ -80,7 +80,7 @@ class ProfileActivity : AppCompatActivity() {
                 }
                 builder.setTitle(this.resources.getString(R.string.logout))
                         .setMessage(this.resources.getString(R.string.you_sure))
-                        .setPositiveButton(android.R.string.ok, { _, _ ->
+                        .setPositiveButton(android.R.string.ok) { _, _ ->
 
                             runOnUiThread {
 
@@ -92,8 +92,8 @@ class ProfileActivity : AppCompatActivity() {
 
                             }
 
-                        })
-                        .setNegativeButton(android.R.string.cancel, { _, _ -> })
+                        }
+                        .setNegativeButton(android.R.string.cancel) { _, _ -> }
                         .show()
 
             }
@@ -121,14 +121,9 @@ class ProfileActivity : AppCompatActivity() {
 
             //debug
             url = url?.replace("http://lamac.local:3000", "http://10.0.1.5:3000")
-            manifest = manifest?.replace("http://lamac.local:3000", "http://10.0.1.5:3000")
             manifest = "$url/app.manifest"
 
-            if (manifest != null) {
-
-                intent.putExtra("manifest", manifest)
-
-            }
+            intent.putExtra("manifest", manifest)
 
             intent.putExtra("url", url)
             startActivity(intent)
