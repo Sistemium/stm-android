@@ -1,7 +1,11 @@
 package com.sistemium.sissales.webInterface
 
+import android.content.Context
+import android.location.LocationManager
+import android.os.Looper
 import android.webkit.JavascriptInterface
 import com.sistemium.sissales.activities.WebViewActivity
+import com.sistemium.sissales.base.MyApplication
 import com.sistemium.sissales.base.STMConstants
 import com.sistemium.sissales.base.STMFunctions
 import com.sistemium.sissales.base.STMFunctions.Companion.gson
@@ -11,6 +15,12 @@ import com.sistemium.sissales.interfaces.STMFullStackPersisting
 import com.sistemium.sissales.persisting.STMPredicate
 import nl.komponents.kovenant.Promise
 import nl.komponents.kovenant.then
+import android.location.Criteria
+import android.location.Location
+import android.os.Bundle
+import android.location.LocationListener
+import com.sistemium.sissales.R
+import java.util.*
 
 
 /**
@@ -266,11 +276,95 @@ class WebAppInterface internal constructor(private var webViewActivity: WebViewA
 
         val mapParameters = gson.fromJson(parameters, Map::class.java)
 
-        // TODO implement checkinWithAccuracy
+        val accuracy = (mapParameters["accuracy"] as? Double)?.toInt()  ?: 0
 
-        val callback = mapParameters["callback"]
+        val timeout = ((mapParameters["timeout"] as? Double) ?: 20000.0) / 2
 
-        return javascriptCallback(arrayOf(mapOf<Any, Any>()), mapParameters, callback as String)
+        val now = Date()
+
+        var bestLocation:Location? = null
+
+        val locationManager = MyApplication.appContext!!.getSystemService(Context.LOCATION_SERVICE) as LocationManager
+
+        val criteria = Criteria()
+        criteria.accuracy = Criteria.ACCURACY_COARSE
+        criteria.powerRequirement = Criteria.POWER_LOW
+        criteria.isAltitudeRequired = false
+        criteria.isBearingRequired = false
+        criteria.isSpeedRequired = false
+        criteria.isCostAllowed = true
+        criteria.horizontalAccuracy = Criteria.ACCURACY_HIGH
+        criteria.verticalAccuracy = Criteria.ACCURACY_HIGH
+
+        val locationListener = object : LocationListener {
+            override fun onLocationChanged(location: Location) {
+
+                if (bestLocation == null || bestLocation!!.accuracy > location.accuracy) {
+
+                    bestLocation = location
+
+                }
+
+                if (bestLocation!!.accuracy <= accuracy || Date().time - timeout > now.time){
+
+                    resolveLocation(bestLocation, mapParameters)
+
+                    locationManager.removeUpdates(this)
+
+                }
+
+            }
+
+            override fun onStatusChanged(provider: String, status: Int, extras: Bundle) {}
+            override fun onProviderEnabled(provider: String) {}
+            override fun onProviderDisabled(provider: String) {}
+        }
+
+        try {
+
+            locationManager.requestLocationUpdates(0, 0.toFloat(), criteria, locationListener, null)
+
+        }
+        catch (e: SecurityException) {
+
+            return javascriptCallback(MyApplication.appContext!!.resources.getString(R.string.location_not_permitted),mapParameters)
+
+        }
+
+    }
+
+    fun resolveLocation(location:Location?, mapParameters:Map<*,*>){
+
+        if (location == null){
+
+            return javascriptCallback(MyApplication.appContext!!.resources.getString(R.string.location_failed),mapParameters)
+
+        }
+
+        val data = mapParameters["data"] as Map<*, *>
+
+        val atributes = HashMap(data)
+
+        atributes["altitude"] = location.altitude
+        atributes["horizontalAccuracy"] = location.accuracy
+        atributes["latitude"] = location.latitude
+        atributes["longitude"] = location.longitude
+        atributes["speed"] = location.speed
+        atributes["verticalAccuracy"] = location.accuracy
+        atributes["isFantom"] = 0
+        atributes["timestamp"] = STMFunctions.stringFrom(Date(location.time))
+
+        persistenceDelegate.merge("STMLocation", atributes.toMap(), null).then {
+
+            val callback = mapParameters["callback"]
+
+            javascriptCallback(arrayOf(it), mapParameters, callback as String)
+
+        }.fail {
+
+            javascriptCallback(MyApplication.appContext!!.resources.getString(R.string.location_failed),mapParameters)
+
+        }
 
     }
 

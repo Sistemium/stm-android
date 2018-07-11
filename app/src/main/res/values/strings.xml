@@ -17,4 +17,6 @@
     <string name="objects">objects</string>
     <string name="logout">Logout</string>
     <string name="you_sure">Are you sure to logout?</string>
+    <string name="location_not_permitted">Location tracking is not permitted</string>
+    <string name="location_failed">Location receiving attempt failed</string>
 </resources>

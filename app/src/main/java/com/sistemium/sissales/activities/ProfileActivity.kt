@@ -157,10 +157,16 @@ class ProfileActivity : AppCompatActivity() {
         }
 
         if (ContextCompat.checkSelfPermission(this,
-                        Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                        Manifest.permission.ACCESS_FINE_LOCATION)
                 != PackageManager.PERMISSION_GRANTED) {
 
-            permissions.add(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+            permissions.add(Manifest.permission.ACCESS_FINE_LOCATION)
+
+        }
+
+        if ( ContextCompat.checkSelfPermission( this, Manifest.permission.ACCESS_COARSE_LOCATION ) != PackageManager.PERMISSION_GRANTED ) {
+
+            permissions.add(Manifest.permission.ACCESS_COARSE_LOCATION)
 
         }
 

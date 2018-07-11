@@ -17,4 +17,6 @@
     <string name="objects">объектов</string>
     <string name="logout">Выйти</string>
     <string name="you_sure">Выйти из аккаунта?</string>
+    <string name="location_not_permitted">Настройки геолокации отключены</string>
+    <string name="location_failed">Не удалось получить геометку</string>
 </resources>
