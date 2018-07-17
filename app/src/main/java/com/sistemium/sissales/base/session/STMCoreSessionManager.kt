@@ -59,11 +59,7 @@ class STMCoreSessionManager private constructor() : STMSessionManager {
 
         var session = sessions[uid]
 
-        if (session != null) {
-
-            session.stopSession()
-
-        }
+        session?.stopSession()
 
         val core = STMCoreSession(trackers)
 

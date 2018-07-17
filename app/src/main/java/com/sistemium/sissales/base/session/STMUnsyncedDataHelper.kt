@@ -180,6 +180,8 @@ class STMUnsyncedDataHelper : STMDataSyncing {
 
     }
 
+    private val sentImportantErrors = arrayListOf<String>()
+
     private fun findSyncableObjectWithEntityName(entityName: String, exclude: ArrayList<String> = ArrayList()): Map<*, *>? {
 
         val unsyncedObject = unsyncedObjectWithEntityName(entityName, exclude) ?: return null
@@ -190,8 +192,24 @@ class STMUnsyncedDataHelper : STMDataSyncing {
 
             val pk = unsyncedObject[column] as? String ?: return@filter false
 
-            val lts = session!!.persistenceDelegate
-                    .findSync(it.destinationEntityName, pk, null)!![STMConstants.STMPersistingOptionLts]
+            val find = session!!.persistenceDelegate
+                .findSync(it.destinationEntityName, pk, null)
+
+            if (find == null) {
+
+                val errorMessage = "${it.destinationEntityName} have no id with $pk which is required by child $entityName with id ${unsyncedObject[STMConstants.DEFAULT_PERSISTING_PRIMARY_KEY]}"
+
+                if (!sentImportantErrors.contains(errorMessage)){
+
+                    sentImportantErrors.add(errorMessage)
+
+                    STMLogger.sharedLogger.importantMessage(errorMessage)
+
+                }
+
+            }
+
+            val lts = find?.get(STMConstants.STMPersistingOptionLts)
 
             lts == null || lts.toString().isEmpty()
 
