@@ -30,7 +30,7 @@ class STMPersisterTransactionCoordinator(private val adapters: HashMap<STMStorag
 
         val transaction = transactionForEntityName(entityName, options)
 
-        return transaction?.mergeWithoutSave(entityName, attributes, options)
+        return transaction.mergeWithoutSave(entityName, attributes, options)
 
     }
 
@@ -46,7 +46,7 @@ class STMPersisterTransactionCoordinator(private val adapters: HashMap<STMStorag
 
         val transaction = transactionForEntityName(entityName, options)
 
-        val count = transaction?.destroyWithoutSave(entityName, predicate, options)
+        val count = transaction.destroyWithoutSave(entityName, predicate, options)
 
         val recordStatuses: ArrayList<Any>? = arrayListOf()
 
@@ -74,12 +74,12 @@ class STMPersisterTransactionCoordinator(private val adapters: HashMap<STMStorag
 
         if (recordStatuses?.count() != null && recordStatuses.count() > 0) {
 
-            transaction?.modellingDelegate?.persistanceDelegate?.notifyObservingEntityName(recordStatusEntity, recordStatuses, options)
+            transaction.modellingDelegate?.persistanceDelegate?.notifyObservingEntityName(recordStatusEntity, recordStatuses, options)
 
         }
 
 
-        return count ?: 0
+        return count
 
     }
 
