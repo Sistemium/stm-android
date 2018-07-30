@@ -1,4 +1,4 @@
-package com.sistemium.sissales.calsses.entitycontrollers
+package com.sistemium.sissales.base.classes.entitycontrollers
 
 import com.sistemium.sissales.base.STMConstants
 import com.sistemium.sissales.base.STMFunctions
@@ -58,6 +58,14 @@ class STMEntityController private constructor() {
             }
 
             return downloadableEntityReady
+
+        }
+
+        fun entitiesWithLifeTime(): ArrayList<Map<*, *>>?{
+
+            val predicate = STMPredicate("lifeTime > 0")
+
+            return sharedInstance.persistenceDelegate?.findAllSync(STMConstants.STM_ENTITY_NAME, predicate, null)
 
         }
 

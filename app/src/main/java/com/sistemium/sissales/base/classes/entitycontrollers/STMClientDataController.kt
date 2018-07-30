@@ -1,4 +1,4 @@
-package com.sistemium.sissales.calsses.entitycontrollers
+package com.sistemium.sissales.base.classes.entitycontrollers
 
 import android.os.Environment
 import com.sistemium.sissales.BuildConfig

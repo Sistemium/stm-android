@@ -1,12 +1,11 @@
 package com.sistemium.sissales.base.session
 
-import com.sistemium.sissales.base.MyApplication
 import com.sistemium.sissales.base.STMConstants
 import com.sistemium.sissales.base.STMCoreSessionFiler
 import com.sistemium.sissales.base.helper.logger.STMLogger
-import com.sistemium.sissales.calsses.entitycontrollers.STMClientDataController
-import com.sistemium.sissales.calsses.entitycontrollers.STMEntityController
-import com.sistemium.sissales.calsses.entitycontrollers.STMRecordStatusController
+import com.sistemium.sissales.base.classes.entitycontrollers.STMClientDataController
+import com.sistemium.sissales.base.classes.entitycontrollers.STMEntityController
+import com.sistemium.sissales.base.classes.entitycontrollers.STMRecordStatusController
 import com.sistemium.sissales.enums.STMSessionStatus
 import com.sistemium.sissales.enums.STMStorageType
 import com.sistemium.sissales.interfaces.*

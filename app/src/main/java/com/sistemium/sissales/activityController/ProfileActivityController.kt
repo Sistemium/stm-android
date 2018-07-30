@@ -4,7 +4,7 @@ import android.view.View
 import com.sistemium.sissales.R
 import com.sistemium.sissales.activities.ProfileActivity
 import com.sistemium.sissales.base.MyApplication
-import com.sistemium.sissales.calsses.entitycontrollers.STMEntityController
+import com.sistemium.sissales.base.classes.entitycontrollers.STMEntityController
 import kotlinx.android.synthetic.main.content_profile.*
 
 /**

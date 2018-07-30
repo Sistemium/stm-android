@@ -1,4 +1,4 @@
-package com.sistemium.sissales.calsses.entitycontrollers
+package com.sistemium.sissales.base.classes.entitycontrollers
 
 /**
  * Created by edgarjanvuicik on 02/03/2018.

@@ -1,4 +1,4 @@
-package com.sistemium.sissales.calsses.entitycontrollers
+package com.sistemium.sissales.base.classes.entitycontrollers
 
 import com.sistemium.sissales.base.STMConstants
 import com.sistemium.sissales.base.STMFunctions

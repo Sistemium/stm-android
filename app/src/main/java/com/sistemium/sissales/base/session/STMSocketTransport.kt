@@ -4,8 +4,8 @@ import com.sistemium.sissales.base.MyApplication
 import com.sistemium.sissales.base.STMConstants
 import com.sistemium.sissales.base.STMFunctions
 import com.sistemium.sissales.base.helper.logger.STMLogger
-import com.sistemium.sissales.calsses.entitycontrollers.STMClientDataController
-import com.sistemium.sissales.calsses.entitycontrollers.STMEntityController
+import com.sistemium.sissales.base.classes.entitycontrollers.STMClientDataController
+import com.sistemium.sissales.base.classes.entitycontrollers.STMEntityController
 import com.sistemium.sissales.enums.STMSocketEvent
 import com.sistemium.sissales.interfaces.STMRemoteDataEventHandling
 import com.sistemium.sissales.interfaces.STMSocketConnection

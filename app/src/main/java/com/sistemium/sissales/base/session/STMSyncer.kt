@@ -5,9 +5,9 @@ import com.sistemium.sissales.base.STMConstants
 import com.sistemium.sissales.base.STMConstants.Companion.NOTIFICATION_SYNCER_SENDIG_DATA
 import com.sistemium.sissales.base.STMFunctions
 import com.sistemium.sissales.base.helper.logger.STMLogger
-import com.sistemium.sissales.calsses.entitycontrollers.STMClientDataController
-import com.sistemium.sissales.calsses.entitycontrollers.STMCorePicturesController
-import com.sistemium.sissales.calsses.entitycontrollers.STMEntityController
+import com.sistemium.sissales.base.classes.entitycontrollers.STMClientDataController
+import com.sistemium.sissales.base.classes.entitycontrollers.STMCorePicturesController
+import com.sistemium.sissales.base.classes.entitycontrollers.STMEntityController
 import com.sistemium.sissales.enums.STMSocketEvent
 import com.sistemium.sissales.interfaces.*
 import nl.komponents.kovenant.then

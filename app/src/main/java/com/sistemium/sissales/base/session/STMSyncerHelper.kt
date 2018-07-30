@@ -1,13 +1,12 @@
 package com.sistemium.sissales.base.session
 
 import com.sistemium.sissales.activities.ProfileActivity
-import com.sistemium.sissales.activityController.ProfileActivityController
 import com.sistemium.sissales.base.STMConstants.Companion.STMPersistingOptionLts
 import com.sistemium.sissales.base.STMConstants.Companion.STM_ENTITY_NAME
 import com.sistemium.sissales.base.STMFunctions
 import com.sistemium.sissales.base.helper.logger.STMLogger
-import com.sistemium.sissales.calsses.entitycontrollers.STMClientEntityController
-import com.sistemium.sissales.calsses.entitycontrollers.STMEntityController
+import com.sistemium.sissales.base.classes.entitycontrollers.STMClientEntityController
+import com.sistemium.sissales.base.classes.entitycontrollers.STMEntityController
 import com.sistemium.sissales.interfaces.*
 import nl.komponents.kovenant.then
 import java.util.*
