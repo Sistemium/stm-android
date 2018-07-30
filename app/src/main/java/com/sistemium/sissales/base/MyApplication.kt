@@ -6,6 +6,7 @@ import android.content.ComponentCallbacks2
 import android.content.Context
 import android.os.Bundle
 import com.crashlytics.android.Crashlytics
+import com.sistemium.sissales.base.classes.entitycontrollers.STMCoreObjectsController
 import com.sistemium.sissales.base.helper.logger.STMLogger
 import com.sistemium.sissales.base.session.STMCoreSessionManager
 import com.sistemium.sissales.base.session.STMSyncer
@@ -46,6 +47,8 @@ class MyApplication : Application(), Application.ActivityLifecycleCallbacks, Com
                     STMLogger.sharedLogger.infoMessage(logMessage)
 
                     syncer?.sendEventViaSocket(STMSocketEvent.STMSocketEventStatusChange, logMessage)
+
+//                    STMCoreObjectsController.checkObjectsForFlushing()
 
                     //TODO
                     //[STMGarbageCollector.sharedInstance removeOutOfDateImages];
