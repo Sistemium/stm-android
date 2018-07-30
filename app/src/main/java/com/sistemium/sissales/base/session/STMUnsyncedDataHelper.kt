@@ -7,7 +7,7 @@ import com.sistemium.sissales.base.STMConstants.Companion.NOTIFICATION_SYNCER_HA
 import com.sistemium.sissales.base.STMConstants.Companion.STMPersistingOptionLts
 import com.sistemium.sissales.base.STMFunctions
 import com.sistemium.sissales.base.helper.logger.STMLogger
-import com.sistemium.sissales.calsses.entitycontrollers.STMEntityController
+import com.sistemium.sissales.base.classes.entitycontrollers.STMEntityController
 import com.sistemium.sissales.interfaces.STMDataSyncing
 import com.sistemium.sissales.interfaces.STMDataSyncingSubscriber
 import com.sistemium.sissales.interfaces.STMModelling
@@ -69,6 +69,36 @@ class STMUnsyncedDataHelper : STMDataSyncing {
         return true
 
     }
+
+    override fun predicateForUnsyncedObjectsWithEntityName(entityName: String): STMPredicate {
+
+        val subpredicates = arrayListOf<STMPredicate>()
+
+        if (entityName == "STMLogMessage") {
+
+            val uploadLogType = session?.settingsController?.stringValueForSettings("uploadLog.type", "syncer")
+            val logMessageSyncTypes = STMLogger.sharedLogger.syncingTypesForSettingType(uploadLogType).map {
+
+                return@map STMPredicate("'$it'")
+
+            }
+
+            subpredicates.add(STMPredicate("IN", STMPredicate("type"), STMPredicate(", ", logMessageSyncTypes)))
+
+            val date = Date()
+
+            date.time -= STMConstants.LOGMESSAGE_MAX_TIME_INTERVAL_TO_UPLOAD
+
+            subpredicates.add(STMPredicate(" > ", STMPredicate("deviceCts"), STMPredicate("'${STMFunctions.stringFrom(date)}'")))
+
+        }
+
+        subpredicates.add(STMPredicate("deviceTs not null and (deviceTs > lts OR lts is null)"))
+
+        return STMPredicate.combinePredicates(subpredicates)
+
+    }
+
 
     private fun declineFromSync(obj: Map<*, *>, entityName: String) {
 
@@ -269,35 +299,6 @@ class STMUnsyncedDataHelper : STMDataSyncing {
             null
 
         }
-
-    }
-
-    private fun predicateForUnsyncedObjectsWithEntityName(entityName: String): STMPredicate {
-
-        val subpredicates = arrayListOf<STMPredicate>()
-
-        if (entityName == "STMLogMessage") {
-
-            val uploadLogType = session?.settingsController?.stringValueForSettings("uploadLog.type", "syncer")
-            val logMessageSyncTypes = STMLogger.sharedLogger.syncingTypesForSettingType(uploadLogType).map {
-
-                return@map STMPredicate("'$it'")
-
-            }
-
-            subpredicates.add(STMPredicate("IN", STMPredicate("type"), STMPredicate(", ", logMessageSyncTypes)))
-
-            val date = Date()
-
-            date.time -= STMConstants.LOGMESSAGE_MAX_TIME_INTERVAL_TO_UPLOAD
-
-            subpredicates.add(STMPredicate(" > ", STMPredicate("deviceCts"), STMPredicate("'${STMFunctions.stringFrom(date)}'")))
-
-        }
-
-        subpredicates.add(STMPredicate("deviceTs not null and (deviceTs > lts OR lts is null)"))
-
-        return STMPredicate.combinePredicates(subpredicates)
 
     }
 
