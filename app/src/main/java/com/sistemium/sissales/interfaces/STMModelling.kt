@@ -36,4 +36,6 @@ interface STMModelling {
 
     fun toOneRelationshipsForEntityName(entityName: String): Map<String, STMRelationshipDescription>
 
+    fun hierarchyForEntityName(name:String):Set<String>
+
 }

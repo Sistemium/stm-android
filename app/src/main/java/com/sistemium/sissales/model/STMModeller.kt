@@ -129,4 +129,30 @@ class STMModeller(modelJSON: String) : STMModelling {
 
     }
 
+    override fun hierarchyForEntityName(name: String): Set<String> {
+
+        val result = HashSet<String>()
+
+        for (entity in managedObjectModel.entitiesByName){
+
+            if (entity.value.parentEntity == name){
+
+                if (isConcreteEntityName(entity.key)){
+
+                    result.add(entity.key)
+
+                }else{
+
+                    result.addAll(hierarchyForEntityName(entity.key))
+
+                }
+
+            }
+
+        }
+
+        return result
+
+    }
+
 }
