@@ -12,15 +12,13 @@ import com.sistemium.sissales.interfaces.STMPersistingTransaction
  */
 class STMPersisterTransactionCoordinator(private val adapters: HashMap<STMStorageType, STMAdapting>, private val readOnly: Boolean) : STMPersistingTransaction {
 
-    override var modellingDelegate: STMModelling? = null
-
     private val transactions = hashMapOf<STMStorageType, STMPersistingTransaction>()
 
     override fun findAllSync(entityName: String, predicate: STMPredicate?, options: Map<*, *>?): ArrayList<Map<*, *>> {
 
         val predicateWithOptions = STMPredicate.predicateWithOptions(options, predicate)
 
-        val transaction = transactionForEntityName(entityName, options) ?: throw Exception("wrong entity name: $entityName")
+        val transaction = transactionForEntityName(entityName, options)
 
         return transaction.findAllSync(entityName, predicateWithOptions, options)
 
@@ -36,48 +34,9 @@ class STMPersisterTransactionCoordinator(private val adapters: HashMap<STMStorag
 
     override fun destroyWithoutSave(entityName: String, predicate: STMPredicate?, options: Map<*, *>?): Int {
 
-        var objects = arrayListOf<Map<*, *>>()
-
-        if (options?.get(STMConstants.STMPersistingOptionRecordstatuses) == null || options[STMConstants.STMPersistingOptionRecordstatuses] == true) {
-
-            objects = findAllSync(entityName, predicate, options)
-
-        }
-
         val transaction = transactionForEntityName(entityName, options)
 
         val count = transaction.destroyWithoutSave(entityName, predicate, options)
-
-        val recordStatuses: ArrayList<Any>? = arrayListOf()
-
-        val recordStatusEntity = STMFunctions.addPrefixToEntityName("RecordStatus")
-
-        for (obj in objects) {
-
-            var recordStatus: Map<*, *>? = hashMapOf(
-
-                    "objectXid" to obj[STMConstants.DEFAULT_PERSISTING_PRIMARY_KEY],
-                    "name" to STMFunctions.removePrefixFromEntityName(entityName),
-                    "isRemoved" to 1
-
-            )
-
-            recordStatus = mergeWithoutSave(recordStatusEntity, recordStatus!!, hashMapOf(STMConstants.STMPersistingOptionRecordstatuses to 0))
-
-            if (recordStatus != null) {
-
-                recordStatuses?.add(recordStatus)
-
-            }
-
-        }
-
-        if (recordStatuses?.count() != null && recordStatuses.count() > 0) {
-
-            transaction.modellingDelegate?.persistanceDelegate?.notifyObservingEntityName(recordStatusEntity, recordStatuses, options)
-
-        }
-
 
         return count
 
@@ -123,16 +82,7 @@ class STMPersisterTransactionCoordinator(private val adapters: HashMap<STMStorag
 
         }
 
-        for (adapter in adapters.values) {
-
-            val storage = adapter.model.storageForEntityName(entityName)
-
-            if (storage != STMStorageType.STMStorageTypeNone) {
-                return adapter.model.storageForEntityName(entityName)
-            }
-        }
-
-        return STMStorageType.STMStorageTypeNone
+        return STMModelling.sharedModeler!!.storageForEntityName(entityName)
 
     }
 

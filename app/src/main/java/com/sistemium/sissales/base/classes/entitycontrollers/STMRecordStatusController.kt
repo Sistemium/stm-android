@@ -2,6 +2,7 @@ package com.sistemium.sissales.base.classes.entitycontrollers
 
 import com.sistemium.sissales.base.STMConstants
 import com.sistemium.sissales.base.STMFunctions
+import com.sistemium.sissales.interfaces.STMModelling
 import com.sistemium.sissales.interfaces.STMPersistingMergeInterceptor
 import com.sistemium.sissales.interfaces.STMPersistingTransaction
 import com.sistemium.sissales.persisting.STMPredicate
@@ -23,9 +24,9 @@ class STMRecordStatusController : STMPersistingMergeInterceptor {
 
             val predicate = STMPredicate.primaryKeyPredicate(arrayOf(objectXid))
 
-            if (persistingTransaction?.modellingDelegate?.isConcreteEntityName(entityNameToDestroy) == true)
+            if (STMModelling.sharedModeler!!.isConcreteEntityName(entityNameToDestroy))
 
-                persistingTransaction.destroyWithoutSave(entityNameToDestroy, predicate, hashMapOf(STMConstants.STMPersistingOptionRecordstatuses to false))
+                persistingTransaction?.destroyWithoutSave(entityNameToDestroy, predicate, options)
         }
 
         if (attributes["isTemporary"] == true) {

@@ -17,8 +17,6 @@ import kotlin.collections.ArrayList
  */
 class STMSQLiteDatabaseTransaction(private var database: SQLiteDatabase, private var adapter: STMSQLiteDatabaseAdapter) : STMPersistingTransaction {
 
-    override var modellingDelegate: STMModelling? = adapter.model
-
     var operation: STMSQLiteDatabaseOperation? = null
 
     override fun findAllSync(entityName: String, predicate: STMPredicate?, options: Map<*, *>?): ArrayList<Map<*, *>> {
@@ -95,7 +93,7 @@ class STMSQLiteDatabaseTransaction(private var database: SQLiteDatabase, private
 
     override fun destroyWithoutSave(entityName: String, predicate: STMPredicate?, options: Map<*, *>?): Int {
 
-        var where = predicate?.predicateForModel(adapter.model, entityName) ?: ""
+        var where = predicate?.predicateForModel(STMModelling.sharedModeler, entityName) ?: ""
 
         val tablename = STMFunctions.removePrefixFromEntityName(entityName)
 
@@ -156,7 +154,7 @@ class STMSQLiteDatabaseTransaction(private var database: SQLiteDatabase, private
         var where = ""
 
         if (predicate != null) {
-            where = predicate.predicateForModel(adapter.model, entityName) ?: ""
+            where = predicate.predicateForModel(STMModelling.sharedModeler, entityName) ?: ""
 //            STMFunctions.debugLog("EntityName", entityName)
 //            STMFunctions.debugLog("PREDICATE", where)
 //            STMFunctions.debugLog("OPTIONS", options)
@@ -271,7 +269,7 @@ class STMSQLiteDatabaseTransaction(private var database: SQLiteDatabase, private
 
         val minMaxTypes = arrayOf("Date")
 
-        val tableColumns = adapter.model.fieldsForEntityName(entityName)
+        val tableColumns = STMModelling.sharedModeler!!.fieldsForEntityName(entityName)
 
         val sumKeys = arrayListOf<String>()
 
@@ -334,7 +332,7 @@ class STMSQLiteDatabaseTransaction(private var database: SQLiteDatabase, private
 
             c.columnNames.forEach {
 
-                atributeTypes[it] = adapter.model.fieldsForEntityName(STMFunctions.addPrefixToEntityName(tableName))[it]?.attributeType
+                atributeTypes[it] = STMModelling.sharedModeler!!.fieldsForEntityName(STMFunctions.addPrefixToEntityName(tableName))[it]?.attributeType
 
             }
 

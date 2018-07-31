@@ -6,7 +6,6 @@ package com.sistemium.sissales.interfaces
 interface STMPersistingObservable {
 
     fun notifyObservingEntityName(entityName: String, items: ArrayList<*>, options: Map<*, *>?)
-    fun notifyObservingEntityName(entityName: String, item: Map<*, *>?, options: Map<*, *>?)
     fun observeEntity(entityName: String, predicate: ((Any) -> Boolean)?, options: Map<*, *>, callback: (ArrayList<*>) -> (Unit)): String
     fun cancelSubscription(subscriptionId: String): Boolean
 

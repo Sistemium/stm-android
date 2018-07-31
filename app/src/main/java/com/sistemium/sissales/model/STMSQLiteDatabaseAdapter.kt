@@ -16,7 +16,7 @@ import java.util.concurrent.Executors
 /**
  * Created by edgarjanvuicik on 15/11/2017.
  */
-class STMSQLiteDatabaseAdapter(override var model: STMModelling, private var dbPath: String) : STMAdapting {
+class STMSQLiteDatabaseAdapter(private var dbPath: String) : STMAdapting {
 
     override var storageType = STMStorageType.STMStorageTypeSQLiteDatabase
 
@@ -55,9 +55,9 @@ class STMSQLiteDatabaseAdapter(override var model: STMModelling, private var dbP
         for (i in 0 until STMConstants.POOL_SIZE) {
 
             //TODO select before end transaction will not return already inserted data
-//            val poolDb = SQLiteDatabase.openDatabase(dbPath, null, SQLiteDatabase.OPEN_READONLY)
+            val poolDb = SQLiteDatabase.openDatabase(dbPath, null, SQLiteDatabase.OPEN_READONLY)
 
-            poolDatabases.add(database!!)
+            poolDatabases.add(poolDb)
 
         }
 
@@ -139,7 +139,7 @@ class STMSQLiteDatabaseAdapter(override var model: STMModelling, private var dbP
 
         val schema = STMSQLIteSchema(database!!)
 
-        val destinationModel = model.managedObjectModel
+        val destinationModel = STMModelling.sharedModeler!!.managedObjectModel
 
         var savedModel: STMManagedObjectModel? = null
 
@@ -169,7 +169,7 @@ class STMSQLiteDatabaseAdapter(override var model: STMModelling, private var dbP
 
             if (savedModel == null){
 
-                _columnsByTable = schema.createTablesWithModelMapping(modelMapper, model)
+                _columnsByTable = schema.createTablesWithModelMapping(modelMapper, STMModelling.sharedModeler!!)
 
                 modelMapper.destinationModel.saveToFile(savedModelPath)
 
@@ -195,7 +195,7 @@ class STMSQLiteDatabaseAdapter(override var model: STMModelling, private var dbP
 
             for (columnname in _columnsByTable[tablename]!!) {
 
-                val attributeType = model.fieldsForEntityName(STMFunctions.addPrefixToEntityName(tablename))[columnname]?.attributeType
+                val attributeType = STMModelling.sharedModeler!!.fieldsForEntityName(STMFunctions.addPrefixToEntityName(tablename))[columnname]?.attributeType
 
                 columns[columnname] = attributeType ?: "Undefined"
 

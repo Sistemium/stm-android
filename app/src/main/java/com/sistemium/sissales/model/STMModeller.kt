@@ -11,8 +11,6 @@ import com.sistemium.sissales.interfaces.STMModelling
 
 class STMModeller(modelJSON: String) : STMModelling {
 
-    override var persistanceDelegate: STMFullStackPersisting? = null
-
     override val managedObjectModel: STMManagedObjectModel = STMManagedObjectModel(modelJSON)
 
     override val concreteEntities: Map<String, STMEntityDescription> = hashMapOf()
@@ -24,12 +22,6 @@ class STMModeller(modelJSON: String) : STMModelling {
     private var _fieldsForEntityName = hashMapOf<String, Map<String, STMAttributeDescription>>()
 
     private var _objectRelationshipsForEntityName = hashMapOf<String, Map<String, STMRelationshipDescription>>()
-
-    init {
-
-        STMModelling.sharedModeler = this
-
-    }
 
     override fun storageForEntityName(entityName: String): STMStorageType {
 

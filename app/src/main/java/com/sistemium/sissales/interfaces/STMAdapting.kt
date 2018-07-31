@@ -8,7 +8,6 @@ import com.sistemium.sissales.enums.STMStorageType
 
 interface STMAdapting {
 
-    var model: STMModelling
     var storageType: STMStorageType
     var ignoredAttributeNames: Array<String>
     var builtInAttributeNames: Array<String>

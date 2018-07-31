@@ -55,21 +55,7 @@ class STMPersister(private val runner: STMPersistingRunning) : STMFullStackPersi
     @Throws(Exception::class)
     override fun mergeSync(entityName: String, attributes: Map<*, *>, options: Map<*, *>?): Map<*, *>? {
 
-        var result: Map<*, *>? = null
-
-        runner.execute {
-
-            result = applyMergeInterceptors(entityName, attributes, options, it)
-
-            result = it.mergeWithoutSave(entityName, result!!, options)
-
-            return@execute true
-
-        }
-
-        notifyObservingEntityName(STMFunctions.addPrefixToEntityName(entityName), if (result?.count() != 0 && result?.count() != null) result!! else null, options)
-
-        return result
+        return mergeManySync(entityName, arrayListOf(attributes), options).firstOrNull()
 
     }
 
@@ -152,11 +138,51 @@ class STMPersister(private val runner: STMPersistingRunning) : STMFullStackPersi
 
         runner.execute {
 
+            var objects = arrayListOf<Map<*, *>>()
+
+            if (options?.get(STMConstants.STMPersistingOptionRecordstatuses) == null || options[STMConstants.STMPersistingOptionRecordstatuses] == true) {
+
+                objects = findAllSync(entityName, predicate, options)
+
+            }
+
             count = it.destroyWithoutSave(entityName, predicate, options)
+
+            val recordStatuses: ArrayList<Any>? = arrayListOf()
+
+            val recordStatusEntity = STMFunctions.addPrefixToEntityName("RecordStatus")
+
+            for (obj in objects) {
+
+                var recordStatus: Map<*, *>? = hashMapOf(
+
+                        "objectXid" to obj[STMConstants.DEFAULT_PERSISTING_PRIMARY_KEY],
+                        "name" to STMFunctions.removePrefixFromEntityName(entityName),
+                        "isRemoved" to 1
+
+                )
+
+                recordStatus = it.mergeWithoutSave(recordStatusEntity, recordStatus!!, hashMapOf(STMConstants.STMPersistingOptionRecordstatuses to false))
+
+                if (recordStatus != null) {
+
+                    recordStatuses?.add(recordStatus)
+
+                }
+
+            }
+
+            if (recordStatuses?.count() != null && recordStatuses.count() > 0) {
+
+                notifyObservingEntityName(recordStatusEntity, recordStatuses, options)
+
+            }
 
             return@execute true
 
         }
+
+
 
         return count
 
@@ -235,14 +261,6 @@ class STMPersister(private val runner: STMPersistingRunning) : STMFullStackPersi
             }
 
         }
-
-    }
-
-    override fun notifyObservingEntityName(entityName: String, item: Map<*, *>?, options: Map<*, *>?) {
-
-        val data = arrayListOf(item)
-
-        notifyObservingEntityName(entityName, data, options)
 
     }
 

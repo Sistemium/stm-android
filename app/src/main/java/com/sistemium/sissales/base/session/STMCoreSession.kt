@@ -42,9 +42,9 @@ class STMCoreSession(var trackers: ArrayList<String>) : STMSession {
 
         val databasePath = filing.persistencePath(STMConstants.SQL_LITE_PATH) + "/" + databaseFile
 
-        val modeler = STMModeller(filing.bundledModelJSON(dataModelName))
+        STMModelling.sharedModeler = STMModeller(filing.bundledModelJSON(dataModelName))
 
-        val adapter = STMSQLiteDatabaseAdapter(modeler, databasePath)
+        val adapter = STMSQLiteDatabaseAdapter(databasePath)
 
         val runner = STMPersisterRunner(hashMapOf(STMStorageType.STMStorageTypeSQLiteDatabase to adapter))
 
@@ -61,8 +61,6 @@ class STMCoreSession(var trackers: ArrayList<String>) : STMSession {
         persister.beforeMergeEntityName(STMConstants.STM_RECORDSTATUS_NAME, recordStatusInterceptor)
 
         this.persistenceDelegate = persister
-
-        modeler.persistanceDelegate = persistenceDelegate
 
         val settings = STMCoreSettingsController()
         settings.persistenceDelegate = persistenceDelegate
