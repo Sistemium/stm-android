@@ -14,6 +14,6 @@ interface STMDataSyncing {
 
     fun setSynced(success: Boolean, entityName: String, itemData: Map<*, *>, itemVersion: String): Boolean
 
-    fun predicateForUnsyncedObjectsWithEntityName(entityName: String): STMPredicate
+    fun predicateForUnsyncedObjectsWithEntityName(entityName: String): STMPredicate?
 
 }

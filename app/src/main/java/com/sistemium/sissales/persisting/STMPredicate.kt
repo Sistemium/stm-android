@@ -4,6 +4,7 @@ import com.sistemium.sissales.base.STMConstants
 import com.sistemium.sissales.base.STMFunctions
 import com.sistemium.sissales.interfaces.STMAdapting
 import com.sistemium.sissales.interfaces.STMModelling
+import java.util.function.Predicate
 
 /**
  * Created by edgarjanvuicik on 10/11/2017.
@@ -18,20 +19,20 @@ class STMPredicate {
 
             return if (values.size == 1) {
 
-                STMPredicate("=", STMPredicate(STMConstants.DEFAULT_PERSISTING_PRIMARY_KEY), STMPredicate("'${values.first().toString()}'"))
+                STMPredicate("${STMConstants.DEFAULT_PERSISTING_PRIMARY_KEY} = '${values.first().toString()}'")
 
             } else {
 
                 val valueArray = values.map { value -> STMPredicate("'${value.toString()}'") }
 
-                STMPredicate(" IN ", STMPredicate(STMConstants.DEFAULT_PERSISTING_PRIMARY_KEY), STMPredicate(", ", valueArray))
+                STMPredicate("${STMConstants.DEFAULT_PERSISTING_PRIMARY_KEY} IN ('${valueArray.joinToString("', '")}')")
 
             }
 
         }
 
         @JvmStatic
-        fun comparatorPredicate(map: Map<*, *>): STMPredicate {
+        fun comparatorPredicate(map: Map<*, *>, entityName: String): STMPredicate? {
 
             val key = map.keys.first() as String
 
@@ -63,16 +64,29 @@ class STMPredicate {
 
                 val valueArray = (value[value.keys.first()] as ArrayList<*>).map { v -> STMPredicate("'$v'") }
 
-                return STMPredicate("IN", STMPredicate(key), STMPredicate(", ", valueArray))
+                return STMPredicate("$key IN (${valueArray.joinToString(", ")})")
 
             }
 
-            return STMPredicate(comparator.toString(), STMPredicate(key), STMPredicate(rightPredicateString))
+            if (
+                    STMModelling.sharedModeler!!
+                            .fieldsForEntityName(entityName)
+                            .containsKey(key) ||
+                    STMModelling.sharedModeler!!
+                            .toOneRelationshipsForEntityName(entityName)
+                            .containsKey(key.removeSuffix(STMConstants.RELATIONSHIP_SUFFIX))
+            ){
+
+                return STMPredicate("$key $comparator $rightPredicateString")
+
+            }
+
+            return null
 
         }
 
         @JvmStatic
-        fun filterPredicate(filter: Map<*, *>?, where: Map<*, *>?): STMPredicate? {
+        fun filterPredicate(filter: Map<*, *>?, where: Map<*, *>?, entityName: String): STMPredicate? {
 
             val filterMap: MutableMap<String, Map<*, *>> = hashMapOf()
 
@@ -98,18 +112,37 @@ class STMPredicate {
 
                     val anyValue = key.split(" ").last()
 
-                    val whereVal = STMPredicate(comparatorPredicate(value).predicateForModel(null, null)!!)
+                    val relationships = STMModelling.sharedModeler!!.entitiesByName[STMFunctions.addPrefixToEntityName(entityName)]?.relationshipsByName
 
-                    val predicate = STMPredicate("", arrayListOf(STMPredicate("exists ( select * from "),
-                            STMPredicate("?", anyValue),
-                            STMPredicate(" where "),
-                            whereVal,
-                            STMPredicate(" and "),
-                            if (anyValue.endsWith("s")) STMPredicate("?", "uncapitalizedTableName") else STMPredicate(""),
-                            STMPredicate("Id = "),
-                            if (anyValue.endsWith("s")) STMPredicate("?", "capitalizedTableName") else STMPredicate(anyValue + STMConstants.RELATIONSHIP_SUFFIX),
-                            if (anyValue.endsWith("s")) STMPredicate(".id )") else STMPredicate(" )")
-                    ))
+                    val relTable = if (relationships?.containsKey(anyValue) == true) {
+
+                        STMFunctions.removePrefixFromEntityName(relationships[anyValue]!!.destinationEntityName)
+
+                    } else {
+
+                        anyValue.removeSuffix(STMConstants.RELATIONSHIP_SUFFIX).capitalize()
+
+                    }
+
+                    val whereVal = comparatorPredicate(value, relTable) ?: continue
+
+                    val isToMany = STMModelling.sharedModeler!!.toManyRelationshipsForEntityName(entityName).containsKey(anyValue)
+
+                    val condition = if (isToMany) {
+                        STMFunctions.removePrefixFromEntityName(entityName).decapitalize()+
+                                "Id = "+
+                                STMFunctions.removePrefixFromEntityName(entityName).capitalize()+
+                                ".id)"
+                    } else {
+                        "Id = "+
+                                anyValue +
+                                STMConstants.RELATIONSHIP_SUFFIX+
+                                ")"
+                    }
+
+                    val predicate = STMPredicate(
+                            "exists ( select * from $relTable where $whereVal and $condition"
+                    )
 
                     subPredicates.add(predicate)
 
@@ -117,22 +150,49 @@ class STMPredicate {
 
                     if (key.endsWith(STMConstants.RELATIONSHIP_SUFFIX) && value.values.first() != null) {
 
-                        val xid = value.values.first() as String?
+                        var xid = value.values.first() as String?
 
-                        val predicate = STMPredicate("nonNull", arrayListOf(STMPredicate("exists ( select * from "),
-                                STMPredicate("?", key),
-                                if (xid != null) STMPredicate(" where [id] = '$xid' and id = ") else STMPredicate(" where [id] IS NULL and id = "),
-                                STMPredicate("relation", key),
-                                STMPredicate(")")
-                        ))
+                        val relationships = STMModelling.sharedModeler!!.entitiesByName[STMFunctions.addPrefixToEntityName(entityName)]?.relationshipsByName
+
+                        val relTable = if (relationships?.containsKey(key) == true) {
+
+                            STMFunctions.removePrefixFromEntityName(relationships[key]!!.destinationEntityName)
+
+                        } else {
+
+                            key.removeSuffix(STMConstants.RELATIONSHIP_SUFFIX).capitalize()
+
+                        }
+
+                        val relation = if (relationships?.containsKey(key.removeSuffix(STMConstants.RELATIONSHIP_SUFFIX)) == true) {
+
+                            key
+
+                        } else {
+
+                            continue
+
+                        }
+
+                        if (xid == null){
+
+                            xid = null
+
+                        }
+
+                        val predicate = STMPredicate("exists ( select * from $relTable ${if (xid != null) " where [id] = '$xid' and id = " else " where [id] IS NULL and id = "}$relation)")
 
                         subPredicates.add(predicate)
 
                     } else {
 
-                        val predicate = comparatorPredicate(hashMapOf(key to value))
+                        val predicate = comparatorPredicate(hashMapOf(key to value), entityName)
 
-                        subPredicates.add(predicate)
+                        if (predicate != null){
+
+                            subPredicates.add(predicate)
+
+                        }
 
                     }
 
@@ -150,7 +210,7 @@ class STMPredicate {
             val isFantom = options?.get(STMConstants.STMPersistingOptionFantoms) as? Boolean
                     ?: false
 
-            val phantomPredicate = STMPredicate("=", STMPredicate("isFantom"), STMPredicate("${if (isFantom) 1 else 0}"))
+            val phantomPredicate = STMPredicate("isFantom = ${if (isFantom) 1 else 0}")
 
             if (predicate == null) return phantomPredicate
 
@@ -160,7 +220,13 @@ class STMPredicate {
         }
 
         @JvmStatic
-        fun combinePredicates(subPredicates: ArrayList<STMPredicate>): STMPredicate {
+        fun combinePredicates(subPredicates: ArrayList<STMPredicate>): STMPredicate? {
+
+            if (subPredicates.size == 0) {
+
+                return null
+
+            }
 
             if (subPredicates.size == 1) {
 
@@ -168,7 +234,7 @@ class STMPredicate {
 
             }
 
-            return STMPredicate(") AND (", subPredicates)
+            return STMPredicate("(${subPredicates.joinToString(") AND (")})")
 
         }
 
@@ -193,6 +259,11 @@ class STMPredicate {
 
     constructor(value: String) {
         this.value = value
+
+        this.value = this.value!!.replace("false", "0")
+
+        this.value = this.value!!.replace("true", "1")
+
         this.type = PredicateType.Value
     }
 
@@ -209,63 +280,17 @@ class STMPredicate {
         this.type = PredicateType.Comparison
     }
 
-    override fun toString(): String = throw Exception("should not, use predicateForAdapter instead")
+    override fun toString(): String = if (value == null){
+        ""
+    } else {
+        value!!
+    }
 
     fun predicateForModel(model: STMModelling?, entityName: String?): String? {
 
         when (type) {
 
             STMPredicate.PredicateType.Value -> {
-
-                if (relation == "?" && model != null && entityName != null) {
-
-                    if (value == "uncapitalizedTableName") return STMFunctions.removePrefixFromEntityName(entityName).decapitalize()
-
-                    if (value == "capitalizedTableName") return STMFunctions.removePrefixFromEntityName(entityName).capitalize()
-
-                    val relationships = model.entitiesByName[STMFunctions.addPrefixToEntityName(entityName)]?.relationshipsByName
-
-                    return if (relationships?.containsKey(value) == true) {
-
-                        STMFunctions.removePrefixFromEntityName(relationships[value]?.destinationEntityName!!)
-
-                    } else {
-
-                        value?.removeSuffix(STMConstants.RELATIONSHIP_SUFFIX)?.capitalize()
-
-                    }
-
-                }
-
-                if (relation == "relation" && model != null && entityName != null) {
-
-                    val relationships = model.entitiesByName[STMFunctions.addPrefixToEntityName(entityName)]?.relationshipsByName
-
-                    return if (relationships?.containsKey(value?.removeSuffix(STMConstants.RELATIONSHIP_SUFFIX)) == true) {
-
-                        value
-
-                    } else {
-
-                        null
-
-                    }
-
-
-                }
-
-                if (value == "false") {
-
-                    return "0"
-
-                }
-
-                if (value == "true") {
-
-                    return "1"
-
-                }
-
 
                 return value
 

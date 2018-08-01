@@ -20,6 +20,8 @@ import android.location.Location
 import android.os.Bundle
 import android.location.LocationListener
 import com.sistemium.sissales.R
+import com.sistemium.sissales.interfaces.STMModelling
+import com.sistemium.sissales.persisting.OldPredicate
 import java.util.*
 
 
@@ -523,7 +525,11 @@ class WebAppInterface internal constructor(private var webViewActivity: WebViewA
 
         val where = parameters["where"] as? Map<*, *>
 
-        val predicate = STMPredicate.filterPredicate(filter, where)
+        val predicate = STMPredicate.filterPredicate(filter, where, entityName)
+
+//        val oldPredicate = OldPredicate.filterPredicate(filter, where)
+//
+//        oldPredicate?.predicateForModel(STMModelling.sharedModeler!!, entityName)
 
         return persistenceDelegate.findAll(entityName, predicate, options)
 

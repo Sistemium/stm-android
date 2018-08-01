@@ -54,7 +54,6 @@ class STMSQLiteDatabaseAdapter(private var dbPath: String) : STMAdapting {
 
         for (i in 0 until STMConstants.POOL_SIZE) {
 
-            //TODO select before end transaction will not return already inserted data
             val poolDb = SQLiteDatabase.openDatabase(dbPath, null, SQLiteDatabase.OPEN_READONLY)
 
             poolDatabases.add(poolDb)

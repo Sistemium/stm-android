@@ -70,7 +70,7 @@ class STMUnsyncedDataHelper : STMDataSyncing {
 
     }
 
-    override fun predicateForUnsyncedObjectsWithEntityName(entityName: String): STMPredicate {
+    override fun predicateForUnsyncedObjectsWithEntityName(entityName: String): STMPredicate? {
 
         val subpredicates = arrayListOf<STMPredicate>()
 
@@ -83,13 +83,13 @@ class STMUnsyncedDataHelper : STMDataSyncing {
 
             }
 
-            subpredicates.add(STMPredicate("IN", STMPredicate("type"), STMPredicate(", ", logMessageSyncTypes)))
+            subpredicates.add(STMPredicate("type IN (${logMessageSyncTypes.joinToString(", ")})"))
 
             val date = Date()
 
             date.time -= STMConstants.LOGMESSAGE_MAX_TIME_INTERVAL_TO_UPLOAD
 
-            subpredicates.add(STMPredicate(" > ", STMPredicate("deviceCts"), STMPredicate("'${STMFunctions.stringFrom(date)}'")))
+            subpredicates.add(STMPredicate("deviceCts > '${STMFunctions.stringFrom(date)}'"))
 
         }
 
@@ -262,7 +262,7 @@ class STMUnsyncedDataHelper : STMDataSyncing {
         val subpredicates = arrayListOf<STMPredicate>()
         val unsyncedPredicate = predicateForUnsyncedObjectsWithEntityName(entityName)
 
-        subpredicates.add(unsyncedPredicate)
+        if (unsyncedPredicate != null) subpredicates.add(unsyncedPredicate)
 
         val predicate = STMPredicate.combinePredicates(subpredicates)
 

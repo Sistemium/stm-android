@@ -1,15 +1,11 @@
 package com.sistemium.sissales
 
-import android.support.test.runner.AndroidJUnit4
 import com.sistemium.sissales.base.STMConstants
 import com.sistemium.sissales.base.STMFunctions
 import com.sistemium.sissales.persisting.STMPredicate
 import org.junit.*
 import org.junit.Assert.assertEquals
-import org.junit.Assert.assertNotEquals
-import org.junit.runner.RunWith
 import java.util.*
-import kotlin.collections.ArrayList
 
 class PersistingSpeedTest:BaseInstrumentaltTest() {
 

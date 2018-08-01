@@ -15,7 +15,7 @@ class STMClientEntityController {
 
             val name = STMFunctions.removePrefixFromEntityName(entityName)
 
-            val predicate = STMPredicate("=", STMPredicate("name"), STMPredicate("'$name'"))
+            val predicate = STMPredicate("name = '$name'")
 
             val result = STMCoreSessionManager.sharedManager.currentSession!!.persistenceDelegate.findAllSync("STMClientEntity", predicate, null)
 

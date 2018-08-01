@@ -121,6 +121,12 @@ class STMModeller(modelJSON: String) : STMModelling {
 
     }
 
+    override fun toManyRelationshipsForEntityName(entityName: String): Map<String, STMRelationshipDescription> {
+
+        return objectRelationshipsForEntityName(entityName, true, null)
+
+    }
+
     override fun hierarchyForEntityName(name: String): Set<String> {
 
         val result = HashSet<String>()

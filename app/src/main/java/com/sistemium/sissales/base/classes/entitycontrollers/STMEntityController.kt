@@ -237,7 +237,7 @@ class STMEntityController private constructor() {
     fun entityWithName(name: String): Map<*, *>? {
 
         val _name = STMFunctions.removePrefixFromEntityName(name)
-        val predicate = STMPredicate("=", STMPredicate("name"), STMPredicate("'$_name'"))
+        val predicate = STMPredicate("name = '$_name'")
         return persistenceDelegate?.findAllSync("STMEntity", predicate, null)?.lastOrNull()
 
     }
