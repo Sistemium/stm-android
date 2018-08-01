@@ -93,7 +93,7 @@ class STMSQLiteDatabaseTransaction(private var database: SQLiteDatabase, private
 
     override fun destroyWithoutSave(entityName: String, predicate: STMPredicate?, options: Map<*, *>?): Int {
 
-        var where = predicate?.predicateForModel(STMModelling.sharedModeler, entityName) ?: ""
+        var where = predicate?.toString() ?: ""
 
         val tablename = STMFunctions.removePrefixFromEntityName(entityName)
 
@@ -113,7 +113,7 @@ class STMSQLiteDatabaseTransaction(private var database: SQLiteDatabase, private
                             fetchLimit: Int?, fetchOffset: Int?, groupBy: ArrayList<*>?): ArrayList<Map<*, *>> {
 
         var options = ""
-        var columns = ""
+        val columns: String
 
         if (groupBy?.count() != null && groupBy.count() != 0) {
 
@@ -154,7 +154,7 @@ class STMSQLiteDatabaseTransaction(private var database: SQLiteDatabase, private
         var where = ""
 
         if (predicate != null) {
-            where = predicate.predicateForModel(STMModelling.sharedModeler, entityName) ?: ""
+            where = predicate.toString()
 //            STMFunctions.debugLog("EntityName", entityName)
 //            STMFunctions.debugLog("PREDICATE", where)
 //            STMFunctions.debugLog("OPTIONS", options)

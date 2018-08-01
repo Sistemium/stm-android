@@ -10,7 +10,7 @@ import java.util.function.Predicate
  * Created by edgarjanvuicik on 10/11/2017.
  */
 
-class STMPredicate {
+class STMPredicate(var value: String) {
 
     companion object {
 
@@ -240,107 +240,11 @@ class STMPredicate {
 
     }
 
-    private enum class PredicateType {
-        Value, PredicateArray, Comparison
+    init {
+        this.value = this.value.replace("false", "0")
+        this.value = this.value.replace("true", "1")
     }
 
-    private var value: String? = null
-    private var predicateArray: List<STMPredicate>? = null
-    private var leftPredicate: STMPredicate? = null
-    private var rightPredicate: STMPredicate? = null
-    private var relation: String? = null
-    private var type: PredicateType
-
-    constructor(relation: String, value: String) {
-        this.relation = relation
-        this.value = value
-        this.type = PredicateType.Value
-    }
-
-    constructor(value: String) {
-        this.value = value
-
-        this.value = this.value!!.replace("false", "0")
-
-        this.value = this.value!!.replace("true", "1")
-
-        this.type = PredicateType.Value
-    }
-
-    constructor(relation: String, predicateArray: List<STMPredicate>) {
-        this.relation = relation
-        this.predicateArray = predicateArray
-        this.type = PredicateType.PredicateArray
-    }
-
-    constructor(relation: String, leftPredicate: STMPredicate, rightPredicate: STMPredicate) {
-        this.relation = relation
-        this.leftPredicate = leftPredicate
-        this.rightPredicate = rightPredicate
-        this.type = PredicateType.Comparison
-    }
-
-    override fun toString(): String = if (value == null){
-        ""
-    } else {
-        value!!
-    }
-
-    fun predicateForModel(model: STMModelling?, entityName: String?): String? {
-
-        when (type) {
-
-            STMPredicate.PredicateType.Value -> {
-
-                return value
-
-            }
-
-            STMPredicate.PredicateType.PredicateArray -> {
-
-                val array = predicateArray!!.mapNotNull {
-
-                    it.predicateForModel(model, entityName)
-
-                }
-
-                if (relation == "nonNull") {
-
-                    return if (predicateArray!!.size == array.size) {
-
-                        "(${array.joinToString("")})"
-
-                    } else {
-
-                        null
-
-                    }
-
-                }
-
-                return "(${array.joinToString(relation!!)})"
-
-            }
-
-            STMPredicate.PredicateType.Comparison -> {
-
-                val left = leftPredicate?.predicateForModel(model, entityName)
-
-                val right = rightPredicate?.predicateForModel(model, entityName)
-
-                val valid = entityName == null || model == null || model.fieldsForEntityName(entityName).containsKey(left) || model.objectRelationshipsForEntityName(entityName).containsKey(left?.removeSuffix(STMConstants.RELATIONSHIP_SUFFIX))
-
-                if (left != null && right != null && valid) {
-
-                    return "$left $relation $right"
-
-                }
-
-                return null
-
-            }
-        }
-
-    }
+    override fun toString(): String = value
 
 }

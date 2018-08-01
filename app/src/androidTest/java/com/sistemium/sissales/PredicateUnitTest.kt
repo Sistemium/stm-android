@@ -11,7 +11,7 @@ class PredicateUnitTest:BaseInstrumentaltTest() {
 
         val predicate = STMPredicate.filterPredicate(null, data, entityName)
 
-        val predicateString = predicate?.predicateForModel(STMModelling.sharedModeler!!, entityName)
+        val predicateString = predicate?.toString()
 
         assertEquals(expect, predicateString)
     }

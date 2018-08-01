@@ -104,7 +104,7 @@ class ProfileActivity : AppCompatActivity() {
 
         gridView.adapter = profileAdapter
 
-        gridView.onItemClickListener = AdapterView.OnItemClickListener { parent, view, position, id ->
+        gridView.onItemClickListener = AdapterView.OnItemClickListener { _, _, position, _ ->
             currentTab = tabs[position]
 
             val intent = Intent(this@ProfileActivity, WebViewActivity::class.java)
