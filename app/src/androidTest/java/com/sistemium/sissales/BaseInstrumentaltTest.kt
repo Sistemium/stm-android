@@ -7,6 +7,7 @@ import com.sistemium.sissales.base.STMFunctions
 import com.sistemium.sissales.base.session.STMCoreAuthController
 import com.sistemium.sissales.enums.STMStorageType
 import com.sistemium.sissales.interfaces.STMFiling
+import com.sistemium.sissales.interfaces.STMModelling
 import com.sistemium.sissales.model.STMModeller
 import com.sistemium.sissales.model.STMSQLiteDatabaseAdapter
 import com.sistemium.sissales.persisting.STMPersister
@@ -23,7 +24,6 @@ open class BaseInstrumentaltTest {
     var filing: STMFiling? = null
     var persister: STMPersister? = null
     var ownerXid:String? = null
-    var modeler:STMModeller? = null
 
     @Before
     fun setUp(){
@@ -40,9 +40,9 @@ open class BaseInstrumentaltTest {
 
         val databasePath = filing!!.persistencePath(STMConstants.SQL_LITE_PATH) + "/" + databaseFile
 
-        modeler = STMModeller(filing!!.bundledModelJSON(dataModelName))
+        STMModelling.sharedModeler = STMModeller(filing!!.bundledModelJSON(dataModelName))
 
-        val adapter = STMSQLiteDatabaseAdapter(modeler!!, databasePath)
+        val adapter = STMSQLiteDatabaseAdapter(databasePath)
 
         val runner = STMPersisterRunner(hashMapOf(STMStorageType.STMStorageTypeSQLiteDatabase to adapter))
 

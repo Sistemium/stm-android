@@ -1,5 +1,6 @@
 package com.sistemium.sissales
 
+import com.sistemium.sissales.interfaces.STMModelling
 import com.sistemium.sissales.persisting.STMPredicate
 import org.junit.Assert.assertEquals
 import org.junit.Test
@@ -8,9 +9,9 @@ class PredicateUnitTest:BaseInstrumentaltTest() {
 
     fun testWhereFilter(entityName:String, data:Map<*,*>, expect:String?){
 
-        val predicate = STMPredicate.filterPredicate(null, data)
+        val predicate = STMPredicate.filterPredicate(null, data, entityName)
 
-        val predicateString = predicate?.predicateForModel(modeler!!, entityName)
+        val predicateString = predicate?.predicateForModel(STMModelling.sharedModeler!!, entityName)
 
         assertEquals(expect, predicateString)
     }
@@ -33,15 +34,15 @@ class PredicateUnitTest:BaseInstrumentaltTest() {
                         "finished" to hashMapOf("==" to 0),
                         "processing" to hashMapOf("==" to "draft")
                 ),
-                "(date = '2018-05-16')")
+                "date = '2018-05-16'")
 
         testWhereFilter("STMOutlet",
                 hashMapOf("ANY outletSalesmanContracts" to
                         hashMapOf("salesmanId" to
                                 hashMapOf("==" to "xid"))
                 ),
-                "(exists ( select * from OutletSalesmanContract where salesmanId = 'xid' " +
-                        "and outletId = Outlet.id ))"
+                "exists ( select * from OutletSalesmanContract where salesmanId = 'xid' " +
+                        "and outletId = Outlet.id)"
         )
 
         testWhereFilter("STMStock",
@@ -66,13 +67,13 @@ class PredicateUnitTest:BaseInstrumentaltTest() {
                 hashMapOf("uncashingId" to
                         hashMapOf("!=" to null)
                 ),
-                "uncashingId IS NULL")
+                "uncashingId IS NOT NULL")
 
         testWhereFilter("STMCashing",
                 hashMapOf("uncashingId" to
                         hashMapOf("==" to null)
                 ),
-                "uncashingId IS NOT NULL")
+                "uncashingId IS NULL")
 
     }
 
