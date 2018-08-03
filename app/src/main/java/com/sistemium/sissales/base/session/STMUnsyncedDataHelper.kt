@@ -93,7 +93,7 @@ class STMUnsyncedDataHelper : STMDataSyncing {
 
         }
 
-        subpredicates.add(STMPredicate("deviceTs not null and (deviceTs > lts OR lts is null)"))
+        subpredicates.add(STMPredicate("deviceTs is not null and (deviceTs > lts OR lts is null)"))
 
         return STMPredicate.combinePredicates(subpredicates)
 

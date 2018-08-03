@@ -112,9 +112,9 @@ class STMPredicate(var value: String) {
 
                     val anyValue = key.split(" ").last()
 
-                    val relationships = STMModelling.sharedModeler!!.entitiesByName[STMFunctions.addPrefixToEntityName(entityName)]?.relationshipsByName
+                    val relationships = STMModelling.sharedModeler!!.objectRelationshipsForEntityName(STMFunctions.addPrefixToEntityName(entityName))
 
-                    val relTable = if (relationships?.containsKey(anyValue) == true) {
+                    val relTable = if (relationships.containsKey(anyValue)) {
 
                         STMFunctions.removePrefixFromEntityName(relationships[anyValue]!!.destinationEntityName)
 
@@ -152,9 +152,9 @@ class STMPredicate(var value: String) {
 
                         var xid = value.values.first() as String?
 
-                        val relationships = STMModelling.sharedModeler!!.entitiesByName[STMFunctions.addPrefixToEntityName(entityName)]?.relationshipsByName
+                        val relationships = STMModelling.sharedModeler!!.objectRelationshipsForEntityName(STMFunctions.addPrefixToEntityName(entityName))
 
-                        val relTable = if (relationships?.containsKey(key) == true) {
+                        val relTable = if (relationships.containsKey(key)) {
 
                             STMFunctions.removePrefixFromEntityName(relationships[key]!!.destinationEntityName)
 
@@ -164,7 +164,7 @@ class STMPredicate(var value: String) {
 
                         }
 
-                        val relation = if (relationships?.containsKey(key.removeSuffix(STMConstants.RELATIONSHIP_SUFFIX)) == true) {
+                        val relation = if (relationships.containsKey(key.removeSuffix(STMConstants.RELATIONSHIP_SUFFIX))) {
 
                             key
 

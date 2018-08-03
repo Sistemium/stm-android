@@ -1,7 +1,6 @@
 package com.sistemium.sissales.persisting
 
 import com.sistemium.sissales.base.STMConstants
-import com.sistemium.sissales.base.STMFunctions
 import com.sistemium.sissales.enums.STMStorageType
 import com.sistemium.sissales.interfaces.STMAdapting
 import com.sistemium.sissales.interfaces.STMModelling
@@ -36,9 +35,7 @@ class STMPersisterTransactionCoordinator(private val adapters: HashMap<STMStorag
 
         val transaction = transactionForEntityName(entityName, options)
 
-        val count = transaction.destroyWithoutSave(entityName, predicate, options)
-
-        return count
+        return transaction.destroyWithoutSave(entityName, predicate, options)
 
     }
 

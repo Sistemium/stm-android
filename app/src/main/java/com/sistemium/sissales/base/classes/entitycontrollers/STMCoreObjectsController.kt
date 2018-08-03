@@ -28,11 +28,11 @@ class STMCoreObjectsController {
 
             for (entity in entitiesWithLifeTime) {
 
-                val lifeTime = entity["lifeTime"] as? Int ?: continue
+                val lifeTime = (entity["lifeTime"] as? Int)?.toLong() ?: continue
 
                 val entityName = entity["name"] as? String ?: continue
 
-                val terminatorDate = Date(startFlushing.time - lifeTime * 3600)
+                val terminatorDate = Date(startFlushing.time - lifeTime * 3600000)
 
                 var dateField = entity["lifeTimeDateField"]
 
@@ -50,7 +50,7 @@ class STMCoreObjectsController {
 
                 if (unsyncedPredicate != null){
 
-                    subpredicates.add(unsyncedPredicate)
+                    subpredicates.add(STMPredicate("not ($unsyncedPredicate)"))
 
                 }
 
@@ -83,7 +83,7 @@ class STMCoreObjectsController {
 
                     }
 
-                    if (STMModelling.sharedModeler!!.isConcreteEntityName(destinationName)) {
+                    if (!STMModelling.sharedModeler!!.isConcreteEntityName(destinationName)) {
 
                         return@forEach
 

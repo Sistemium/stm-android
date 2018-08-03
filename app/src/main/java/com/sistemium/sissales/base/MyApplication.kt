@@ -48,7 +48,7 @@ class MyApplication : Application(), Application.ActivityLifecycleCallbacks, Com
 
                     syncer?.sendEventViaSocket(STMSocketEvent.STMSocketEventStatusChange, logMessage)
 
-//                    STMCoreObjectsController.checkObjectsForFlushing()
+                    STMCoreObjectsController.checkObjectsForFlushing()
 
                     //TODO
                     //[STMGarbageCollector.sharedInstance removeOutOfDateImages];
