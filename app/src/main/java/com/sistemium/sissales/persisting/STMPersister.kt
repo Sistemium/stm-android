@@ -136,6 +136,10 @@ class STMPersister(private val runner: STMPersistingRunning) : STMFullStackPersi
 
         var count = 0
 
+        val recordStatuses: ArrayList<Any>? = arrayListOf()
+
+        val recordStatusEntity = STMFunctions.addPrefixToEntityName("RecordStatus")
+
         runner.execute {
 
             var objects = arrayListOf<Map<*, *>>()
@@ -147,10 +151,6 @@ class STMPersister(private val runner: STMPersistingRunning) : STMFullStackPersi
             }
 
             count = it.destroyWithoutSave(entityName, predicate, options)
-
-            val recordStatuses: ArrayList<Any>? = arrayListOf()
-
-            val recordStatusEntity = STMFunctions.addPrefixToEntityName("RecordStatus")
 
             for (obj in objects) {
 
@@ -172,17 +172,15 @@ class STMPersister(private val runner: STMPersistingRunning) : STMFullStackPersi
 
             }
 
-            if (recordStatuses?.count() != null && recordStatuses.count() > 0) {
-
-                notifyObservingEntityName(recordStatusEntity, recordStatuses, options)
-
-            }
-
             return@execute true
 
         }
 
+        if (recordStatuses?.count() != null && recordStatuses.count() > 0) {
 
+            notifyObservingEntityName(recordStatusEntity, recordStatuses, options)
+
+        }
 
         return count
 
