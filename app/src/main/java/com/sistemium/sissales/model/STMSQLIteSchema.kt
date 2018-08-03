@@ -256,7 +256,7 @@ class STMSQLIteSchema(private val database: SQLiteDatabase) {
 
         val addedColumns = addColumns(columnAttributes, tableName)
         columns.addAll(addedColumns)
-        val relationships = entity.relationshipsByName.values
+        val relationships = STMModelling.sharedModeler!!.objectRelationshipsForEntityName(entity.entityName).values
         val addedRelationships = addRelationships(ArrayList(relationships), tableName)
 
         columns.addAll(addedRelationships)
@@ -519,18 +519,19 @@ class STMSQLIteSchema(private val database: SQLiteDatabase) {
         STMFunctions.debugLog("STMSQLiteSchema", "fillWithFantoms: ${entity.entityName}")
 
         val tableName = STMFunctions.removePrefixFromEntityName(entity.entityName)
-        var relationships = entity.relationshipsByName.values
+        var relationships =  STMModelling.sharedModeler!!.objectRelationshipsForEntityName(entity.entityName).values
 
         relationships = ArrayList(relationships.filter {
-
-            return@filter it.isToMany && !modelMapping!!.destinationModel.entitiesByName[it.destinationEntityName]!!.relationshipsByName[it.inverseRelationshipName]!!.isToMany
+            val relations = STMModelling.sharedModeler!!.objectRelationshipsForEntityName(modelMapping!!.destinationModel.entitiesByName[it.destinationEntityName]!!.entityName)
+            return@filter it.isToMany && !relations[it.inverseRelationshipName]!!.isToMany
 
         })
 
         relationships.forEach {
 
             STMFunctions.debugLog("STMSQLiteSchema", "${entity.entityName} fill with fantoms")
-            val toOneRelName = modelMapping!!.destinationModel.entitiesByName[it.destinationEntityName]!!.relationshipsByName[it.inverseRelationshipName]!!.relationshipName
+            val relations = STMModelling.sharedModeler!!.objectRelationshipsForEntityName(it.destinationEntityName)
+            val toOneRelName = relations[it.inverseRelationshipName]!!.relationshipName
             val toManyRelTableName = STMFunctions.removePrefixFromEntityName(it.destinationEntityName)
             val insertFantomsDDL = "INSERT INTO $tableName (id, isFantom, deviceCts) SELECT DISTINCT $toOneRelName, 1, null FROM $toManyRelTableName"
             migrationSuccessful = migrationSuccessful && executeDDL(arrayListOf(insertFantomsDDL))
