@@ -51,7 +51,7 @@ class STMEntityDescription(entity: Map<*, *>) {
 
         }
 
-        return entityName == other.entityName && abstract == other.abstract && attributesByName == other.attributesByName && userInfo == other.userInfo
+        return entityName == other.entityName && abstract == other.abstract && attributesByName == other.attributesByName && relationshipsByName == other.relationshipsByName && userInfo == other.userInfo
 
     }
 

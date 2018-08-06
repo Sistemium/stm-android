@@ -10,61 +10,17 @@ import kotlin.collections.ArrayList
  */
 class STMModelMapper(savedModel: STMManagedObjectModel?, override var destinationModel: STMManagedObjectModel) : STMModelMapping {
 
-    override val addedEntities: ArrayList<STMEntityDescription> by lazy {
+    override val addedEntities = ArrayList<STMEntityDescription>()
 
-        //TODO
-        return@lazy ArrayList(destinationModel.entitiesByName.values)
+    override val addedAttributes = HashMap<String, ArrayList<STMAttributeDescription>>()
 
-    }
+    override val addedRelationships = HashMap<String, ArrayList<STMRelationshipDescription>>()
 
-    override val addedProperties: HashMap<String, ArrayList<STMPropertyDescription>> by lazy {
+    override val removedEntities = ArrayList<STMEntityDescription>()
 
-        //TODO
-        return@lazy hashMapOf<String, ArrayList<STMPropertyDescription>>()
+    override val removedAttributes = HashMap<String, ArrayList<STMAttributeDescription>>()
 
-    }
-
-    override val addedAttributes: HashMap<String, ArrayList<STMAttributeDescription>> by lazy {
-
-        //TODO
-        return@lazy hashMapOf<String, ArrayList<STMAttributeDescription>>()
-
-    }
-
-    override val addedRelationships: HashMap<String, ArrayList<STMRelationshipDescription>> by lazy {
-
-        //TODO
-        return@lazy hashMapOf<String, ArrayList<STMRelationshipDescription>>()
-
-    }
-
-    override val removedEntities: ArrayList<STMEntityDescription> by lazy {
-
-        //TODO
-        return@lazy arrayListOf<STMEntityDescription>()
-
-    }
-
-    override val removedProperties: HashMap<String, ArrayList<STMPropertyDescription>> by lazy {
-
-        //TODO
-        return@lazy hashMapOf<String, ArrayList<STMPropertyDescription>>()
-
-    }
-
-    override val removedAttributes: HashMap<String, ArrayList<STMAttributeDescription>> by lazy {
-
-        //TODO
-        return@lazy hashMapOf<String, ArrayList<STMAttributeDescription>>()
-
-    }
-
-    override val removedRelationships: HashMap<String, ArrayList<STMRelationshipDescription>> by lazy {
-
-        //TODO
-        return@lazy hashMapOf<String, ArrayList<STMRelationshipDescription>>()
-
-    }
+    override val removedRelationships = HashMap<String, ArrayList<STMRelationshipDescription>>()
 
     var needToMigrate: Boolean = false
 
@@ -72,8 +28,140 @@ class STMModelMapper(savedModel: STMManagedObjectModel?, override var destinatio
 
         if (savedModel != destinationModel) {
 
+            for (entity in destinationModel.entitiesByName){
+
+                if (savedModel!!.entitiesByName.keys.contains(entity.key)){
+
+                    val savedEntity = savedModel.entitiesByName[entity.key]!!
+
+                    val atr = ArrayList<STMAttributeDescription>()
+
+                    for (attribute in entity.value.attributesByName.values){
+
+                        if (savedEntity.attributesByName.keys.contains(attribute.attributeName)){
+
+                            if (attribute != savedEntity.attributesByName[attribute.attributeName]){
+
+                                TODO("not implemented")
+
+                            }
+
+                        } else {
+
+                            atr.add(attribute)
+
+                        }
+
+                    }
+
+                    if (atr.size > 0){
+
+                        addedAttributes[entity.key] = atr
+
+                    }
+
+                    val rel = ArrayList<STMRelationshipDescription>()
+
+                    for (relation in entity.value.relationshipsByName.values){
+
+                        if (savedEntity.relationshipsByName.keys.contains(relation.relationshipName)){
+
+                            if (relation != savedEntity.relationshipsByName[relation.relationshipName]){
+
+                                TODO("not implemented")
+
+                            }
+
+                        } else {
+
+                            rel.add(relation)
+
+                        }
+
+                    }
+
+                    if (rel.size > 0){
+
+                        addedRelationships[entity.key] = rel
+
+                    }
+
+                } else {
+
+                    addedEntities.add(entity.value)
+
+                }
+
+            }
+
+            for (entity in savedModel!!.entitiesByName){
+
+                if (destinationModel.entitiesByName.keys.contains(entity.key)){
+
+                    val savedEntity = destinationModel.entitiesByName[entity.key]!!
+
+                    val atr = ArrayList<STMAttributeDescription>()
+
+                    for (attribute in entity.value.attributesByName.values){
+
+                        if (savedEntity.attributesByName.keys.contains(attribute.attributeName)){
+
+                            if (attribute != savedEntity.attributesByName[attribute.attributeName]){
+
+                                TODO("not implemented")
+
+                            }
+
+                        } else {
+
+                            atr.add(attribute)
+
+                        }
+
+                    }
+
+                    if (atr.size > 0){
+
+                        removedAttributes[entity.key] = atr
+
+                    }
+
+                    val rel = ArrayList<STMRelationshipDescription>()
+
+                    for (relation in entity.value.relationshipsByName.values){
+
+                        if (savedEntity.relationshipsByName.keys.contains(relation.relationshipName)){
+
+                            if (relation != savedEntity.relationshipsByName[relation.relationshipName]){
+
+                                TODO("not implemented")
+
+                            }
+
+                        } else {
+
+                            rel.add(relation)
+
+                        }
+
+                    }
+
+                    if (rel.size > 0){
+
+                        removedRelationships[entity.key] = rel
+
+                    }
+
+                } else {
+
+                    removedEntities.add(entity.value)
+
+                }
+
+            }
+
             val changes = addedEntities.size + removedEntities.size + addedAttributes.size + removedAttributes.size +
-                    addedProperties.size + removedProperties.size + addedRelationships.size + removedRelationships.size
+                     + addedRelationships.size + removedRelationships.size
 
             if (changes > 0) {
 

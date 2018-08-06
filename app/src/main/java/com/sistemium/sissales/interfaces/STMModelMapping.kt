@@ -11,11 +11,9 @@ interface STMModelMapping {
     var destinationModel: STMManagedObjectModel
 
     val addedEntities: ArrayList<STMEntityDescription>
-    val addedProperties: HashMap<String, ArrayList<STMPropertyDescription>>
     val addedAttributes: HashMap<String, ArrayList<STMAttributeDescription>>
     val addedRelationships: HashMap<String, ArrayList<STMRelationshipDescription>>
     val removedEntities: ArrayList<STMEntityDescription>
-    val removedProperties: HashMap<String, ArrayList<STMPropertyDescription>>
     val removedAttributes: HashMap<String, ArrayList<STMAttributeDescription>>
     val removedRelationships: HashMap<String, ArrayList<STMRelationshipDescription>>
 

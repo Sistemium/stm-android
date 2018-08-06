@@ -21,12 +21,15 @@ class STMAttributeDescription(attribute: Map<*, *>) {
 
         }
 
-        return attributeName == other.attributeName
+        return attributeName == other.attributeName && attributeType == other.attributeType && indexed == other.indexed
 
     }
 
     override fun hashCode(): Int {
-        return attributeName.hashCode()
+        var result = attributeName.hashCode()
+        result = 31 * result + attributeType.hashCode()
+        result = 31 * result + indexed.hashCode()
+        return result
     }
 
 }

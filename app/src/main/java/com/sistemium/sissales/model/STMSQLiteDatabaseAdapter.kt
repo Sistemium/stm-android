@@ -166,19 +166,9 @@ class STMSQLiteDatabaseAdapter(private var dbPath: String) : STMAdapting {
 
         if (modelMapper.needToMigrate) {
 
-            if (savedModel == null){
+            _columnsByTable = schema.createTablesWithModelMapping(modelMapper, STMModelling.sharedModeler!!)
 
-                _columnsByTable = schema.createTablesWithModelMapping(modelMapper, STMModelling.sharedModeler!!)
-
-                modelMapper.destinationModel.saveToFile(savedModelPath)
-
-            } else {
-
-                //TODO migration
-
-                _columnsByTable = schema.currentDBScheme()
-
-            }
+            modelMapper.destinationModel.saveToFile(savedModelPath)
 
         } else {
 

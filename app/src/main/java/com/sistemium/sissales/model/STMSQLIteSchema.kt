@@ -44,7 +44,6 @@ class STMSQLIteSchema(private val database: SQLiteDatabase) {
             deleteEntity(entityDescription)
         }
 
-        //TODO properties change
 //        if (!modelMapping.removedProperties().isEmpty()){
 //
 //            modelMapping.removedAttributes().forEach{
@@ -467,39 +466,6 @@ class STMSQLIteSchema(private val database: SQLiteDatabase) {
         val name = STMConstants.CASCADE_TRIGGER_PREFIX + relationship.relationshipName
 
         return "DROP TRIGGER IF EXISTS ${tableName}_$name"
-
-    }
-
-    private fun addPropertiesArray(propertiesArray: ArrayList<STMPropertyDescription>, entityName: String) {
-
-        if (propertiesArray.count() == 0) return
-
-        val tableName = STMFunctions.removePrefixFromEntityName(entityName)
-        if (recreatedTables.contains(tableName)) return
-        var columns = columnsDictionary?.get(tableName)
-
-        if (columns == null) columns = arrayListOf()
-
-        TODO("not implemented")
-//        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"class == %@", [NSAttributeDescription class]];
-//        NSArray <NSAttributeDescription *> *attributes = (NSArray <NSAttributeDescription *> *)[propertiesArray filteredArrayUsingPredicate:predicate];
-//        if (attributes.count) {
-//            NSLog(@"%@ add atributes: %@", entityName, [attributes valueForKeyPath:@"name"]);
-//            [columns addObjectsFromArray:[self addColumns:attributes toTable:tableName]];
-//            [self.tablesToReload addObject:tableName];
-//        }
-//        predicate = [NSPredicate predicateWithFormat:@"class == %@", [NSRelationshipDescription class]];
-//        NSArray <NSRelationshipDescription *> *relationships = (NSArray <NSRelationshipDescription *> *)[propertiesArray filteredArrayUsingPredicate:predicate];
-//        if (relationships.count) {
-//            NSLog(@"%@ add relationships: %@", entityName, [relationships valueForKeyPath:@"name"]);
-//            [columns addObjectsFromArray:[self addRelationships:relationships toTable:tableName]];
-//            NSPredicate *predicate = [NSPredicate predicateWithFormat:@"toMany != YES"];
-//            relationships = [relationships filteredArrayUsingPredicate:predicate];
-//            if (relationships.count) {
-//                [self.tablesToReload addObject:tableName];
-//            }
-//        }
-//        self.columnsDictionary[tableName] = columns;
 
     }
 
