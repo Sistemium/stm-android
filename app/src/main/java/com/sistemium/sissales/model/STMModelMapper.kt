@@ -2,8 +2,8 @@ package com.sistemium.sissales.model
 
 import com.sistemium.sissales.base.STMFunctions
 import com.sistemium.sissales.interfaces.STMModelMapping
-import java.util.*
 import kotlin.collections.ArrayList
+import kotlin.collections.HashMap
 
 /**
  * Created by edgarjanvuicik on 28/11/2017.
@@ -30,7 +30,7 @@ class STMModelMapper(savedModel: STMManagedObjectModel?, override var destinatio
 
             for (entity in destinationModel.entitiesByName){
 
-                if (savedModel!!.entitiesByName.keys.contains(entity.key)){
+                if (savedModel?.entitiesByName?.keys?.contains(entity.key) == true){
 
                     val savedEntity = savedModel.entitiesByName[entity.key]!!
 
@@ -94,7 +94,7 @@ class STMModelMapper(savedModel: STMManagedObjectModel?, override var destinatio
 
             }
 
-            for (entity in savedModel!!.entitiesByName){
+            for (entity in savedModel?.entitiesByName ?: HashMap()){
 
                 if (destinationModel.entitiesByName.keys.contains(entity.key)){
 
