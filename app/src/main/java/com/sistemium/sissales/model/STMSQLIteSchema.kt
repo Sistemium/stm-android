@@ -381,8 +381,8 @@ class STMSQLIteSchema(private val database: SQLiteDatabase) {
         val phantomSource = "WHERE NOT EXISTS (SELECT * FROM $parentName WHERE ${STMConstants.DEFAULT_PERSISTING_PRIMARY_KEY} = NEW.$columnName)"
         val columnNotNull = "NEW.$columnName is not null"
         val createPhantom = arrayListOf(phantomFields, phantomData, phantomSource).joinToString(" ")
-        clauses.add(createTriggerDDL("phantom_" + columnName, STMConstants.SQLiteBeforeInsert, tableName, createPhantom, columnNotNull))
-        clauses.add(createTriggerDDL("phantom_update_" + columnName, "BEFORE UPDATE OF " + columnName, tableName, createPhantom, columnNotNull))
+        clauses.add(createTriggerDDL("phantom_$columnName", STMConstants.SQLiteBeforeInsert, tableName, createPhantom, columnNotNull))
+        clauses.add(createTriggerDDL("phantom_update_$columnName", "BEFORE UPDATE OF " + columnName, tableName, createPhantom, columnNotNull))
 
         return clauses
 
