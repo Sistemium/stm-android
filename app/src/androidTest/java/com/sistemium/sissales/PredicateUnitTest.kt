@@ -1,6 +1,5 @@
 package com.sistemium.sissales
 
-import com.sistemium.sissales.interfaces.STMModelling
 import com.sistemium.sissales.persisting.STMPredicate
 import org.junit.Assert.assertEquals
 import org.junit.Test
