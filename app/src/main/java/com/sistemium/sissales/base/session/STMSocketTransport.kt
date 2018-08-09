@@ -202,7 +202,7 @@ class STMSocketTransport(var socketUrlString: String, var entityResource: String
             deferred.resolve(arrayOf(dataDic))
 
         } else if (_value != null) {
-            socket!!.emit(event.toString(), arrayOf(_value), {
+            socket!!.emit(event.toString(), arrayOf(_value)) {
 
                 if (it.firstOrNull() == "NO ACK") {
 
@@ -212,7 +212,7 @@ class STMSocketTransport(var socketUrlString: String, var entityResource: String
 
                 deferred.resolve(it)
 
-            })
+            }
         } else {
 
             socket!!.emit(event.toString(), Ack {
@@ -311,13 +311,17 @@ class STMSocketTransport(var socketUrlString: String, var entityResource: String
 
         socket!!.on(STMSocketEvent.STMSocketEventRemoteCommands.toString()) {
 
-            TODO("not implemented")
+            //TODO
+
+            STMFunctions.debugLog("STMSocketTransport","got Remote Commands")
 
         }
 
         socket!!.on(STMSocketEvent.STMSocketEventRemoteRequests.toString()) {
 
-            TODO("not implemented")
+            //TODO
+
+            STMFunctions.debugLog("STMSocketTransport","got Remote Request")
 
         }
 
