@@ -2,36 +2,18 @@ package com.sistemium.sissales.activities
 
 import android.annotation.SuppressLint
 import android.app.Activity
-import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Bundle
-import android.support.constraint.ConstraintLayout
-import android.view.View
 import android.webkit.*
-import android.webkit.WebSettings.MIXED_CONTENT_ALWAYS_ALLOW
 import com.sistemium.sissales.R
 import com.sistemium.sissales.webInterface.WebAppInterface
-import com.github.kittinunf.fuel.Fuel
-import com.github.kittinunf.fuel.android.extension.responseJson
-import com.github.kittinunf.fuel.core.FuelManager
-import com.github.kittinunf.result.Result
-import com.sistemium.sissales.base.session.STMCoreAuthController
-import com.sistemium.sissales.R.id.webView1
 import com.sistemium.sissales.base.STMFunctions
-import devliving.online.securedpreferencestore.SecuredPreferenceStore
 import nl.komponents.kovenant.task
-import com.sistemium.sissales.R.layout.webview
 import android.content.Intent
-import android.os.Build
 import android.os.Environment
 import android.provider.MediaStore
 import java.io.File
 import java.io.IOException
-import android.os.Environment.DIRECTORY_PICTURES
-import android.os.Environment.getExternalStoragePublicDirectory
-import com.sistemium.sissales.base.MyApplication
-import com.sistemium.sissales.base.session.STMCoreSessionManager
-import com.sistemium.sissales.enums.STMSocketEvent
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -51,7 +33,7 @@ class WebViewActivity : Activity() {
     private var mCM: String? = null
     private val FCR = 1
 
-    private var error:String?  = null
+    private var err:String?  = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -131,6 +113,7 @@ class WebViewActivity : Activity() {
                 webView?.webViewClient = object : WebViewClient() {
 
                     override fun onReceivedError(view: WebView?, request: WebResourceRequest?, error: WebResourceError?) {
+                        err = error.toString()
                         STMFunctions.debugLog("CHROME", error.toString())
                     }
 
@@ -144,7 +127,7 @@ class WebViewActivity : Activity() {
 
                     override fun onConsoleMessage(consoleMessage: ConsoleMessage?): Boolean {
                         if (consoleMessage!!.message().startsWith("Uncaught Error")){
-                            error = consoleMessage.message()
+                            err = consoleMessage.message()
                         }
                         return super.onConsoleMessage(consoleMessage)
                     }
@@ -161,7 +144,7 @@ class WebViewActivity : Activity() {
 
     override fun onBackPressed() {
 
-        if (error != null){
+        if (err != null){
 
             this.goBack()
 
