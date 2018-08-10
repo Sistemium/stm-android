@@ -28,13 +28,6 @@ class STMCoreSessionManager private constructor() : STMSessionManager {
 
     override fun sessionStopped(session: STMSession) {
 
-//        if (session.status == STMSessionRemoving || session.status == STMSessionFinishing || session.status == STMSessionStopped) {
-//            session.status = STMSessionStopped;
-//            [self removeSessionForUID:session.uid];
-//        } else {
-//            [self removeSessionForUID:session.uid];
-//        }
-
         if (session.status == STMSessionStatus.STMSessionRemoving || session.status == STMSessionStatus.STMSessionFinishing){
 
             session.status = STMSessionStatus.STMSessionStopped
