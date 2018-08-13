@@ -126,7 +126,7 @@ class STMSyncerHelper : STMDefantomizing, STMDataDownloading {
 
         }
 
-        STMCoreSessionManager.sharedManager.currentSession!!.persistenceDelegate.mergeMany(entityName, dataRecieved, hashMapOf(STMPersistingOptionLts to STMFunctions.stringFrom(Date())))
+        STMSession.sharedSession.persistenceDelegate.mergeMany(entityName, dataRecieved, hashMapOf(STMPersistingOptionLts to STMFunctions.stringFrom(Date())))
                 .then {
 
                     findAllResultMergedWithSuccess(dataRecieved, entityName, offset!!, pageSize!!)

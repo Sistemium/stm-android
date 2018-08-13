@@ -4,7 +4,7 @@ import com.sistemium.sissales.base.STMConstants
 import com.sistemium.sissales.base.STMConstants.Companion.STMPersistingOptionPageSize
 import com.sistemium.sissales.base.STMConstants.Companion.STMPersistingOptionRecordstatuses
 import com.sistemium.sissales.base.STMFunctions
-import com.sistemium.sissales.base.session.STMCoreSessionManager
+import com.sistemium.sissales.base.session.STMSession
 import com.sistemium.sissales.interfaces.STMModelling
 import com.sistemium.sissales.persisting.STMPredicate
 import java.util.*
@@ -18,7 +18,7 @@ class STMCoreObjectsController {
 
             STMFunctions.debugLog("STMCoreObjectsController","checkObjectsForFlushing")
 
-            val session = STMCoreSessionManager.sharedManager.currentSession ?: return
+            val session = STMSession.sharedSession
 
             val syncer = session.syncer ?: return
 

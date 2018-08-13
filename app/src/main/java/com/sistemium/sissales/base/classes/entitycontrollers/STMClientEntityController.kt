@@ -1,7 +1,7 @@
 package com.sistemium.sissales.base.classes.entitycontrollers
 
 import com.sistemium.sissales.base.STMFunctions
-import com.sistemium.sissales.base.session.STMCoreSessionManager
+import com.sistemium.sissales.base.session.STMSession
 import com.sistemium.sissales.persisting.STMPredicate
 
 /**
@@ -17,13 +17,13 @@ class STMClientEntityController {
 
             val predicate = STMPredicate("name = '$name'")
 
-            val result = STMCoreSessionManager.sharedManager.currentSession!!.persistenceDelegate.findAllSync("STMClientEntity", predicate, null)
+            val result = STMSession.sharedSession.persistenceDelegate.findAllSync("STMClientEntity", predicate, null)
 
             if (result.count() > 1) {
 
                 val logMessage = "more than one clientEntity with name $name"
 
-                STMCoreSessionManager.sharedManager.currentSession!!.logger!!.errorMessage(logMessage)
+                STMSession.sharedSession.logger!!.errorMessage(logMessage)
 
             }
 
@@ -49,7 +49,7 @@ class STMClientEntityController {
 
             clientEntity["eTag"] = eTag
 
-            STMCoreSessionManager.sharedManager.currentSession!!.persistenceDelegate.mergeSync("STMClientEntity", clientEntity, null)
+            STMSession.sharedSession.persistenceDelegate.mergeSync("STMClientEntity", clientEntity, null)
 
         }
     }

@@ -11,7 +11,6 @@ import com.sistemium.sissales.base.classes.entitycontrollers.STMEntityController
 import com.sistemium.sissales.interfaces.STMDataSyncing
 import com.sistemium.sissales.interfaces.STMDataSyncingSubscriber
 import com.sistemium.sissales.interfaces.STMModelling
-import com.sistemium.sissales.interfaces.STMSession
 import com.sistemium.sissales.persisting.STMPredicate
 import java.util.*
 import kotlin.collections.ArrayList

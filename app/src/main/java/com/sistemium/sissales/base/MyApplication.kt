@@ -8,15 +8,12 @@ import android.os.Bundle
 import com.crashlytics.android.Crashlytics
 import com.sistemium.sissales.base.classes.entitycontrollers.STMCoreObjectsController
 import com.sistemium.sissales.base.helper.logger.STMLogger
-import com.sistemium.sissales.base.session.STMCoreSessionManager
+import com.sistemium.sissales.base.session.STMSession
 import com.sistemium.sissales.base.session.STMSyncer
 import com.sistemium.sissales.enums.STMSocketEvent
-import com.sistemium.sissales.interfaces.STMAdapting
 import devliving.online.securedpreferencestore.DefaultRecoveryHandler
 import devliving.online.securedpreferencestore.SecuredPreferenceStore
 import io.fabric.sdk.android.Fabric
-import kotlin.properties.Delegates
-
 
 /**
  * Created by edgarjanvuicik on 02/02/2018.
@@ -28,7 +25,7 @@ class MyApplication : Application(), Application.ActivityLifecycleCallbacks, Com
         var syncer: STMSyncer? = null
             get() {
 
-                return STMCoreSessionManager.sharedManager.currentSession?.syncer
+                return STMSession.sharedSession.syncer
 
             }
 

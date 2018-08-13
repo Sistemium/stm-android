@@ -2,9 +2,9 @@ package com.sistemium.sissales.base.helper.logger
 
 import android.util.Log
 import com.sistemium.sissales.base.STMConstants
+import com.sistemium.sissales.base.session.STMSession
 import com.sistemium.sissales.enums.STMLogMessageType
 import com.sistemium.sissales.enums.STMSessionStatus
-import com.sistemium.sissales.interfaces.STMSession
 import java.util.*
 
 /**

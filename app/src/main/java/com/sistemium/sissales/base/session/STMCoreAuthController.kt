@@ -239,11 +239,8 @@ class STMCoreAuthController {
 
         fun logout(){
 
-            val sessionManager = STMCoreSessionManager.sharedManager
-            sessionManager.currentSession?.syncer?.prepareToDestroy()
+            STMSession.sharedSession.syncer?.prepareToDestroy()
             STMLogger.sharedLogger.saveLogMessageWithText("logout", STMLogMessageType.STMLogMessageTypeImportant)
-
-            sessionManager.stopSessionForUID(userID)
 
             userID = null
             accessToken = null
@@ -379,11 +376,7 @@ class STMCoreAuthController {
             STMFunctions.debugLog("STMCoreAuthController", "socketURL $socketURL")
             STMFunctions.debugLog("STMCoreAuthController", "entity resource $entityResource")
 
-            val trackers = arrayListOf("battery", "location")
-
-            val sessionManager = STMCoreSessionManager.sharedManager
-
-            sessionManager.startSession(trackers)
+            STMSession.sharedSession.setupSyncer()
 
         }
 

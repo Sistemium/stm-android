@@ -19,20 +19,24 @@ import com.sistemium.sissales.persisting.STMPersistingInterceptorUniqueProperty
 /**
  * Created by edgarjanvuicik on 08/02/2018.
  */
-class STMCoreSession(var trackers: ArrayList<String>) : STMSession {
+class STMSession {
 
-    override var uid: String = STMCoreAuthController.userID!!
-    override var filing: STMFiling = STMCoreSessionFiler(STMCoreAuthController.accountOrg!!, STMCoreAuthController.iSisDB
+    private object Holder {
+        val INSTANCE = STMSession()
+    }
+
+    companion object {
+        val sharedSession: STMSession by lazy { Holder.INSTANCE }
+    }
+
+    var uid: String = STMCoreAuthController.userID!!
+    var filing: STMFiling = STMCoreSessionFiler(STMCoreAuthController.accountOrg!!, STMCoreAuthController.iSisDB
             ?: uid)
-    override var status: STMSessionStatus = STMSessionStatus.STMSessionStarting
-    override lateinit var persistenceDelegate: STMFullStackPersisting
-    override var logger: STMLogger? = null
-    override var settingsController: STMSettingsController? = null
-    override var syncer: STMSyncer? = null
-
-    var manager: STMSessionManager? = null
-
-    private var startTrackers: ArrayList<String> = ArrayList(trackers)
+    var status: STMSessionStatus = STMSessionStatus.STMSessionStarting
+    var persistenceDelegate: STMFullStackPersisting
+    var logger: STMLogger? = null
+    var settingsController: STMSettingsController? = null
+    var syncer: STMSyncer? = null
 
     init {
 
@@ -72,19 +76,13 @@ class STMCoreSession(var trackers: ArrayList<String>) : STMSession {
         logger = STMLogger.sharedLogger
         logger?.session = this
 
-        trackers = ArrayList()
-
-        checkTrackersToStart()
-
         status = STMSessionStatus.STMSessionRunning
-
-        setupSyncer()
 
     }
 
     fun stopSession() {
 
-        status = if  (status === STMSessionStatus.STMSessionRemoving) status else STMSessionStatus.STMSessionStopped
+        status = if (status === STMSessionStatus.STMSessionRemoving) status else STMSessionStatus.STMSessionStopped
 
         logger?.session = null
 
@@ -94,32 +92,9 @@ class STMCoreSession(var trackers: ArrayList<String>) : STMSession {
 
         syncer = null
 
-        manager?.sessionStopped(this)
-
     }
 
-    private fun checkTrackersToStart() {
-
-        //TODO check trackers
-        if (startTrackers.contains("location")) {
-
-//            val locationTracker = STMCoreLocationTracker()
-//            self.trackers[self.locationTracker.group] = self.locationTracker;
-//            self.locationTracker.session = self;
-
-        }
-
-        if (startTrackers.contains("battery")) {
-
-//            self.batteryTracker = [[[self batteryTrackerClass] alloc] init];
-//            self.trackers[self.batteryTracker.group] = self.batteryTracker;
-//            self.batteryTracker.session = self;
-
-        }
-
-    }
-
-    private fun setupSyncer() {
+    fun setupSyncer() {
 
         val syncer = STMSyncer()
         val syncerHelper = STMSyncerHelper()

@@ -2,7 +2,6 @@ package com.sistemium.sissales.webInterface
 
 import android.content.Context
 import android.location.LocationManager
-import android.os.Looper
 import android.webkit.JavascriptInterface
 import com.sistemium.sissales.activities.WebViewActivity
 import com.sistemium.sissales.base.MyApplication
@@ -10,7 +9,6 @@ import com.sistemium.sissales.base.STMConstants
 import com.sistemium.sissales.base.STMFunctions
 import com.sistemium.sissales.base.STMFunctions.Companion.gson
 import com.sistemium.sissales.base.session.STMCoreAuthController
-import com.sistemium.sissales.base.session.STMCoreSessionManager
 import com.sistemium.sissales.interfaces.STMFullStackPersisting
 import com.sistemium.sissales.persisting.STMPredicate
 import nl.komponents.kovenant.Promise
@@ -20,8 +18,8 @@ import android.location.Location
 import android.os.Bundle
 import android.location.LocationListener
 import com.sistemium.sissales.R
-import com.sistemium.sissales.interfaces.STMModelling
-import com.sistemium.sissales.persisting.OldPredicate
+import com.sistemium.sissales.base.session.STMSession
+
 import java.util.*
 
 
@@ -37,7 +35,7 @@ class WebAppInterface internal constructor(private var webViewActivity: WebViewA
 
     private var unsyncedInfoJSFunction:String? = null
 
-    private var persistenceDelegate: STMFullStackPersisting = STMCoreSessionManager.sharedManager.currentSession!!.persistenceDelegate
+    private var persistenceDelegate: STMFullStackPersisting = STMSession.sharedSession.persistenceDelegate
 
     @JavascriptInterface
     fun errorCatcher(parameters: String?) {
@@ -526,10 +524,6 @@ class WebAppInterface internal constructor(private var webViewActivity: WebViewA
         val where = parameters["where"] as? Map<*, *>
 
         val predicate = STMPredicate.filterPredicate(filter, where, entityName)
-
-//        val oldPredicate = OldPredicate.filterPredicate(filter, where)
-//
-//        oldPredicate?.predicateForModel(STMModelling.sharedModeler!!, entityName)
 
         return persistenceDelegate.findAll(entityName, predicate, options)
 
