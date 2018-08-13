@@ -6,7 +6,6 @@ import com.sistemium.sissales.base.helper.logger.STMLogger
 import com.sistemium.sissales.base.classes.entitycontrollers.STMClientDataController
 import com.sistemium.sissales.base.classes.entitycontrollers.STMEntityController
 import com.sistemium.sissales.base.classes.entitycontrollers.STMRecordStatusController
-import com.sistemium.sissales.enums.STMSessionStatus
 import com.sistemium.sissales.enums.STMStorageType
 import com.sistemium.sissales.interfaces.*
 import com.sistemium.sissales.model.STMModeller
@@ -32,7 +31,6 @@ class STMSession {
     var uid: String = STMCoreAuthController.userID!!
     var filing: STMFiling = STMCoreSessionFiler(STMCoreAuthController.accountOrg!!, STMCoreAuthController.iSisDB
             ?: uid)
-    var status: STMSessionStatus = STMSessionStatus.STMSessionStarting
     var persistenceDelegate: STMFullStackPersisting
     var logger: STMLogger? = null
     var settingsController: STMSettingsController? = null
@@ -75,22 +73,6 @@ class STMSession {
 
         logger = STMLogger.sharedLogger
         logger?.session = this
-
-        status = STMSessionStatus.STMSessionRunning
-
-    }
-
-    fun stopSession() {
-
-        status = if (status === STMSessionStatus.STMSessionRemoving) status else STMSessionStatus.STMSessionStopped
-
-        logger?.session = null
-
-        settingsController = null
-
-        logger = null
-
-        syncer = null
 
     }
 

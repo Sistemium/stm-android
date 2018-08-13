@@ -4,7 +4,6 @@ import android.util.Log
 import com.sistemium.sissales.base.STMConstants
 import com.sistemium.sissales.base.session.STMSession
 import com.sistemium.sissales.enums.STMLogMessageType
-import com.sistemium.sissales.enums.STMSessionStatus
 import java.util.*
 
 /**
@@ -140,13 +139,7 @@ class STMLogger private constructor() {
 
     private fun saveLogMessageDic(logMessageDic: Map<*, *>) {
 
-        val sessionIsRunning = this.session!!.status == STMSessionStatus.STMSessionRunning
-
-        if (sessionIsRunning) {
-
-            createAndSaveLogMessageFromDictionary(logMessageDic)
-
-        }
+        createAndSaveLogMessageFromDictionary(logMessageDic)
 
     }
 
