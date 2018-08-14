@@ -240,21 +240,25 @@ class STMPersister(private val runner: STMPersistingRunning) : STMFullStackPersi
 
             }
 
+            var _items = items
+
             if (subscription.predicate != null) {
 
-                items.filter(subscription.predicate!!)
+                _items = ArrayList(items.filter(subscription.predicate!!))
 
             }
 
-            if (items.count() == 0) continue
+            _items = ArrayList(_items)
+
+            if (_items.count() == 0) continue
 
             if (subscription.entityName != null) {
 
-                subscription.callback?.invoke(items)
+                subscription.callback?.invoke(_items)
 
             } else {
 
-                subscription.callbackWithEntityName?.invoke(entityName, items)
+                subscription.callbackWithEntityName?.invoke(entityName, _items)
 
             }
 
