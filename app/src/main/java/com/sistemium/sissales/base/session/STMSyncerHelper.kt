@@ -82,7 +82,7 @@ class STMSyncerHelper : STMDefantomizing, STMDataDownloading {
 
         STMFunctions.debugLog("STMSyncerHelper", "stopDownloading")
 
-        ProfileActivity.profileActivityController!!.setProgressInfo(-1)
+        ProfileActivity.profileActivityController?.setProgressInfo(-1)
 
         downloadingQueue?.shutdown()
 
@@ -94,7 +94,7 @@ class STMSyncerHelper : STMDefantomizing, STMDataDownloading {
 
         downloadingOperations.clear()
 
-        dataDownloadingOwner!!.dataDownloadingFinished()
+        dataDownloadingOwner?.dataDownloadingFinished()
 
     }
 
