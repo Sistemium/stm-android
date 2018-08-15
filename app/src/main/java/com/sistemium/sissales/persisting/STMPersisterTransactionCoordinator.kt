@@ -63,7 +63,14 @@ class STMPersisterTransactionCoordinator(private val adapters: HashMap<STMStorag
 
         if (transaction == null && !adapters.keys.contains(storageType)){
 
-            throw Exception("Wrong entity name: $entityName")
+            var keys = ""
+
+            for (key in adapters.keys){
+
+                keys += "$key ,"
+            }
+
+            throw Exception("Wrong entity name: $entityName, storage type : $storageType, has adapters for storage types $keys")
 
         }
 
