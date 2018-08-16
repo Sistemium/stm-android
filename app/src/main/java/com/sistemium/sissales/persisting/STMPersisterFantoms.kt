@@ -14,7 +14,11 @@ class STMPersisterFantoms : STMPersistingFantoms {
 
     override fun findAllFantomsIdsSync(entityName: String, excludingIds: ArrayList<*>): ArrayList<String> {
 
-        val result = STMSession.sharedSession.persistenceDelegate.findAllSync(entityName, null, hashMapOf(STMConstants.STMPersistingOptionFantoms to true))
+        val result =  try {
+            STMSession.sharedSession.persistenceDelegate.findAllSync(entityName, null, hashMapOf(STMConstants.STMPersistingOptionFantoms to true))
+        } catch (e:Exception){
+            arrayListOf<Map<*, *>>()
+        }
 
         val _result = ArrayList(result.map {
 
