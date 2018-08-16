@@ -1,7 +1,5 @@
 package com.sistemium.sissales.base
 
-import com.sistemium.sissales.BuildConfig
-
 /**
  * Created by edgarjanvuicik on 14/11/2017.
  */
@@ -34,9 +32,6 @@ class STMConstants {
         const val STMPersistingOptionRecordstatuses = "createRecordStatuses"
         const val STMPersistingOptionOrderDirectionDescValue = "DESC"
         const val STMPersistingOptionWhere = "where"
-        const val KC_PHONE_NUMBER = "phoneNumber"
-        const val preferencesKey = "SistemiumSharedPreferences"
-        const val SHARED_PATH = "shared"
         const val PERSISTENCE_PATH = "persistence"
         const val AUTH_DELAY = 20
         const val syncInterval = 600
@@ -52,7 +47,6 @@ class STMConstants {
         const val CASCADE_TRIGGER_PREFIX = "cascade_"
         const val SQLiteBeforeDelete = "BEFORE DELETE"
         const val SQLiteBeforeInsert = "BEFORE INSERT"
-        const val SQLiteStatementSeparator = "; "
         const val SQLiteDefaultNow = "DEFAULT(STRFTIME('%Y-%m-%d %H:%M:%f', 'NOW'))"
         const val fetchLimit = 500
         const val userAgent = "iSisSales/$model"

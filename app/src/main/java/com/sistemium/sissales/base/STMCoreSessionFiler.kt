@@ -1,7 +1,6 @@
 package com.sistemium.sissales.base
 
 import android.content.Context
-import com.sistemium.sissales.base.STMConstants.Companion.SHARED_PATH
 import com.sistemium.sissales.interfaces.STMDirectoring
 import com.sistemium.sissales.interfaces.STMFiling
 import java.io.File
