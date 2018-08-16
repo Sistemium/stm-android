@@ -196,6 +196,46 @@ class STMSQLiteDatabaseAdapter(private var dbPath: String) : STMAdapting {
 
         columnsByTable = columnsByTableWithTypes
 
+        if (columnsByTable?.get("OutletPhoto")?.keys?.contains("locationId") != true){
+
+            val relation = STMModelling.sharedModeler!!.objectRelationshipsForEntityName("STMOutlet")["location"]
+
+            schema.executeDDL(schema.addRelationshipDDL(relation!!, "OutletPhoto"))
+
+            schema.executeDDL(arrayListOf("update clientEntity set eTag = '*' where name = 'OutletPhoto'"))
+
+        }
+
+        if (columnsByTable?.get("PhotoReport")?.keys?.contains("locationId") != true){
+
+            val relation = STMModelling.sharedModeler!!.objectRelationshipsForEntityName("STMPhotoReport")["location"]
+
+            schema.executeDDL(schema.addRelationshipDDL(relation!!, "PhotoReport"))
+
+            schema.executeDDL(arrayListOf("update clientEntity set eTag = '*' where name = 'PhotoReport'"))
+
+        }
+
+        if (columnsByTable?.get("UncashingPicture")?.keys?.contains("locationId") != true){
+
+            val relation = STMModelling.sharedModeler!!.objectRelationshipsForEntityName("STMUncashingPicture")["location"]
+
+            schema.executeDDL(schema.addRelationshipDDL(relation!!, "UncashingPicture"))
+
+            schema.executeDDL(arrayListOf("update clientEntity set eTag = '*' where name = 'UncashingPicture'"))
+
+        }
+
+        if (columnsByTable?.get("VisitPhoto")?.keys?.contains("locationId") != true){
+
+            val relation = STMModelling.sharedModeler!!.objectRelationshipsForEntityName("STMVisitPhoto")["location"]
+
+            schema.executeDDL(schema.addRelationshipDDL(relation!!, "VisitPhoto"))
+
+            schema.executeDDL(arrayListOf("update clientEntity set eTag = '*' where name = 'VisitPhoto'"))
+
+        }
+
     }
 
 }
