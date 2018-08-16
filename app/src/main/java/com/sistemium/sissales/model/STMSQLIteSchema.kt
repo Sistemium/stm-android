@@ -183,7 +183,7 @@ class STMSQLIteSchema(private val database: SQLiteDatabase) {
 
     }
 
-    fun executeDDL(ddls: ArrayList<String>): Boolean {
+    private fun executeDDL(ddls: ArrayList<String>): Boolean {
 
         if (ddls.isEmpty()) return true
         try {
@@ -362,7 +362,7 @@ class STMSQLIteSchema(private val database: SQLiteDatabase) {
 
     }
 
-    fun addRelationshipDDL(relationship: STMRelationshipDescription, tableName: String): ArrayList<String> {
+    private fun addRelationshipDDL(relationship: STMRelationshipDescription, tableName: String): ArrayList<String> {
 
         if (relationship.isToMany) {
 
