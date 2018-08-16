@@ -235,7 +235,7 @@ class STMCoreAuthController {
 
             }
 
-        val dataModelName = "iSisSales"
+        val dataModelName = STMConstants.dataModelName
 
         fun logout(){
 
@@ -382,7 +382,7 @@ class STMCoreAuthController {
 
         private fun requestRoles(): Promise<Map<*, *>, Exception> {
 
-            FuelManager.instance.baseHeaders = mapOf("user-agent" to "iSisSales/360", "DeviceUUID" to STMFunctions.deviceUUID(), "Authorization" to accessToken!!)
+            FuelManager.instance.baseHeaders = mapOf("user-agent" to STMConstants.userAgent, "DeviceUUID" to STMFunctions.deviceUUID(), "Authorization" to accessToken!!)
 
             if (rolesResponse != null) {
 
