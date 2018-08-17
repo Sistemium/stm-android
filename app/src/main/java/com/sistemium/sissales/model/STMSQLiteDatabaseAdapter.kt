@@ -166,15 +166,13 @@ class STMSQLiteDatabaseAdapter(private var dbPath: String) : STMAdapting {
 
         if (modelMapper.needToMigrate) {
 
-            _columnsByTable = schema.createTablesWithModelMapping(modelMapper, STMModelling.sharedModeler!!)
+            schema.createTablesWithModelMapping(modelMapper, STMModelling.sharedModeler!!)
 
             modelMapper.destinationModel.saveToFile(savedModelPath)
 
-        } else {
-
-            _columnsByTable = schema.currentDBScheme()
-
         }
+
+        _columnsByTable = schema.currentDBScheme()
 
         val columnsByTableWithTypes = hashMapOf<String, Map<String, String>>()
 

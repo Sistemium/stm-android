@@ -115,7 +115,7 @@ class ProfileActivity : AppCompatActivity() {
 
             if (url == null && manifest != null){
 
-                url = manifest.replace("/app.manifest", "")
+                url = manifest.replace(manifest.split("/").last(), "")
 
             }
 
