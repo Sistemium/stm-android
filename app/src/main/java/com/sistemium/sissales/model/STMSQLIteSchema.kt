@@ -15,7 +15,6 @@ class STMSQLIteSchema(private val database: SQLiteDatabase) {
 
     private var modelMapping: STMModelMapping? = null
     private var migrationSuccessful = false
-    private var columnsDictionary: HashMap<String, ArrayList<String>>? = null
     private val builtInAttributes = arrayListOf(
             STMConstants.DEFAULT_PERSISTING_PRIMARY_KEY,
             STMConstants.STMPersistingKeyCreationTimestamp,
@@ -28,13 +27,12 @@ class STMSQLIteSchema(private val database: SQLiteDatabase) {
     private val tablesToReload = hashSetOf<String>()
     private var modeler: STMModelling? = null
 
-    fun createTablesWithModelMapping(modelMapping: STMModelMapping, modeler: STMModelling): Map<String, ArrayList<String>> {
+    fun createTablesWithModelMapping(modelMapping: STMModelMapping, modeler: STMModelling) {
 
         STMFunctions.debugLog("STMSQLIteSchema", "createTablesWithModelMapping")
         this.modelMapping = modelMapping
         this.modeler = modeler
         migrationSuccessful = true
-        columnsDictionary = HashMap(currentDBScheme())
 
         for (entityDescription in modelMapping.addedEntities) {
             addEntity(entityDescription)
@@ -44,7 +42,17 @@ class STMSQLIteSchema(private val database: SQLiteDatabase) {
             deleteEntity(entityDescription)
         }
 
-        //TODO migration
+        for (relation in modelMapping.addedRelationships){
+
+            val table = STMFunctions.removePrefixFromEntityName(relation.key)
+
+            addRelationships(relation.value, table)
+
+            executeDDL(arrayListOf("update clientEntity set eTag = '*' where name = '$table'"))
+
+        }
+
+        //TODO rest of migration
 
 //        if (!modelMapping.removedProperties().isEmpty()){
 //
@@ -104,13 +112,10 @@ class STMSQLIteSchema(private val database: SQLiteDatabase) {
 
             STMFunctions.debugLog("STMSQLiteSchema", "model migrating SUCCESS")
 
-            columnsDictionary!!
 
         } else {
 
             STMFunctions.debugLog("STMSQLiteSchema", "model migrating NOT SUCCESS")
-
-            columnsDictionary!!
 
         }
 
@@ -163,23 +168,13 @@ class STMSQLIteSchema(private val database: SQLiteDatabase) {
         if (entity.abstract) return
 
         STMFunctions.debugLog("STMSQLiteSchema", "add entity ${entity.entityName}")
-        val columns = ArrayList(builtInAttributes)
         val tableName = STMFunctions.removePrefixFromEntityName(entity.entityName)
         val tableExists = isTableExists(tableName, database)
         if (!tableExists) {
             migrationSuccessful = migrationSuccessful && executeDDL(createTableDDL(tableName))
         }
 
-        val propertiesColumns = processPropertiesForEntity(entity, tableName)
-
-        columns.addAll(propertiesColumns)
-        if (columns.isEmpty()) {
-
-            columnsDictionary!!.remove(tableName)
-
-        }
-
-        columnsDictionary!![tableName] = columns
+        processPropertiesForEntity(entity, tableName)
 
     }
 
@@ -242,10 +237,7 @@ class STMSQLIteSchema(private val database: SQLiteDatabase) {
         return isExist
     }
 
-    private fun processPropertiesForEntity(entity: STMEntityDescription, tableName: String): ArrayList<String> {
-
-        val columns = arrayListOf<String>()
-
+    private fun processPropertiesForEntity(entity: STMEntityDescription, tableName: String){
         var columnAttributes = modeler!!.fieldsForEntityName(entity.entityName).values
         columnAttributes = ArrayList(
                 columnAttributes.filter {
@@ -255,27 +247,17 @@ class STMSQLIteSchema(private val database: SQLiteDatabase) {
                 }
         )
 
-        val addedColumns = addColumns(columnAttributes, tableName)
-        columns.addAll(addedColumns)
+        addColumns(columnAttributes, tableName)
         val relationships = STMModelling.sharedModeler!!.objectRelationshipsForEntityName(entity.entityName).values
-        val addedRelationships = addRelationships(ArrayList(relationships), tableName)
-
-        columns.addAll(addedRelationships)
-
-        return columns
-
+        addRelationships(ArrayList(relationships), tableName)
     }
 
-    private fun addColumns(columnAttributes: ArrayList<STMAttributeDescription>, tableName: String): ArrayList<String> {
+    private fun addColumns(columnAttributes: ArrayList<STMAttributeDescription>, tableName: String) {
 
-        val columns = arrayListOf<String>()
         for (attribute in columnAttributes) {
 
-            columns.add((attribute.attributeName))
             migrationSuccessful = migrationSuccessful && executeDDL(addAttributeDDL(attribute, tableName))
         }
-
-        return columns
 
     }
 
@@ -296,9 +278,8 @@ class STMSQLIteSchema(private val database: SQLiteDatabase) {
 
     }
 
-    private fun addRelationships(relationships: ArrayList<STMRelationshipDescription>, tableName: String): ArrayList<String> {
+    private fun addRelationships(relationships: ArrayList<STMRelationshipDescription>, tableName: String){
 
-        val columns = arrayListOf<String>()
         for (relationship in relationships) {
 
             if (relationship.isToMany) {
@@ -311,12 +292,9 @@ class STMSQLIteSchema(private val database: SQLiteDatabase) {
 
             }
 
-            columns.add(relationship.relationshipName + STMConstants.RELATIONSHIP_SUFFIX)
             migrationSuccessful = migrationSuccessful && executeDDL(addRelationshipDDL(relationship, tableName))
 
         }
-
-        return columns
 
     }
 
@@ -352,7 +330,7 @@ class STMSQLIteSchema(private val database: SQLiteDatabase) {
 
     private fun createTriggerDDL(name: String, event: String, tableName: String, body: String, whenn: String?): String {
 
-        val _when = if (whenn != null) "WHEN " + whenn else ""
+        val _when = if (whenn != null) "WHEN $whenn" else ""
         val formats = arrayListOf(
                 "CREATE TRIGGER IF NOT EXISTS ${tableName}_$name",
                 "$event ON [$tableName] FOR EACH ROW $_when",
@@ -426,12 +404,6 @@ class STMSQLIteSchema(private val database: SQLiteDatabase) {
         STMFunctions.debugLog("STMSQLLiteSchema", "delete entity ${entity.entityName}")
         val tableName = STMFunctions.removePrefixFromEntityName(entity.entityName)
         val result = executeDDL(arrayListOf(dropTable(tableName)))
-
-        if (result) {
-
-            columnsDictionary!!.remove(tableName)
-
-        }
 
         migrationSuccessful = migrationSuccessful && result
 
