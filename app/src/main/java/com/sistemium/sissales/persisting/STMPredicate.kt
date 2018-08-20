@@ -148,9 +148,9 @@ class STMPredicate(var value: String) {
 
                 } else {
 
-                    if (key.endsWith(STMConstants.RELATIONSHIP_SUFFIX) && value.values.first() != null) {
+                    if (key.endsWith(STMConstants.RELATIONSHIP_SUFFIX) && value.values.first() != null && value.values.first() !is ArrayList<*>) {
 
-                        var xid = value.values.first() as String?
+                        val xid = value.values.first() as String?
 
                         val relationships = STMModelling.sharedModeler!!.objectRelationshipsForEntityName(STMFunctions.addPrefixToEntityName(entityName))
 
@@ -171,12 +171,6 @@ class STMPredicate(var value: String) {
                         } else {
 
                             continue
-
-                        }
-
-                        if (xid == null){
-
-                            xid = null
 
                         }
 
