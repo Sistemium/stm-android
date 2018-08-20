@@ -341,6 +341,8 @@ class WebAppInterface internal constructor(private var webViewActivity: WebViewA
 
         }
 
+        location.accuracy = Math.round(location.accuracy).toFloat()
+
         val data = mapParameters["data"] as Map<*, *>
 
         val atributes = HashMap(data)
