@@ -247,7 +247,7 @@ class STMSQLiteDatabaseTransaction(private var database: SQLiteDatabase, private
 
                 if (jsonColumns?.contains(key) == true) {
 
-                    values.add(STMFunctions.jsonStringFromObject(value!!))
+                    values.add(STMFunctions.jsonStringFromObject(value ?: hashMapOf<Any,Any>()))
 
                 } else {
 
@@ -363,6 +363,32 @@ class STMSQLiteDatabaseTransaction(private var database: SQLiteDatabase, private
                         dict[columnName] = data != 0
 
                         continue
+
+                    }
+
+                    if (attributeType == "Transformable") {
+
+                        val str = c.getString(index)
+
+                        if (str.startsWith("{")){
+
+                            val data = STMFunctions.gson.fromJson(c.getString(index), Map::class.java)
+
+                            dict[columnName] = data
+
+                            continue
+
+                        }
+
+                        if (str.startsWith("[")){
+
+                            val data = STMFunctions.gson.fromJson(c.getString(index), ArrayList::class.java)
+
+                            dict[columnName] = data
+
+                            continue
+
+                        }
 
                     }
 
