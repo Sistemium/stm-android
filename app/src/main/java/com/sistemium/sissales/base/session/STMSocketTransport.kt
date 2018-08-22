@@ -47,7 +47,7 @@ class STMSocketTransport(var socketUrlString: String, var entityResource: String
 
         val deferred = deferred<Map<*, *>, Exception>()
 
-        val resource = STMEntityController.sharedInstance.resourceForEntity(entityName)
+        val resource = STMEntityController.sharedInstance!!.resourceForEntity(entityName)
 
         val value = hashMapOf(
                 "method" to STMConstants.kSocketUpdateMethod,
@@ -85,7 +85,7 @@ class STMSocketTransport(var socketUrlString: String, var entityResource: String
 
         val deferred = deferred<Map<*, *>, Exception>()
 
-        val resource = STMEntityController.sharedInstance.resourceForEntity(entityName)
+        val resource = STMEntityController.sharedInstance!!.resourceForEntity(entityName)
 
         val value = if (identifier != null) {
 
@@ -235,7 +235,7 @@ class STMSocketTransport(var socketUrlString: String, var entityResource: String
 
     override fun closeSocket() {
 
-        STMLogger.sharedLogger.infoMessage("close Socket")
+        STMLogger.sharedLogger!!.infoMessage("close Socket")
         socket!!.off()
         socket!!.disconnect()
         owner.socketWillClosed()
@@ -261,7 +261,7 @@ class STMSocketTransport(var socketUrlString: String, var entityResource: String
 
     private fun startSocket() {
 
-        STMLogger.sharedLogger.infoMessage("STMSocketTransport")
+        STMLogger.sharedLogger!!.infoMessage("STMSocketTransport")
 
         val o = IO.Options()
 
@@ -283,7 +283,7 @@ class STMSocketTransport(var socketUrlString: String, var entityResource: String
 
         socket?.off()
 
-        STMLogger.sharedLogger.infoMessage("addEventObserversToSocket")
+        STMLogger.sharedLogger!!.infoMessage("addEventObserversToSocket")
 
         socket!!.on(STMSocketEvent.STMSocketEventConnect.toString()) {
 
@@ -366,15 +366,15 @@ class STMSocketTransport(var socketUrlString: String, var entityResource: String
                 "userId" to STMCoreAuthController.userID,
                 "accessToken" to STMCoreAuthController.accessToken,
                 "deviceUUID" to STMFunctions.deviceUUID(),
-                "bundleIdentifier" to STMConstants.userAgent.split("/").first(),
-                "appVersion" to STMConstants.userAgent.split("/").last()
+                "bundleIdentifier" to STMCoreAuthController.userAgent.split("/").first(),
+                "appVersion" to STMCoreAuthController.userAgent.split("/").last()
         )
 
         dataDic += authDic
 
         val logMessage = "send authorization data $dataDic"
 
-        STMLogger.sharedLogger.infoMessage(logMessage)
+        STMLogger.sharedLogger!!.infoMessage(logMessage)
 
         val eventNum = STMSocketEvent.STMSocketEventAuthorization
 
@@ -398,7 +398,7 @@ class STMSocketTransport(var socketUrlString: String, var entityResource: String
 
         var logMessage = "receiveAuthorizationAckWithData ${data.firstOrNull()}"
 
-        STMLogger.sharedLogger.infoMessage(logMessage)
+        STMLogger.sharedLogger!!.infoMessage(logMessage)
 
         val dataDic = data.firstOrNull() as? JSONObject
                 ?: return notAuthorizedWithError("socket receiveAuthorizationAck with data.firstOrNull() is not a JSONObject")
@@ -421,7 +421,7 @@ class STMSocketTransport(var socketUrlString: String, var entityResource: String
 
         logMessage = "socket authorized"
 
-        STMLogger.sharedLogger.infoMessage(logMessage)
+        STMLogger.sharedLogger!!.infoMessage(logMessage)
 
         owner.socketReceiveAuthorization()
 
@@ -455,7 +455,7 @@ class STMSocketTransport(var socketUrlString: String, var entityResource: String
 
     private fun socketLostConnection(infoString: String) {
 
-        STMLogger.sharedLogger.infoMessage("Socket lost connection: $infoString")
+        STMLogger.sharedLogger!!.infoMessage("Socket lost connection: $infoString")
 
         owner.socketWillClosed()
 

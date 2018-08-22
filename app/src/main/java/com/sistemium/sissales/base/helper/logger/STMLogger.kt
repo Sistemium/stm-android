@@ -11,12 +11,26 @@ import java.util.*
  */
 class STMLogger private constructor() {
 
-    private object Holder {
-        val INSTANCE = STMLogger()
-    }
-
     companion object {
-        val sharedLogger: STMLogger by lazy { Holder.INSTANCE }
+        private var INSTANCE:STMLogger? = null
+
+        var sharedLogger: STMLogger?
+            get() {
+
+                if (INSTANCE == null){
+
+                    INSTANCE = STMLogger()
+
+                }
+
+                return INSTANCE!!
+
+            }
+            set(value) {
+
+                INSTANCE = value
+
+            }
     }
 
     var session: STMSession? = null

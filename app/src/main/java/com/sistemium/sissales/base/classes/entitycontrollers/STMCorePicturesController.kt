@@ -5,13 +5,27 @@ package com.sistemium.sissales.base.classes.entitycontrollers
  */
 class STMCorePicturesController {
 
-    private object Holder {
-        val INSTANCE = STMCorePicturesController()
-    }
-
     companion object {
 
-        val sharedInstance: STMCorePicturesController by lazy { Holder.INSTANCE }
+        private var INSTANCE:STMCorePicturesController? = null
+
+        var sharedInstance: STMCorePicturesController?
+            get() {
+
+                if (INSTANCE == null){
+
+                    INSTANCE = STMCorePicturesController()
+
+                }
+
+                return INSTANCE!!
+
+            }
+            set(value) {
+
+                INSTANCE = value
+
+            }
 
     }
 

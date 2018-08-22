@@ -17,13 +17,13 @@ class STMClientEntityController {
 
             val predicate = STMPredicate("name = '$name'")
 
-            val result = STMSession.sharedSession.persistenceDelegate.findAllSync("STMClientEntity", predicate, null)
+            val result = STMSession.sharedSession!!.persistenceDelegate.findAllSync("STMClientEntity", predicate, null)
 
             if (result.count() > 1) {
 
                 val logMessage = "more than one clientEntity with name $name"
 
-                STMSession.sharedSession.logger!!.errorMessage(logMessage)
+                STMSession.sharedSession!!.logger!!.errorMessage(logMessage)
 
             }
 
@@ -31,7 +31,7 @@ class STMClientEntityController {
 
             if (clientEntity == null) {
 
-                val eTag = STMEntityController.sharedInstance.entityWithName(name)?.get("eTag")
+                val eTag = STMEntityController.sharedInstance!!.entityWithName(name)?.get("eTag")
 
                 clientEntity = hashMapOf(
                         "name" to name,
@@ -49,7 +49,7 @@ class STMClientEntityController {
 
             clientEntity["eTag"] = eTag
 
-            STMSession.sharedSession.persistenceDelegate.mergeSync("STMClientEntity", clientEntity, null)
+            STMSession.sharedSession!!.persistenceDelegate.mergeSync("STMClientEntity", clientEntity, null)
 
         }
     }

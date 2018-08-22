@@ -13,13 +13,27 @@ import com.sistemium.sissales.persisting.STMPredicate
  */
 class STMEntityController private constructor() {
 
-    private object Holder {
-        val INSTANCE = STMEntityController()
-    }
-
     companion object {
 
-        val sharedInstance: STMEntityController by lazy { Holder.INSTANCE }
+        private var INSTANCE:STMEntityController? = null
+
+        var sharedInstance: STMEntityController?
+            get() {
+
+                if (INSTANCE == null){
+
+                    INSTANCE = STMEntityController()
+
+                }
+
+                return INSTANCE!!
+
+            }
+            set(value) {
+
+                INSTANCE = value
+
+            }
 
         private var downloadableEntityReady = false
 
@@ -29,11 +43,11 @@ class STMEntityController private constructor() {
 
                 var result = true
 
-                val persisting = sharedInstance.persistenceDelegate ?: return false
+                val persisting = sharedInstance!!.persistenceDelegate ?: return false
 
                 val clientEntities = persisting.findAllSync("ClientEntity", null, null)
 
-                val downloadableEntityNames = sharedInstance.downloadableEntityNames()
+                val downloadableEntityNames = sharedInstance!!.downloadableEntityNames()
 
                 val downloaded = arrayListOf<String>()
 
@@ -65,7 +79,7 @@ class STMEntityController private constructor() {
 
             val predicate = STMPredicate("lifeTime > 0")
 
-            return sharedInstance.persistenceDelegate?.findAllSync(STMConstants.STM_ENTITY_NAME, predicate, null)
+            return sharedInstance!!.persistenceDelegate?.findAllSync(STMConstants.STM_ENTITY_NAME, predicate, null)
 
         }
 
@@ -197,7 +211,7 @@ class STMEntityController private constructor() {
 
             val message = "Entity $it have ${duplicates.size} duplicates"
 
-            STMLogger.sharedLogger.errorMessage(message)
+            STMLogger.sharedLogger!!.errorMessage(message)
 
             val newStcEntitiesArray = ArrayList(entitiesArray)
 
@@ -212,7 +226,7 @@ class STMEntityController private constructor() {
 
         if (totalDuplicates == 0) {
 
-            STMLogger.sharedLogger.infoMessage("stc.entity duplicates not found")
+            STMLogger.sharedLogger!!.infoMessage("stc.entity duplicates not found")
 
         }
 

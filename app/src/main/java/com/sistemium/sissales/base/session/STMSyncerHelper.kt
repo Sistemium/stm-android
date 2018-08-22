@@ -42,9 +42,9 @@ class STMSyncerHelper : STMDefantomizing, STMDataDownloading {
         if (_entitiesNames == null) {
 
             val names = hashSetOf(STM_ENTITY_NAME)
-            names.addAll(STMEntityController.sharedInstance.downloadableEntityNames())
+            names.addAll(STMEntityController.sharedInstance!!.downloadableEntityNames())
 
-            if (STMEntityController.sharedInstance.entityWithName("STMSetting") != null) {
+            if (STMEntityController.sharedInstance!!.entityWithName("STMSetting") != null) {
 
                 names.add("STMSetting")
 
@@ -126,7 +126,7 @@ class STMSyncerHelper : STMDefantomizing, STMDataDownloading {
 
         }
 
-        STMSession.sharedSession.persistenceDelegate.mergeMany(entityName, dataRecieved, hashMapOf(STMPersistingOptionLts to STMFunctions.stringFrom(Date())))
+        STMSession.sharedSession!!.persistenceDelegate.mergeMany(entityName, dataRecieved, hashMapOf(STMPersistingOptionLts to STMFunctions.stringFrom(Date())))
                 .then {
 
                     findAllResultMergedWithSuccess(dataRecieved, entityName, offset!!, pageSize!!)
@@ -155,9 +155,9 @@ class STMSyncerHelper : STMDefantomizing, STMDataDownloading {
 
         this.defantomizing = defantomizing
 
-        for (entityName in STMEntityController.sharedInstance.entityNamesWithResolveFantoms()) {
+        for (entityName in STMEntityController.sharedInstance!!.entityNamesWithResolveFantoms()) {
 
-            val entity = STMEntityController.sharedInstance.stcEntities!![entityName]
+            val entity = STMEntityController.sharedInstance!!.stcEntities!![entityName]
 
             if (entity?.get("url") == null) {
 
@@ -245,7 +245,7 @@ class STMSyncerHelper : STMDefantomizing, STMDataDownloading {
 
         if (errorMessage != null) {
 
-            STMLogger.sharedLogger.errorMessage(errorMessage)
+            STMLogger.sharedLogger!!.errorMessage(errorMessage)
 
         }
 

@@ -17,7 +17,7 @@ class STMSyncerHelperDefantomizing {
 
     fun addDefantomizationOfEntityName(entityName: String, identifier: String) {
 
-        val op = STMDefantomizingOperation(entityName, identifier, STMSession.sharedSession.syncer!!)
+        val op = STMDefantomizingOperation(entityName, identifier, STMSession.sharedSession!!.syncer!!)
 
         try {
 

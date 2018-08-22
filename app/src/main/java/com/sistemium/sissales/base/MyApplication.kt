@@ -25,7 +25,7 @@ class MyApplication : Application(), Application.ActivityLifecycleCallbacks, Com
         var syncer: STMSyncer? = null
             get() {
 
-                return STMSession.sharedSession.syncer
+                return STMSession.sharedSession!!.syncer
 
             }
 
@@ -41,7 +41,7 @@ class MyApplication : Application(), Application.ActivityLifecycleCallbacks, Com
 
                     val logMessage = "application did enter background"
 
-                    STMLogger.sharedLogger.infoMessage(logMessage)
+                    STMLogger.sharedLogger!!.infoMessage(logMessage)
 
                     syncer?.sendEventViaSocket(STMSocketEvent.STMSocketEventStatusChange, logMessage)
 
@@ -54,7 +54,7 @@ class MyApplication : Application(), Application.ActivityLifecycleCallbacks, Com
 
                     val logMessage = "application will enter foreground"
 
-                    STMLogger.sharedLogger.infoMessage(logMessage)
+                    STMLogger.sharedLogger!!.infoMessage(logMessage)
 
                     syncer?.sendEventViaSocket(STMSocketEvent.STMSocketEventStatusChange, logMessage)
 

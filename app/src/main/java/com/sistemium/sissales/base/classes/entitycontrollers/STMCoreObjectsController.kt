@@ -20,7 +20,7 @@ class STMCoreObjectsController {
 
             val session = STMSession.sharedSession
 
-            val syncer = session.syncer ?: return
+            val syncer = session!!.syncer ?: return
 
             val startFlushing = Date()
 
@@ -103,7 +103,7 @@ class STMCoreObjectsController {
 
                 val predicate = STMPredicate.combinePredicates(subpredicates)
 
-                val deletedCount = session.persistenceDelegate.destroyAllSync(entityName, predicate, options)
+                val deletedCount = session!!.persistenceDelegate.destroyAllSync(entityName, predicate, options)
 
                 STMFunctions.debugLog("STMCoreObjectsController","Flushed $deletedCount of $entityName")
 

@@ -22,14 +22,15 @@ import nl.komponents.kovenant.then
 import java.io.File
 import java.util.*
 import android.text.format.DateUtils
-
+import com.sistemium.sissales.base.classes.entitycontrollers.STMCorePicturesController
+import com.sistemium.sissales.base.classes.entitycontrollers.STMEntityController
+import com.sistemium.sissales.interfaces.STMModelling
 
 
 /**
  * Created by edgarjanvuicik on 05/02/2018.
  */
 
-//TODO cache vars with private vars?
 class STMCoreAuthController {
 
     companion object {
@@ -270,8 +271,8 @@ class STMCoreAuthController {
 
         fun logout(){
 
-            STMSession.sharedSession.syncer?.prepareToDestroy()
-            STMLogger.sharedLogger.saveLogMessageWithText("logout", STMLogMessageType.STMLogMessageTypeImportant)
+            STMSession.sharedSession!!.syncer?.prepareToDestroy()
+            STMLogger.sharedLogger!!.saveLogMessageWithText("logout", STMLogMessageType.STMLogMessageTypeImportant)
 
             userID = null
             accessToken = null
@@ -284,6 +285,11 @@ class STMCoreAuthController {
             requestID = null
             accountOrg = null
             rolesResponse = null
+            STMSession.sharedSession = null
+            STMModelling.sharedModeler = null
+            STMEntityController.sharedInstance= null
+            STMCorePicturesController.sharedInstance = null
+
 
             STMFunctions.deleteRecursive(File(MyApplication.appContext!!.cacheDir
                     .absolutePath))
@@ -331,7 +337,7 @@ class STMCoreAuthController {
 
             return task {
 
-                FuelManager.instance.baseHeaders = mapOf("user-agent" to STMConstants.userAgent, "DeviceUUID" to STMFunctions.deviceUUID())
+                FuelManager.instance.baseHeaders = mapOf("user-agent" to userAgent, "DeviceUUID" to STMFunctions.deviceUUID())
 
                 val (_, _, result) = Fuel.get("https://api.sistemium.com/pha/auth", listOf("ID" to id, "smsCode" to smsCode)).responseJson()
 
@@ -407,13 +413,13 @@ class STMCoreAuthController {
             STMFunctions.debugLog("STMCoreAuthController", "socketURL $socketURL")
             STMFunctions.debugLog("STMCoreAuthController", "entity resource $entityResource")
 
-            STMSession.sharedSession.setupSyncer()
+            STMSession.sharedSession!!.setupSyncer()
 
         }
 
         private fun requestRoles(): Promise<Map<*, *>, Exception> {
 
-            FuelManager.instance.baseHeaders = mapOf("user-agent" to STMConstants.userAgent, "DeviceUUID" to STMFunctions.deviceUUID(), "Authorization" to accessToken!!)
+            FuelManager.instance.baseHeaders = mapOf("user-agent" to userAgent, "DeviceUUID" to STMFunctions.deviceUUID(), "Authorization" to accessToken!!)
 
             if (rolesResponse != null) {
 

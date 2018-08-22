@@ -77,10 +77,10 @@ class STMSyncer : STMDefantomizingOwner, STMDataDownloadingOwner, STMDataSyncing
 
         initTimer()
 
-        val downloadableEntityNames = STMEntityController.sharedInstance.downloadableEntityNames()
+        val downloadableEntityNames = STMEntityController.sharedInstance!!.downloadableEntityNames()
         val downloadableEntityResources = downloadableEntityNames.map {
 
-            STMEntityController.sharedInstance.resourceForEntity(it)
+            STMEntityController.sharedInstance!!.resourceForEntity(it)
 
         }
 
@@ -162,9 +162,9 @@ class STMSyncer : STMDefantomizingOwner, STMDataDownloadingOwner, STMDataSyncing
 
         STMFunctions.debugLog("STMSyncer", "dataDownloadingFinished")
 
-        STMCorePicturesController.sharedInstance.checkNotUploadedPhotos()
+        STMCorePicturesController.sharedInstance!!.checkNotUploadedPhotos()
 
-        STMLogger.sharedLogger.infoMessage("dataDownloadingFinished")
+        STMLogger.sharedLogger!!.infoMessage("dataDownloadingFinished")
 
         startDefantomization()
 
@@ -256,7 +256,7 @@ class STMSyncer : STMDefantomizingOwner, STMDataDownloadingOwner, STMDataSyncing
 
         }
 
-        STMEntityController.sharedInstance.checkEntitiesForDuplicates()
+        STMEntityController.sharedInstance!!.checkEntitiesForDuplicates()
 
         STMClientDataController.checkClientData()
 
@@ -276,9 +276,9 @@ class STMSyncer : STMDefantomizingOwner, STMDataDownloadingOwner, STMDataSyncing
 
     private fun checkStcEntities(): Boolean {
 
-        STMEntityController.sharedInstance.persistenceDelegate = session?.persistenceDelegate
+        STMEntityController.sharedInstance!!.persistenceDelegate = session?.persistenceDelegate
 
-        val stcEntities = STMEntityController.sharedInstance.stcEntities
+        val stcEntities = STMEntityController.sharedInstance!!.stcEntities
 
         val entity = stcEntities?.get("STMEntity")
 
@@ -367,7 +367,7 @@ class STMSyncer : STMDefantomizingOwner, STMDataDownloadingOwner, STMDataSyncing
 
         if (!isRunning) return
 
-        STMLogger.sharedLogger.infoMessage("STMSyncer")
+        STMLogger.sharedLogger!!.infoMessage("STMSyncer")
 
         if (dataDownloadingDelegate!!.downloadingQueue != null) {
 

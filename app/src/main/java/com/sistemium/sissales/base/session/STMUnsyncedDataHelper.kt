@@ -76,7 +76,7 @@ class STMUnsyncedDataHelper : STMDataSyncing {
         if (entityName == "STMLogMessage") {
 
             val uploadLogType = session?.settingsController?.stringValueForSettings("uploadLog.type", "syncer")
-            val logMessageSyncTypes = STMLogger.sharedLogger.syncingTypesForSettingType(uploadLogType).map {
+            val logMessageSyncTypes = STMLogger.sharedLogger!!.syncingTypesForSettingType(uploadLogType).map {
 
                 return@map STMPredicate("'$it'")
 
@@ -142,7 +142,7 @@ class STMUnsyncedDataHelper : STMDataSyncing {
 
     private fun anyObjectToSend(): Map<*, *>? {
 
-        for (entityName in STMEntityController.sharedInstance.uploadableEntitiesNames!!) {
+        for (entityName in STMEntityController.sharedInstance!!.uploadableEntitiesNames!!) {
 
             val anyObjectToSend = findSyncableObjectWithEntityName(entityName)
 
@@ -232,7 +232,7 @@ class STMUnsyncedDataHelper : STMDataSyncing {
 
                     sentImportantErrors.add(errorMessage)
 
-                    STMLogger.sharedLogger.importantMessage(errorMessage)
+                    STMLogger.sharedLogger!!.importantMessage(errorMessage)
 
                 }
 
@@ -313,9 +313,9 @@ class STMUnsyncedDataHelper : STMDataSyncing {
 
         initPrivateData()
 
-        STMEntityController.sharedInstance.persistenceDelegate = session!!.persistenceDelegate
+        STMEntityController.sharedInstance!!.persistenceDelegate = session!!.persistenceDelegate
 
-        for (entityName in STMEntityController.sharedInstance.uploadableEntitiesNames!!) {
+        for (entityName in STMEntityController.sharedInstance!!.uploadableEntitiesNames!!) {
 
             val onlyLocalChanges = hashMapOf(STMPersistingOptionLts to false)
 

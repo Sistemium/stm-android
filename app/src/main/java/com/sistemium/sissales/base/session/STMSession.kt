@@ -20,12 +20,27 @@ import com.sistemium.sissales.persisting.STMPersistingInterceptorUniqueProperty
  */
 class STMSession {
 
-    private object Holder {
-        val INSTANCE = STMSession()
-    }
-
     companion object {
-        val sharedSession: STMSession by lazy { Holder.INSTANCE }
+
+        private var INSTANCE:STMSession? = null
+
+        var sharedSession: STMSession?
+            get() {
+
+                if (INSTANCE == null){
+
+                    INSTANCE = STMSession()
+
+                }
+
+                return INSTANCE!!
+
+            }
+            set(value) {
+
+                INSTANCE = value
+
+            }
     }
 
     var uid: String = STMCoreAuthController.userID!!
@@ -88,7 +103,7 @@ class STMSession {
 
         val unsyncedHelper = STMUnsyncedDataHelper()
         unsyncedHelper.session = this
-        STMEntityController.sharedInstance.owner = syncer
+        STMEntityController.sharedInstance!!.owner = syncer
         unsyncedHelper.subscriberDelegate = syncer
         syncer.dataSyncingDelegate = unsyncedHelper
         syncer.session = this

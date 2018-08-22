@@ -35,7 +35,7 @@ class WebAppInterface internal constructor(private var webViewActivity: WebViewA
 
     private var unsyncedInfoJSFunction:String? = null
 
-    private var persistenceDelegate: STMFullStackPersisting = STMSession.sharedSession.persistenceDelegate
+    private var persistenceDelegate: STMFullStackPersisting = STMSession.sharedSession!!.persistenceDelegate
 
     @JavascriptInterface
     fun errorCatcher(parameters: String?) {
