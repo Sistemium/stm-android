@@ -38,7 +38,7 @@ class STMClientDataController {
 
         private var bundleIdentifier:String = ""
             get() {
-                return STMConstants.BUNDLE_DISPLAY_NAME
+                return STMCoreAuthController.configuration
             }
 
         private var appVersion:String = ""

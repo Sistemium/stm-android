@@ -71,6 +71,32 @@ class STMCoreAuthController {
 
             }
 
+        var configuration:String = ""
+            get() {
+
+                if ((rolesResponse?.get("roles") as? Map<*,*>)?.keys?.contains("salesman") == true){
+
+                    return "SisSales"
+
+                }
+
+                if ((rolesResponse?.get("roles") as? Map<*,*>)?.keys?.contains("driver") == true){
+
+                    return "SisDriver"
+
+                }
+
+                return ""
+
+            }
+
+        var userAgent:String = ""
+            get() {
+
+                return "i$configuration/${STMConstants.model}"
+
+            }
+
         var stcTabs: ArrayList<*>?
             get() {
 
@@ -235,7 +261,12 @@ class STMCoreAuthController {
 
             }
 
-        val dataModelName = STMConstants.dataModelName
+        var dataModelName: String = ""
+            get() {
+
+                return STMCoreAuthController.configuration
+
+            }
 
         fun logout(){
 

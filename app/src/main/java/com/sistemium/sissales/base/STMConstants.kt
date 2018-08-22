@@ -8,7 +8,6 @@ class STMConstants {
 
     companion object {
 
-        private const val configuration = "SisSales"
         const val model = 367
         const val ISISTEMIUM_PREFIX = "STM"
         const val DEFAULT_PERSISTING_PRIMARY_KEY = "id"
@@ -50,12 +49,9 @@ class STMConstants {
         const val SQLiteBeforeInsert = "BEFORE INSERT"
         const val SQLiteDefaultNow = "DEFAULT(STRFTIME('%Y-%m-%d %H:%M:%f', 'NOW'))"
         const val fetchLimit = 500
-        const val userAgent = "i$configuration/$model"
         const val NOTIFICATION_SYNCER_HAVE_UNSYNCED_OBJECTS = "haveUnsyncedObjects"
         const val NOTIFICATION_SYNCER_HAVE_NO_UNSYNCED_OBJECTS = "haveNoUnsyncedObjects"
         const val NOTIFICATION_SYNCER_SENDIG_DATA = "syncerIsSendingData"
-        const val BUNDLE_DISPLAY_NAME = configuration
-        const val dataModelName = configuration
 
     }
 
