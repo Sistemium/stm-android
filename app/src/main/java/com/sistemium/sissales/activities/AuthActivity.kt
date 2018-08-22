@@ -60,7 +60,7 @@ class AuthActivity : AppCompatActivity() {
         phoneNumberEdit.setText(mobileNumber)
         phoneNumberEdit.setSelection(phoneNumberEdit.text.length)
 
-        val listener = View.OnKeyListener({ _, keyCode, event ->
+        val listener = View.OnKeyListener { _, keyCode, event ->
 
             if (keyCode == KeyEvent.KEYCODE_ENTER && event.action != KeyEvent.ACTION_UP) {
 
@@ -71,7 +71,7 @@ class AuthActivity : AppCompatActivity() {
             }
 
             false
-        })
+        }
 
         phoneNumberEdit.setOnKeyListener(listener)
 

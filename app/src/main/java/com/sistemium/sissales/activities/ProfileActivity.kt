@@ -1,7 +1,6 @@
 package com.sistemium.sissales.activities
 
 import android.Manifest
-import android.annotation.TargetApi
 import android.app.AlertDialog
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -111,7 +110,7 @@ class ProfileActivity : AppCompatActivity() {
 
             var url = currentTab!!["url"] as? String
 
-            var manifest = currentTab!!["appManifestURI"] as? String
+            val manifest = currentTab!!["appManifestURI"] as? String
 
             if (url == null && manifest != null){
 
@@ -119,11 +118,8 @@ class ProfileActivity : AppCompatActivity() {
 
             }
 
-            //debug
-            url = url?.replace("http://lamac.local:3000", "http://10.0.1.5:3000")
-            manifest = "$url/app.manifest"
-
-            intent.putExtra("manifest", manifest)
+//            //debug
+//            url = url?.replace("http://lamac.local:3000", "http://10.0.1.5:3000")
 
             intent.putExtra("url", url)
             startActivity(intent)
