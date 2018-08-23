@@ -148,6 +148,14 @@ class WebViewActivity : Activity() {
 
             this.goBack()
 
+        } else {
+
+            webView?.evaluateJavascript("window.history.back()"){
+
+                STMFunctions.debugLog("DEBUG", "Evaluate finish")
+
+            }
+
         }
 
     }
