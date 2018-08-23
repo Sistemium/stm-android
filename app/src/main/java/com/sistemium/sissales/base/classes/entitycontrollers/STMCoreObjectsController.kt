@@ -103,7 +103,7 @@ class STMCoreObjectsController {
 
                 val predicate = STMPredicate.combinePredicates(subpredicates)
 
-                val deletedCount = session!!.persistenceDelegate.destroyAllSync(entityName, predicate, options)
+                val deletedCount = session.persistenceDelegate.destroyAllSync(entityName, predicate, options)
 
                 STMFunctions.debugLog("STMCoreObjectsController","Flushed $deletedCount of $entityName")
 
