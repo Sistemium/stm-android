@@ -25,7 +25,7 @@ class MyApplication : Application(), Application.ActivityLifecycleCallbacks, Com
         var syncer: STMSyncer? = null
             get() {
 
-                return STMSession.sharedSession!!.syncer
+                return STMSession.sharedSession?.syncer
 
             }
 

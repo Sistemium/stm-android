@@ -29,11 +29,11 @@ class STMSession {
 
                 if (INSTANCE == null){
 
-                    INSTANCE = STMSession()
+                    INSTANCE = try {STMSession()} catch (e:Exception) { null }
 
                 }
 
-                return INSTANCE!!
+                return INSTANCE
 
             }
             set(value) {

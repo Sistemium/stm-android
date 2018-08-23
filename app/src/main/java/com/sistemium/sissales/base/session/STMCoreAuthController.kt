@@ -285,6 +285,7 @@ class STMCoreAuthController {
             requestID = null
             accountOrg = null
             rolesResponse = null
+            lastAuth = null
             STMSession.sharedSession = null
             STMModelling.sharedModeler = null
             STMEntityController.sharedInstance= null

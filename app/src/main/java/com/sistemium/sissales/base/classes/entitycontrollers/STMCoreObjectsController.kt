@@ -20,7 +20,7 @@ class STMCoreObjectsController {
 
             val session = STMSession.sharedSession
 
-            val syncer = session!!.syncer ?: return
+            val syncer = session?.syncer ?: return
 
             val startFlushing = Date()
 
