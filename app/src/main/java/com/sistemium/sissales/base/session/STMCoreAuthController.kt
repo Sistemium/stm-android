@@ -25,6 +25,10 @@ import android.text.format.DateUtils
 import com.sistemium.sissales.base.classes.entitycontrollers.STMCorePicturesController
 import com.sistemium.sissales.base.classes.entitycontrollers.STMEntityController
 import com.sistemium.sissales.interfaces.STMModelling
+import android.content.pm.PackageManager
+import android.content.ComponentName
+
+
 
 
 /**
@@ -70,6 +74,30 @@ class STMCoreAuthController {
 
                 prefStore?.edit()?.putString("rolesResponse", rolesResponseJSON)?.apply()
 
+                if ((value?.get("roles") as? Map<*,*>)?.keys?.contains("salesman") == true){
+
+                    MyApplication.appContext?.packageManager?.setComponentEnabledSetting(
+                            ComponentName("com.sistemium.sissales", "com.sistemium.sissales.sales"),
+                            PackageManager.COMPONENT_ENABLED_STATE_ENABLED, PackageManager.DONT_KILL_APP)
+
+                    MyApplication.appContext?.packageManager?.setComponentEnabledSetting(
+                            ComponentName("com.sistemium.sissales", "com.sistemium.sissales.driver"),
+                            PackageManager.COMPONENT_ENABLED_STATE_DISABLED, PackageManager.DONT_KILL_APP)
+
+                }
+
+                if ((value?.get("roles") as? Map<*,*>)?.keys?.contains("driver") == true){
+
+                    MyApplication.appContext?.packageManager?.setComponentEnabledSetting(
+                            ComponentName("com.sistemium.sissales", "com.sistemium.sissales.driver"),
+                            PackageManager.COMPONENT_ENABLED_STATE_ENABLED, PackageManager.DONT_KILL_APP)
+
+                    MyApplication.appContext?.packageManager?.setComponentEnabledSetting(
+                            ComponentName("com.sistemium.sissales", "com.sistemium.sissales.sales"),
+                            PackageManager.COMPONENT_ENABLED_STATE_DISABLED, PackageManager.DONT_KILL_APP)
+
+                }
+
             }
 
         var configuration:String = ""
@@ -77,11 +105,27 @@ class STMCoreAuthController {
 
                 if ((rolesResponse?.get("roles") as? Map<*,*>)?.keys?.contains("salesman") == true){
 
+                    MyApplication.appContext?.packageManager?.setComponentEnabledSetting(
+                            ComponentName("com.sistemium.sissales", "com.sistemium.sissales.sales"),
+                            PackageManager.COMPONENT_ENABLED_STATE_ENABLED, PackageManager.DONT_KILL_APP)
+
+                    MyApplication.appContext?.packageManager?.setComponentEnabledSetting(
+                            ComponentName("com.sistemium.sissales", "com.sistemium.sissales.driver"),
+                            PackageManager.COMPONENT_ENABLED_STATE_DISABLED, PackageManager.DONT_KILL_APP)
+
                     return "SisSales"
 
                 }
 
                 if ((rolesResponse?.get("roles") as? Map<*,*>)?.keys?.contains("driver") == true){
+
+                    MyApplication.appContext?.packageManager?.setComponentEnabledSetting(
+                            ComponentName("com.sistemium.sissales", "com.sistemium.sissales.driver"),
+                            PackageManager.COMPONENT_ENABLED_STATE_ENABLED, PackageManager.DONT_KILL_APP)
+
+                    MyApplication.appContext?.packageManager?.setComponentEnabledSetting(
+                            ComponentName("com.sistemium.sissales", "com.sistemium.sissales.sales"),
+                            PackageManager.COMPONENT_ENABLED_STATE_DISABLED, PackageManager.DONT_KILL_APP)
 
                     return "SisDriver"
 
