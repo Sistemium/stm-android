@@ -25,7 +25,7 @@ android {
         applicationId "com.sistemium.sissales"
         minSdkVersion 21
         targetSdkVersion 27
-        versionCode 376
+        versionCode 377
         versionName "1.0.10"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
