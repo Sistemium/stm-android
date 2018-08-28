@@ -76,25 +76,10 @@ class STMCoreAuthController {
 
                 if ((value?.get("roles") as? Map<*,*>)?.keys?.contains("salesman") == true){
 
-                    MyApplication.appContext?.packageManager?.setComponentEnabledSetting(
-                            ComponentName("com.sistemium.sissales", "com.sistemium.sissales.sales"),
-                            PackageManager.COMPONENT_ENABLED_STATE_ENABLED, PackageManager.DONT_KILL_APP)
-
-//                    MyApplication.appContext?.packageManager?.setComponentEnabledSetting(
-//                            ComponentName("com.sistemium.sissales", "com.sistemium.sissales.driver"),
-//                            PackageManager.COMPONENT_ENABLED_STATE_DISABLED, PackageManager.DONT_KILL_APP)
-
                 }
 
                 if ((value?.get("roles") as? Map<*,*>)?.keys?.contains("driver") == true){
 
-                    MyApplication.appContext?.packageManager?.setComponentEnabledSetting(
-                            ComponentName("com.sistemium.sissales", "com.sistemium.sissales.driver"),
-                            PackageManager.COMPONENT_ENABLED_STATE_ENABLED, PackageManager.DONT_KILL_APP)
-
-//                    MyApplication.appContext?.packageManager?.setComponentEnabledSetting(
-//                            ComponentName("com.sistemium.sissales", "com.sistemium.sissales.sales"),
-//                            PackageManager.COMPONENT_ENABLED_STATE_DISABLED, PackageManager.DONT_KILL_APP)
 
                 }
 

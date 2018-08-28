@@ -10,6 +10,7 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="com.android.launcher.permission.INSTALL_SHORTCUT"/>
     <uses-feature android:name="android.hardware.location.gps" />
 
 
@@ -19,6 +20,8 @@
         android:fullBackupContent="@xml/backup_descriptor"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
+        android:icon="@mipmap/ic_launcher"
+        android:roundIcon="@mipmap/ic_launcher_round"
         tools:ignore="GoogleAppIndexingWarning">
         <activity
             android:name=".activities.WebViewActivity"
@@ -29,6 +32,7 @@
             android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="stateVisible">
             <intent-filter>
+                 <action android:name="android.intent.action.MAIN"/>
                  <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -51,30 +55,6 @@
             android:name="io.fabric.ApiKey"
             android:value="035bda92bd5b13402aaf2c6cb5f66b8ff23f2166"
             />
-        <activity-alias
-            android:label="@string/app_name"
-            android:icon="@mipmap/ic_launcher"
-            android:roundIcon="@mipmap/ic_launcher_round"
-            android:name=".sales"
-            android:enabled="true"
-            android:targetActivity=".activities.AuthActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity-alias>
-        <activity-alias
-            android:label="@string/app_name"
-            android:icon="@mipmap/ic_launcher2"
-            android:roundIcon="@mipmap/ic_launcher2_round"
-            android:name=".driver"
-            android:enabled="false"
-            android:targetActivity=".activities.AuthActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity-alias>
     </application>
 
 </manifest>
