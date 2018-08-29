@@ -92,6 +92,14 @@ class WebViewActivity : Activity() {
                 return true
 
             }
+
+            override fun onConsoleMessage(consoleMessage: ConsoleMessage?): Boolean {
+                if (consoleMessage!!.message().startsWith("Uncaught Error")){
+                    err = consoleMessage.message()
+                }
+                return super.onConsoleMessage(consoleMessage)
+            }
+
         }
 
         val url = intent.getStringExtra("url")
@@ -119,17 +127,6 @@ class WebViewActivity : Activity() {
 
                     override fun shouldOverrideUrlLoading(view: WebView?, request: WebResourceRequest?): Boolean {
                         return false
-                    }
-
-                }
-
-                webView?.webChromeClient = object : WebChromeClient() {
-
-                    override fun onConsoleMessage(consoleMessage: ConsoleMessage?): Boolean {
-                        if (consoleMessage!!.message().startsWith("Uncaught Error")){
-                            err = consoleMessage.message()
-                        }
-                        return super.onConsoleMessage(consoleMessage)
                     }
 
                 }
