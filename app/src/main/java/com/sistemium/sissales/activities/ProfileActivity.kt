@@ -119,7 +119,7 @@ class ProfileActivity : AppCompatActivity() {
             }
 
 //            //debug
-//            url = url?.replace("http://lamac.local:3000", "http://10.0.1.5:3000")
+            url = url?.replace("http://lamac.local:3000", "http://10.0.1.5:3000")
 
             intent.putExtra("url", url)
             startActivity(intent)
