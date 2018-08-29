@@ -33,10 +33,7 @@
                                   </option>
                                   <option name="values">
                                     <map>
-                                      <entry key="backgroundLayerName" value="ic_launcher_background" />
-                                      <entry key="foregroundImage" value="$PROJECT_DIR$/app/src/main/res/drawable/drawable_truck76.png" />
-                                      <entry key="foregroundLayerName" value="ic_launcher_foreground" />
-                                      <entry key="outputName" value="ic_launcher2" />
+                                      <entry key="foregroundImage" value="$PROJECT_DIR$/app/src/main/res/drawable/drawable_3colors.png" />
                                     </map>
                                   </option>
                                 </PersistentState>
