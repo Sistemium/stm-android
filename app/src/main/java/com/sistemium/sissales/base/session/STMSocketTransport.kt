@@ -287,11 +287,15 @@ class STMSocketTransport(var socketUrlString: String, var entityResource: String
 
         socket!!.on(STMSocketEvent.STMSocketEventConnect.toString()) {
 
+            STMFunctions.debugLog("SOCKET", "STMSocketEventConnect")
+
             emitAuthorization()
 
         }
 
         socket!!.on(STMSocketEvent.STMSocketEventDisconnect.toString()) {
+
+            STMFunctions.debugLog("SOCKET", "STMSocketEventDisconnect")
 
             owner.socketWillClosed()
 
@@ -299,11 +303,15 @@ class STMSocketTransport(var socketUrlString: String, var entityResource: String
 
         socket!!.on(STMSocketEvent.STMSocketEventError.toString()) {
 
+            STMFunctions.debugLog("SOCKET", "STMSocketEventError")
+
             reconnectSocket()
 
         }
 
         socket!!.on(STMSocketEvent.STMSocketEventReconnect.toString()) {
+
+            STMFunctions.debugLog("SOCKET", "STMSocketEventReconnect")
 
             reconnectSocket()
 
@@ -327,11 +335,15 @@ class STMSocketTransport(var socketUrlString: String, var entityResource: String
 
         socket!!.on(STMSocketEvent.STMSocketEventUpdate.toString()) {
 
+            STMFunctions.debugLog("SOCKET", "STMSocketEventUpdate")
+
             updateEventHandleWithData(it)
 
         }
 
         socket!!.on(STMSocketEvent.STMSocketEventUpdateCollection.toString()) {
+
+            STMFunctions.debugLog("SOCKET", "STMSocketEventUpdateCollection")
 
             updateEventHandleWithData(it)
 
@@ -339,13 +351,95 @@ class STMSocketTransport(var socketUrlString: String, var entityResource: String
 
         socket!!.on(STMSocketEvent.STMSocketEventDestroy.toString()) {
 
+            STMFunctions.debugLog("SOCKET", "STMSocketEventDestroy")
+
             destroyEventHandleWithData(it)
 
         }
 
         socket!!.on(Socket.EVENT_CONNECT_ERROR){
 
+            STMFunctions.debugLog("SOCKET", "EVENT_CONNECT_ERROR")
+
             owner.socketWillClosed()
+
+        }
+
+        socket!!.on(Socket.EVENT_CONNECT_TIMEOUT){
+
+            STMFunctions.debugLog("SOCKET", "EVENT_CONNECT_TIMEOUT")
+
+        }
+
+        socket!!.on(Socket.EVENT_DISCONNECT){
+
+            STMFunctions.debugLog("SOCKET", "EVENT_DISCONNECT")
+
+        }
+
+        socket!!.on(Socket.EVENT_CONNECTING){
+
+            STMFunctions.debugLog("SOCKET", "EVENT_CONNECTING")
+
+        }
+
+        socket!!.on(Socket.EVENT_ERROR){
+
+            STMFunctions.debugLog("SOCKET", "EVENT_ERROR")
+
+        }
+
+        socket!!.on(Socket.EVENT_MESSAGE){
+
+            STMFunctions.debugLog("SOCKET", "EVENT_MESSAGE")
+
+        }
+
+        socket!!.on(Socket.EVENT_PING){
+
+            STMFunctions.debugLog("SOCKET", "EVENT_PING")
+
+        }
+
+        socket!!.on(Socket.EVENT_PONG){
+
+            STMFunctions.debugLog("SOCKET", "EVENT_PONG")
+
+        }
+
+        socket!!.on(Socket.EVENT_RECONNECT){
+
+            STMFunctions.debugLog("SOCKET", "EVENT_RECONNECT")
+
+        }
+
+        socket!!.on(Socket.EVENT_RECONNECTING){
+
+            STMFunctions.debugLog("SOCKET", "EVENT_RECONNECTING")
+
+        }
+
+        socket!!.on(Socket.EVENT_RECONNECT_ATTEMPT){
+
+            STMFunctions.debugLog("SOCKET", "EVENT_RECONNECT_ATTEMPT ${it.first()}")
+
+            if ((it.first() as Int) % 10 == 0){
+
+                STMLogger.sharedLogger?.importantMessage("EVENT_RECONNECT_ATTEMPT ${it.first()}")
+
+            }
+
+        }
+
+        socket!!.on(Socket.EVENT_RECONNECT_ERROR){
+
+            STMFunctions.debugLog("SOCKET", "EVENT_RECONNECT_ERROR")
+
+        }
+
+        socket!!.on(Socket.EVENT_RECONNECT_FAILED){
+
+            STMFunctions.debugLog("SOCKET", "EVENT_RECONNECT_FAILED")
 
         }
 
