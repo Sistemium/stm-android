@@ -10,12 +10,10 @@ import com.sistemium.sissales.webInterface.WebAppInterface
 import com.sistemium.sissales.base.STMFunctions
 import nl.komponents.kovenant.task
 import android.content.Intent
-import android.os.Environment
-import android.provider.MediaStore
-import java.io.File
-import java.io.IOException
-import java.text.SimpleDateFormat
-import java.util.*
+import com.sistemium.sissales.base.classes.entitycontrollers.STMCorePhotosController
+import com.sistemium.sissales.base.helper.logger.STMLogger
+import com.sistemium.sissales.base.session.STMSession
+import nl.komponents.kovenant.then
 
 
 @SuppressLint("SetJavaScriptEnabled")
@@ -28,11 +26,9 @@ class WebViewActivity : Activity() {
     }
 
     var webView: WebView? = null
-
+    var filePath:String? = null
+    var photoMapParameters:Map<*,*>? = null
     private var mUMA:ValueCallback<Array<Uri>>? = null
-    private var mCM: String? = null
-    private val FCR = 1
-
     private var err:String?  = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -44,6 +40,11 @@ class WebViewActivity : Activity() {
         webView?.settings?.javaScriptEnabled = true
 
         webView?.settings?.domStorageEnabled = true
+
+        webView?.settings?.allowFileAccess = true
+        webView?.settings?.allowContentAccess = true
+        webView?.settings?.allowUniversalAccessFromFileURLs = true
+        webView?.settings?.allowFileAccessFromFileURLs = true
 
         webInterface = WebAppInterface(this)
 
@@ -57,37 +58,8 @@ class WebViewActivity : Activity() {
                     mUMA!!.onReceiveValue(null)
                 }
                 mUMA = filePathCallback
-                var takePictureIntent: Intent? = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-                if (takePictureIntent!!.resolveActivity(this@WebViewActivity.packageManager) != null) {
-                    var photoFile: File? = null
-                    try {
-                        photoFile = createImageFile()
-                        takePictureIntent.putExtra("PhotoPath", mCM)
-                    } catch (ex: IOException) {
-                        STMFunctions.debugLog("WebViewActivity", "Image file creation failed")
-                    }
 
-                    if (photoFile != null) {
-                        mCM = "file:" + photoFile.absolutePath
-                        takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(photoFile))
-                    } else {
-                        takePictureIntent = null
-                    }
-                }
-                val contentSelectionIntent = Intent(Intent.ACTION_GET_CONTENT)
-                contentSelectionIntent.addCategory(Intent.CATEGORY_OPENABLE)
-                contentSelectionIntent.type = "*/*"
-                val intentArray: Array<Intent?>
-                intentArray = if (takePictureIntent != null) {
-                    arrayOf(takePictureIntent)
-                } else {
-                    arrayOfNulls(0)
-                }
-                val chooserIntent = Intent(Intent.ACTION_CHOOSER)
-                chooserIntent.putExtra(Intent.EXTRA_INTENT, contentSelectionIntent)
-                chooserIntent.putExtra(Intent.EXTRA_TITLE, "Image Chooser")
-                chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, intentArray)
-                startActivityForResult(chooserIntent, FCR)
+                filePath = STMCorePhotosController.sharedInstance!!.selectImage(this@WebViewActivity)
 
                 return true
 
@@ -159,24 +131,58 @@ class WebViewActivity : Activity() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
 
+        var nativePath = ""
+
         var results: Array<Uri>? = null
         if (resultCode === Activity.RESULT_OK) {
-            if (requestCode === FCR) {
-                if (null == mUMA) {
+            if (requestCode === 1) {
+                if (null == mUMA && photoMapParameters == null) {
                     return
                 }
                 if (data == null || data.data == null) {
-                    if (mCM != null) {
-                        results = arrayOf(Uri.parse(mCM))
+                    if (filePath != null) {
+                        results = arrayOf(Uri.parse("file:$filePath"))
+                        nativePath = filePath.toString()
                     }
                 } else {
                     val dataString = data.dataString
                     if (dataString != null) {
-                        results = arrayOf(Uri.parse(dataString))
+                        results = arrayOf(Uri.parse("file:$dataString"))
+                        nativePath = dataString
                     }
                 }
             }
         }
+
+        if (photoMapParameters != null) {
+
+            val photoEntityName = photoMapParameters!!["entityName"] as String
+
+            val attributes = HashMap(STMCorePhotosController.sharedInstance!!.newPhotoObject(photoEntityName, nativePath))
+
+            val photoData = photoMapParameters!!["data"] as Map<*,*>
+
+            attributes.putAll(photoData)
+
+            STMSession.sharedSession!!.persistenceDelegate.merge(photoEntityName, attributes.toMap(), null).then {
+
+                val callback = photoMapParameters!!["callback"] as String
+                webInterface!!.javascriptCallback(arrayListOf(it), photoMapParameters, callback)
+
+                STMCorePhotosController.sharedInstance!!.uploadPhotoEntityName(photoEntityName, attributes, nativePath)
+
+            }.fail {
+
+                STMLogger.sharedLogger!!.importantMessage(it.localizedMessage)
+
+                webInterface!!.javascriptCallback(it, photoMapParameters)
+
+            }
+
+            return
+
+        }
+
         mUMA?.onReceiveValue(results)
         mUMA = null
 
@@ -192,14 +198,6 @@ class WebViewActivity : Activity() {
 
         }
 
-    }
-
-    @Throws(IOException::class)
-    private fun createImageFile(): File {
-        @SuppressLint("SimpleDateFormat") val timeStamp = SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())
-        val imageFileName = "img_" + timeStamp + "_"
-        val storageDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)
-        return File.createTempFile(imageFileName, ".jpg", storageDir)
     }
 
 }

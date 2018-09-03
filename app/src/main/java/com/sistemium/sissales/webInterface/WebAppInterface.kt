@@ -1,6 +1,8 @@
 package com.sistemium.sissales.webInterface
 
+import android.app.Activity
 import android.content.Context
+import android.content.Intent
 import android.location.LocationManager
 import android.webkit.JavascriptInterface
 import com.sistemium.sissales.activities.WebViewActivity
@@ -17,8 +19,11 @@ import android.location.Criteria
 import android.location.Location
 import android.os.Bundle
 import android.location.LocationListener
+import android.net.Uri
 import com.sistemium.sissales.R
+import com.sistemium.sissales.base.classes.entitycontrollers.STMCorePhotosController
 import com.sistemium.sissales.base.session.STMSession
+import com.sistemium.sissales.webInterface.STMWebAppInterfaceSubscription
 
 import java.util.*
 
@@ -392,11 +397,9 @@ class WebAppInterface internal constructor(private var webViewActivity: WebViewA
 
         val mapParameters = gson.fromJson(parameters, Map::class.java)
 
-        // TODO implement saveImage
+        webViewActivity.photoMapParameters = mapParameters
 
-        val callback = mapParameters["callback"]
-
-        return javascriptCallback(arrayOf(mapOf<Any, Any>()), mapParameters, callback as String)
+        webViewActivity.filePath = STMCorePhotosController.sharedInstance!!.selectImage(webViewActivity)
 
     }
 
@@ -689,7 +692,7 @@ class WebAppInterface internal constructor(private var webViewActivity: WebViewA
 
     // callbacks
 
-    private fun javascriptCallback(data: Any, parameters: Map<*, *>?, jsCallbackFunction: String) {
+    fun javascriptCallback(data: Any, parameters: Map<*, *>?, jsCallbackFunction: String) {
 
         val arguments = mutableListOf<Any>()
 
@@ -718,10 +721,10 @@ class WebAppInterface internal constructor(private var webViewActivity: WebViewA
 
     }
 
-    private fun javascriptCallback(data: Any, parameters: Map<*, *>?) =
+    fun javascriptCallback(data: Any, parameters: Map<*, *>?) =
             javascriptCallback(data, parameters, this.javascriptCallback)
 
-    private fun javascriptCallback(error: String, parameters: Map<*, *>?) {
+    fun javascriptCallback(error: String, parameters: Map<*, *>?) {
 
         val arguments = mutableListOf<Any>()
 
