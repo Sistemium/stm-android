@@ -59,7 +59,6 @@ class STMCorePicturesController {
 
         val xid = picture[STMConstants.DEFAULT_PERSISTING_PRIMARY_KEY] as String
         val fileName = "$xid.jpg"
-        val result = true
 
         STMFunctions.debugLog("STMCorePicturesController", "saveResized: $fileName")
 
@@ -67,11 +66,11 @@ class STMCorePicturesController {
 
         val mutablePicture = HashMap(picture)
 
-        mutablePicture["resizedImagePath"] = resizedPath
-
         STMFunctions.debugLog("STMCorePicturesController", "saveThumbnail: $fileName")
 
         val thumbnailPath = saveThumbnailImageFile("thumbnail_$fileName", file, entityName)
+
+        mutablePicture["resizedImagePath"] = resizedPath
 
         mutablePicture["thumbnailPath"] = thumbnailPath
 

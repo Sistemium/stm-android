@@ -10,6 +10,7 @@ interface STMFiling {
     fun persistencePath(folderName: String): String
     fun bundledModelJSON(modelName: String): String
     fun saveImage(bitmap:Bitmap, folderName:String, fileName:String):String
+    fun webPath(title:String): String
     fun removeOrgDirectory()
 
 }

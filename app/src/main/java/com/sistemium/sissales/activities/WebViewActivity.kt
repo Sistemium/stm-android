@@ -2,6 +2,7 @@ package com.sistemium.sissales.activities
 
 import android.annotation.SuppressLint
 import android.app.Activity
+import android.content.Context
 import android.net.Uri
 import android.os.Bundle
 import android.webkit.*
@@ -10,10 +11,15 @@ import com.sistemium.sissales.webInterface.WebAppInterface
 import com.sistemium.sissales.base.STMFunctions
 import nl.komponents.kovenant.task
 import android.content.Intent
+import com.github.kittinunf.fuel.Fuel
+import com.github.kittinunf.fuel.android.extension.responseJson
+import com.sistemium.sissales.base.MyApplication
 import com.sistemium.sissales.base.classes.entitycontrollers.STMCorePhotosController
 import com.sistemium.sissales.base.helper.logger.STMLogger
 import com.sistemium.sissales.base.session.STMSession
+import nl.komponents.kovenant.Promise
 import nl.komponents.kovenant.then
+import java.io.File
 
 
 @SuppressLint("SetJavaScriptEnabled")
@@ -75,6 +81,8 @@ class WebViewActivity : Activity() {
         }
 
         val url = intent.getStringExtra("url")
+        val manifest = intent.getStringExtra("manifest")
+        val title = intent.getStringExtra("title")
 
         task {
 
@@ -103,8 +111,20 @@ class WebViewActivity : Activity() {
 
                 }
 
-                webView?.loadUrl(url)
+                loadFromManifest(manifest, title, url).success {
 
+                    runOnUiThread{
+
+                        webView?.loadUrl("file:///$it")
+
+                    }
+
+                }fail {
+
+                    val test = ""
+
+                }
+                
             }
 
         }
@@ -197,6 +217,92 @@ class WebViewActivity : Activity() {
             super.onBackPressed()
 
         }
+
+    }
+
+    private fun filePathsToLoadFromAppManifest(manifest:String):List<String>{
+
+        return manifest.split("\n").map {
+
+            return@map it.filter{
+
+                if (it == ' '){
+
+                    return@filter false
+
+                }
+
+                return@filter true
+
+            }
+
+        }.filter {
+
+            if (it == "" || it.startsWith("#") || it == "favicon.ico" || it == "robots.txt"
+                    || it == "CACHEMANIFEST"|| it == "CACHE:"|| it == "NETWORK:"|| it == "*"){
+
+                return@filter false
+
+            }
+
+            return@filter true
+
+        }
+
+    }
+
+    fun loadFromManifest(manifest:String, title:String, url:String): Promise<String, Exception> {
+
+        return task {
+
+            val webPath = STMSession.sharedSession!!.filing.webPath(title)
+
+            val (_, response, result) = Fuel.get(manifest).responseJson()
+
+            val etag = response.headers["ETag"]?.first()
+
+            val prefStore = MyApplication.appContext?.getSharedPreferences("Sistemium", Context.MODE_PRIVATE)
+
+            val savedTag = prefStore?.getString("${title}ETag", null)
+
+            if (etag != savedTag && etag != null){
+
+                prefStore?.edit()?.putString("${title}ETag", etag)?.apply()
+
+                STMFunctions.debugLog("STMCoreAuthController","update available")
+
+                val filePaths = filePathsToLoadFromAppManifest(result.get().content)
+
+                for (file in filePaths){
+
+                    Fuel.download("$url/$file").destination { _, _ ->
+
+                        File.createTempFile("temp", ".tmp")
+
+                     }.response { req, res, result ->
+
+                        val path = "$webPath/$file"
+
+                        File(path.removeSuffix("/" + path.split("/").last())).mkdirs()
+
+                        if (result.component1()!!.isNotEmpty()){
+
+                            File("$webPath/$file").writeBytes(result.component1()!!)
+
+                        }
+
+                    }
+
+                }
+
+            }
+
+
+
+            return@task "$webPath/index.html"
+
+        }
+
 
     }
 

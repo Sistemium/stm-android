@@ -26,6 +26,7 @@ class STMCoreSessionFiler(org: String, uid: String, var context:Context? = MyApp
     private val userDocuments = "$userOrg/$uid"
     private val persistenceBasePath = userDocuments + "/" + STMConstants.PERSISTENCE_PATH
     private val picturePath = "$userOrg/pictures"
+    private val webPath = "$userOrg/Web/byName"
 
     override fun bundledModelJSON(modelName: String): String {
 
@@ -54,6 +55,16 @@ class STMCoreSessionFiler(org: String, uid: String, var context:Context? = MyApp
 
     }
 
+    override fun webPath(title:String): String {
+
+        val path = "$webPath/$title/localHTML"
+
+        File(path).mkdirs()
+
+        return path
+
+    }
+
     override fun saveImage(bitmap: Bitmap, folderName: String, fileName:String):String {
 
         val folder = File(picturePath, folderName)
@@ -69,7 +80,7 @@ class STMCoreSessionFiler(org: String, uid: String, var context:Context? = MyApp
         fOut.close()
         MediaStore.Images.Media.insertImage(context!!.contentResolver, file.absolutePath, file.name, file.name)
 
-        return file.absolutePath
+        return "$folderName/$fileName"
 
     }
 

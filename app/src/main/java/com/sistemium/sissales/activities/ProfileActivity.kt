@@ -14,6 +14,7 @@ import android.widget.*
 import com.sistemium.sissales.R
 import com.sistemium.sissales.activityController.ProfileActivityController
 import com.sistemium.sissales.base.session.STMCoreAuthController
+import com.sistemium.sissales.base.session.STMSession
 import kotlinx.android.synthetic.main.activity_profile.*
 
 class ProfileActivity : AppCompatActivity() {
@@ -110,7 +111,7 @@ class ProfileActivity : AppCompatActivity() {
 
             var url = currentTab!!["url"] as? String
 
-            val manifest = currentTab!!["appManifestURI"] as? String
+            var manifest = currentTab!!["appManifestURI"] as? String
 
             if (url == null && manifest != null){
 
@@ -119,9 +120,15 @@ class ProfileActivity : AppCompatActivity() {
             }
 
 //            //debug
-            url = url?.replace("http://lamac.local:3000", "http://10.0.1.5:3000")
+//            url = url?.replace("http://lamac.local:3000", "http://10.0.1.5:3000")
+//            if (manifest == null){
+//                manifest = "$url/app.manifest"
+//            }
+//            //debug
 
             intent.putExtra("url", url)
+            intent.putExtra("manifest", manifest)
+            intent.putExtra("title", currentTab!!["title"] as String)
             startActivity(intent)
             profileAdapter.notifyDataSetChanged()
 
