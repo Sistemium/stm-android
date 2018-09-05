@@ -88,15 +88,6 @@ class WebViewActivity : Activity() {
 
             runOnUiThread {
 
-                webView?.settings!!.cacheMode = WebSettings.LOAD_CACHE_ELSE_NETWORK
-
-                val appCachePath = applicationContext.cacheDir
-                        .absolutePath
-
-                webView?.settings?.setAppCachePath(appCachePath)
-                webView?.settings?.allowFileAccess = true
-                webView?.settings?.setAppCacheEnabled(true)
-
 
                 webView?.webViewClient = object : WebViewClient() {
 
@@ -124,7 +115,7 @@ class WebViewActivity : Activity() {
                     val test = ""
 
                 }
-                
+
             }
 
         }
@@ -275,29 +266,31 @@ class WebViewActivity : Activity() {
 
                 for (file in filePaths){
 
-                    Fuel.download("$url/$file").destination { _, _ ->
+                    val (_,_, res) =  Fuel.download("$url/$file").destination { _, _ ->
 
                         File.createTempFile("temp", ".tmp")
 
-                     }.response { req, res, result ->
+                    }.response()
 
-                        val path = "$webPath/$file"
+                    val path = "$webPath/$file"
 
-                        File(path.removeSuffix("/" + path.split("/").last())).mkdirs()
+                    File(path.removeSuffix("/" + path.split("/").last())).mkdirs()
 
-                        if (result.component1()!!.isNotEmpty()){
+                    if (res.component1()!!.isNotEmpty()){
 
-                            File("$webPath/$file").writeBytes(result.component1()!!)
+                        STMFunctions.debugLog("WebViewActivity","finished downloading $file saved to $webPath/$file")
 
-                        }
+                        File("$webPath/$file").writeBytes(res.component1()!!)
+
+                    }else{
+
+                        STMFunctions.debugLog("WebViewActivity","did not received any bytes of file $file")
 
                     }
 
                 }
 
             }
-
-
 
             return@task "$webPath/index.html"
 
