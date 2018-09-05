@@ -22,6 +22,7 @@ import android.location.LocationListener
 import android.net.Uri
 import com.sistemium.sissales.R
 import com.sistemium.sissales.base.classes.entitycontrollers.STMCorePhotosController
+import com.sistemium.sissales.base.classes.entitycontrollers.STMCorePicturesController
 import com.sistemium.sissales.base.session.STMSession
 import com.sistemium.sissales.webInterface.STMWebAppInterfaceSubscription
 
@@ -436,11 +437,19 @@ class WebAppInterface internal constructor(private var webViewActivity: WebViewA
 
         val mapParameters = gson.fromJson(parameters, Map::class.java)
 
-        // TODO implement loadImageForPrimaryKey
+        val identifier = mapParameters["imageID"] as String
 
         val callback = mapParameters["callback"]
 
-        return javascriptCallback("", mapParameters, callback as String)
+        STMCorePicturesController.sharedInstance?.loadImageForPrimaryKey(identifier)?.then {
+
+            javascriptCallback(arrayListOf(it), mapParameters, callback as String)
+
+        }?.fail {
+
+            javascriptCallback("$it", mapParameters)
+
+        }
 
     }
 

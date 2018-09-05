@@ -1,5 +1,6 @@
 package com.sistemium.sissales.base.classes.entitycontrollers
 
+import android.R.attr.*
 import com.sistemium.sissales.base.STMConstants
 import com.sistemium.sissales.base.STMFunctions
 import java.io.File
@@ -8,15 +9,19 @@ import android.graphics.BitmapFactory
 import android.os.Environment
 import android.os.Environment.DIRECTORY_DCIM
 import android.os.Environment.getExternalStoragePublicDirectory
-import android.R.attr.y
-import android.R.attr.x
 import android.content.Context.WINDOW_SERVICE
 import android.graphics.Point
 import android.view.Display
 import android.view.WindowManager
 import com.sistemium.sissales.base.MyApplication
 import android.provider.MediaStore
+import android.service.carrier.CarrierIdentifier
+import com.sistemium.sissales.base.helper.logger.STMLogger
 import com.sistemium.sissales.base.session.STMSession
+import com.sistemium.sissales.interfaces.STMModelling
+import com.sistemium.sissales.persisting.STMPredicate
+import nl.komponents.kovenant.Promise
+import nl.komponents.kovenant.task
 import java.io.OutputStream
 
 
@@ -89,9 +94,68 @@ class STMCorePicturesController {
 
     }
 
+    fun loadImageForPrimaryKey(identifier:String): Promise<Map<*, *>, Exception>{
+
+        val predicate = STMPredicate("${STMConstants.DEFAULT_PERSISTING_PRIMARY_KEY} = '$identifier'")
+
+        val picture = allPicturesWithPredicate(predicate).firstOrNull()
+
+        if (picture == null){
+
+            STMLogger.sharedLogger!!.errorMessage("Picture not found id = $identifier")
+
+            throw Exception("Picture not found")
+
+        }
+
+        val attributes = picture["attributes"] as Map<*,*>
+        val entityName = picture["entityName"] as String
+
+        return downloadImagesEntityName(entityName, attributes)
+
+    }
+
     fun uploadImageEntityName(photoEntityName:String, attributes:Map<*,*>, image:String){
 
+        //TODO
 
+    }
+
+    private fun downloadImagesEntityName(entityName:String, attributes:Map<*,*>): Promise<Map<*, *>, Exception> {
+
+        //TODO
+
+        return task {
+
+            return@task attributes
+
+        }
+
+    }
+
+    private fun allPicturesWithPredicate(predicate:STMPredicate):ArrayList<Map<*,*>>{
+
+        val result = arrayListOf<Map<*,*>>()
+
+        for (entityName in pictureEntitiesNames()){
+
+            val objects = STMSession.sharedSession!!.persistenceDelegate.findAllSync(entityName, predicate, null)
+
+            result.addAll(objects.map {
+
+                return@map hashMapOf("entityName" to entityName, "attributes" to it)
+
+            })
+
+        }
+
+        return result
+
+    }
+
+    private fun pictureEntitiesNames():Set<String>{
+
+        return STMModelling.sharedModeler!!.hierarchyForEntityName("STMCorePicture")
 
     }
 
