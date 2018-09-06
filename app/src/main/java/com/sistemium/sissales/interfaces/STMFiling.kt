@@ -11,6 +11,7 @@ interface STMFiling {
     fun bundledModelJSON(modelName: String): String
     fun saveImage(bitmap:Bitmap, folderName:String, fileName:String):String
     fun webPath(title:String): String
+    fun tempWebPath(title:String): String
     fun removeOrgDirectory()
 
 }

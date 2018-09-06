@@ -102,17 +102,43 @@ class WebViewActivity : Activity() {
 
                 }
 
-                loadFromManifest(manifest, title, url).success {
+                val webPath = STMSession.sharedSession!!.filing.webPath(title)+"/index.html"
 
-                    runOnUiThread{
+                val webFolder = File(webPath)
 
-                        webView?.loadUrl("file:///$it")
+                var needLoad = false
+
+                if (webFolder.exists()){
+
+                    webView?.loadUrl("file:///$webPath")
+
+                } else {
+
+                    needLoad = true
+
+                }
+
+                loadFromManifest(manifest, title, url) success {
+
+                    val oldFolder = File(STMSession.sharedSession!!.filing.webPath(title))
+
+                    STMFunctions.deleteRecursive(oldFolder)
+
+                    File(it).renameTo(oldFolder)
+
+                    if (needLoad){
+
+                        runOnUiThread{
+
+                            webView?.loadUrl("file:///$webPath")
+
+                        }
 
                     }
 
-                }fail {
+                } fail {
 
-                    val test = ""
+                    STMFunctions.debugLog("WebViewActivity",it.localizedMessage)
 
                 }
 
@@ -246,7 +272,7 @@ class WebViewActivity : Activity() {
 
         return task {
 
-            val webPath = STMSession.sharedSession!!.filing.webPath(title)
+            val webPath = STMSession.sharedSession!!.filing.tempWebPath(title)
 
             val (_, response, result) = Fuel.get(manifest).responseJson()
 
@@ -257,8 +283,6 @@ class WebViewActivity : Activity() {
             val savedTag = prefStore?.getString("${title}ETag", null)
 
             if (etag != savedTag && etag != null){
-
-                prefStore?.edit()?.putString("${title}ETag", etag)?.apply()
 
                 STMFunctions.debugLog("STMCoreAuthController","update available")
 
@@ -290,9 +314,13 @@ class WebViewActivity : Activity() {
 
                 }
 
+                prefStore?.edit()?.putString("${title}ETag", etag)?.apply()
+
+                return@task webPath
+
             }
 
-            return@task "$webPath/index.html"
+            throw Exception("no update")
 
         }
 

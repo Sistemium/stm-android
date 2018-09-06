@@ -65,6 +65,16 @@ class STMCoreSessionFiler(org: String, uid: String, var context:Context? = MyApp
 
     }
 
+    override fun tempWebPath(title:String): String {
+
+        val path = "$webPath/$title/tempHTML"
+
+        File(path).mkdirs()
+
+        return path
+
+    }
+
     override fun saveImage(bitmap: Bitmap, folderName: String, fileName:String):String {
 
         val folder = File(picturePath, folderName)
