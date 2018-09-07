@@ -203,6 +203,16 @@ class WebViewActivity : Activity() {
 
         if (photoMapParameters != null) {
 
+            val photoMapParameters = this.photoMapParameters
+
+            this.photoMapParameters = null
+
+            if (nativePath.isEmpty()){
+
+                return webInterface!!.javascriptCallback("canceled", photoMapParameters)
+
+            }
+
             val photoEntityName = photoMapParameters!!["entityName"] as String
 
             val attributes = HashMap(STMCorePhotosController.sharedInstance!!.newPhotoObject(photoEntityName, nativePath))
