@@ -22,6 +22,7 @@ import com.github.kittinunf.fuel.core.Blob
 import com.github.kittinunf.fuel.core.DataPart
 import com.github.kittinunf.fuel.core.FuelManager
 import com.sistemium.sissales.base.helper.logger.STMLogger
+import com.sistemium.sissales.base.session.STMCoreAuthController
 import com.sistemium.sissales.base.session.STMSession
 import com.sistemium.sissales.interfaces.STMModelling
 import com.sistemium.sissales.persisting.STMPredicate
@@ -124,6 +125,78 @@ class STMCorePicturesController {
     }
 
     fun uploadImageEntityName(photoEntityName:String, attributes:Map<*,*>, image:Bitmap){
+
+        val appSettings = STMSession.sharedSession!!.settingsController!!.currentSettingsForGroup("appSettings")
+        val url = (appSettings!!["IMS.url"] as String) + "?folder="
+
+        val (year, month, day) = STMFunctions.stringFrom(Date()).split(" ").first().split("-")
+
+        val imsURL = "$url$photoEntityName%2F$year%2F$month%2F$day"
+
+        Fuel.upload(imsURL).header(mapOf("Authorization" to STMCoreAuthController.accessToken!!))
+
+                .dataParts { _, _ ->
+                    val f = File.createTempFile("temp", ".tmp")
+
+                    val fOut = FileOutputStream(f)
+
+                    image.compress(Bitmap.CompressFormat.PNG, 100, fOut)
+                    fOut.flush()
+                    fOut.close()
+                    listOf(
+                            DataPart(f, "image", "image/png")
+                    )
+                }
+
+                .responseString { request, response, result ->
+
+                    if (response.statusCode != 200){
+
+                        STMFunctions.debugLog("STMCorePicturesController Error", response.responseMessage)
+
+                        return@responseString
+                    }
+
+                    val dictionary = STMFunctions.gson.fromJson(result.component1(), Map::class.java)
+
+                    val picturesDicts = dictionary["pictures"] as ArrayList<*>
+
+                    val picture = HashMap<String,Any?>()
+
+                    for (dict in picturesDicts){
+
+                        if ((dict as Map<*,*>)["name"] == "original"){
+
+                            picture["href"] = dict["src"]
+
+                        }
+
+                    }
+
+                    picture["picturesInfo"] = picturesDicts
+
+                    val imagePath = attributes["imagePath"]
+
+                    picture["imagePath"] = attributes["resizedImagePath"]
+
+                    picture[STMConstants.DEFAULT_PERSISTING_PRIMARY_KEY] = attributes[STMConstants.DEFAULT_PERSISTING_PRIMARY_KEY]
+
+                    STMSession.sharedSession!!.persistenceDelegate.merge(photoEntityName, picture, hashMapOf(STMConstants.STMPersistingOptionReturnSaved to false)) success {
+
+                        removeImageFile(imagePath as String, photoEntityName)
+
+                    } fail {
+
+                        STMLogger.sharedLogger!!.importantMessage("Error on update after upload: ${it.localizedMessage}")
+
+                    }
+
+
+        }
+
+    }
+
+    private fun removeImageFile(filePath:String, entityName:String){
 
         //TODO
 
