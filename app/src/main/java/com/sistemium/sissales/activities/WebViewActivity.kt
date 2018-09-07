@@ -11,6 +11,8 @@ import com.sistemium.sissales.webInterface.WebAppInterface
 import com.sistemium.sissales.base.STMFunctions
 import nl.komponents.kovenant.task
 import android.content.Intent
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import com.github.kittinunf.fuel.Fuel
 import com.github.kittinunf.fuel.android.extension.responseJson
 import com.sistemium.sissales.base.MyApplication
@@ -140,6 +142,13 @@ class WebViewActivity : Activity() {
 
                     STMFunctions.debugLog("WebViewActivity",it.localizedMessage)
 
+                    if (needLoad){
+
+                        err = it.localizedMessage
+
+                    }
+
+
                 }
 
             }
@@ -190,6 +199,7 @@ class WebViewActivity : Activity() {
                 }
             }
         }
+
 
         if (photoMapParameters != null) {
 
