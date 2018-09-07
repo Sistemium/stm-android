@@ -351,9 +351,9 @@ class STMCoreAuthController {
 
             return task {
 
-                FuelManager.instance.baseHeaders = mapOf("user-agent" to userAgent, "DeviceUUID" to STMFunctions.deviceUUID())
-
-                val (_, _, result) = Fuel.get("https://api.sistemium.com/pha/auth", listOf("ID" to id, "smsCode" to smsCode)).responseJson()
+                val (_, _, result) = Fuel.get("https://api.sistemium.com/pha/auth", listOf("ID" to id, "smsCode" to smsCode))
+                        .header(mapOf("user-agent" to userAgent, "DeviceUUID" to STMFunctions.deviceUUID()))
+                        .responseJson()
 
                 when (result) {
                     is Result.Success -> {
@@ -433,8 +433,6 @@ class STMCoreAuthController {
 
         private fun requestRoles(): Promise<Map<*, *>, Exception> {
 
-            FuelManager.instance.baseHeaders = mapOf("user-agent" to userAgent, "DeviceUUID" to STMFunctions.deviceUUID(), "Authorization" to accessToken!!)
-
             if (rolesResponse != null) {
 
                 return task {
@@ -449,7 +447,9 @@ class STMCoreAuthController {
 
             return task {
 
-                val (_, _, result) = Fuel.get("https://api.sistemium.com/pha/roles", listOf("access_token" to accessToken)).responseJson()
+                val (_, _, result) = Fuel.get("https://api.sistemium.com/pha/roles", listOf("access_token" to accessToken))
+                        .header(mapOf("user-agent" to userAgent, "DeviceUUID" to STMFunctions.deviceUUID(), "Authorization" to accessToken!!))
+                        .responseJson()
 
                 when (result) {
                     is Result.Success -> {
