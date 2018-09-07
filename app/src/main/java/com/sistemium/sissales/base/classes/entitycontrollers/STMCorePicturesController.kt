@@ -204,13 +204,60 @@ class STMCorePicturesController {
 
     private fun downloadImagesEntityName(entityName:String, attributes:Map<*,*>): Promise<Map<*, *>, Exception> {
 
-        //TODO
-
         return task {
 
-            return@task attributes
+            val href = attributes["href"] as? String
+
+            if (href == null || !pictureEntitiesNames().contains(entityName)) {
+
+                throw Exception("no href or not a Picture")
+
+            }
+
+            if (attributes["imagePath"] != null){
+
+                didProcessHref(href)
+
+                return@task attributes
+
+            }
+
+            val (_,_, res) =  Fuel.download(href).destination { _, _ ->
+
+                File.createTempFile("temp", ".tmp")
+
+            }.response()
+
+            didProcessHref(href)
+
+            if (res.component1()?.isEmpty() == true){
+
+                throw Error("failed download image $href")
+
+            }
+
+            val bitmap = BitmapFactory.decodeByteArray(res.component1()!!, 0, res.component1()!!.size)
+
+            val pictureWithPaths = setImagesFromData(bitmap, attributes, entityName)
+
+            val attributesToUpdate = hashMapOf(
+                    "imagePath" to pictureWithPaths["imagePath"],
+                    "resizedImagePath" to pictureWithPaths["resizedImagePath"],
+                    "thumbnailPath" to pictureWithPaths["thumbnailPath"],
+                    STMConstants.DEFAULT_PERSISTING_PRIMARY_KEY to pictureWithPaths[STMConstants.DEFAULT_PERSISTING_PRIMARY_KEY]
+            )
+
+            return@task STMSession.sharedSession!!.persistenceDelegate.mergeSync(entityName, attributesToUpdate, null)!!
 
         }
+
+    }
+
+    private fun didProcessHref(href:String){
+
+        //TODO
+//        hrefDictionaryRemove(href)
+//        downloadNextPicture()
 
     }
 
