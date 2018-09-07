@@ -215,7 +215,18 @@ class WebViewActivity : Activity() {
 
             val photoEntityName = photoMapParameters!!["entityName"] as String
 
-            val attributes = HashMap(STMCorePhotosController.sharedInstance!!.newPhotoObject(photoEntityName, nativePath))
+            val file:Bitmap? = if (nativePath.startsWith("content:/")){
+
+                BitmapFactory.decodeStream(MyApplication.appContext!!.contentResolver.openInputStream(Uri.parse(nativePath)))
+
+            } else {
+
+                BitmapFactory.decodeFile(filePath)
+
+            }
+
+
+            val attributes = HashMap(STMCorePhotosController.sharedInstance!!.newPhotoObject(photoEntityName, file!!))
 
             val photoData = photoMapParameters!!["data"] as Map<*,*>
 
@@ -226,7 +237,7 @@ class WebViewActivity : Activity() {
                 val callback = photoMapParameters!!["callback"] as String
                 webInterface!!.javascriptCallback(arrayListOf(it), photoMapParameters, callback)
 
-                STMCorePhotosController.sharedInstance!!.uploadPhotoEntityName(photoEntityName, attributes, nativePath)
+                STMCorePhotosController.sharedInstance!!.uploadPhotoEntityName(photoEntityName, attributes, file)
 
             }.fail {
 

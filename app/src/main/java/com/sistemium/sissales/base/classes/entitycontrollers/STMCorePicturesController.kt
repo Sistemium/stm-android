@@ -16,13 +16,23 @@ import android.view.WindowManager
 import com.sistemium.sissales.base.MyApplication
 import android.provider.MediaStore
 import android.service.carrier.CarrierIdentifier
+import com.github.kittinunf.fuel.Fuel
+import com.github.kittinunf.fuel.android.extension.responseJson
+import com.github.kittinunf.fuel.core.Blob
+import com.github.kittinunf.fuel.core.DataPart
+import com.github.kittinunf.fuel.core.FuelManager
 import com.sistemium.sissales.base.helper.logger.STMLogger
 import com.sistemium.sissales.base.session.STMSession
 import com.sistemium.sissales.interfaces.STMModelling
 import com.sistemium.sissales.persisting.STMPredicate
 import nl.komponents.kovenant.Promise
 import nl.komponents.kovenant.task
+import java.io.ByteArrayOutputStream
+import java.io.FileOutputStream
 import java.io.OutputStream
+import java.util.*
+import kotlin.collections.ArrayList
+import kotlin.collections.HashMap
 
 
 /**
@@ -60,10 +70,10 @@ class STMCorePicturesController {
 
     }
 
-    fun setImagesFromData(file:String, picture:Map<*,*>, entityName:String):Map<*,*>{
+    fun setImagesFromData(file:Bitmap, picture:Map<*,*>, entityName:String):Map<*,*>{
 
         val xid = picture[STMConstants.DEFAULT_PERSISTING_PRIMARY_KEY] as String
-        val fileName = "$xid.jpg"
+        val fileName = "$xid.png"
 
         STMFunctions.debugLog("STMCorePicturesController", "saveResized: $fileName")
 
@@ -84,11 +94,9 @@ class STMCorePicturesController {
         return mutablePicture.toMap()
     }
 
-    fun saveImageFile(fileName:String, file:String, entityName:String):String{
+    fun saveImageFile(fileName:String, file:Bitmap, entityName:String):String{
 
-        val image = BitmapFactory.decodeFile(file)
-
-        val bitmap = Bitmap.createBitmap(image)
+        val bitmap = Bitmap.createBitmap(file)
 
         return STMSession.sharedSession!!.filing.saveImage(bitmap, entityName, fileName)
 
@@ -115,7 +123,7 @@ class STMCorePicturesController {
 
     }
 
-    fun uploadImageEntityName(photoEntityName:String, attributes:Map<*,*>, image:String){
+    fun uploadImageEntityName(photoEntityName:String, attributes:Map<*,*>, image:Bitmap){
 
         //TODO
 
@@ -159,13 +167,11 @@ class STMCorePicturesController {
 
     }
 
-    private fun saveResizedImageFile(resizedFileName:String, file:String, entityName:String):String{
+    private fun saveResizedImageFile(resizedFileName:String, file:Bitmap, entityName:String):String{
 
         val maxPictureScale = STMEntityController.sharedInstance!!.entityWithName(entityName)?.get("maxPictureScale") as? Double ?: 1.0
 
-        val image = BitmapFactory.decodeFile(file)
-
-        val maxPictureDimension = Math.max(image.height, image.width)
+        val maxPictureDimension = Math.max(file.height, file.width)
 
         val display = (MyApplication.appContext!!.getSystemService(WINDOW_SERVICE) as WindowManager).defaultDisplay
         val size = Point()
@@ -179,17 +185,15 @@ class STMCorePicturesController {
 
         val scale = if (maxPictureDimension > MAX_PICTURE_SIZE) MAX_PICTURE_SIZE / maxPictureDimension else 1.0
 
-        val bitmap = Bitmap.createScaledBitmap(image, (image.width * scale).toInt(), (image.height * scale).toInt(), false)
+        val bitmap = Bitmap.createScaledBitmap(file, (file.width * scale).toInt(), (file.height * scale).toInt(), false)
 
         return STMSession.sharedSession!!.filing.saveImage(bitmap, entityName, resizedFileName)
 
     }
 
-    private fun saveThumbnailImageFile(thumbnailFileName:String, file:String, entityName:String):String{
+    private fun saveThumbnailImageFile(thumbnailFileName:String, file:Bitmap, entityName:String):String{
 
-        val image = BitmapFactory.decodeFile(file)
-
-        val bitmap = Bitmap.createScaledBitmap(image, STMConstants.THUMBNAIL_SIZE, STMConstants.THUMBNAIL_SIZE, false)
+        val bitmap = Bitmap.createScaledBitmap(file, STMConstants.THUMBNAIL_SIZE, STMConstants.THUMBNAIL_SIZE, false)
 
         return STMSession.sharedSession!!.filing.saveImage(bitmap, entityName,  thumbnailFileName)
 

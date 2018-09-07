@@ -85,7 +85,7 @@ class STMCoreSessionFiler(org: String, uid: String, var context:Context? = MyApp
 
         val fOut = FileOutputStream(file)
 
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 85, fOut)
+        bitmap.compress(Bitmap.CompressFormat.PNG, 100, fOut)
         fOut.flush()
         fOut.close()
         MediaStore.Images.Media.insertImage(context!!.contentResolver, file.absolutePath, file.name, file.name)

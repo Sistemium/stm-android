@@ -9,6 +9,7 @@ import android.content.Intent
 import com.sistemium.sissales.base.MyApplication
 import android.support.v4.app.ActivityCompat.startActivityForResult
 import android.content.DialogInterface
+import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Environment
 import android.webkit.ValueCallback
@@ -88,13 +89,13 @@ class STMCorePhotosController {
 
     }
 
-    fun newPhotoObject(photoEntityName:String, file:String):Map<*,*>{
+    fun newPhotoObject(photoEntityName:String, file:Bitmap):Map<*,*>{
 
         val picture = STMCorePicturesController.sharedInstance!!.setImagesFromData(file, hashMapOf(STMConstants.DEFAULT_PERSISTING_PRIMARY_KEY to STMFunctions.uuidString()), photoEntityName)
 
         val xid = picture[STMConstants.DEFAULT_PERSISTING_PRIMARY_KEY] as String
 
-        val fileName = "$xid.jpg"
+        val fileName = "$xid.png"
 
         val path = STMCorePicturesController.sharedInstance!!.saveImageFile(fileName, file, photoEntityName)
 
@@ -106,7 +107,7 @@ class STMCorePhotosController {
 
     }
 
-    fun uploadPhotoEntityName(photoEntityName:String, attributes:Map<*,*>, image:String){
+    fun uploadPhotoEntityName(photoEntityName:String, attributes:Map<*,*>, image:Bitmap){
 
         STMCorePicturesController.sharedInstance!!.uploadImageEntityName(photoEntityName, attributes, image)
 
@@ -118,7 +119,7 @@ class STMCorePhotosController {
         val imageFileName = "img_" + timeStamp + "_"
         val storageDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)
 
-        return File.createTempFile(imageFileName, ".jpg", storageDir)
+        return File.createTempFile(imageFileName, ".png", storageDir)
     }
 
 }
