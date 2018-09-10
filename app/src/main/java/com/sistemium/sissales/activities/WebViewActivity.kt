@@ -228,13 +228,13 @@ class WebViewActivity : Activity() {
 
             val attributes = HashMap(STMCorePhotosController.sharedInstance!!.newPhotoObject(photoEntityName, file!!))
 
-            val photoData = photoMapParameters!!["data"] as Map<*,*>
+            val photoData = photoMapParameters["data"] as Map<*,*>
 
             attributes.putAll(photoData)
 
             STMSession.sharedSession!!.persistenceDelegate.merge(photoEntityName, attributes.toMap(), null).then {
 
-                val callback = photoMapParameters!!["callback"] as String
+                val callback = photoMapParameters["callback"] as String
                 webInterface!!.javascriptCallback(arrayListOf(it), photoMapParameters, callback)
 
                 STMCorePhotosController.sharedInstance!!.uploadPhotoEntityName(photoEntityName, attributes, file)
