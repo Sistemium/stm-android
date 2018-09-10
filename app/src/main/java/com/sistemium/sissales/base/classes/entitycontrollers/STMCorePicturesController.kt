@@ -67,7 +67,44 @@ class STMCorePicturesController {
 
     fun checkNotUploadedPhotos() {
 
-        //TODO not implemented
+        var counter = 0
+
+        val notUploaded = STMPredicate("href is null")
+
+        for (picture in allPicturesWithPredicate(notUploaded)) {
+
+            val entityName = picture["entityName"] as String
+
+            val attributes = picture["attributes"] as Map<*,*>
+
+            if (attributes["imagePath"] == null) continue
+
+            val imageData = STMSession.sharedSession!!.filing.getImage(attributes["imagePath"] as String)
+
+            if (imageData != null && imageData.byteCount > 0){
+
+                uploadImageEntityName(STMFunctions.removePrefixFromEntityName(entityName),attributes,imageData)
+                counter++
+
+            }
+
+            //TODO
+//            if (error) {
+//                NSString *logMessage = [NSString stringWithFormat:@"checkUploadedPhotos dataWithContentsOfFile error: %@", error.localizedDescription];
+//                [self.logger errorMessage:logMessage];
+//            } else {
+//                NSString *logMessage = [NSString stringWithFormat:@"attempt to upload picture %@, imageData %@, length %lu — object will be deleted", entityName, imageData, (unsigned long)imageData.length];
+//                [self.logger errorMessage:logMessage];
+//                [self deletePicture:picture];
+//            }
+
+        }
+
+        if (counter > 0) {
+
+            STMLogger.sharedLogger!!.importantMessage("Sending $counter photos")
+
+        }
 
     }
 
