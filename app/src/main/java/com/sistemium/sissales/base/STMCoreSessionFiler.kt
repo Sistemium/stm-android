@@ -14,7 +14,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 import android.provider.MediaStore.Images.Media.getBitmap
 import android.app.Activity
-
+import android.graphics.BitmapFactory
 
 
 /**
@@ -91,6 +91,12 @@ class STMCoreSessionFiler(org: String, uid: String, var context:Context? = MyApp
         MediaStore.Images.Media.insertImage(context!!.contentResolver, file.absolutePath, file.name, file.name)
 
         return "$folderName/$fileName"
+
+    }
+
+    override fun getImage(localPath: String): Bitmap? {
+
+        return BitmapFactory.decodeFile("$picturePath/$localPath")
 
     }
 
