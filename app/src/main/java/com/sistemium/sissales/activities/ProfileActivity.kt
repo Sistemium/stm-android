@@ -111,7 +111,7 @@ class ProfileActivity : AppCompatActivity() {
 
             var url = currentTab!!["url"] as? String
 
-            var manifest = currentTab!!["appManifestURI"] as? String
+            val manifest = currentTab!!["appManifestURI"] as? String
 
             if (url == null && manifest != null){
 
@@ -119,12 +119,13 @@ class ProfileActivity : AppCompatActivity() {
 
             }
 
-//            //debug
+            //debug
 //            url = url?.replace("http://lamac.local:3000", "http://10.0.1.5:3000")
+//            url = url?.replace("http://lamac.local:3000", "http://192.168.0.103:3000")
 //            if (manifest == null){
 //                manifest = "$url/app.manifest"
 //            }
-//            //debug
+            //debug
 
             intent.putExtra("url", url)
             intent.putExtra("manifest", manifest)
