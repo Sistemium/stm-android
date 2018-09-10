@@ -314,7 +314,8 @@ class STMCoreAuthController {
 
             return task {
 
-                val (_, _, result) = Fuel.get("https://api.sistemium.com/pha/auth", listOf("mobileNumber" to phoneNumber)).responseJson()
+                val (_, _, result) = Fuel.get("https://api.sistemium.com/pha/auth", listOf("mobileNumber" to phoneNumber))
+                        .responseJson()
 
                 when (result) {
                     is Result.Success -> {
