@@ -10,9 +10,7 @@ import com.sistemium.sissales.enums.STMSocketEvent
 import com.sistemium.sissales.interfaces.STMRemoteDataEventHandling
 import com.sistemium.sissales.interfaces.STMSocketConnection
 import com.sistemium.sissales.interfaces.STMSocketConnectionOwner
-import io.socket.client.Ack
-import io.socket.client.IO
-import io.socket.client.Socket
+import io.socket.client.*
 import nl.komponents.kovenant.Promise
 import nl.komponents.kovenant.deferred
 import nl.komponents.kovenant.then
@@ -158,15 +156,19 @@ class STMSocketTransport(private var socketUrlString: String, private var owner:
 
             }
 
-            socket!!.emit(event.toString(), _value, Ack {
+            socket!!.emit(event.toString(), _value, object: AckWithTimeOut(STMConstants.AUTH_DELAY.toLong() * 1000){
 
-                if (it.firstOrNull() == "NO ACK") {
+                override fun call(vararg args: Any?) {
 
-                    deferred.reject(Exception("ack timeout"))
+                    if (args.firstOrNull() is NoAck) {
+
+                        deferred.reject(Exception("ack timeout"))
+
+                    }
+
+                    deferred.resolve(args)
 
                 }
-
-                deferred.resolve(it)
 
             })
 
@@ -176,15 +178,19 @@ class STMSocketTransport(private var socketUrlString: String, private var owner:
 
         if (event == STMSocketEvent.STMSocketEventInfo){
 
-            socket!!.emit(event.toString(), value, Ack {
+            socket!!.emit(event.toString(), value, object: AckWithTimeOut(STMConstants.AUTH_DELAY.toLong() * 1000){
 
-                if (it.firstOrNull() == "NO ACK") {
+                override fun call(vararg args: Any?) {
 
-                    deferred.reject(Exception("ack timeout"))
+                    if (args.firstOrNull() is NoAck) {
+
+                        deferred.reject(Exception("ack timeout"))
+
+                    }
+
+                    deferred.resolve(args)
 
                 }
-
-                deferred.resolve(it)
 
             })
 
@@ -202,28 +208,36 @@ class STMSocketTransport(private var socketUrlString: String, private var owner:
             deferred.resolve(arrayOf(dataDic))
 
         } else if (_value != null) {
-            socket!!.emit(event.toString(), arrayOf(_value)) {
+            socket!!.emit(event.toString(), value, object: AckWithTimeOut(STMConstants.AUTH_DELAY.toLong() * 1000){
 
-                if (it.firstOrNull() == "NO ACK") {
+                override fun call(vararg args: Any?) {
 
-                    deferred.reject(Exception("ack timeout"))
+                    if (args.firstOrNull() is NoAck) {
+
+                        deferred.reject(Exception("ack timeout"))
+
+                    }
+
+                    deferred.resolve(args)
 
                 }
 
-                deferred.resolve(it)
-
-            }
+            })
         } else {
 
-            socket!!.emit(event.toString(), Ack {
+            socket!!.emit(event.toString(), value, object: AckWithTimeOut(STMConstants.AUTH_DELAY.toLong() * 1000){
 
-                if (it.firstOrNull() == "NO ACK") {
+                override fun call(vararg args: Any?) {
 
-                    deferred.reject(Exception("ack timeout"))
+                    if (args.firstOrNull() is NoAck) {
+
+                        deferred.reject(Exception("ack timeout"))
+
+                    }
+
+                    deferred.resolve(args)
 
                 }
-
-                deferred.resolve(it)
 
             })
 
@@ -474,9 +488,11 @@ class STMSocketTransport(private var socketUrlString: String, private var owner:
 
         val event = eventNum.toString()
 
-        socket!!.emit(event, JSONObject(dataDic), Ack {
+        socket!!.emit(event, JSONObject(dataDic), object: AckWithTimeOut(STMConstants.AUTH_DELAY.toLong() * 1000){
 
-            receiveAuthorizationAckWithData(it)
+            override fun call(vararg args: Any?) {
+                receiveAuthorizationAckWithData(args)
+            }
 
         })
 
@@ -484,7 +500,7 @@ class STMSocketTransport(private var socketUrlString: String, private var owner:
 
     private fun receiveAuthorizationAckWithData(data: Array<*>) {
 
-        if (data.firstOrNull() == "NO ACK") {
+        if (data.firstOrNull() is NoAck) {
 
             notAuthorizedWithError("receiveAuthorizationAckWithData authorization timeout")
 
@@ -525,7 +541,7 @@ class STMSocketTransport(private var socketUrlString: String, private var owner:
 
     private fun notAuthorizedWithError(errorString: String) {
 
-        TODO("not implemented")
+        STMLogger.sharedLogger?.importantMessage(errorString)
 
     }
 
@@ -535,7 +551,7 @@ class STMSocketTransport(private var socketUrlString: String, private var owner:
 
             emitAuthorization()
 
-        }, STMConstants.AUTH_DELAY.toLong())
+        }, STMConstants.AUTH_DELAY.toLong() * 1000)
 
     }
 
