@@ -262,7 +262,7 @@ class STMSyncer : STMDefantomizingOwner, STMDataDownloadingOwner, STMDataSyncing
 
         session?.logger?.infoMessage("Syncer start")
 
-        socketTransport = STMSocketTransport(STMCoreAuthController.socketURL!!, STMCoreAuthController.entityResource!!, this, this)
+        socketTransport = STMSocketTransport(STMCoreAuthController.socketURL!!, this, this)
 
         isRunning = true
 

@@ -24,7 +24,7 @@ import java.net.URI
  * Created by edgarjanvuicik on 14/02/2018.
  */
 
-class STMSocketTransport(var socketUrlString: String, var entityResource: String, var owner: STMSocketConnectionOwner, var remoteDataEventHandling: STMRemoteDataEventHandling) : STMSocketConnection {
+class STMSocketTransport(private var socketUrlString: String, private var owner: STMSocketConnectionOwner, private var remoteDataEventHandling: STMRemoteDataEventHandling) : STMSocketConnection {
 
     override var isReady: Boolean = false
         get() {
