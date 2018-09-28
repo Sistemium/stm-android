@@ -156,7 +156,8 @@ class STMSocketTransport(private var socketUrlString: String, private var owner:
 
             }
 
-            socket!!.emit(event.toString(), _value, object: AckWithTimeOut(STMConstants.AUTH_DELAY.toLong() * 1000){
+            //TODO ack with timeout
+            socket!!.emit(event.toString(), _value, object: Ack{
 
                 override fun call(vararg args: Any?) {
 
@@ -178,7 +179,8 @@ class STMSocketTransport(private var socketUrlString: String, private var owner:
 
         if (event == STMSocketEvent.STMSocketEventInfo){
 
-            socket!!.emit(event.toString(), value, object: AckWithTimeOut(STMConstants.AUTH_DELAY.toLong() * 1000){
+            //TODO ack with timeout
+            socket!!.emit(event.toString(), value, object: Ack{
 
                 override fun call(vararg args: Any?) {
 
@@ -208,7 +210,8 @@ class STMSocketTransport(private var socketUrlString: String, private var owner:
             deferred.resolve(arrayOf(dataDic))
 
         } else if (_value != null) {
-            socket!!.emit(event.toString(), value, object: AckWithTimeOut(STMConstants.AUTH_DELAY.toLong() * 1000){
+            //TODO ack with timeout
+            socket!!.emit(event.toString(), value, object: Ack{
 
                 override fun call(vararg args: Any?) {
 
@@ -225,7 +228,8 @@ class STMSocketTransport(private var socketUrlString: String, private var owner:
             })
         } else {
 
-            socket!!.emit(event.toString(), value, object: AckWithTimeOut(STMConstants.AUTH_DELAY.toLong() * 1000){
+            //TODO ack with timeout
+            socket!!.emit(event.toString(), value, object: Ack{
 
                 override fun call(vararg args: Any?) {
 
