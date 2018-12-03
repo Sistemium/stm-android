@@ -49,6 +49,7 @@ apply plugin: 'io.fabric'
 repositories {
     jcenter()
     maven { url 'https://maven.fabric.io/public' }
+    maven { url "https://jitpack.io" }
 }
 
 dependencies {
@@ -60,10 +61,10 @@ dependencies {
     implementation 'nl.komponents.kovenant:kovenant:3.3.0'
     implementation 'com.github.kittinunf.fuel:fuel-android:1.15.0'
     implementation 'com.github.kittinunf.fuel:fuel-gson:1.15.0'
-    implementation group: 'online.devliving', name: 'securedpreferencestore', version: '0.7.4'
+//    implementation group: 'online.devliving', name: 'securedpreferencestore', version: '0.7.4'
     implementation group: 'com.bandyer', name: 'socket.io-client', version: '1.0.9'
     implementation('com.crashlytics.sdk.android:crashlytics:2.9.6@aar') {
         transitive = true
     }
-
+    implementation 'com.github.EdgarJan:Secured-Preference-Store:master-SNAPSHOT'
 }

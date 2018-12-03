@@ -85,7 +85,10 @@ class MyApplication : Application(), Application.ActivityLifecycleCallbacks, Com
     override fun onCreate() {
         super.onCreate()
         appContext = applicationContext
-        SecuredPreferenceStore.init(appContext, DefaultRecoveryHandler())
+
+        val seedKey = "SecuredSeedData".toByteArray()
+        SecuredPreferenceStore.init(applicationContext, null, null, seedKey, DefaultRecoveryHandler())
+
         this.registerActivityLifecycleCallbacks(this)
         Fabric.with(this, Crashlytics())
 
