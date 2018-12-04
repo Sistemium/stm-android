@@ -239,6 +239,8 @@ class STMSocketTransport(private var socketUrlString: String, private var owner:
 
                         deferred.reject(Exception("ack timeout"))
 
+                        return
+
                     }
 
                     deferred.resolve(args)
