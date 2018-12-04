@@ -156,14 +156,15 @@ class STMSocketTransport(private var socketUrlString: String, private var owner:
 
             }
 
-            //TODO ack with timeout
-            socket!!.emit(event.toString(), _value, object: Ack{
+            socket!!.emit(event.toString(), _value, object: AckWithTimeOut(STMConstants.AUTH_DELAY.toLong() * 1000){
 
                 override fun call(vararg args: Any?) {
 
                     if (args.firstOrNull() is NoAck) {
 
                         deferred.reject(Exception("ack timeout"))
+
+                        return
 
                     }
 
@@ -179,14 +180,15 @@ class STMSocketTransport(private var socketUrlString: String, private var owner:
 
         if (event == STMSocketEvent.STMSocketEventInfo){
 
-            //TODO ack with timeout
-            socket!!.emit(event.toString(), value, object: Ack{
+            socket!!.emit(event.toString(), value, object: AckWithTimeOut(STMConstants.AUTH_DELAY.toLong() * 1000){
 
                 override fun call(vararg args: Any?) {
 
                     if (args.firstOrNull() is NoAck) {
 
                         deferred.reject(Exception("ack timeout"))
+
+                        return
 
                     }
 
@@ -210,14 +212,15 @@ class STMSocketTransport(private var socketUrlString: String, private var owner:
             deferred.resolve(arrayOf(dataDic))
 
         } else if (_value != null) {
-            //TODO ack with timeout
-            socket!!.emit(event.toString(), value, object: Ack{
+            socket!!.emit(event.toString(), value, object: AckWithTimeOut(STMConstants.AUTH_DELAY.toLong() * 1000){
 
                 override fun call(vararg args: Any?) {
 
                     if (args.firstOrNull() is NoAck) {
 
                         deferred.reject(Exception("ack timeout"))
+
+                        return
 
                     }
 
@@ -228,8 +231,7 @@ class STMSocketTransport(private var socketUrlString: String, private var owner:
             })
         } else {
 
-            //TODO ack with timeout
-            socket!!.emit(event.toString(), value, object: Ack{
+            socket!!.emit(event.toString(), value, object: AckWithTimeOut(STMConstants.AUTH_DELAY.toLong() * 1000){
 
                 override fun call(vararg args: Any?) {
 
