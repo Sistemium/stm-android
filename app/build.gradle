@@ -32,23 +32,23 @@ android {
     buildTypes {
         debug {
             applicationIdSuffix ".sissalesdebug"
-            manifestPlaceholders = [appName: "SisSales-debug"]
+            manifestPlaceholders = [appName: "SisSales-debug", "icon":"@mipmap/ic_launcher", "roundIcon":"@mipmap/ic_launcher_round"]
         }
         release {
             applicationIdSuffix ".sissales"
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-            manifestPlaceholders = [appName: "SisSales"]
+            manifestPlaceholders = [appName: "SisSales", "icon":"@mipmap/ic_launcher", "roundIcon":"@mipmap/ic_launcher_round"]
         }
         driverDebug {
             initWith(buildTypes.debug)
             applicationIdSuffix ".driverdebug"
-            manifestPlaceholders = [appName: "SisDriver-debug"]
+            manifestPlaceholders = [appName: "SisDriver-debug", "icon":"@mipmap/ic_launcher2", "roundIcon":"@mipmap/ic_launcher2_round"]
         }
         driverRelease {
             initWith(buildTypes.release)
             applicationIdSuffix ".driver"
-            manifestPlaceholders = [appName: "SisDriver"]
+            manifestPlaceholders = [appName: "SisDriver", "icon":"@mipmap/ic_launcher2", "roundIcon":"@mipmap/ic_launcher2_round"]
         }
     }
 
