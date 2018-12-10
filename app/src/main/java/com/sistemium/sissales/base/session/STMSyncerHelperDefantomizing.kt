@@ -1,6 +1,7 @@
 package com.sistemium.sissales.base.session
 
 import com.sistemium.sissales.base.STMFunctions
+import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.Executors
 
 /**
@@ -13,7 +14,7 @@ class STMSyncerHelperDefantomizing {
     var failToResolveIds = ArrayList<Any>()
 
     @Volatile
-    var operations = HashMap<Pair<String, String>, STMDefantomizingOperation>()
+    var operations = ConcurrentHashMap<Pair<String, String>, STMDefantomizingOperation>()
 
     fun addDefantomizationOfEntityName(entityName: String, identifier: String) {
 
