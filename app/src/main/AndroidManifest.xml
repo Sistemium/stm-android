@@ -20,8 +20,8 @@
         android:fullBackupContent="@xml/backup_descriptor"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
-        android:icon="${icon}"
-        android:roundIcon="${roundIcon}"
+        android:icon="@mipmap/ic_launcher"
+        android:roundIcon="@mipmap/ic_launcher_round"
         tools:ignore="GoogleAppIndexingWarning"
         tools:replace="android:label"
         android:label="${appName}" >
