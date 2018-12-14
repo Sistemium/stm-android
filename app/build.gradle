@@ -81,5 +81,6 @@ dependencies {
     implementation('com.crashlytics.sdk.android:crashlytics:2.9.6@aar') {
         transitive = true
     }
-    implementation 'com.github.EdgarJan:Secured-Preference-Store:master-SNAPSHOT'
+    implementation 'com.github.EdgarJan:Secured-Preference-Store:-SNAPSHOT'
+    implementation 'com.github.javiersantos:AppUpdater:2.7'
 }

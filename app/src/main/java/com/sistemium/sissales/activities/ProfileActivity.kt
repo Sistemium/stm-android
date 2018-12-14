@@ -16,6 +16,9 @@ import com.sistemium.sissales.activityController.ProfileActivityController
 import com.sistemium.sissales.base.session.STMCoreAuthController
 import com.sistemium.sissales.base.session.STMSession
 import kotlinx.android.synthetic.main.activity_profile.*
+import com.github.javiersantos.appupdater.AppUpdater
+import com.github.javiersantos.appupdater.enums.UpdateFrom
+
 
 class ProfileActivity : AppCompatActivity() {
 
@@ -38,6 +41,8 @@ class ProfileActivity : AppCompatActivity() {
         setSupportActionBar(toolbar)
 
         initPermissions()
+
+        initUpdater()
 
         progressBar = findViewById(R.id.progressBar)
 
@@ -188,6 +193,14 @@ class ProfileActivity : AppCompatActivity() {
                     0)
 
         }
+
+    }
+
+    private fun initUpdater(){
+
+        val appUpdater = AppUpdater(this)
+        appUpdater.setUpdateFrom(UpdateFrom.GOOGLE_PLAY)
+        appUpdater.start()
 
     }
 
