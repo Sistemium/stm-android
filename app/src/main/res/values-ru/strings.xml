@@ -1,5 +1,8 @@
 <resources>
-    <string name="app_name">Sistemium</string>
+    <string name="app_name_sissales">SisSales</string>
+    <string name="app_name_sissales_debug">SisSales-debug</string>
+    <string name="app_name_sisdriver">SisDriver</string>
+    <string name="app_name_sisdriver_debug">SisDriver-debug</string>
     <string name="auth_toolbar_title">Вход в Sistemium</string>
     <string name="enter_code_from_sms">Введите код из SMS:</string>
     <string name="send">Отправить</string>
