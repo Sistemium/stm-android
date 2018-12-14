@@ -32,25 +32,26 @@ android {
     buildTypes {
         debug {
             applicationIdSuffix ".sissalesdebug"
-            manifestPlaceholders = [appName: "@string/app_name_sissales_debug"]
+            manifestPlaceholders = [appName: "SisSales-debug"]
         }
         release {
             applicationIdSuffix ".sissales"
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-            manifestPlaceholders = [appName: "@string/app_name_sissales"]
+            manifestPlaceholders = [appName: "SisSales"]
         }
         driverDebug {
             initWith(buildTypes.debug)
             applicationIdSuffix ".driverdebug"
-            manifestPlaceholders = [appName: "@string/app_name_sisdriver_debug"]
+            manifestPlaceholders = [appName: "SisDriver-debug"]
         }
         driverRelease {
             initWith(buildTypes.release)
             applicationIdSuffix ".driver"
-            manifestPlaceholders = [appName: "@string/app_name_sisdriver"]
+            manifestPlaceholders = [appName: "SisDriver"]
         }
     }
+
     lintOptions {
 
         checkReleaseBuilds false
