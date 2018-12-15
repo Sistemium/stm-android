@@ -200,6 +200,7 @@ class ProfileActivity : AppCompatActivity() {
 
         val appUpdater = AppUpdater(this)
         appUpdater.setUpdateFrom(UpdateFrom.GOOGLE_PLAY)
+        appUpdater.setButtonDoNotShowAgain("")
         appUpdater.start()
 
     }
