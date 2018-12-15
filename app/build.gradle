@@ -87,5 +87,5 @@ dependencies {
         transitive = true
     }
     implementation 'com.github.EdgarJan:Secured-Preference-Store:-SNAPSHOT'
-    implementation 'com.github.javiersantos:AppUpdater:2.7'
+    implementation 'com.github.EdgarJan:AppUpdaterFix:-SNAPSHOT'
 }
