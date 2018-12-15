@@ -42,8 +42,6 @@ class ProfileActivity : AppCompatActivity() {
 
         initPermissions()
 
-        initUpdater()
-
         progressBar = findViewById(R.id.progressBar)
 
         progressBar!!.visibility = View.INVISIBLE
@@ -193,15 +191,6 @@ class ProfileActivity : AppCompatActivity() {
                     0)
 
         }
-
-    }
-
-    private fun initUpdater(){
-
-        val appUpdater = AppUpdater(this)
-        appUpdater.setUpdateFrom(UpdateFrom.GOOGLE_PLAY)
-        appUpdater.setButtonDoNotShowAgain("")
-        appUpdater.start()
 
     }
 

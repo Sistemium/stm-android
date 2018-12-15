@@ -13,6 +13,8 @@ import nl.komponents.kovenant.task
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import com.github.javiersantos.appupdater.AppUpdater
+import com.github.javiersantos.appupdater.enums.UpdateFrom
 import com.github.kittinunf.fuel.Fuel
 import com.github.kittinunf.fuel.android.extension.responseJson
 import com.sistemium.sissales.base.MyApplication
@@ -85,6 +87,8 @@ class WebViewActivity : Activity() {
         val url = intent.getStringExtra("url")
         val manifest = intent.getStringExtra("manifest")
         val title = intent.getStringExtra("title")
+
+        initUpdater()
 
         task {
 
@@ -296,6 +300,15 @@ class WebViewActivity : Activity() {
             return@filter true
 
         }
+
+    }
+
+    private fun initUpdater(){
+
+        val appUpdater = AppUpdater(this)
+        appUpdater.setUpdateFrom(UpdateFrom.GOOGLE_PLAY)
+        appUpdater.setButtonDoNotShowAgain("")
+        appUpdater.start()
 
     }
 
