@@ -81,11 +81,10 @@ dependencies {
     implementation 'nl.komponents.kovenant:kovenant:3.3.0'
     implementation 'com.github.kittinunf.fuel:fuel-android:1.15.0'
     implementation 'com.github.kittinunf.fuel:fuel-gson:1.15.0'
-    //    implementation group: 'online.devliving', name: 'securedpreferencestore', version: '0.7.4'
     implementation 'com.bandyer:socket.io-client:1.0.9'
     implementation('com.crashlytics.sdk.android:crashlytics:2.9.6@aar') {
         transitive = true
     }
     implementation 'com.github.EdgarJan:Secured-Preference-Store:-SNAPSHOT'
-    implementation 'com.github.EdgarJan:AppUpdaterFix:-SNAPSHOT'
+    implementation 'com.github.javiersantos:AppUpdater:master-SNAPSHOT'
 }
