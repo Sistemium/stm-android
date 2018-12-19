@@ -13,6 +13,7 @@ import nl.komponents.kovenant.task
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.os.Handler
 import com.github.javiersantos.appupdater.AppUpdater
 import com.github.javiersantos.appupdater.enums.UpdateFrom
 import com.github.kittinunf.fuel.Fuel
@@ -24,6 +25,9 @@ import com.sistemium.sissales.base.session.STMSession
 import nl.komponents.kovenant.Promise
 import nl.komponents.kovenant.then
 import java.io.File
+import android.support.v4.os.HandlerCompat.postDelayed
+
+
 
 
 @SuppressLint("SetJavaScriptEnabled")
@@ -40,6 +44,7 @@ class WebViewActivity : Activity() {
     var photoMapParameters:Map<*,*>? = null
     private var mUMA:ValueCallback<Array<Uri>>? = null
     private var err:String?  = null
+    private val updateHandler = Handler()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -261,6 +266,8 @@ class WebViewActivity : Activity() {
     }
 
     fun goBack() {
+
+        updateHandler.removeCallbacksAndMessages(null)
         
         runOnUiThread {
 
@@ -308,7 +315,15 @@ class WebViewActivity : Activity() {
         val appUpdater = AppUpdater(this)
         appUpdater.setUpdateFrom(UpdateFrom.GOOGLE_PLAY)
         appUpdater.setButtonDoNotShowAgain("")
-        appUpdater.start()
+
+        val runnableCode = object : Runnable {
+            override fun run() {
+
+                appUpdater.start()
+                updateHandler.postDelayed(this, 604800000)
+            }
+        }
+        updateHandler.post(runnableCode)
 
     }
 
