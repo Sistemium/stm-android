@@ -320,7 +320,7 @@ class WebViewActivity : Activity() {
             override fun run() {
 
                 appUpdater.start()
-                updateHandler.postDelayed(this, 604800000)
+                updateHandler.postDelayed(this, 1000 * 60 * 60 * 24)
             }
         }
         updateHandler.post(runnableCode)
