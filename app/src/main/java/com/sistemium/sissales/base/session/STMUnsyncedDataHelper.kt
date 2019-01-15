@@ -205,6 +205,18 @@ class STMUnsyncedDataHelper : STMDataSyncing {
 
     private fun initPrivateData() {
 
+        if (erroredObjectsByEntity.size > 0) {
+
+            val logs = ArrayList<String>()
+
+            erroredObjectsByEntity.forEach{
+                logs.add("${it.value.size} ${it.key} objects")
+            }
+
+            STMLogger.sharedLogger!!.importantMessage("erroredObjectsByEntity contains ${logs.joinToString(", ")}")
+
+        }
+
         erroredObjectsByEntity = hashMapOf()
 
     }
