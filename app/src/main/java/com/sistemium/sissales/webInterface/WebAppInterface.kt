@@ -715,10 +715,10 @@ class WebAppInterface internal constructor(private var webViewActivity: WebViewA
 
         val jsFunction = "window.$jsCallbackFunction && $jsCallbackFunction.apply(null,${gson.toJson(arguments)})"
 
-        webViewActivity.webView?.post {
+        STMFunctions.debugLog("DEBUG", "EvaluateJS")
+//        STMFunctions.debugLog("JSFUNCTION", jsFunction)
 
-            STMFunctions.debugLog("DEBUG", "EvaluateJS")
-            STMFunctions.debugLog("JSFUNCTION", jsFunction)
+        webViewActivity.webView?.post {
 
             webViewActivity.webView?.evaluateJavascript(jsFunction) {
 
@@ -747,10 +747,10 @@ class WebAppInterface internal constructor(private var webViewActivity: WebViewA
 
         val jsFunction = "${this.errorCallback}.apply(null, ${gson.toJson(arguments)})"
 
-        webViewActivity.webView?.post {
+        STMFunctions.debugLog("DEBUG", "EvaluateErrorJS")
+        STMFunctions.debugLog("JSFUNCTION", jsFunction)
 
-            STMFunctions.debugLog("DEBUG", "EvaluateErrorJS")
-            STMFunctions.debugLog("JSFUNCTION", jsFunction)
+        webViewActivity.webView?.post {
 
             webViewActivity.webView?.evaluateJavascript(jsFunction) {
 
