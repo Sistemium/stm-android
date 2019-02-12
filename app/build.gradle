@@ -9,7 +9,7 @@ buildscript {
 
         // We recommend changing it to the latest version from our changelog:
         // https://docs.fabric.io/android/changelog.html#fabric-gradle-plugin
-        classpath 'io.fabric.tools:gradle:1.25.4'
+        classpath 'io.fabric.tools:gradle:1.27.1'
     }
 }
 
@@ -75,14 +75,14 @@ configurations.all {
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
-    implementation 'com.android.support.constraint:constraint-layout:2.0.0-alpha2'
+    implementation 'com.android.support.constraint:constraint-layout:2.0.0-alpha3'
     implementation 'com.android.support:design:28.0.0'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
     implementation 'nl.komponents.kovenant:kovenant:3.3.0'
     implementation 'com.github.kittinunf.fuel:fuel-android:1.15.0'
     implementation 'com.github.kittinunf.fuel:fuel-gson:1.15.0'
     implementation 'com.bandyer:socket.io-client:1.0.9'
-    implementation('com.crashlytics.sdk.android:crashlytics:2.9.6@aar') {
+    implementation('com.crashlytics.sdk.android:crashlytics:2.9.9@aar') {
         transitive = true
     }
     implementation 'com.github.EdgarJan:Secured-Preference-Store:-SNAPSHOT'
