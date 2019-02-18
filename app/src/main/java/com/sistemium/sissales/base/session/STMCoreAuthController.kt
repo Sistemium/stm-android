@@ -1,5 +1,6 @@
 package com.sistemium.sissales.base.session
 
+import android.annotation.SuppressLint
 import android.app.ActivityOptions
 import android.content.Context
 import android.content.Intent
@@ -388,6 +389,7 @@ class STMCoreAuthController {
 
         }
 
+        @SuppressLint("PrivateResource")
         fun logIn(): Promise<Map<*, *>, Exception> {
 
             val accessToken = STMCoreAuthController.accessToken
