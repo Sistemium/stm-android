@@ -258,8 +258,8 @@ class STMSocketTransport(private var socketUrlString: String, private var owner:
     override fun closeSocket() {
 
         STMLogger.sharedLogger!!.infoMessage("close Socket")
-        socket!!.off()
-        socket!!.disconnect()
+        socket?.off()
+        socket?.disconnect()
         owner.socketWillClosed()
         socket = null
         isAuthorized = false
@@ -281,7 +281,7 @@ class STMSocketTransport(private var socketUrlString: String, private var owner:
 
     }
 
-    private fun startSocket() {
+    fun startSocket() {
 
         STMLogger.sharedLogger!!.infoMessage("STMSocketTransport")
 
@@ -419,13 +419,13 @@ class STMSocketTransport(private var socketUrlString: String, private var owner:
 
         socket!!.on(Socket.EVENT_PING){
 
-            STMFunctions.debugLog("SOCKET", "EVENT_PING")
+//            STMFunctions.debugLog("SOCKET", "EVENT_PING")
 
         }
 
         socket!!.on(Socket.EVENT_PONG){
 
-            STMFunctions.debugLog("SOCKET", "EVENT_PONG")
+//            STMFunctions.debugLog("SOCKET", "EVENT_PONG")
 
         }
 
@@ -467,7 +467,7 @@ class STMSocketTransport(private var socketUrlString: String, private var owner:
 
     }
 
-    private fun reconnectSocket() {
+    override fun reconnectSocket() {
 
         closeSocket()
         startSocket()

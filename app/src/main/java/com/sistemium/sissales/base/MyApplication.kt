@@ -22,6 +22,8 @@ class MyApplication : Application(), Application.ActivityLifecycleCallbacks, Com
 
     companion object {
 
+        private var socketClosed = false
+
         var syncer: STMSyncer? = null
             get() {
 
@@ -37,6 +39,8 @@ class MyApplication : Application(), Application.ActivityLifecycleCallbacks, Com
 
             if (field != value) {
 
+                field = value
+
                 if (value) {
 
                     val logMessage = "application did enter background"
@@ -47,10 +51,34 @@ class MyApplication : Application(), Application.ActivityLifecycleCallbacks, Com
 
                     STMCoreObjectsController.checkObjectsForFlushing()
 
+                    android.os.Handler(MyApplication.appContext!!.mainLooper).postDelayed({
+
+                        if (inBackground) {
+
+                            STMFunctions.debugLog("MYApp", "close socket")
+
+                            syncer?.socketTransport?.closeSocket()
+
+                            socketClosed = true
+
+                        }
+
+                    }, STMConstants.AUTH_DELAY.toLong() * 1000)
+
                     //TODO
                     //[STMGarbageCollector.sharedInstance removeOutOfDateImages];
 
                 } else {
+
+                    if (socketClosed) {
+
+                        syncer?.socketTransport?.reconnectSocket()
+
+                        STMFunctions.debugLog("MYApp", "reconnect socket")
+
+                        socketClosed = false
+
+                    }
 
                     val logMessage = "application will enter foreground"
 

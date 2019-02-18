@@ -18,4 +18,6 @@ interface STMSocketConnection {
 
     fun closeSocket()
 
+    fun reconnectSocket()
+
 }

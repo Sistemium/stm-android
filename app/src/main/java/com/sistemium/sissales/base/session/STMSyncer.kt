@@ -26,7 +26,7 @@ class STMSyncer : STMDefantomizingOwner, STMDataDownloadingOwner, STMDataSyncing
     var session: STMSession? = null
     private var needRepeatDownload = false
     private var isRunning = false
-    private var socketTransport: STMSocketConnection? = null
+    var socketTransport: STMSocketConnection? = null
     private var isSendingData = false
     set(value) {
 
