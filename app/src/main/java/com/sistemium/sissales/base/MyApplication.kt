@@ -63,7 +63,7 @@ class MyApplication : Application(), Application.ActivityLifecycleCallbacks, Com
 
                         }
 
-                    }, STMConstants.AUTH_DELAY.toLong() * 1000)
+                    }, STMConstants.BACKGROUND_DELAY.toLong() * 1000)
 
                     //TODO
                     //[STMGarbageCollector.sharedInstance removeOutOfDateImages];
