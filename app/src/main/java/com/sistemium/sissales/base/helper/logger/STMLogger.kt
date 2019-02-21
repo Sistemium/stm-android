@@ -2,6 +2,7 @@ package com.sistemium.sissales.base.helper.logger
 
 import android.util.Log
 import com.sistemium.sissales.base.STMConstants
+import com.sistemium.sissales.base.STMFunctions
 import com.sistemium.sissales.base.session.STMSession
 import com.sistemium.sissales.enums.STMLogMessageType
 import java.util.*
@@ -52,6 +53,8 @@ class STMLogger private constructor() {
 
     fun infoMessage(text: String) {
 
+        STMFunctions.debugLog("test", text)
+
         saveLogMessageWithText(text, STMLogMessageType.STMLogMessageTypeInfo)
 
     }
@@ -73,45 +76,37 @@ class STMLogger private constructor() {
         val types = ArrayList(availableTypes)
 
         if (settingType == "debug") {
+
             return types
+
         } else {
 
             types.remove("debug")
 
-            if (settingType == "debug") {
+            if (settingType == "info") {
 
                 return types
 
             } else {
 
-                types.remove("debug")
+                types.remove("info")
 
-                if (settingType == "info") {
+                if (settingType == "warning") {
 
                     return types
 
                 } else {
 
-                    types.remove("info")
+                    types.remove("warning")
 
-                    if (settingType == "warning") {
+                    return if (settingType == "error") {
 
-                        return types
+                        types
 
                     } else {
 
-                        types.remove("warning")
-
-                        return if (settingType == "error") {
-
-                            types
-
-                        } else {
-
-                            types.remove("error")
-                            types
-
-                        }
+                        types.remove("error")
+                        types
 
                     }
 
