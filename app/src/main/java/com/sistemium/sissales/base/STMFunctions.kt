@@ -79,8 +79,6 @@ class STMFunctions {
                 Log.d("${stringFrom(Date())}:$name", msg.substring(start, end))
             }
 
-            Log.d("${stringFrom(Date())}:$name", msg)
-
         }
 
         fun handleError(activity: Activity?, message: String) {
