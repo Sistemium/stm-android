@@ -6,14 +6,17 @@ import android.content.ComponentCallbacks2
 import android.content.Context
 import android.os.Bundle
 import com.crashlytics.android.Crashlytics
+import com.sistemium.sissales.activities.ProfileActivity
 import com.sistemium.sissales.base.classes.entitycontrollers.STMCoreObjectsController
 import com.sistemium.sissales.base.helper.logger.STMLogger
+import com.sistemium.sissales.base.session.STMCoreAuthController
 import com.sistemium.sissales.base.session.STMSession
 import com.sistemium.sissales.base.session.STMSyncer
 import com.sistemium.sissales.enums.STMSocketEvent
 import devliving.online.securedpreferencestore.DefaultRecoveryHandler
 import devliving.online.securedpreferencestore.SecuredPreferenceStore
 import io.fabric.sdk.android.Fabric
+import nl.komponents.kovenant.task
 
 /**
  * Created by edgarjanvuicik on 02/02/2018.
@@ -21,8 +24,6 @@ import io.fabric.sdk.android.Fabric
 class MyApplication : Application(), Application.ActivityLifecycleCallbacks, ComponentCallbacks2 {
 
     companion object {
-
-        private var socketClosed = false
 
         var syncer: STMSyncer? = null
             get() {
@@ -51,34 +52,10 @@ class MyApplication : Application(), Application.ActivityLifecycleCallbacks, Com
 
                     STMCoreObjectsController.checkObjectsForFlushing()
 
-                    android.os.Handler(MyApplication.appContext!!.mainLooper).postDelayed({
-
-                        if (inBackground) {
-
-                            STMFunctions.debugLog("MYApp", "close socket")
-
-                            syncer?.socketTransport?.closeSocket()
-
-                            socketClosed = true
-
-                        }
-
-                    }, STMConstants.BACKGROUND_DELAY.toLong() * 1000)
-
                     //TODO
                     //[STMGarbageCollector.sharedInstance removeOutOfDateImages];
 
                 } else {
-
-                    if (socketClosed) {
-
-                        syncer?.socketTransport?.reconnectSocket()
-
-                        STMFunctions.debugLog("MYApp", "reconnect socket")
-
-                        socketClosed = false
-
-                    }
 
                     val logMessage = "application will enter foreground"
 
