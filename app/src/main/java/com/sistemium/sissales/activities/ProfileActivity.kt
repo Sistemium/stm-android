@@ -18,6 +18,7 @@ import com.sistemium.sissales.base.session.STMSession
 import kotlinx.android.synthetic.main.activity_profile.*
 import com.github.javiersantos.appupdater.AppUpdater
 import com.github.javiersantos.appupdater.enums.UpdateFrom
+import com.sistemium.sissales.base.STMFunctions
 
 
 class ProfileActivity : AppCompatActivity() {
@@ -35,6 +36,9 @@ class ProfileActivity : AppCompatActivity() {
     var currentTab: Map<*, *>? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
+
+        STMFunctions.memoryFix()
+
         super.onCreate(savedInstanceState)
         profileActivityController = ProfileActivityController(this)
         setContentView(R.layout.activity_profile)

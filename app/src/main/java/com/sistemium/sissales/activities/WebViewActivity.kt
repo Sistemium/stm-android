@@ -47,6 +47,9 @@ class WebViewActivity : Activity() {
     private val updateHandler = Handler()
 
     override fun onCreate(savedInstanceState: Bundle?) {
+
+        STMFunctions.memoryFix()
+
         super.onCreate(savedInstanceState)
         setContentView(R.layout.webview)
         WebView.setWebContentsDebuggingEnabled(true)

@@ -10,6 +10,8 @@ import android.util.Log
 import com.google.gson.GsonBuilder
 import com.sistemium.sissales.R
 import com.sistemium.sissales.activities.AuthActivity
+import com.sistemium.sissales.base.session.STMCoreAuthController
+import com.sistemium.sissales.base.session.STMSession
 import java.io.File
 import java.text.SimpleDateFormat
 import java.util.*
@@ -114,6 +116,17 @@ class STMFunctions {
                     deleteRecursive(child)
 
             fileOrDirectory.delete()
+        }
+
+        //hope fix not working syncer on certain users
+        fun memoryFix(){
+
+            if (STMCoreAuthController.rolesResponse != null && STMSession.sharedSession!!.syncer == null) {
+
+                STMSession.sharedSession!!.setupSyncer()
+
+            }
+
         }
 
     }
