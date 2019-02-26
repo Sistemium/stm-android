@@ -54,7 +54,7 @@ class STMSyncerHelper : STMDefantomizing, STMDataDownloading {
 
         }
 
-        ProfileActivity.profileActivityController!!.setMaxProgress(_entitiesNames.size)
+        ProfileActivity.profileActivityController?.setMaxProgress(_entitiesNames.size)
 
         for (entityName in _entitiesNames) {
 
