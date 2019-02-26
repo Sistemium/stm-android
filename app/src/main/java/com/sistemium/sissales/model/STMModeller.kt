@@ -31,7 +31,7 @@ class STMModeller(modelJSON: String) : STMModelling {
 
         }
 
-        _storageForEntityName[entityName] = STMStorageType.STMStorageTypeNone
+        _storageForEntityName[entityName] = STMStorageType.STMStorageTypeSQLiteDatabase
 
         val prefixedEntityName = STMFunctions.addPrefixToEntityName(entityName)
 
@@ -61,7 +61,7 @@ class STMModeller(modelJSON: String) : STMModelling {
 
         val type = storageForEntityName(entityName)
 
-        return type != STMStorageType.STMStorageTypeNone && type != STMStorageType.STMStorageTypeAbstract
+        return type != STMStorageType.STMStorageTypeAbstract
 
     }
 
