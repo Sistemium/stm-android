@@ -125,7 +125,7 @@ class STMPersister(private val runner: STMPersistingRunning) : STMFullStackPersi
     @Throws(Exception::class)
     override fun destroySync(entityName: String, identifier: String, options: Map<*, *>?): Boolean {
 
-        val deletedCount = destroyAllSync(entityName, STMPredicate("${STMConstants.DEFAULT_PERSISTING_PRIMARY_KEY} = '$identifier'"), null)
+        val deletedCount = destroyAllSync(entityName, STMPredicate("${STMConstants.DEFAULT_PERSISTING_PRIMARY_KEY} = '$identifier'"), options)
 
         return deletedCount > 0
 
