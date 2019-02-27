@@ -181,7 +181,7 @@ class STMSyncerHelper : STMDefantomizing, STMDataDownloading {
 
         STMFunctions.debugLog("STMSyncerHelper", "DEFANTOMIZING_START with queue of $count")
 
-        ProfileActivity.profileActivityController!!.setMaxProgress(count)
+        ProfileActivity.profileActivityController?.setMaxProgress(count)
 
         if (count == 0) defantomizingFinished()
 
@@ -257,7 +257,7 @@ class STMSyncerHelper : STMDefantomizing, STMDataDownloading {
 
         STMFunctions.debugLog("STMSyncerHelper", "doneWith $entityName remain ${downloadingOperations.size} to receive")
 
-        ProfileActivity.profileActivityController!!.addProgress(1)
+        ProfileActivity.profileActivityController?.addProgress(1)
 
         if (downloadingOperations.size > 0) {
 
@@ -275,7 +275,7 @@ class STMSyncerHelper : STMDefantomizing, STMDataDownloading {
 
         STMFunctions.debugLog("STMSyncerHelper", "    $entityName: got ${result.size} objects")
 
-        ProfileActivity.profileActivityController!!.setProgressInfo(result.size)
+        ProfileActivity.profileActivityController?.setProgressInfo(result.size)
 
         if (result.size < pageSize) {
 
@@ -291,7 +291,7 @@ class STMSyncerHelper : STMDefantomizing, STMDataDownloading {
     private fun defantomizingFinished() {
 
         STMFunctions.debugLog("STMSyncedHelper", "DEFANTOMIZING_FINISHED")
-        ProfileActivity.profileActivityController!!.setProgressInfo(-1)
+        ProfileActivity.profileActivityController?.setProgressInfo(-1)
         this.defantomizing = null
         defantomizingOwner!!.defantomizingFinished()
 
@@ -308,7 +308,7 @@ class STMSyncerHelper : STMDefantomizing, STMDataDownloading {
 
         STMFunctions.debugLog("STMSyncerHelper", "doneWith $entityName $identifier ($count)")
 
-        ProfileActivity.profileActivityController!!.addProgress(1)
+        ProfileActivity.profileActivityController?.addProgress(1)
 
         if (count == 0) {
 
