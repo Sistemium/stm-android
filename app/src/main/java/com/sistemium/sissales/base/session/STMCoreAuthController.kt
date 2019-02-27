@@ -40,7 +40,7 @@ class STMCoreAuthController {
 
     companion object {
 
-        var accessToken: String?
+        var accessToken: String? = null
             get() {
 
                 val prefStore = SecuredPreferenceStore.getSharedInstance()
@@ -49,11 +49,32 @@ class STMCoreAuthController {
             }
             set(value) {
 
+                if (field != value){
+
+                    val prefStore = SecuredPreferenceStore.getSharedInstance()
+
+                    prefStore.edit().putString("accessToken", value).apply()
+
+                    lastAuth = STMFunctions.stringFrom(Date())
+
+                    tokenHash = STMFunctions.md5FromString(value!!)
+
+                }
+
+            }
+
+        var tokenHash: String?
+            get() {
+
+                val prefStore = SecuredPreferenceStore.getSharedInstance()
+                return prefStore.getString("tokenHash", null)
+
+            }
+            set(value) {
+
                 val prefStore = SecuredPreferenceStore.getSharedInstance()
 
-                prefStore.edit().putString("accessToken", value).apply()
-
-                lastAuth = STMFunctions.stringFrom(Date())
+                prefStore.edit().putString("tokenHash", value).apply()
 
             }
 

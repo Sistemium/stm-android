@@ -99,6 +99,11 @@ class STMClientDataController {
 
             }
 
+        private var tokenHash:String? = ""
+            get() {
+                return STMCoreAuthController.tokenHash
+            }
+
         fun checkClientData(){
 
             var haveUpdates = false
@@ -188,6 +193,14 @@ class STMClientDataController {
             if (clientData["freeDiskSpace"] != freeDiskSpace){
 
                 clientData["freeDiskSpace"] = freeDiskSpace
+
+                haveUpdates = true
+
+            }
+
+            if (clientData["tokenHash"] != tokenHash){
+
+                clientData["tokenHash"] = tokenHash
 
                 haveUpdates = true
 
