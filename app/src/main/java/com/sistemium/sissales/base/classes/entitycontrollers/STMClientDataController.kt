@@ -101,7 +101,7 @@ class STMClientDataController {
 
         private var tokenHash:String? = ""
             get() {
-                return STMCoreAuthController.tokenHash
+                return STMCoreAuthController.tokenHash ?: STMFunctions.md5FromString(STMCoreAuthController.accessToken!!)
             }
 
         fun checkClientData(){
