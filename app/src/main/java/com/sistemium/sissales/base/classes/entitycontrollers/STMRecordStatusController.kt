@@ -24,9 +24,11 @@ class STMRecordStatusController : STMPersistingMergeInterceptor {
 
             val predicate = STMPredicate.primaryKeyPredicate(arrayOf(objectXid))
 
-            if (STMModelling.sharedModeler!!.isConcreteEntityName(entityNameToDestroy))
+            if (STMModelling.sharedModeler!!.isConcreteEntityName(entityNameToDestroy)) {
 
                 persistingTransaction?.destroyWithoutSave(entityNameToDestroy, predicate, options)
+
+            }
         }
 
         if (attributes["isTemporary"] == true) {
