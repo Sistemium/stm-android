@@ -5,6 +5,6 @@ package com.sistemium.sissales.enums
  */
 enum class STMStorageType {
 
-    STMStorageTypeSQLiteDatabase, STMStorageTypeAbstract
+    STMStorageTypeSQLiteDatabase, STMStorageTypeNone, STMStorageTypeAbstract
 
 }
