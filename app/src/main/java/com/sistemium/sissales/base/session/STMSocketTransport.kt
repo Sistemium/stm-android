@@ -344,6 +344,10 @@ class STMSocketTransport(private var socketUrlString: String, private var owner:
 
             STMFunctions.debugLog("STMSocketTransport","got Remote Commands")
 
+            if (it.first() is JSONObject){
+                STMRemoteController.receiveRemoteCommands(it.first() as JSONObject)
+            }
+
         }
 
         socket!!.on(STMSocketEvent.STMSocketEventRemoteRequests.toString()) {
