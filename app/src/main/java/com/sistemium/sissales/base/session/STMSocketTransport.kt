@@ -6,6 +6,7 @@ import com.sistemium.sissales.base.STMFunctions
 import com.sistemium.sissales.base.helper.logger.STMLogger
 import com.sistemium.sissales.base.classes.entitycontrollers.STMClientDataController
 import com.sistemium.sissales.base.classes.entitycontrollers.STMEntityController
+import com.sistemium.sissales.base.classes.entitycontrollers.STMRemoteController
 import com.sistemium.sissales.enums.STMSocketEvent
 import com.sistemium.sissales.interfaces.STMRemoteDataEventHandling
 import com.sistemium.sissales.interfaces.STMSocketConnection
@@ -162,7 +163,7 @@ class STMSocketTransport(private var socketUrlString: String, private var owner:
 
                     if (args.firstOrNull() is NoAck) {
 
-                        deferred.reject(Exception("ack timeout on event $event"))
+//                        deferred.reject(Exception("ack timeout on event $event"))
 
                         return
 
@@ -186,7 +187,7 @@ class STMSocketTransport(private var socketUrlString: String, private var owner:
 
                     if (args.firstOrNull() is NoAck) {
 
-                        deferred.reject(Exception("ack timeout on event $event"))
+//                        deferred.reject(Exception("ack timeout on event $event"))
 
                         return
 
@@ -218,7 +219,7 @@ class STMSocketTransport(private var socketUrlString: String, private var owner:
 
                     if (args.firstOrNull() is NoAck) {
 
-                        deferred.reject(Exception("ack timeout on event $event"))
+//                        deferred.reject(Exception("ack timeout on event $event"))
 
                         return
 
@@ -237,7 +238,7 @@ class STMSocketTransport(private var socketUrlString: String, private var owner:
 
                     if (args.firstOrNull() is NoAck) {
 
-                        deferred.reject(Exception("ack timeout on event $event with null value"))
+//                        deferred.reject(Exception("ack timeout on event $event with null value"))
 
                         return
 
@@ -340,8 +341,6 @@ class STMSocketTransport(private var socketUrlString: String, private var owner:
         }
 
         socket!!.on(STMSocketEvent.STMSocketEventRemoteCommands.toString()) {
-
-            //TODO
 
             STMFunctions.debugLog("STMSocketTransport","got Remote Commands")
 
