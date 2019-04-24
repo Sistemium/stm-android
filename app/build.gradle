@@ -75,7 +75,7 @@ configurations.all {
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
-    implementation 'com.android.support.constraint:constraint-layout:2.0.0-alpha3'
+    implementation 'com.android.support.constraint:constraint-layout:2.0.0-alpha4'
     implementation 'com.android.support:design:28.0.0'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
     implementation 'nl.komponents.kovenant:kovenant:3.3.0'
