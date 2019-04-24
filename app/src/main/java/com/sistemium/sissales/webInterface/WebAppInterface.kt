@@ -23,6 +23,7 @@ import android.net.Uri
 import com.sistemium.sissales.R
 import com.sistemium.sissales.base.classes.entitycontrollers.STMCorePhotosController
 import com.sistemium.sissales.base.classes.entitycontrollers.STMCorePicturesController
+import com.sistemium.sissales.base.session.STMCoreSettingsController
 import com.sistemium.sissales.base.session.STMSession
 import com.sistemium.sissales.webInterface.STMWebAppInterfaceSubscription
 
@@ -299,8 +300,10 @@ class WebAppInterface internal constructor(private var webViewActivity: WebViewA
         criteria.isBearingRequired = false
         criteria.isSpeedRequired = false
         criteria.isCostAllowed = true
-        criteria.horizontalAccuracy = Criteria.ACCURACY_HIGH
-        criteria.verticalAccuracy = Criteria.ACCURACY_HIGH
+        val accuracyCriteria = STMSession.sharedSession?.settingsController?.stringValueForSettings("accuracy_criteria", "location")?.toInt() ?: 0
+        criteria.horizontalAccuracy = accuracyCriteria
+        criteria.verticalAccuracy = accuracyCriteria
+        criteria.isAltitudeRequired = false
 
         val locationListener = object : LocationListener {
             override fun onLocationChanged(location: Location) {
