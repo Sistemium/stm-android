@@ -285,27 +285,29 @@ class WebAppInterface internal constructor(private var webViewActivity: WebViewA
 
         val accuracy = (mapParameters["accuracy"] as? Double)?.toInt()  ?: 0
 
-        val timeout = ((mapParameters["timeout"] as? Double) ?: 20000.0) / 2
+        var timeout = (mapParameters["timeout"] as? Double) ?: 20000.0
 
-        val now = Date()
+        timeout /= 1.5 // otherwise web app will trigger timeout itself and bestLocation will not return
+
+        val startTime = Date()
 
         var bestLocation:Location? = null
 
         val locationManager = MyApplication.appContext!!.getSystemService(Context.LOCATION_SERVICE) as LocationManager
 
         val criteria = Criteria()
-        criteria.accuracy = Criteria.ACCURACY_COARSE
         criteria.powerRequirement = Criteria.POWER_LOW
         criteria.isAltitudeRequired = false
         criteria.isBearingRequired = false
         criteria.isSpeedRequired = false
-        criteria.isCostAllowed = true
         val accuracyCriteria = STMSession.sharedSession?.settingsController?.stringValueForSettings("accuracy_criteria", "location")?.toInt() ?: 0
+        criteria.accuracy = if (accuracyCriteria == 0 || accuracyCriteria == 1) Criteria.ACCURACY_COARSE else Criteria.ACCURACY_FINE
         criteria.horizontalAccuracy = accuracyCriteria
         criteria.verticalAccuracy = accuracyCriteria
         criteria.isAltitudeRequired = false
 
         val locationListener = object : LocationListener {
+
             override fun onLocationChanged(location: Location) {
 
                 if (bestLocation == null || bestLocation!!.accuracy > location.accuracy) {
@@ -314,29 +316,38 @@ class WebAppInterface internal constructor(private var webViewActivity: WebViewA
 
                 }
 
-                if (bestLocation!!.accuracy <= accuracy || Date().time - timeout > now.time){
+                if (bestLocation!!.accuracy <= accuracy || Date().time - timeout > startTime.time){
 
                     resolveLocation(bestLocation, mapParameters)
 
-                    locationManager.removeUpdates(this)
+                } else {
+
+                    requestLocationUpdate(locationManager, criteria, this, mapParameters)
 
                 }
 
             }
 
-            override fun onStatusChanged(provider: String, status: Int, extras: Bundle) {}
-            override fun onProviderEnabled(provider: String) {}
-            override fun onProviderDisabled(provider: String) {}
+            override fun onStatusChanged(provider: String?, status: Int, extras: Bundle?) {}
+            override fun onProviderEnabled(provider: String?) {}
+            override fun onProviderDisabled(provider: String?) {}
         }
+
+        requestLocationUpdate(locationManager, criteria, locationListener, mapParameters)
+
+
+    }
+
+    fun requestLocationUpdate(locationManager:LocationManager, criteria:Criteria, locationListener:LocationListener, mapParameters:Map<*,*>){
 
         try {
 
-            locationManager.requestLocationUpdates(0, 0.toFloat(), criteria, locationListener, null)
+            locationManager.requestSingleUpdate(criteria, locationListener, null)
 
         }
         catch (e: SecurityException) {
 
-            return javascriptCallback(MyApplication.appContext!!.resources.getString(R.string.location_not_permitted),mapParameters)
+            return javascriptCallback(MyApplication.appContext!!.resources.getString(R.string.location_not_permitted), mapParameters)
 
         }
 
