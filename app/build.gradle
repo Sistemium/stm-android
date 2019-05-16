@@ -87,4 +87,5 @@ dependencies {
     }
     implementation 'com.github.EdgarJan:Secured-Preference-Store:-SNAPSHOT'
     implementation 'com.github.javiersantos:AppUpdater:master-SNAPSHOT'
+    implementation 'com.google.android.gms:play-services-location:16.0.0'
 }
