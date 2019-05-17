@@ -1,9 +1,5 @@
 package com.sistemium.sissales.webInterface
 
-import android.Manifest
-import android.app.Activity
-import android.content.Context
-import android.content.Intent
 import android.location.LocationManager
 import android.webkit.JavascriptInterface
 import com.sistemium.sissales.activities.WebViewActivity
@@ -20,38 +16,27 @@ import android.location.Criteria
 import android.location.Location
 import android.os.Bundle
 import android.location.LocationListener
-import android.net.Uri
 import com.google.android.gms.common.api.GoogleApiClient
-import com.sistemium.sissales.R
 import com.sistemium.sissales.base.classes.entitycontrollers.STMCorePhotosController
 import com.sistemium.sissales.base.classes.entitycontrollers.STMCorePicturesController
-import com.sistemium.sissales.base.session.STMCoreSettingsController
 import com.sistemium.sissales.base.session.STMSession
-import com.sistemium.sissales.webInterface.STMWebAppInterfaceSubscription
 
 import java.util.*
 import com.google.android.gms.location.LocationServices
-import android.R
 import com.google.android.gms.common.ConnectionResult
-import android.widget.Toast
-import android.content.pm.PackageManager
-import android.Manifest.permission
-import android.Manifest.permission.ACCESS_COARSE_LOCATION
-import android.support.v4.app.ActivityCompat
-import android.Manifest.permission.ACCESS_FINE_LOCATION
 import com.google.android.gms.location.LocationRequest
-import android.R
 import android.annotation.SuppressLint
 import android.os.Looper
 import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationRequest.PRIORITY_HIGH_ACCURACY
+import com.google.android.gms.location.LocationResult
 
 
 /**
  * Created by edgarjanvuicik on 27/10/2017.
  */
 
-class WebAppInterface internal constructor(private var webViewActivity: WebViewActivity): {
+class WebAppInterface internal constructor(private var webViewActivity: WebViewActivity) {
 
     private val javascriptCallback = "iSistemiumIOSCallback"
 
@@ -302,18 +287,18 @@ class WebAppInterface internal constructor(private var webViewActivity: WebViewA
 
         val accuracy = (mapParameters["accuracy"] as? Double)?.toInt()  ?: 0
 
-        var timeout = (mapParameters["timeout"] as? Double) ?: 20000.0
+        var timeout = (mapParameters["timeout"] as? Double) ?: 30000.0
 
-        timeout /= 1.5 // otherwise web app will trigger timeout itself and bestLocation will not return
+        timeout -= 2000 // otherwise web app will trigger timeout itself and bestLocation will not return
 
         val startTime = Date()
 
-        val accuracyCriteria = STMSession.sharedSession?.settingsController?.stringValueForSettings("accuracy_criteria", "location")?.toInt() ?: 0
+        var bestLocation:Location? = null
 
         val mFusedLocationClient = LocationServices.getFusedLocationProviderClient(MyApplication.appContext!!)
 
-        var bestLocation:Location? = null
-        //GoogleApiClient.OnConnectionFailedListener
+        var googleApiClient:GoogleApiClient? = null
+
         val locationListener = object : GoogleApiClient.ConnectionCallbacks,
                 GoogleApiClient.OnConnectionFailedListener{
 
@@ -322,78 +307,52 @@ class WebAppInterface internal constructor(private var webViewActivity: WebViewA
 
                 val locationRequest = LocationRequest()
                 locationRequest.priority = PRIORITY_HIGH_ACCURACY
-//                locationRequest.interval = UPDATE_INTERVAL
-//                locationRequest.fastestInterval = FASTEST_INTERVAL
-
+                locationRequest.interval = 0
 
                 mFusedLocationClient.requestLocationUpdates(locationRequest, object:LocationCallback(){
-                    
+
+                    override fun onLocationResult(p0: LocationResult?) {
+                        val location = p0!!.lastLocation
+
+                        if (bestLocation == null || bestLocation!!.accuracy > location.accuracy) {
+
+                            bestLocation = location
+
+                        }
+                        
+                        if (bestLocation!!.accuracy <= accuracy || Date().time - timeout > startTime.time){
+
+                            resolveLocation(bestLocation, mapParameters)
+
+                            mFusedLocationClient.removeLocationUpdates(this)
+
+                            googleApiClient?.disconnect()
+
+                        }
+                    }
+
                 }, Looper.myLooper())
 
             }
 
             override fun onConnectionSuspended(p0: Int) {
-                TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+
+                googleApiClient?.disconnect()
             }
 
             override fun onConnectionFailed(p0: ConnectionResult) {
-                TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+
+                googleApiClient?.disconnect()
             }
 
         }
 
-        val googleApiClient:GoogleApiClient = GoogleApiClient.Builder(MyApplication.appContext!!)
+        googleApiClient = GoogleApiClient.Builder(MyApplication.appContext!!)
                 .addApi(LocationServices.API)
                 .addConnectionCallbacks(locationListener)
                 .addOnConnectionFailedListener(locationListener)
                 .build()
         googleApiClient.connect()
-
-        mFusedLocationClient.removeLocationUpdates(googleApiClient, this)
-        googleApiClient.disconnect()
-
-//        val locationManager = MyApplication.appContext!!.getSystemService(Context.LOCATION_SERVICE) as LocationManager
-//
-//        val criteria = Criteria()
-//        criteria.powerRequirement = Criteria.POWER_LOW
-//        criteria.isAltitudeRequired = false
-//        criteria.isBearingRequired = false
-//        criteria.isSpeedRequired = false
-//        val accuracyCriteria = STMSession.sharedSession?.settingsController?.stringValueForSettings("accuracy_criteria", "location")?.toInt() ?: 0
-//        criteria.accuracy = if (accuracyCriteria == 0 || accuracyCriteria == 1) Criteria.ACCURACY_COARSE else Criteria.ACCURACY_FINE
-//        criteria.horizontalAccuracy = accuracyCriteria
-//        criteria.verticalAccuracy = accuracyCriteria
-//        criteria.isAltitudeRequired = false
-//
-//        val locationListener = object : LocationListener {
-//
-//            override fun onLocationChanged(location: Location) {
-//
-//                if (bestLocation == null || bestLocation!!.accuracy > location.accuracy) {
-//
-//                    bestLocation = location
-//
-//                }
-//
-//                if (bestLocation!!.accuracy <= accuracy || Date().time - timeout > startTime.time){
-//
-//                    resolveLocation(bestLocation, mapParameters)
-//
-//                } else {
-//
-//                    requestLocationUpdate(locationManager, criteria, this, mapParameters)
-//
-//                }
-//
-//            }
-//
-//            override fun onStatusChanged(provider: String?, status: Int, extras: Bundle?) {}
-//            override fun onProviderEnabled(provider: String?) {}
-//            override fun onProviderDisabled(provider: String?) {}
-//        }
-//
-//        requestLocationUpdate(locationManager, criteria, locationListener, mapParameters)
-
 
     }
 
@@ -406,7 +365,7 @@ class WebAppInterface internal constructor(private var webViewActivity: WebViewA
         }
         catch (e: SecurityException) {
 
-            return javascriptCallback(MyApplication.appContext!!.resources.getString(R.string.location_not_permitted), mapParameters)
+            return javascriptCallback(MyApplication.appContext!!.resources.getString(com.sistemium.sissales.R.string.location_not_permitted), mapParameters)
 
         }
 
@@ -416,7 +375,7 @@ class WebAppInterface internal constructor(private var webViewActivity: WebViewA
 
         if (location == null){
 
-            return javascriptCallback(MyApplication.appContext!!.resources.getString(R.string.location_failed),mapParameters)
+            return javascriptCallback(MyApplication.appContext!!.resources.getString(com.sistemium.sissales.R.string.location_failed),mapParameters)
 
         }
 
@@ -443,7 +402,7 @@ class WebAppInterface internal constructor(private var webViewActivity: WebViewA
 
         }.fail {
 
-            javascriptCallback(MyApplication.appContext!!.resources.getString(R.string.location_failed),mapParameters)
+            javascriptCallback(MyApplication.appContext!!.resources.getString(com.sistemium.sissales.R.string.location_failed),mapParameters)
 
         }
 
