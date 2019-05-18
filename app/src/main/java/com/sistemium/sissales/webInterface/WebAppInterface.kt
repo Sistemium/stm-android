@@ -319,7 +319,7 @@ class WebAppInterface internal constructor(private var webViewActivity: WebViewA
                             bestLocation = location
 
                         }
-                        
+
                         if (bestLocation!!.accuracy <= accuracy || Date().time - timeout > startTime.time){
 
                             resolveLocation(bestLocation, mapParameters)
