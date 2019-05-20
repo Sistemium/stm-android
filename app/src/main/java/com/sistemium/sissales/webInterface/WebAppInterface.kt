@@ -356,21 +356,6 @@ class WebAppInterface internal constructor(private var webViewActivity: WebViewA
 
     }
 
-    fun requestLocationUpdate(locationManager:LocationManager, criteria:Criteria, locationListener:LocationListener, mapParameters:Map<*,*>){
-
-        try {
-
-            locationManager.requestSingleUpdate(criteria, locationListener, null)
-
-        }
-        catch (e: SecurityException) {
-
-            return javascriptCallback(MyApplication.appContext!!.resources.getString(com.sistemium.sissales.R.string.location_not_permitted), mapParameters)
-
-        }
-
-    }
-
     fun resolveLocation(location:Location?, mapParameters:Map<*,*>){
 
         if (location == null){
