@@ -187,7 +187,7 @@ class STMSocketTransport(private var socketUrlString: String, private var owner:
 
                     if (args.firstOrNull() is NoAck) {
 
-//                        deferred.reject(Exception("ack timeout on event $event"))
+                        deferred.reject(Exception("ack timeout on event $event"))
 
                         return
 
@@ -219,7 +219,7 @@ class STMSocketTransport(private var socketUrlString: String, private var owner:
 
                     if (args.firstOrNull() is NoAck) {
 
-//                        deferred.reject(Exception("ack timeout on event $event"))
+                        deferred.reject(Exception("ack timeout on event $event"))
 
                         return
 
@@ -238,7 +238,7 @@ class STMSocketTransport(private var socketUrlString: String, private var owner:
 
                     if (args.firstOrNull() is NoAck) {
 
-//                        deferred.reject(Exception("ack timeout on event $event with null value"))
+                        deferred.reject(Exception("ack timeout on event $event with null value"))
 
                         return
 
