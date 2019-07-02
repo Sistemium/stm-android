@@ -450,7 +450,7 @@ class STMSocketTransport(private var socketUrlString: String, private var owner:
 
             if ((it.first() as Int) % 10 == 0){
 
-                STMLogger.sharedLogger?.importantMessage("EVENT_RECONNECT_ATTEMPT ${it.first()}")
+//                STMLogger.sharedLogger?.importantMessage("EVENT_RECONNECT_ATTEMPT ${it.first()}")
 
             }
 
