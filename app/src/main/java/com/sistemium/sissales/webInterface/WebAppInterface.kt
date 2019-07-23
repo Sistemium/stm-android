@@ -1,6 +1,5 @@
 package com.sistemium.sissales.webInterface
 
-import android.location.LocationManager
 import android.webkit.JavascriptInterface
 import com.sistemium.sissales.activities.WebViewActivity
 import com.sistemium.sissales.base.MyApplication
@@ -12,10 +11,8 @@ import com.sistemium.sissales.interfaces.STMFullStackPersisting
 import com.sistemium.sissales.persisting.STMPredicate
 import nl.komponents.kovenant.Promise
 import nl.komponents.kovenant.then
-import android.location.Criteria
 import android.location.Location
 import android.os.Bundle
-import android.location.LocationListener
 import com.google.android.gms.common.api.GoogleApiClient
 import com.sistemium.sissales.base.classes.entitycontrollers.STMCorePhotosController
 import com.sistemium.sissales.base.classes.entitycontrollers.STMCorePicturesController
