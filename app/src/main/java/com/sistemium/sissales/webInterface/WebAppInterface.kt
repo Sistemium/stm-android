@@ -30,6 +30,11 @@ import android.os.Looper
 import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationRequest.PRIORITY_HIGH_ACCURACY
 import com.google.android.gms.location.LocationResult
+import android.content.ClipData
+import android.content.ClipboardManager
+import android.content.Context
+
+
 
 
 /**
@@ -492,9 +497,12 @@ class WebAppInterface internal constructor(private var webViewActivity: WebViewA
 
         val mapParameters = gson.fromJson(parameters, Map::class.java)
 
-        // TODO implement copyToClipboard
-
         val callback = mapParameters["callback"]
+        val text = mapParameters["text"] as String
+
+        val clipboard = MyApplication.appContext!!.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager?
+        val clip = ClipData.newPlainText("label", text)
+        clipboard!!.primaryClip = clip
 
         return javascriptCallback(arrayOf<Any>(), mapParameters, callback as String)
 
