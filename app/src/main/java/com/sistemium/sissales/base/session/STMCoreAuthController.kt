@@ -122,6 +122,12 @@ class STMCoreAuthController {
 
                 }
 
+                if ((rolesResponse?.get("roles") as? Map<*,*>)?.keys != null){
+
+                    return "SisWarehouse"
+
+                }
+
                 return ""
 
             }
