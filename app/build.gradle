@@ -44,11 +44,23 @@ android {
             initWith(buildTypes.debug)
             applicationIdSuffix ".driverdebug"
             manifestPlaceholders = [appName: "SisDriver-debug"]
+            debuggable = true
         }
         driverRelease {
             initWith(buildTypes.release)
             applicationIdSuffix ".driver"
             manifestPlaceholders = [appName: "SisDriver"]
+        }
+        warehouseRealease {
+            initWith(buildTypes.release)
+            applicationIdSuffix ".warehouse"
+            manifestPlaceholders = [appName: "SisWarehouse"]
+        }
+        warehouseDebug {
+            initWith(buildTypes.debug)
+            applicationIdSuffix ".warehousedebug"
+            manifestPlaceholders = [appName: "SisWarehouse-debug"]
+            debuggable = true
         }
     }
 
