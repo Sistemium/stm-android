@@ -1,0 +1,2837 @@
+{
+  "model": {
+    "type": "com.apple.IDECoreDataModeler.DataModel",
+    "documentVersion": "1.0",
+    "lastSavedToolsVersion": "14460.32",
+    "systemVersion": "18C54",
+    "minimumToolsVersion": "Xcode 7.3",
+    "sourceLanguage": "Objective-C",
+    "entity": [
+      {
+        "name": "STMAbstract",
+        "isAbstract": "YES",
+        "parentEntity": "STMDatum",
+        "syncable": "YES",
+        "attribute": [
+          {
+            "name": "commentText",
+            "optional": "YES",
+            "attributeType": "String",
+            "syncable": "YES"
+          },
+          {
+            "name": "ownerXid",
+            "optional": "YES",
+            "attributeType": "Binary",
+            "syncable": "YES"
+          },
+          {
+            "name": "source",
+            "optional": "YES",
+            "attributeType": "String",
+            "syncable": "YES"
+          },
+          {
+            "name": "target",
+            "optional": "YES",
+            "attributeType": "String",
+            "syncable": "YES"
+          }
+        ]
+      },
+      {
+        "name": "STMAccount",
+        "parentEntity": "STMAbstract",
+        "syncable": "YES",
+        "attribute": [
+          {
+            "name": "email",
+            "optional": "YES",
+            "attributeType": "String",
+            "syncable": "YES"
+          },
+          {
+            "name": "emailCC",
+            "optional": "YES",
+            "attributeType": "String",
+            "syncable": "YES"
+          },
+          {
+            "name": "isCoordinator",
+            "optional": "YES",
+            "attributeType": "Boolean",
+            "usesScalarValueType": "NO",
+            "syncable": "YES"
+          },
+          {
+            "name": "mobileNumber",
+            "optional": "YES",
+            "attributeType": "String",
+            "syncable": "YES"
+          },
+          {
+            "name": "name",
+            "optional": "YES",
+            "attributeType": "String",
+            "syncable": "YES"
+          }
+        ]
+      },
+      {
+        "name": "STMArticle",
+        "representedClassName": "STMArticle",
+        "parentEntity": "STMAbstract",
+        "syncable": "YES",
+        "attribute": [
+          {
+            "name": "articleSameId",
+            "optional": "YES",
+            "attributeType": "String",
+            "syncable": "YES"
+          },
+          {
+            "name": "barcode",
+            "optional": "YES",
+            "attributeType": "String",
+            "indexed": "YES",
+            "syncable": "YES"
+          },
+          {
+            "name": "code",
+            "optional": "YES",
+            "attributeType": "String",
+            "syncable": "YES"
+          },
+          {
+            "name": "extraLabel",
+            "optional": "YES",
+            "attributeType": "String",
+            "syncable": "YES"
+          },
+          {
+            "name": "factor",
+            "optional": "YES",
+            "attributeType": "Integer 64",
+            "defaultValueString": "0",
+            "usesScalarValueType": "NO",
+            "syncable": "YES"
+          },
+          {
+            "name": "name",
+            "optional": "YES",
+            "attributeType": "String",
+            "syncable": "YES"
+          },
+          {
+            "name": "packageRel",
+            "optional": "YES",
+            "attributeType": "Integer 64",
+            "defaultValueString": "0",
+            "usesScalarValueType": "NO",
+            "syncable": "YES"
+          },
+          {
+            "name": "pieceVolume",
+            "optional": "YES",
+            "attributeType": "Decimal",
+            "defaultValueString": "0.0",
+            "syncable": "YES"
+          },
+          {
+            "name": "pieceWeight",
+            "optional": "YES",
+            "attributeType": "Decimal",
+            "defaultValueString": "0.0",
+            "syncable": "YES"
+          },
+          {
+            "name": "price",
+            "optional": "YES",
+            "attributeType": "Decimal",
+            "defaultValueString": "0.0",
+            "syncable": "YES"
+          },
+          {
+            "name": "productionInfoType",
+            "optional": "YES",
+            "attributeType": "Integer 64",
+            "defaultValueString": "0",
+            "usesScalarValueType": "NO",
+            "syncable": "YES"
+          }
+        ],
+        "relationship": [
+          {
+            "name": "articleDocs",
+            "optional": "YES",
+            "toMany": "YES",
+            "deletionRule": "Cascade",
+            "destinationEntity": "STMArticleDoc",
+            "inverseName": "article",
+            "inverseEntity": "STMArticleDoc",
+            "syncable": "YES"
+          },
+          {
+            "name": "articleGroup",
+            "optional": "YES",
+            "maxCount": "1",
+            "deletionRule": "Nullify",
+            "destinationEntity": "STMArticleGroup",
+            "inverseName": "articles",
+            "inverseEntity": "STMArticleGroup",
+            "syncable": "YES"
+          },
+          {
+            "name": "avatarPicture",
+            "optional": "YES",
+            "maxCount": "1",
+            "deletionRule": "Nullify",
+            "destinationEntity": "STMArticlePicture",
+            "inverseName": "avatarArticles",
+            "inverseEntity": "STMArticlePicture",
+            "syncable": "YES"
+          },
+          {
+            "name": "barCodes",
+            "optional": "YES",
+            "toMany": "YES",
+            "deletionRule": "Cascade",
+            "destinationEntity": "STMArticleBarCode",
+            "inverseName": "article",
+            "inverseEntity": "STMArticleBarCode",
+            "syncable": "YES"
+          },
+          {
+            "name": "inventoryBatches",
+            "optional": "YES",
+            "toMany": "YES",
+            "deletionRule": "Cascade",
+            "destinationEntity": "STMInventoryBatch",
+            "inverseName": "article",
+            "inverseEntity": "STMInventoryBatch",
+            "syncable": "YES"
+          },
+          {
+            "name": "pickingOrderPositions",
+            "optional": "YES",
+            "toMany": "YES",
+            "deletionRule": "Cascade",
+            "destinationEntity": "STMPickingOrderPosition",
+            "inverseName": "article",
+            "inverseEntity": "STMPickingOrderPosition",
+            "syncable": "YES"
+          },
+          {
+            "name": "pickingOrderPositionsPicked",
+            "optional": "YES",
+            "toMany": "YES",
+            "deletionRule": "Cascade",
+            "destinationEntity": "STMPickingOrderPositionPicked",
+            "inverseName": "article",
+            "inverseEntity": "STMPickingOrderPositionPicked",
+            "syncable": "YES"
+          },
+          {
+            "name": "pictures",
+            "optional": "YES",
+            "toMany": "YES",
+            "deletionRule": "Cascade",
+            "destinationEntity": "STMArticlePictureArticle",
+            "inverseName": "article",
+            "inverseEntity": "STMArticlePictureArticle",
+            "syncable": "YES"
+          },
+          {
+            "name": "stockBatches",
+            "optional": "YES",
+            "toMany": "YES",
+            "deletionRule": "Cascade",
+            "destinationEntity": "STMStockBatch",
+            "inverseName": "article",
+            "inverseEntity": "STMStockBatch",
+            "syncable": "YES"
+          },
+          {
+            "name": "stocks",
+            "optional": "YES",
+            "toMany": "YES",
+            "deletionRule": "Cascade",
+            "destinationEntity": "STMStock",
+            "inverseName": "article",
+            "inverseEntity": "STMStock",
+            "syncable": "YES"
+          },
+          {
+            "name": "stockTakingItems",
+            "optional": "YES",
+            "toMany": "YES",
+            "deletionRule": "Nullify",
+            "destinationEntity": "STMStockTakingItem",
+            "inverseName": "article",
+            "inverseEntity": "STMStockTakingItem",
+            "syncable": "YES"
+          },
+          {
+            "name": "warehouseItems",
+            "optional": "YES",
+            "toMany": "YES",
+            "deletionRule": "Cascade",
+            "destinationEntity": "STMWarehouseItem",
+            "inverseName": "article",
+            "inverseEntity": "STMWarehouseItem",
+            "syncable": "YES"
+          },
+          {
+            "name": "warehouseStocks",
+            "optional": "YES",
+            "toMany": "YES",
+            "deletionRule": "Cascade",
+            "destinationEntity": "STMWarehouseStock",
+            "inverseName": "article",
+            "inverseEntity": "STMWarehouseStock",
+            "syncable": "YES"
+          }
+        ]
+      },
+      {
+        "name": "STMArticleBarCode",
+        "parentEntity": "STMAbstract",
+        "syncable": "YES",
+        "attribute": {
+          "name": "code",
+          "optional": "YES",
+          "attributeType": "String",
+          "syncable": "YES"
+        },
+        "relationship": {
+          "name": "article",
+          "optional": "YES",
+          "maxCount": "1",
+          "deletionRule": "Nullify",
+          "destinationEntity": "STMArticle",
+          "inverseName": "barCodes",
+          "inverseEntity": "STMArticle",
+          "syncable": "YES"
+        }
+      },
+      {
+        "name": "STMArticleDoc",
+        "parentEntity": "STMAbstract",
+        "syncable": "YES",
+        "attribute": [
+          {
+            "name": "dateEGAIS",
+            "optional": "YES",
+            "attributeType": "String",
+            "syncable": "YES"
+          },
+          {
+            "name": "dateImport",
+            "optional": "YES",
+            "attributeType": "String",
+            "syncable": "YES"
+          },
+          {
+            "name": "dateProduction",
+            "optional": "YES",
+            "attributeType": "String",
+            "syncable": "YES"
+          },
+          {
+            "name": "ndocEGAIS",
+            "optional": "YES",
+            "attributeType": "String",
+            "syncable": "YES"
+          },
+          {
+            "name": "volume",
+            "optional": "YES",
+            "attributeType": "Integer 64",
+            "defaultValueString": "0",
+            "usesScalarValueType": "NO",
+            "syncable": "YES"
+          }
+        ],
+        "relationship": {
+          "name": "article",
+          "optional": "YES",
+          "maxCount": "1",
+          "deletionRule": "Nullify",
+          "destinationEntity": "STMArticle",
+          "inverseName": "articleDocs",
+          "inverseEntity": "STMArticle",
+          "syncable": "YES"
+        }
+      },
+      {
+        "name": "STMArticleGroup",
+        "representedClassName": "STMArticleGroup",
+        "parentEntity": "STMAbstract",
+        "syncable": "YES",
+        "attribute": {
+          "name": "name",
+          "optional": "YES",
+          "attributeType": "String",
+          "syncable": "YES"
+        },
+        "relationship": [
+          {
+            "name": "articleGroup",
+            "optional": "YES",
+            "maxCount": "1",
+            "deletionRule": "Nullify",
+            "destinationEntity": "STMArticleGroup",
+            "inverseName": "articleGroups",
+            "inverseEntity": "STMArticleGroup",
+            "syncable": "YES"
+          },
+          {
+            "name": "articleGroups",
+            "optional": "YES",
+            "toMany": "YES",
+            "deletionRule": "Cascade",
+            "destinationEntity": "STMArticleGroup",
+            "inverseName": "articleGroup",
+            "inverseEntity": "STMArticleGroup",
+            "syncable": "YES"
+          },
+          {
+            "name": "articles",
+            "optional": "YES",
+            "toMany": "YES",
+            "deletionRule": "Cascade",
+            "destinationEntity": "STMArticle",
+            "inverseName": "articleGroup",
+            "inverseEntity": "STMArticle",
+            "syncable": "YES"
+          },
+          {
+            "name": "children",
+            "optional": "YES",
+            "toMany": "YES",
+            "deletionRule": "Nullify",
+            "destinationEntity": "STMArticleGroup",
+            "inverseName": "parents",
+            "inverseEntity": "STMArticleGroup",
+            "syncable": "YES"
+          },
+          {
+            "name": "parents",
+            "optional": "YES",
+            "toMany": "YES",
+            "deletionRule": "Nullify",
+            "destinationEntity": "STMArticleGroup",
+            "inverseName": "children",
+            "inverseEntity": "STMArticleGroup",
+            "syncable": "YES"
+          }
+        ]
+      },
+      {
+        "name": "STMArticlePicture",
+        "representedClassName": "STMArticlePicture",
+        "parentEntity": "STMCorePicture",
+        "syncable": "YES",
+        "relationship": [
+          {
+            "name": "articles",
+            "optional": "YES",
+            "toMany": "YES",
+            "deletionRule": "Cascade",
+            "destinationEntity": "STMArticlePictureArticle",
+            "inverseName": "picture",
+            "inverseEntity": "STMArticlePictureArticle",
+            "syncable": "YES"
+          },
+          {
+            "name": "avatarArticles",
+            "optional": "YES",
+            "toMany": "YES",
+            "deletionRule": "Nullify",
+            "destinationEntity": "STMArticle",
+            "inverseName": "avatarPicture",
+            "inverseEntity": "STMArticle",
+            "syncable": "YES"
+          }
+        ]
+      },
+      {
+        "name": "STMArticlePictureArticle",
+        "parentEntity": "STMAbstract",
+        "syncable": "YES",
+        "relationship": [
+          {
+            "name": "article",
+            "optional": "YES",
+            "maxCount": "1",
+            "deletionRule": "Nullify",
+            "destinationEntity": "STMArticle",
+            "inverseName": "pictures",
+            "inverseEntity": "STMArticle",
+            "syncable": "YES"
+          },
+          {
+            "name": "picture",
+            "optional": "YES",
+            "maxCount": "1",
+            "deletionRule": "Nullify",
+            "destinationEntity": "STMArticlePicture",
+            "inverseName": "articles",
+            "inverseEntity": "STMArticlePicture",
+            "syncable": "YES"
+          }
+        ]
+      },
+      {
+        "name": "STMBarCodeScan",
+        "representedClassName": "STMBarCodeScan",
+        "parentEntity": "STMAbstract",
+        "syncable": "YES",
+        "attribute": [
+          {
+            "name": "code",
+            "optional": "YES",
+            "attributeType": "String",
+            "syncable": "YES"
+          },
+          {
+            "name": "destinationEntity",
+            "optional": "YES",
+            "attributeType": "String",
+            "syncable": "YES"
+          },
+          {
+            "name": "destinationXid",
+            "optional": "YES",
+            "attributeType": "Binary",
+            "syncable": "YES"
+          }
+        ]
+      },
+      {
+        "name": "STMBarCodeType",
+        "representedClassName": "STMBarCodeType",
+        "parentEntity": "STMAbstract",
+        "syncable": "YES",
+        "attribute": [
+          {
+            "name": "mask",
+            "optional": "YES",
+            "attributeType": "String",
+            "syncable": "YES"
+          },
+          {
+            "name": "name",
+            "optional": "YES",
+            "attributeType": "String",
+            "syncable": "YES"
+          },
+          {
+            "name": "symbology",
+            "optional": "YES",
+            "attributeType": "String",
+            "syncable": "YES"
+          },
+          {
+            "name": "type",
+            "optional": "YES",
+            "attributeType": "String",
+            "syncable": "YES"
+          }
+        ]
+      },
+      {
+        "name": "STMBatteryStatus",
+        "representedClassName": "STMBatteryStatus",
+        "parentEntity": "STMAbstract",
+        "syncable": "YES",
+        "attribute": [
+          {
+            "name": "batteryLevel",
+            "optional": "YES",
+            "attributeType": "Decimal",
+            "defaultValueString": "0.0",
+            "syncable": "YES"
+          },
+          {
+            "name": "batteryState",
+            "optional": "YES",
+            "attributeType": "String",
+            "syncable": "YES"
+          }
+        ]
+      },
+      {
+        "name": "STMClientData",
+        "representedClassName": "STMClientData",
+        "parentEntity": "STMAbstract",
+        "syncable": "YES",
+        "attribute": [
+          {
+            "name": "appVersion",
+            "optional": "YES",
+            "attributeType": "String",
+            "syncable": "YES"
+          },
+          {
+            "name": "buildType",
+            "optional": "YES",
+            "attributeType": "String",
+            "syncable": "YES"
+          },
+          {
+            "name": "bundleIdentifier",
+            "optional": "YES",
+            "attributeType": "String",
+            "syncable": "YES"
+          },
+          {
+            "name": "bundleVersion",
+            "optional": "YES",
+            "attributeType": "String",
+            "syncable": "YES"
+          },
+          {
+            "name": "deviceName",
+            "optional": "YES",
+            "attributeType": "String",
+            "syncable": "YES"
+          },
+          {
+            "name": "devicePlatform",
+            "optional": "YES",
+            "attributeType": "String",
+            "syncable": "YES"
+          },
+          {
+            "name": "deviceToken",
+            "optional": "YES",
+            "attributeType": "String",
+            "syncable": "YES"
+          },
+          {
+            "name": "deviceTokenError",
+            "optional": "YES",
+            "attributeType": "String",
+            "syncable": "YES"
+          },
+          {
+            "name": "deviceUUID",
+            "optional": "YES",
+            "attributeType": "String",
+            "syncable": "YES"
+          },
+          {
+            "name": "freeDiskSpace",
+            "optional": "YES",
+            "attributeType": "Integer 64",
+            "defaultValueString": "0",
+            "usesScalarValueType": "NO",
+            "syncable": "YES"
+          },
+          {
+            "name": "lastAuth",
+            "optional": "YES",
+            "attributeType": "Date",
+            "usesScalarValueType": "NO",
+            "syncable": "YES"
+          },
+          {
+            "name": "locationServiceStatus",
+            "optional": "YES",
+            "attributeType": "String",
+            "syncable": "YES"
+          },
+          {
+            "name": "notificationTypes",
+            "optional": "YES",
+            "attributeType": "String",
+            "syncable": "YES"
+          },
+          {
+            "name": "systemVersion",
+            "optional": "YES",
+            "attributeType": "String",
+            "syncable": "YES"
+          },
+          {
+            "name": "tokenHash",
+            "optional": "YES",
+            "attributeType": "String",
+            "syncable": "YES"
+          }
+        ],
+        "userInfo": {
+          "entry": {
+            "key": "STORE",
+            "value": "FMDB"
+          }
+        }
+      },
+      {
+        "name": "STMClientEntity",
+        "representedClassName": "STMClientEntity",
+        "parentEntity": "STMAbstract",
+        "syncable": "YES",
+        "attribute": [
+          {
+            "name": "eTag",
+            "optional": "YES",
+            "attributeType": "String",
+            "syncable": "YES"
+          },
+          {
+            "name": "lastSent",
+            "optional": "YES",
+            "attributeType": "Date",
+            "usesScalarValueType": "NO",
+            "syncable": "YES"
+          },
+          {
+            "name": "name",
+            "optional": "YES",
+            "attributeType": "String",
+            "syncable": "YES",
+            "userInfo": {
+              "entry": {
+                "key": "UNIQUE",
+                "value": "REPLACE"
+              }
+            }
+          }
+        ],
+        "userInfo": {
+          "entry": {
+            "key": "STORE",
+            "value": "FMDB"
+          }
+        }
+      },
+      {
+        "name": "STMCoreLocation",
+        "representedClassName": "STMCoreLocation",
+        "isAbstract": "YES",
+        "parentEntity": "STMAbstract",
+        "syncable": "YES",
+        "attribute": [
+          {
+            "name": "altitude",
+            "optional": "YES",
+            "attributeType": "Decimal",
+            "defaultValueString": "0.0",
+            "syncable": "YES"
+          },
+          {
+            "name": "course",
+            "optional": "YES",
+            "attributeType": "Decimal",
+            "defaultValueString": "0.0",
+            "syncable": "YES"
+          },
+          {
+            "name": "horizontalAccuracy",
+            "optional": "YES",
+            "attributeType": "Decimal",
+            "defaultValueString": "0.0",
+            "syncable": "YES"
+          },
+          {
+            "name": "lastSeenAt",
+            "optional": "YES",
+            "attributeType": "Date",
+            "usesScalarValueType": "NO",
+            "syncable": "YES"
+          },
+          {
+            "name": "latitude",
+            "optional": "YES",
+            "attributeType": "Decimal",
+            "defaultValueString": "0.0",
+            "syncable": "YES"
+          },
+          {
+            "name": "longitude",
+            "optional": "YES",
+            "attributeType": "Decimal",
+            "defaultValueString": "0.0",
+            "syncable": "YES"
+          },
+          {
+            "name": "speed",
+            "optional": "YES",
+            "attributeType": "Decimal",
+            "defaultValueString": "0.0",
+            "syncable": "YES"
+          },
+          {
+            "name": "timestamp",
+            "optional": "YES",
+            "attributeType": "Date",
+            "usesScalarValueType": "NO",
+            "syncable": "YES"
+          },
+          {
+            "name": "verticalAccuracy",
+            "optional": "YES",
+            "attributeType": "Decimal",
+            "defaultValueString": "0.0",
+            "syncable": "YES"
+          }
+        ],
+        "relationship": {
+          "name": "photos",
+          "optional": "YES",
+          "toMany": "YES",
+          "deletionRule": "Nullify",
+          "destinationEntity": "STMCorePhoto",
+          "inverseName": "location",
+          "inverseEntity": "STMCorePhoto",
+          "syncable": "YES"
+        }
+      },
+      {
+        "name": "STMCorePhoto",
+        "representedClassName": "STMCorePhoto",
+        "isAbstract": "YES",
+        "parentEntity": "STMCorePicture",
+        "elementID": "photo",
+        "syncable": "YES",
+        "relationship": {
+          "name": "location",
+          "optional": "YES",
+          "maxCount": "1",
+          "deletionRule": "Nullify",
+          "destinationEntity": "STMLocation",
+          "inverseName": "photos",
+          "inverseEntity": "STMCoreLocation",
+          "syncable": "YES"
+        }
+      },
+      {
+        "name": "STMCorePicture",
+        "representedClassName": "STMCorePicture",
+        "isAbstract": "YES",
+        "parentEntity": "STMAbstract",
+        "syncable": "YES",
+        "attribute": [
+          {
+            "name": "deviceAts",
+            "optional": "YES",
+            "attributeType": "Date",
+            "usesScalarValueType": "NO",
+            "syncable": "YES"
+          },
+          {
+            "name": "href",
+            "optional": "YES",
+            "attributeType": "String",
+            "syncable": "YES"
+          },
+          {
+            "name": "imageFormat",
+            "optional": "YES",
+            "attributeType": "String",
+            "syncable": "YES"
+          },
+          {
+            "name": "imagePath",
+            "optional": "YES",
+            "attributeType": "String",
+            "allowsExternalBinaryDataStorage": "YES",
+            "syncable": "YES"
+          },
+          {
+            "name": "name",
+            "optional": "YES",
+            "attributeType": "String",
+            "syncable": "YES"
+          },
+          {
+            "name": "picturesInfo",
+            "optional": "YES",
+            "attributeType": "String",
+            "syncable": "YES"
+          },
+          {
+            "name": "resizedImagePath",
+            "optional": "YES",
+            "attributeType": "String",
+            "allowsExternalBinaryDataStorage": "YES",
+            "syncable": "YES"
+          },
+          {
+            "name": "thumbnailHref",
+            "optional": "YES",
+            "attributeType": "String",
+            "syncable": "YES"
+          },
+          {
+            "name": "thumbnailPath",
+            "optional": "YES",
+            "attributeType": "String",
+            "allowsExternalBinaryDataStorage": "YES",
+            "storedInTruthFile": "YES",
+            "syncable": "YES"
+          }
+        ]
+      },
+      {
+        "name": "STMDatum",
+        "representedClassName": "STMDatum",
+        "syncable": "YES",
+        "attribute": [
+          {
+            "name": "deviceCts",
+            "optional": "YES",
+            "attributeType": "Date",
+            "usesScalarValueType": "NO",
+            "indexed": "YES",
+            "syncable": "YES"
+          },
+          {
+            "name": "deviceTs",
+            "optional": "YES",
+            "attributeType": "Date",
+            "usesScalarValueType": "NO",
+            "syncable": "YES"
+          },
+          {
+            "name": "id",
+            "optional": "YES",
+            "attributeType": "Integer 64",
+            "defaultValueString": "0",
+            "usesScalarValueType": "NO",
+            "indexed": "YES",
+            "syncable": "YES"
+          },
+          {
+            "name": "isFantom",
+            "optional": "YES",
+            "attributeType": "Boolean",
+            "defaultValueString": "YES",
+            "usesScalarValueType": "NO",
+            "syncable": "YES"
+          },
+          {
+            "name": "lts",
+            "optional": "YES",
+            "attributeType": "Date",
+            "usesScalarValueType": "NO",
+            "syncable": "YES"
+          },
+          {
+            "name": "xid",
+            "optional": "YES",
+            "attributeType": "Binary",
+            "indexed": "YES",
+            "syncable": "YES"
+          }
+        ],
+        "userInfo": {
+          "entry": {
+            "key": "STORE",
+            "value": "NONE"
+          }
+        }
+      },
+      {
+        "name": "STMEntity",
+        "representedClassName": "STMEntity",
+        "parentEntity": "STMAbstract",
+        "syncable": "YES",
+        "attribute": [
+          {
+            "name": "eTag",
+            "optional": "YES",
+            "attributeType": "String",
+            "syncable": "YES"
+          },
+          {
+            "name": "isResolveFantoms",
+            "optional": "YES",
+            "attributeType": "Boolean",
+            "usesScalarValueType": "NO",
+            "syncable": "YES"
+          },
+          {
+            "name": "isUploadable",
+            "optional": "YES",
+            "attributeType": "Boolean",
+            "usesScalarValueType": "NO",
+            "syncable": "YES"
+          },
+          {
+            "name": "lifeTime",
+            "optional": "YES",
+            "attributeType": "Double",
+            "defaultValueString": "0.0",
+            "usesScalarValueType": "NO",
+            "syncable": "YES"
+          },
+          {
+            "name": "lifeTimeDateField",
+            "optional": "YES",
+            "attributeType": "String",
+            "syncable": "YES"
+          },
+          {
+            "name": "lifeTimePredicate",
+            "optional": "YES",
+            "attributeType": "String",
+            "syncable": "YES"
+          },
+          {
+            "name": "maxPictureScale",
+            "optional": "YES",
+            "attributeType": "Double",
+            "defaultValueString": "0.0",
+            "usesScalarValueType": "NO",
+            "syncable": "YES"
+          },
+          {
+            "name": "name",
+            "optional": "YES",
+            "attributeType": "String",
+            "syncable": "YES"
+          },
+          {
+            "name": "pictureLifeTime",
+            "optional": "YES",
+            "attributeType": "Double",
+            "defaultValueString": "0.0",
+            "usesScalarValueType": "NO",
+            "syncable": "YES"
+          },
+          {
+            "name": "roleName",
+            "optional": "YES",
+            "attributeType": "String",
+            "syncable": "YES"
+          },
+          {
+            "name": "roleOwner",
+            "optional": "YES",
+            "attributeType": "String",
+            "syncable": "YES"
+          },
+          {
+            "name": "url",
+            "optional": "YES",
+            "attributeType": "String",
+            "syncable": "YES"
+          },
+          {
+            "name": "workflow",
+            "optional": "YES",
+            "attributeType": "String",
+            "syncable": "YES"
+          }
+        ],
+        "relationship": {
+          "name": "wf",
+          "optional": "YES",
+          "maxCount": "1",
+          "deletionRule": "Nullify",
+          "destinationEntity": "STMWorkflow",
+          "inverseName": "entities",
+          "inverseEntity": "STMWorkflow",
+          "syncable": "YES"
+        },
+        "userInfo": {
+          "entry": {
+            "key": "STORE",
+            "value": "FMDB"
+          }
+        }
+      },
+      {
+        "name": "STMInventoryBatch",
+        "parentEntity": "STMAbstract",
+        "syncable": "YES",
+        "attribute": [
+          {
+            "name": "code",
+            "optional": "YES",
+            "attributeType": "String",
+            "syncable": "YES"
+          },
+          {
+            "name": "exciseStampCode",
+            "optional": "YES",
+            "attributeType": "String",
+            "syncable": "YES"
+          },
+          {
+            "name": "isDone",
+            "optional": "YES",
+            "attributeType": "Boolean",
+            "usesScalarValueType": "NO",
+            "syncable": "YES"
+          },
+          {
+            "name": "productionInfo",
+            "optional": "YES",
+            "attributeType": "String",
+            "syncable": "YES"
+          },
+          {
+            "name": "stockBatchCode",
+            "optional": "YES",
+            "attributeType": "String",
+            "syncable": "YES"
+          }
+        ],
+        "relationship": [
+          {
+            "name": "article",
+            "optional": "YES",
+            "maxCount": "1",
+            "deletionRule": "Nullify",
+            "destinationEntity": "STMArticle",
+            "inverseName": "inventoryBatches",
+            "inverseEntity": "STMArticle",
+            "syncable": "YES"
+          },
+          {
+            "name": "inventoryBatchItems",
+            "optional": "YES",
+            "toMany": "YES",
+            "deletionRule": "Cascade",
+            "destinationEntity": "STMInventoryBatchItem",
+            "inverseName": "inventoryBatch",
+            "inverseEntity": "STMInventoryBatchItem",
+            "syncable": "YES"
+          },
+          {
+            "name": "stockBatch",
+            "optional": "YES",
+            "maxCount": "1",
+            "deletionRule": "Nullify",
+            "destinationEntity": "STMStockBatch",
+            "inverseName": "inventoryBatches",
+            "inverseEntity": "STMStockBatch",
+            "syncable": "YES"
+          }
+        ]
+      },
+      {
+        "name": "STMInventoryBatchItem",
+        "parentEntity": "STMAbstract",
+        "syncable": "YES",
+        "attribute": {
+          "name": "code",
+          "optional": "YES",
+          "attributeType": "String",
+          "syncable": "YES"
+        },
+        "relationship": {
+          "name": "inventoryBatch",
+          "optional": "YES",
+          "maxCount": "1",
+          "deletionRule": "Nullify",
+          "destinationEntity": "STMInventoryBatch",
+          "inverseName": "inventoryBatchItems",
+          "inverseEntity": "STMInventoryBatch",
+          "syncable": "YES"
+        }
+      },
+      {
+        "name": "STMLocation",
+        "representedClassName": "STMLocation",
+        "parentEntity": "STMCoreLocation",
+        "syncable": "YES"
+      },
+      {
+        "name": "STMLogMessage",
+        "representedClassName": "STMLogMessage",
+        "parentEntity": "STMAbstract",
+        "syncable": "YES",
+        "attribute": [
+          {
+            "name": "text",
+            "optional": "YES",
+            "attributeType": "String",
+            "syncable": "YES"
+          },
+          {
+            "name": "type",
+            "optional": "YES",
+            "attributeType": "String",
+            "syncable": "YES"
+          }
+        ]
+      },
+      {
+        "name": "STMOutlet",
+        "parentEntity": "STMAbstract",
+        "syncable": "YES",
+        "attribute": [
+          {
+            "name": "address",
+            "optional": "YES",
+            "attributeType": "String",
+            "syncable": "YES"
+          },
+          {
+            "name": "isActive",
+            "optional": "YES",
+            "attributeType": "Boolean",
+            "usesScalarValueType": "NO",
+            "syncable": "YES"
+          },
+          {
+            "name": "name",
+            "optional": "YES",
+            "attributeType": "String",
+            "syncable": "YES"
+          },
+          {
+            "name": "shortName",
+            "optional": "YES",
+            "attributeType": "String",
+            "syncable": "YES"
+          }
+        ],
+        "relationship": [
+          {
+            "name": "partner",
+            "optional": "YES",
+            "maxCount": "1",
+            "deletionRule": "Nullify",
+            "destinationEntity": "STMPartner",
+            "inverseName": "outlets",
+            "inverseEntity": "STMPartner",
+            "syncable": "YES"
+          },
+          {
+            "name": "pickingOrders",
+            "optional": "YES",
+            "toMany": "YES",
+            "deletionRule": "Cascade",
+            "destinationEntity": "STMPickingOrder",
+            "inverseName": "outlet",
+            "inverseEntity": "STMPickingOrder",
+            "syncable": "YES"
+          }
+        ]
+      },
+      {
+        "name": "STMPartner",
+        "parentEntity": "STMAbstract",
+        "syncable": "YES",
+        "attribute": [
+          {
+            "name": "inn",
+            "optional": "YES",
+            "attributeType": "String",
+            "syncable": "YES"
+          },
+          {
+            "name": "name",
+            "optional": "YES",
+            "attributeType": "String",
+            "syncable": "YES"
+          }
+        ],
+        "relationship": {
+          "name": "outlets",
+          "optional": "YES",
+          "toMany": "YES",
+          "deletionRule": "Cascade",
+          "destinationEntity": "STMOutlet",
+          "inverseName": "partner",
+          "inverseEntity": "STMOutlet",
+          "syncable": "YES"
+        }
+      },
+      {
+        "name": "STMPicker",
+        "parentEntity": "STMAbstract",
+        "syncable": "YES",
+        "attribute": [
+          {
+            "name": "code",
+            "optional": "YES",
+            "attributeType": "String",
+            "syncable": "YES"
+          },
+          {
+            "name": "isDismissed",
+            "optional": "YES",
+            "attributeType": "Boolean",
+            "usesScalarValueType": "NO",
+            "syncable": "YES"
+          },
+          {
+            "name": "name",
+            "optional": "YES",
+            "attributeType": "String",
+            "syncable": "YES"
+          },
+          {
+            "name": "outerCode",
+            "optional": "YES",
+            "attributeType": "String",
+            "syncable": "YES"
+          },
+          {
+            "name": "outerXid",
+            "optional": "YES",
+            "attributeType": "String",
+            "syncable": "YES"
+          },
+          {
+            "name": "password",
+            "optional": "YES",
+            "attributeType": "String",
+            "syncable": "YES"
+          },
+          {
+            "name": "siteId",
+            "optional": "YES",
+            "attributeType": "String",
+            "syncable": "YES"
+          }
+        ],
+        "relationship": [
+          {
+            "name": "pickingOrders",
+            "optional": "YES",
+            "toMany": "YES",
+            "deletionRule": "Cascade",
+            "destinationEntity": "STMPickingOrder",
+            "inverseName": "picker",
+            "inverseEntity": "STMPickingOrder",
+            "syncable": "YES"
+          },
+          {
+            "name": "pickingSessions",
+            "optional": "YES",
+            "toMany": "YES",
+            "deletionRule": "Cascade",
+            "destinationEntity": "STMPickingSession",
+            "inverseName": "picker",
+            "inverseEntity": "STMPickingSession",
+            "syncable": "YES"
+          }
+        ]
+      },
+      {
+        "name": "STMPickingOrder",
+        "parentEntity": "STMAbstract",
+        "syncable": "YES",
+        "attribute": [
+          {
+            "name": "date",
+            "optional": "YES",
+            "attributeType": "String",
+            "syncable": "YES"
+          },
+          {
+            "name": "ndoc",
+            "optional": "YES",
+            "attributeType": "String",
+            "syncable": "YES"
+          },
+          {
+            "name": "processing",
+            "optional": "YES",
+            "attributeType": "String",
+            "syncable": "YES"
+          }
+        ],
+        "relationship": [
+          {
+            "name": "outlet",
+            "optional": "YES",
+            "maxCount": "1",
+            "deletionRule": "Nullify",
+            "destinationEntity": "STMOutlet",
+            "inverseName": "pickingOrders",
+            "inverseEntity": "STMOutlet",
+            "syncable": "YES"
+          },
+          {
+            "name": "picker",
+            "optional": "YES",
+            "maxCount": "1",
+            "deletionRule": "Nullify",
+            "destinationEntity": "STMPicker",
+            "inverseName": "pickingOrders",
+            "inverseEntity": "STMPicker",
+            "syncable": "YES"
+          },
+          {
+            "name": "pickingOrderPositions",
+            "optional": "YES",
+            "toMany": "YES",
+            "deletionRule": "Cascade",
+            "destinationEntity": "STMPickingOrderPosition",
+            "inverseName": "pickingOrder",
+            "inverseEntity": "STMPickingOrderPosition",
+            "syncable": "YES"
+          },
+          {
+            "name": "pickingSessions",
+            "optional": "YES",
+            "toMany": "YES",
+            "deletionRule": "Cascade",
+            "destinationEntity": "STMPickingOrderSession",
+            "inverseName": "pickingOrder",
+            "inverseEntity": "STMPickingOrderSession",
+            "syncable": "YES"
+          }
+        ]
+      },
+      {
+        "name": "STMPickingOrderPosition",
+        "parentEntity": "STMAbstract",
+        "syncable": "YES",
+        "attribute": [
+          {
+            "name": "ord",
+            "optional": "YES",
+            "attributeType": "Integer 64",
+            "defaultValueString": "0",
+            "usesScalarValueType": "NO",
+            "syncable": "YES"
+          },
+          {
+            "name": "volume",
+            "optional": "YES",
+            "attributeType": "Integer 64",
+            "defaultValueString": "0",
+            "usesScalarValueType": "NO",
+            "syncable": "YES"
+          }
+        ],
+        "relationship": [
+          {
+            "name": "article",
+            "optional": "YES",
+            "maxCount": "1",
+            "deletionRule": "Nullify",
+            "destinationEntity": "STMArticle",
+            "inverseName": "pickingOrderPositions",
+            "inverseEntity": "STMArticle",
+            "syncable": "YES"
+          },
+          {
+            "name": "pickingOrder",
+            "optional": "YES",
+            "maxCount": "1",
+            "deletionRule": "Nullify",
+            "destinationEntity": "STMPickingOrder",
+            "inverseName": "pickingOrderPositions",
+            "inverseEntity": "STMPickingOrder",
+            "syncable": "YES"
+          },
+          {
+            "name": "pickingOrderPositionsPicked",
+            "optional": "YES",
+            "toMany": "YES",
+            "deletionRule": "Cascade",
+            "destinationEntity": "STMPickingOrderPositionPicked",
+            "inverseName": "pickingOrderPosition",
+            "inverseEntity": "STMPickingOrderPositionPicked",
+            "syncable": "YES"
+          }
+        ]
+      },
+      {
+        "name": "STMPickingOrderPositionPicked",
+        "parentEntity": "STMAbstract",
+        "syncable": "YES",
+        "attribute": [
+          {
+            "name": "code",
+            "optional": "YES",
+            "attributeType": "String",
+            "syncable": "YES"
+          },
+          {
+            "name": "ord",
+            "optional": "YES",
+            "attributeType": "Integer 64",
+            "defaultValueString": "0",
+            "usesScalarValueType": "NO",
+            "syncable": "YES"
+          },
+          {
+            "name": "productionInfo",
+            "optional": "YES",
+            "attributeType": "String",
+            "syncable": "YES"
+          },
+          {
+            "name": "stockToken",
+            "optional": "YES",
+            "attributeType": "String",
+            "syncable": "YES"
+          },
+          {
+            "name": "volume",
+            "optional": "YES",
+            "attributeType": "Integer 64",
+            "defaultValueString": "0",
+            "usesScalarValueType": "NO",
+            "syncable": "YES"
+          }
+        ],
+        "relationship": [
+          {
+            "name": "article",
+            "optional": "YES",
+            "maxCount": "1",
+            "deletionRule": "Nullify",
+            "destinationEntity": "STMArticle",
+            "inverseName": "pickingOrderPositionsPicked",
+            "inverseEntity": "STMArticle",
+            "syncable": "YES"
+          },
+          {
+            "name": "pickingOrderPosition",
+            "optional": "YES",
+            "maxCount": "1",
+            "deletionRule": "Nullify",
+            "destinationEntity": "STMPickingOrderPosition",
+            "inverseName": "pickingOrderPositionsPicked",
+            "inverseEntity": "STMPickingOrderPosition",
+            "syncable": "YES"
+          },
+          {
+            "name": "stockBatch",
+            "optional": "YES",
+            "maxCount": "1",
+            "deletionRule": "Nullify",
+            "destinationEntity": "STMStockBatch",
+            "inverseName": "pickingOrderPositionsPicked",
+            "inverseEntity": "STMStockBatch",
+            "syncable": "YES"
+          },
+          {
+            "name": "warehouseBox",
+            "optional": "YES",
+            "maxCount": "1",
+            "deletionRule": "Nullify",
+            "destinationEntity": "STMWarehouseBox",
+            "inverseName": "pickingOrderPositionPickeds",
+            "inverseEntity": "STMWarehouseBox",
+            "syncable": "YES"
+          }
+        ]
+      },
+      {
+        "name": "STMPickingOrderSession",
+        "parentEntity": "STMAbstract",
+        "syncable": "YES",
+        "relationship": [
+          {
+            "name": "pickingOrder",
+            "optional": "YES",
+            "maxCount": "1",
+            "deletionRule": "Nullify",
+            "destinationEntity": "STMPickingOrder",
+            "inverseName": "pickingSessions",
+            "inverseEntity": "STMPickingOrder",
+            "syncable": "YES"
+          },
+          {
+            "name": "pickingSession",
+            "optional": "YES",
+            "maxCount": "1",
+            "deletionRule": "Nullify",
+            "destinationEntity": "STMPickingSession",
+            "inverseName": "pickingOrders",
+            "inverseEntity": "STMPickingSession",
+            "syncable": "YES"
+          }
+        ]
+      },
+      {
+        "name": "STMPickingSession",
+        "parentEntity": "STMAbstract",
+        "syncable": "YES",
+        "attribute": [
+          {
+            "name": "processing",
+            "optional": "YES",
+            "attributeType": "String",
+            "syncable": "YES"
+          },
+          {
+            "name": "siteId",
+            "optional": "YES",
+            "attributeType": "String",
+            "syncable": "YES"
+          }
+        ],
+        "relationship": [
+          {
+            "name": "picker",
+            "optional": "YES",
+            "maxCount": "1",
+            "deletionRule": "Nullify",
+            "destinationEntity": "STMPicker",
+            "inverseName": "pickingSessions",
+            "inverseEntity": "STMPicker",
+            "syncable": "YES"
+          },
+          {
+            "name": "pickingOrders",
+            "optional": "YES",
+            "toMany": "YES",
+            "deletionRule": "Cascade",
+            "destinationEntity": "STMPickingOrderSession",
+            "inverseName": "pickingSession",
+            "inverseEntity": "STMPickingOrderSession",
+            "syncable": "YES"
+          },
+          {
+            "name": "weighings",
+            "optional": "YES",
+            "toMany": "YES",
+            "deletionRule": "Cascade",
+            "destinationEntity": "STMPickingSessionWeighing",
+            "inverseName": "pickingSession",
+            "inverseEntity": "STMPickingSessionWeighing",
+            "syncable": "YES"
+          }
+        ]
+      },
+      {
+        "name": "STMPickingSessionWeighing",
+        "parentEntity": "STMAbstract",
+        "syncable": "YES",
+        "attribute": {
+          "name": "weight",
+          "optional": "YES",
+          "attributeType": "Decimal",
+          "defaultValueString": "0.0",
+          "syncable": "YES"
+        },
+        "relationship": {
+          "name": "pickingSession",
+          "optional": "YES",
+          "maxCount": "1",
+          "deletionRule": "Nullify",
+          "destinationEntity": "STMPickingSession",
+          "inverseName": "weighings",
+          "inverseEntity": "STMPickingSession",
+          "syncable": "YES"
+        }
+      },
+      {
+        "name": "STMProducer",
+        "parentEntity": "STMAbstract",
+        "syncable": "YES",
+        "attribute": [
+          {
+            "name": "address",
+            "optional": "YES",
+            "attributeType": "String",
+            "syncable": "YES"
+          },
+          {
+            "name": "inn",
+            "optional": "YES",
+            "attributeType": "String",
+            "syncable": "YES"
+          },
+          {
+            "name": "name",
+            "optional": "YES",
+            "attributeType": "String",
+            "syncable": "YES"
+          }
+        ],
+        "relationship": {
+          "name": "warehouseArticles",
+          "optional": "YES",
+          "toMany": "YES",
+          "deletionRule": "No Action",
+          "destinationEntity": "STMWarehouseArticle",
+          "inverseName": "producer",
+          "inverseEntity": "STMWarehouseArticle",
+          "syncable": "YES"
+        }
+      },
+      {
+        "name": "STMProductionInfoType",
+        "parentEntity": "STMAbstract",
+        "syncable": "YES",
+        "attribute": [
+          {
+            "name": "datatype",
+            "optional": "YES",
+            "attributeType": "String",
+            "syncable": "YES"
+          },
+          {
+            "name": "mask",
+            "optional": "YES",
+            "attributeType": "String",
+            "syncable": "YES"
+          },
+          {
+            "name": "name",
+            "optional": "YES",
+            "attributeType": "String",
+            "syncable": "YES"
+          },
+          {
+            "name": "separator",
+            "optional": "YES",
+            "attributeType": "String",
+            "syncable": "YES"
+          }
+        ]
+      },
+      {
+        "name": "STMRecordStatus",
+        "representedClassName": "STMRecordStatus",
+        "parentEntity": "STMAbstract",
+        "syncable": "YES",
+        "attribute": [
+          {
+            "name": "isRead",
+            "optional": "YES",
+            "attributeType": "Boolean",
+            "usesScalarValueType": "NO",
+            "syncable": "YES"
+          },
+          {
+            "name": "isRemoved",
+            "optional": "YES",
+            "attributeType": "Boolean",
+            "usesScalarValueType": "NO",
+            "syncable": "YES"
+          },
+          {
+            "name": "isTemporary",
+            "optional": "YES",
+            "attributeType": "Boolean",
+            "usesScalarValueType": "NO",
+            "syncable": "YES"
+          },
+          {
+            "name": "name",
+            "optional": "YES",
+            "attributeType": "String",
+            "syncable": "YES"
+          },
+          {
+            "name": "objectXid",
+            "optional": "YES",
+            "attributeType": "Binary",
+            "indexed": "YES",
+            "syncable": "YES"
+          }
+        ]
+      },
+      {
+        "name": "STMSetting",
+        "representedClassName": "STMSetting",
+        "parentEntity": "STMAbstract",
+        "syncable": "YES",
+        "attribute": [
+          {
+            "name": "group",
+            "optional": "YES",
+            "attributeType": "String",
+            "syncable": "YES"
+          },
+          {
+            "name": "name",
+            "optional": "YES",
+            "attributeType": "String",
+            "syncable": "YES"
+          },
+          {
+            "name": "value",
+            "optional": "YES",
+            "attributeType": "String",
+            "syncable": "YES"
+          }
+        ],
+        "userInfo": {
+          "entry": {
+            "key": "STORE",
+            "value": "FMDB"
+          }
+        }
+      },
+      {
+        "name": "STMSQLPatch",
+        "parentEntity": "STMAbstract",
+        "syncable": "YES",
+        "attribute": [
+          {
+            "name": "condition",
+            "optional": "YES",
+            "attributeType": "String",
+            "syncable": "YES"
+          },
+          {
+            "name": "isProcessed",
+            "optional": "YES",
+            "attributeType": "Boolean",
+            "usesScalarValueType": "NO",
+            "syncable": "YES"
+          },
+          {
+            "name": "ord",
+            "optional": "YES",
+            "attributeType": "Integer 64",
+            "defaultValueString": "0",
+            "usesScalarValueType": "NO",
+            "syncable": "YES"
+          },
+          {
+            "name": "patch",
+            "optional": "YES",
+            "attributeType": "String",
+            "syncable": "YES"
+          }
+        ]
+      },
+      {
+        "name": "STMStock",
+        "representedClassName": "STMStock",
+        "parentEntity": "STMAbstract",
+        "syncable": "YES",
+        "attribute": [
+          {
+            "name": "displayVolume",
+            "optional": "YES",
+            "attributeType": "String",
+            "syncable": "YES"
+          },
+          {
+            "name": "volume",
+            "optional": "YES",
+            "attributeType": "Integer 64",
+            "defaultValueString": "0",
+            "usesScalarValueType": "NO",
+            "syncable": "YES"
+          }
+        ],
+        "relationship": [
+          {
+            "name": "article",
+            "optional": "YES",
+            "maxCount": "1",
+            "deletionRule": "Nullify",
+            "destinationEntity": "STMArticle",
+            "inverseName": "stocks",
+            "inverseEntity": "STMArticle",
+            "syncable": "YES"
+          },
+          {
+            "name": "warehouse",
+            "optional": "YES",
+            "maxCount": "1",
+            "deletionRule": "Nullify",
+            "destinationEntity": "STMWarehouse",
+            "inverseName": "stocks",
+            "inverseEntity": "STMWarehouse",
+            "syncable": "YES"
+          }
+        ]
+      },
+      {
+        "name": "STMStockBatch",
+        "parentEntity": "STMAbstract",
+        "syncable": "YES",
+        "attribute": [
+          {
+            "name": "isInventarized",
+            "optional": "YES",
+            "attributeType": "Boolean",
+            "usesScalarValueType": "NO",
+            "syncable": "YES"
+          },
+          {
+            "name": "processing",
+            "optional": "YES",
+            "attributeType": "String",
+            "syncable": "YES"
+          },
+          {
+            "name": "productionInfo",
+            "optional": "YES",
+            "attributeType": "String",
+            "syncable": "YES"
+          },
+          {
+            "name": "volume",
+            "optional": "YES",
+            "attributeType": "Integer 64",
+            "defaultValueString": "0",
+            "usesScalarValueType": "NO",
+            "syncable": "YES"
+          }
+        ],
+        "relationship": [
+          {
+            "name": "article",
+            "optional": "YES",
+            "maxCount": "1",
+            "deletionRule": "Nullify",
+            "destinationEntity": "STMArticle",
+            "inverseName": "stockBatches",
+            "inverseEntity": "STMArticle",
+            "syncable": "YES"
+          },
+          {
+            "name": "barCodes",
+            "optional": "YES",
+            "toMany": "YES",
+            "deletionRule": "Cascade",
+            "destinationEntity": "STMStockBatchBarCode",
+            "inverseName": "stockBatch",
+            "inverseEntity": "STMStockBatchBarCode",
+            "syncable": "YES"
+          },
+          {
+            "name": "inventoryBatches",
+            "optional": "YES",
+            "toMany": "YES",
+            "deletionRule": "Cascade",
+            "destinationEntity": "STMInventoryBatch",
+            "inverseName": "stockBatch",
+            "inverseEntity": "STMInventoryBatch",
+            "syncable": "YES"
+          },
+          {
+            "name": "pickingOrderPositionsPicked",
+            "optional": "YES",
+            "toMany": "YES",
+            "deletionRule": "Cascade",
+            "destinationEntity": "STMPickingOrderPositionPicked",
+            "inverseName": "stockBatch",
+            "inverseEntity": "STMPickingOrderPositionPicked",
+            "syncable": "YES"
+          }
+        ]
+      },
+      {
+        "name": "STMStockBatchBarCode",
+        "parentEntity": "STMAbstract",
+        "syncable": "YES",
+        "attribute": {
+          "name": "code",
+          "optional": "YES",
+          "attributeType": "String",
+          "syncable": "YES"
+        },
+        "relationship": {
+          "name": "stockBatch",
+          "optional": "YES",
+          "maxCount": "1",
+          "deletionRule": "Nullify",
+          "destinationEntity": "STMStockBatch",
+          "inverseName": "barCodes",
+          "inverseEntity": "STMStockBatch",
+          "syncable": "YES"
+        }
+      },
+      {
+        "name": "STMStockBatchItem",
+        "parentEntity": "STMAbstract",
+        "syncable": "YES",
+        "attribute": [
+          {
+            "name": "barcode",
+            "optional": "YES",
+            "attributeType": "String",
+            "syncable": "YES"
+          },
+          {
+            "name": "timestamp",
+            "optional": "YES",
+            "attributeType": "Date",
+            "usesScalarValueType": "NO",
+            "syncable": "YES"
+          },
+          {
+            "name": "volume",
+            "optional": "YES",
+            "attributeType": "Integer 64",
+            "defaultValueString": "0",
+            "usesScalarValueType": "NO",
+            "syncable": "YES"
+          }
+        ],
+        "relationship": {
+          "name": "stockBatch",
+          "optional": "YES",
+          "maxCount": "1",
+          "deletionRule": "Nullify",
+          "destinationEntity": "STMStockBatch",
+          "syncable": "YES"
+        }
+      },
+      {
+        "name": "STMStockTaking",
+        "parentEntity": "STMAbstract",
+        "syncable": "YES",
+        "attribute": [
+          {
+            "name": "authId",
+            "optional": "YES",
+            "attributeType": "String",
+            "syncable": "YES"
+          },
+          {
+            "name": "date",
+            "optional": "YES",
+            "attributeType": "String",
+            "syncable": "YES"
+          }
+        ],
+        "relationship": [
+          {
+            "name": "stockTakingItems",
+            "optional": "YES",
+            "toMany": "YES",
+            "deletionRule": "Cascade",
+            "destinationEntity": "STMStockTakingItem",
+            "inverseName": "stockTaking",
+            "inverseEntity": "STMStockTakingItem",
+            "syncable": "YES"
+          },
+          {
+            "name": "warehouse",
+            "optional": "YES",
+            "maxCount": "1",
+            "deletionRule": "Nullify",
+            "destinationEntity": "STMWarehouse",
+            "inverseName": "stockTakings",
+            "inverseEntity": "STMWarehouse",
+            "syncable": "YES"
+          }
+        ]
+      },
+      {
+        "name": "STMStockTakingItem",
+        "parentEntity": "STMAbstract",
+        "syncable": "YES",
+        "attribute": [
+          {
+            "name": "barcode",
+            "optional": "YES",
+            "attributeType": "String",
+            "syncable": "YES"
+          },
+          {
+            "name": "packageRel",
+            "optional": "YES",
+            "attributeType": "Integer 64",
+            "defaultValueString": "0",
+            "usesScalarValueType": "NO",
+            "syncable": "YES"
+          },
+          {
+            "name": "timestamp",
+            "optional": "YES",
+            "attributeType": "Date",
+            "usesScalarValueType": "NO",
+            "syncable": "YES"
+          },
+          {
+            "name": "volume",
+            "optional": "YES",
+            "attributeType": "Integer 64",
+            "defaultValueString": "0",
+            "usesScalarValueType": "NO",
+            "syncable": "YES"
+          }
+        ],
+        "relationship": [
+          {
+            "name": "article",
+            "optional": "YES",
+            "maxCount": "1",
+            "deletionRule": "Nullify",
+            "destinationEntity": "STMArticle",
+            "inverseName": "stockTakingItems",
+            "inverseEntity": "STMArticle",
+            "syncable": "YES"
+          },
+          {
+            "name": "stockTaking",
+            "optional": "YES",
+            "maxCount": "1",
+            "deletionRule": "Nullify",
+            "destinationEntity": "STMStockTaking",
+            "inverseName": "stockTakingItems",
+            "inverseEntity": "STMStockTaking",
+            "syncable": "YES"
+          }
+        ]
+      },
+      {
+        "name": "STMWarehouse",
+        "parentEntity": "STMAbstract",
+        "syncable": "YES",
+        "attribute": {
+          "name": "name",
+          "optional": "YES",
+          "attributeType": "String",
+          "syncable": "YES"
+        },
+        "relationship": [
+          {
+            "name": "stocks",
+            "optional": "YES",
+            "toMany": "YES",
+            "deletionRule": "Cascade",
+            "destinationEntity": "STMStock",
+            "inverseName": "warehouse",
+            "inverseEntity": "STMStock",
+            "syncable": "YES"
+          },
+          {
+            "name": "stockTakings",
+            "optional": "YES",
+            "toMany": "YES",
+            "deletionRule": "Cascade",
+            "destinationEntity": "STMStockTaking",
+            "inverseName": "warehouse",
+            "inverseEntity": "STMStockTaking",
+            "syncable": "YES"
+          },
+          {
+            "name": "warehouseStocks",
+            "optional": "YES",
+            "toMany": "YES",
+            "deletionRule": "Cascade",
+            "destinationEntity": "STMWarehouseStock",
+            "inverseName": "warehouse",
+            "inverseEntity": "STMWarehouseStock",
+            "syncable": "YES"
+          }
+        ]
+      },
+      {
+        "name": "STMWarehouseArticle",
+        "parentEntity": "STMAbstract",
+        "syncable": "YES",
+        "attribute": [
+          {
+            "name": "barcodes",
+            "optional": "YES",
+            "attributeType": "Transformable",
+            "syncable": "YES"
+          },
+          {
+            "name": "code",
+            "optional": "YES",
+            "attributeType": "String",
+            "syncable": "YES"
+          },
+          {
+            "name": "firstName",
+            "optional": "YES",
+            "attributeType": "String",
+            "syncable": "YES"
+          },
+          {
+            "name": "lastName",
+            "optional": "YES",
+            "attributeType": "String",
+            "syncable": "YES"
+          },
+          {
+            "name": "name",
+            "optional": "YES",
+            "attributeType": "String",
+            "syncable": "YES"
+          },
+          {
+            "name": "pieceVolume",
+            "optional": "YES",
+            "attributeType": "Decimal",
+            "defaultValueString": "0.0",
+            "syncable": "YES"
+          },
+          {
+            "name": "preName",
+            "optional": "YES",
+            "attributeType": "String",
+            "syncable": "YES"
+          }
+        ],
+        "relationship": [
+          {
+            "name": "producer",
+            "optional": "YES",
+            "maxCount": "1",
+            "deletionRule": "No Action",
+            "destinationEntity": "STMProducer",
+            "inverseName": "warehouseArticles",
+            "inverseEntity": "STMProducer",
+            "syncable": "YES"
+          },
+          {
+            "name": "warehouseBoxes",
+            "optional": "YES",
+            "toMany": "YES",
+            "deletionRule": "Cascade",
+            "destinationEntity": "STMWarehouseBox",
+            "inverseName": "warehouseArticle",
+            "inverseEntity": "STMWarehouseBox",
+            "syncable": "YES"
+          },
+          {
+            "name": "warehouseItems",
+            "optional": "YES",
+            "toMany": "YES",
+            "deletionRule": "Cascade",
+            "destinationEntity": "STMWarehouseItem",
+            "inverseName": "warehouseArticle",
+            "inverseEntity": "STMWarehouseItem",
+            "syncable": "YES"
+          }
+        ]
+      },
+      {
+        "name": "STMWarehouseBox",
+        "parentEntity": "STMAbstract",
+        "syncable": "YES",
+        "attribute": [
+          {
+            "name": "barcode",
+            "optional": "YES",
+            "attributeType": "String",
+            "indexed": "YES",
+            "syncable": "YES"
+          },
+          {
+            "name": "currentPaletteId",
+            "optional": "YES",
+            "attributeType": "String",
+            "indexed": "YES",
+            "syncable": "YES"
+          },
+          {
+            "name": "processing",
+            "optional": "YES",
+            "attributeType": "String",
+            "syncable": "YES"
+          },
+          {
+            "name": "timestamp",
+            "optional": "YES",
+            "attributeType": "Date",
+            "usesScalarValueType": "NO",
+            "syncable": "YES"
+          }
+        ],
+        "relationship": [
+          {
+            "name": "pickingOrderPositionPickeds",
+            "optional": "YES",
+            "toMany": "YES",
+            "deletionRule": "Cascade",
+            "destinationEntity": "STMPickingOrderPositionPicked",
+            "inverseName": "warehouseBox",
+            "inverseEntity": "STMPickingOrderPositionPicked",
+            "syncable": "YES"
+          },
+          {
+            "name": "warehouseArticle",
+            "optional": "YES",
+            "maxCount": "1",
+            "deletionRule": "Nullify",
+            "destinationEntity": "STMWarehouseArticle",
+            "inverseName": "warehouseBoxes",
+            "inverseEntity": "STMWarehouseArticle",
+            "syncable": "YES"
+          }
+        ]
+      },
+      {
+        "name": "STMWarehouseBoxOperation",
+        "parentEntity": "STMAbstract",
+        "syncable": "YES",
+        "attribute": [
+          {
+            "name": "paletteFromId",
+            "optional": "YES",
+            "attributeType": "Binary",
+            "syncable": "YES"
+          },
+          {
+            "name": "paletteToId",
+            "optional": "YES",
+            "attributeType": "Binary",
+            "syncable": "YES"
+          },
+          {
+            "name": "timestamp",
+            "optional": "YES",
+            "attributeType": "Date",
+            "usesScalarValueType": "NO",
+            "syncable": "YES"
+          },
+          {
+            "name": "warehouseBoxId",
+            "optional": "YES",
+            "attributeType": "Binary",
+            "syncable": "YES"
+          }
+        ]
+      },
+      {
+        "name": "STMWarehouseItem",
+        "parentEntity": "STMAbstract",
+        "syncable": "YES",
+        "attribute": [
+          {
+            "name": "barcode",
+            "optional": "YES",
+            "attributeType": "String",
+            "indexed": "YES",
+            "syncable": "YES"
+          },
+          {
+            "name": "currentBoxId",
+            "optional": "YES",
+            "attributeType": "Binary",
+            "indexed": "YES",
+            "syncable": "YES"
+          },
+          {
+            "name": "processing",
+            "optional": "YES",
+            "attributeType": "String",
+            "syncable": "YES"
+          },
+          {
+            "name": "timestamp",
+            "optional": "YES",
+            "attributeType": "Date",
+            "usesScalarValueType": "NO",
+            "syncable": "YES"
+          }
+        ],
+        "relationship": [
+          {
+            "name": "article",
+            "optional": "YES",
+            "maxCount": "1",
+            "deletionRule": "Nullify",
+            "destinationEntity": "STMArticle",
+            "inverseName": "warehouseItems",
+            "inverseEntity": "STMArticle",
+            "syncable": "YES"
+          },
+          {
+            "name": "warehouseArticle",
+            "optional": "YES",
+            "maxCount": "1",
+            "deletionRule": "Nullify",
+            "destinationEntity": "STMWarehouseArticle",
+            "inverseName": "warehouseItems",
+            "inverseEntity": "STMWarehouseArticle",
+            "syncable": "YES"
+          }
+        ]
+      },
+      {
+        "name": "STMWarehouseItemOperation",
+        "parentEntity": "STMAbstract",
+        "syncable": "YES",
+        "attribute": [
+          {
+            "name": "boxFromId",
+            "optional": "YES",
+            "attributeType": "Binary",
+            "syncable": "YES"
+          },
+          {
+            "name": "boxToId",
+            "optional": "YES",
+            "attributeType": "Binary",
+            "syncable": "YES"
+          },
+          {
+            "name": "timestamp",
+            "optional": "YES",
+            "attributeType": "Date",
+            "usesScalarValueType": "NO",
+            "syncable": "YES"
+          },
+          {
+            "name": "warehouseItemId",
+            "optional": "YES",
+            "attributeType": "Binary",
+            "syncable": "YES"
+          }
+        ]
+      },
+      {
+        "name": "STMWarehousePalette",
+        "parentEntity": "STMAbstract",
+        "syncable": "YES",
+        "attribute": [
+          {
+            "name": "barcode",
+            "optional": "YES",
+            "attributeType": "String",
+            "syncable": "YES"
+          },
+          {
+            "name": "processing",
+            "optional": "YES",
+            "attributeType": "String",
+            "syncable": "YES"
+          },
+          {
+            "name": "timestamp",
+            "optional": "YES",
+            "attributeType": "Date",
+            "usesScalarValueType": "NO",
+            "syncable": "YES"
+          }
+        ]
+      },
+      {
+        "name": "STMWarehouseStock",
+        "parentEntity": "STMAbstract",
+        "syncable": "YES",
+        "attribute": [
+          {
+            "name": "date",
+            "optional": "YES",
+            "attributeType": "String",
+            "syncable": "YES"
+          },
+          {
+            "name": "volume",
+            "optional": "YES",
+            "attributeType": "Integer 64",
+            "defaultValueString": "0",
+            "usesScalarValueType": "NO",
+            "syncable": "YES"
+          }
+        ],
+        "relationship": [
+          {
+            "name": "article",
+            "optional": "YES",
+            "maxCount": "1",
+            "deletionRule": "Nullify",
+            "destinationEntity": "STMArticle",
+            "inverseName": "warehouseStocks",
+            "inverseEntity": "STMArticle",
+            "syncable": "YES"
+          },
+          {
+            "name": "warehouse",
+            "optional": "YES",
+            "maxCount": "1",
+            "deletionRule": "Nullify",
+            "destinationEntity": "STMWarehouse",
+            "inverseName": "warehouseStocks",
+            "inverseEntity": "STMWarehouse",
+            "syncable": "YES"
+          }
+        ]
+      },
+      {
+        "name": "STMWorkflow",
+        "representedClassName": "STMWorkflow",
+        "parentEntity": "STMAbstract",
+        "syncable": "YES",
+        "attribute": [
+          {
+            "name": "code",
+            "optional": "YES",
+            "attributeType": "String",
+            "syncable": "YES"
+          },
+          {
+            "name": "workflow",
+            "optional": "YES",
+            "attributeType": "Transformable",
+            "syncable": "YES"
+          }
+        ],
+        "relationship": {
+          "name": "entities",
+          "optional": "YES",
+          "toMany": "YES",
+          "deletionRule": "Nullify",
+          "destinationEntity": "STMEntity",
+          "inverseName": "wf",
+          "inverseEntity": "STMEntity",
+          "syncable": "YES"
+        }
+      }
+    ],
+    "elements": {
+      "element": [
+        {
+          "name": "STMAbstract",
+          "positionX": "1341",
+          "positionY": "2106",
+          "width": "128",
+          "height": "105"
+        },
+        {
+          "name": "STMAccount",
+          "positionX": "1323",
+          "positionY": "2088",
+          "width": "128",
+          "height": "120"
+        },
+        {
+          "name": "STMArticle",
+          "positionX": "1163",
+          "positionY": "619",
+          "width": "128",
+          "height": "405"
+        },
+        {
+          "name": "STMArticleBarCode",
+          "positionX": "1179",
+          "positionY": "2133",
+          "width": "128",
+          "height": "75"
+        },
+        {
+          "name": "STMArticleDoc",
+          "positionX": "1134",
+          "positionY": "2088",
+          "width": "128",
+          "height": "135"
+        },
+        {
+          "name": "STMArticleGroup",
+          "positionX": "1386",
+          "positionY": "918",
+          "width": "128",
+          "height": "135"
+        },
+        {
+          "name": "STMArticlePicture",
+          "positionX": "38",
+          "positionY": "792",
+          "width": "128",
+          "height": "73"
+        },
+        {
+          "name": "STMArticlePictureArticle",
+          "positionX": "407",
+          "positionY": "349",
+          "width": "128",
+          "height": "75"
+        },
+        {
+          "name": "STMBarCodeScan",
+          "positionX": "72",
+          "positionY": "2286",
+          "width": "128",
+          "height": "90"
+        },
+        {
+          "name": "STMBarCodeType",
+          "positionX": "218",
+          "positionY": "2286",
+          "width": "128",
+          "height": "105"
+        },
+        {
+          "name": "STMBatteryStatus",
+          "positionX": "648",
+          "positionY": "2286",
+          "width": "128",
+          "height": "75"
+        },
+        {
+          "name": "STMClientData",
+          "positionX": "936",
+          "positionY": "2286",
+          "width": "128",
+          "height": "270"
+        },
+        {
+          "name": "STMClientEntity",
+          "positionX": "70",
+          "positionY": "2286",
+          "width": "128",
+          "height": "90"
+        },
+        {
+          "name": "STMCoreLocation",
+          "positionX": "495",
+          "positionY": "1179",
+          "width": "128",
+          "height": "195"
+        },
+        {
+          "name": "STMCorePhoto",
+          "positionX": "272",
+          "positionY": "1147",
+          "width": "128",
+          "height": "60"
+        },
+        {
+          "name": "STMCorePicture",
+          "positionX": "92",
+          "positionY": "1188",
+          "width": "128",
+          "height": "180"
+        },
+        {
+          "name": "STMDatum",
+          "positionX": "1224",
+          "positionY": "2286",
+          "width": "128",
+          "height": "135"
+        },
+        {
+          "name": "STMEntity",
+          "positionX": "232",
+          "positionY": "681",
+          "width": "128",
+          "height": "255"
+        },
+        {
+          "name": "STMInventoryBatch",
+          "positionX": "1170",
+          "positionY": "2124",
+          "width": "128",
+          "height": "165"
+        },
+        {
+          "name": "STMInventoryBatchItem",
+          "positionX": "1152",
+          "positionY": "2106",
+          "width": "128",
+          "height": "75"
+        },
+        {
+          "name": "STMLocation",
+          "positionX": "720",
+          "positionY": "1135",
+          "width": "128",
+          "height": "45"
+        },
+        {
+          "name": "STMLogMessage",
+          "positionX": "792",
+          "positionY": "2286",
+          "width": "128",
+          "height": "75"
+        },
+        {
+          "name": "STMOutlet",
+          "positionX": "1125",
+          "positionY": "2079",
+          "width": "128",
+          "height": "135"
+        },
+        {
+          "name": "STMPartner",
+          "positionX": "1179",
+          "positionY": "2133",
+          "width": "128",
+          "height": "90"
+        },
+        {
+          "name": "STMPicker",
+          "positionX": "1143",
+          "positionY": "2097",
+          "width": "128",
+          "height": "180"
+        },
+        {
+          "name": "STMPickingOrder",
+          "positionX": "1134",
+          "positionY": "2088",
+          "width": "128",
+          "height": "150"
+        },
+        {
+          "name": "STMPickingOrderPosition",
+          "positionX": "1170",
+          "positionY": "2124",
+          "width": "128",
+          "height": "120"
+        },
+        {
+          "name": "STMPickingOrderPositionPicked",
+          "positionX": "1161",
+          "positionY": "2115",
+          "width": "128",
+          "height": "180"
+        },
+        {
+          "name": "STMPickingOrderSession",
+          "positionX": "1179",
+          "positionY": "2133",
+          "width": "128",
+          "height": "75"
+        },
+        {
+          "name": "STMPickingSession",
+          "positionX": "1179",
+          "positionY": "2133",
+          "width": "128",
+          "height": "120"
+        },
+        {
+          "name": "STMPickingSessionWeighing",
+          "positionX": "1170",
+          "positionY": "2124",
+          "width": "128",
+          "height": "75"
+        },
+        {
+          "name": "STMProducer",
+          "positionX": "1134",
+          "positionY": "2088",
+          "width": "128",
+          "height": "105"
+        },
+        {
+          "name": "STMProductionInfoType",
+          "positionX": "1152",
+          "positionY": "2106",
+          "width": "128",
+          "height": "105"
+        },
+        {
+          "name": "STMRecordStatus",
+          "positionX": "360",
+          "positionY": "2286",
+          "width": "128",
+          "height": "120"
+        },
+        {
+          "name": "STMSetting",
+          "positionX": "1080",
+          "positionY": "2286",
+          "width": "128",
+          "height": "90"
+        },
+        {
+          "name": "STMSQLPatch",
+          "positionX": "1179",
+          "positionY": "2133",
+          "width": "128",
+          "height": "105"
+        },
+        {
+          "name": "STMStock",
+          "positionX": "947",
+          "positionY": "540",
+          "width": "128",
+          "height": "105"
+        },
+        {
+          "name": "STMStockBatch",
+          "positionX": "1161",
+          "positionY": "2115",
+          "width": "128",
+          "height": "165"
+        },
+        {
+          "name": "STMStockBatchBarCode",
+          "positionX": "1143",
+          "positionY": "2097",
+          "width": "128",
+          "height": "75"
+        },
+        {
+          "name": "STMStockBatchItem",
+          "positionX": "1179",
+          "positionY": "2133",
+          "width": "128",
+          "height": "105"
+        },
+        {
+          "name": "STMStockTaking",
+          "positionX": "1170",
+          "positionY": "2124",
+          "width": "128",
+          "height": "105"
+        },
+        {
+          "name": "STMStockTakingItem",
+          "positionX": "1161",
+          "positionY": "2115",
+          "width": "128",
+          "height": "135"
+        },
+        {
+          "name": "STMWarehouse",
+          "positionX": "1179",
+          "positionY": "2133",
+          "width": "128",
+          "height": "105"
+        },
+        {
+          "name": "STMWarehouseArticle",
+          "positionX": "1143",
+          "positionY": "2097",
+          "width": "128",
+          "height": "195"
+        },
+        {
+          "name": "STMWarehouseBox",
+          "positionX": "1179",
+          "positionY": "2133",
+          "width": "128",
+          "height": "135"
+        },
+        {
+          "name": "STMWarehouseBoxOperation",
+          "positionX": "1152",
+          "positionY": "2106",
+          "width": "128",
+          "height": "105"
+        },
+        {
+          "name": "STMWarehouseItem",
+          "positionX": "1170",
+          "positionY": "2124",
+          "width": "128",
+          "height": "135"
+        },
+        {
+          "name": "STMWarehouseItemOperation",
+          "positionX": "1170",
+          "positionY": "2124",
+          "width": "128",
+          "height": "105"
+        },
+        {
+          "name": "STMWarehousePalette",
+          "positionX": "1161",
+          "positionY": "2115",
+          "width": "128",
+          "height": "90"
+        },
+        {
+          "name": "STMWarehouseStock",
+          "positionX": "1152",
+          "positionY": "2106",
+          "width": "128",
+          "height": "105"
+        },
+        {
+          "name": "STMWorkflow",
+          "positionX": "45",
+          "positionY": "675",
+          "width": "128",
+          "height": "90"
+        }
+      ]
+    }
+  }
+}
