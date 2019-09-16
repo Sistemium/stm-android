@@ -30,8 +30,7 @@ import com.google.android.gms.location.LocationResult
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
-
-
+import com.sistemium.sissales.base.STMBarCodeScanner
 
 
 /**
@@ -92,8 +91,14 @@ class WebAppInterface internal constructor(private var webViewActivity: WebViewA
 
         var scannerScanJSFunction = mapParameters["scanCallback"]
         var scannerPowerButtonJSFunction = mapParameters["powerButtonCallback"]
+        var scannerStatusJSFunction = mapParameters["statusCallback"]
 
-        // TODO implement startBarcodeScanning
+        STMBarCodeScanner.sharedScanner?.startBarcodeScanning(webViewActivity)
+
+
+//        if ([self.iOSModeBarCodeScanner isDeviceConnected]) {
+//            [self scannerIsConnected];
+//        }
 
     }
 
