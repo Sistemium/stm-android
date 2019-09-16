@@ -19,4 +19,6 @@
     <string name="you_sure">Выйти из аккаунта?</string>
     <string name="location_not_permitted">Настройки геолокации отключены</string>
     <string name="location_failed">Не удалось получить геометку</string>
+    <string name="zebra_pairing">Сканер Zebra</string>
+    <string name="zebra_pairing_description">Просканируйте, чтобы подключить сканер</string>
 </resources>

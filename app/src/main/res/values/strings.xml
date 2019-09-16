@@ -19,4 +19,6 @@
     <string name="you_sure">Are you sure to logout?</string>
     <string name="location_not_permitted">Location tracking is not permitted</string>
     <string name="location_failed">Location receiving attempt failed</string>
+    <string name="zebra_pairing">Zebra pairing</string>
+    <string name="zebra_pairing_description">Scan the barcode to connect scanner</string>
 </resources>
