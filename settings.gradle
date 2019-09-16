@@ -1,1 +1,1 @@
-include ':app'
+include ':app', ':barcode_scanner_library_v2.4.6.0'
