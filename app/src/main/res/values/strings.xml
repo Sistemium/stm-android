@@ -21,4 +21,6 @@
     <string name="location_failed">Location receiving attempt failed</string>
     <string name="zebra_pairing">Zebra pairing</string>
     <string name="zebra_pairing_description">Scan the barcode to connect scanner</string>
+    <string name="cancel">Cancel</string>
+    <string name="scanner_arrival">Scanner device arrival</string>
 </resources>

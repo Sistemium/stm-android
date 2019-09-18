@@ -1,25 +1,30 @@
 package com.sistemium.sissales.base
 
 import android.app.Activity
-import android.app.AlertDialog
-import android.graphics.Rect
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import android.widget.ImageView
-import com.sistemium.sissales.R
-import com.zebra.scannercontrol.DCSSDKDefs
-import com.zebra.scannercontrol.DCSScannerInfo
-import com.zebra.scannercontrol.SDKHandler
 import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.experimental.and
+import android.app.Dialog
+import android.view.Window
+import android.widget.FrameLayout
+import android.widget.TextView
+import android.graphics.Point
+import android.widget.LinearLayout
+import com.sistemium.sissales.R
+import com.zebra.scannercontrol.*
+import com.zebra.scannercontrol.RMDAttributes.RMD_ATTR_BEEPER_VOLUME
+import com.zebra.scannercontrol.RMDAttributes.RMD_ATTR_VALUE_BEEPER_VOLUME_LOW
+import android.speech.tts.TextToSpeech
+import com.sistemium.sissales.activities.WebViewActivity
+import com.sistemium.sissales.webInterface.WebAppInterface
 
 
-
-class STMBarCodeScanner {
+class STMBarCodeScanner:IDcsSdkApiDelegate {
 
     val api = SDKHandler(MyApplication.appContext)
+
+    private var connectedId = 0
+    private var dialogFwReconnectScanner: Dialog? = null
 
     companion object {
         private var INSTANCE:STMBarCodeScanner? = null
@@ -43,6 +48,22 @@ class STMBarCodeScanner {
             }
     }
 
+    init {
+
+        api.dcssdkSetDelegate(this)
+        api.dcssdkSubsribeForEvents(
+                DCSSDKDefs.DCSSDK_EVENT.DCSSDK_EVENT_SCANNER_APPEARANCE.value
+                        or DCSSDKDefs.DCSSDK_EVENT.DCSSDK_EVENT_SCANNER_DISAPPEARANCE.value
+                        or DCSSDKDefs.DCSSDK_EVENT.DCSSDK_EVENT_SESSION_ESTABLISHMENT.value
+                        or DCSSDKDefs.DCSSDK_EVENT.DCSSDK_EVENT_SESSION_TERMINATION.value
+                        or DCSSDKDefs.DCSSDK_EVENT.DCSSDK_EVENT_BARCODE.value
+        )
+
+        api.dcssdkSetOperationalMode(DCSSDKDefs.DCSSDK_MODE.DCSSDK_OPMODE_BT_LE)
+
+        api.dcssdkEnableAvailableScannersDetection(true)
+    }
+
     var isDeviceConnected = false
 
     fun startBarcodeScanning(activity:Activity){
@@ -55,8 +76,6 @@ class STMBarCodeScanner {
 
     private fun showPairingAlertInViewController(activity:Activity){
 
-        val title = R.string.zebra_pairing
-        val description = R.string.zebra_pairing_description
         val btAddress = randomBTAddress()
 
         STMFunctions.debugLog("STMBarCodeScanner", "Connection using BTAddress: $btAddress")
@@ -72,32 +91,51 @@ class STMBarCodeScanner {
 
         }
 
-//        val barcode = api.dcssdkGetPairingBarcode(DCSSDKDefs.DCSSDK_BT_PROTOCOL.CRD_BT, DCSSDKDefs.DCSSDK_BT_SCANNER_CONFIG.KEEP_CURRENT)
+        val barcode = api.dcssdkGetPairingBarcode(DCSSDKDefs.DCSSDK_BT_PROTOCOL.SSI_BT_LE, DCSSDKDefs.DCSSDK_BT_SCANNER_CONFIG.KEEP_CURRENT)
+
+        dialogFwReconnectScanner = Dialog(activity)
+        dialogFwReconnectScanner?.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        dialogFwReconnectScanner?.setContentView(R.layout.dialog_fw_reconnect_scanner)
+
+        val cancelButton = dialogFwReconnectScanner?.findViewById(R.id.btn_cancel) as TextView
+        cancelButton.setOnClickListener {
+
+            activity.runOnUiThread {
+
+                dialogFwReconnectScanner?.dismiss()
+
+            }
+            dialogFwReconnectScanner = null
+        }
+
+        val llBarcode: FrameLayout = dialogFwReconnectScanner?.findViewById(R.id.scan_to_connect_barcode) as FrameLayout
+
+        val layoutParams = LinearLayout.LayoutParams(-1, -1)
+        val display = activity.windowManager.defaultDisplay
+        val size = Point()
+        display.getSize(size)
+        val width = size.x
+        val x = width * 9 / 10
+        val y = x / 3
+        barcode.setSize(x, y)
 
         activity.runOnUiThread {
-            AlertDialog.Builder(activity)
-                    .setTitle(title)
-                    .setMessage(description)
-                    .setIcon(android.R.drawable.ic_dialog_alert)
-//                    .setView(barcode)
-                    .setNegativeButton(android.R.string.no, null)
-                    .show().window?.setLayout(600, 400)
+
+            llBarcode.addView(barcode, layoutParams)
+
+            dialogFwReconnectScanner?.setCancelable(false)
+            dialogFwReconnectScanner?.setCanceledOnTouchOutside(false)
+            dialogFwReconnectScanner?.setOnCancelListener {
+                api.dcssdkEnableAvailableScannersDetection(false)
+            }
+            dialogFwReconnectScanner?.show()
+            api.dcssdkEnableAvailableScannersDetection(true)
+            val window = dialogFwReconnectScanner?.window
+            val scale = activity.resources.displayMetrics.density
+            window?.setLayout(LinearLayout.LayoutParams.MATCH_PARENT, (300 * scale + 0.5f).toInt())
+
         }
-//        PMAlertController *alert = [[PMAlertController alloc] initWithTitle:title
-//                description:description
-//        image:barcode
-//        style:PMAlertControllerStyleAlert];
-//        [alert addAction:[[PMAlertAction alloc] initWithTitle:NSLocalizedString(@"CANCEL", nil)
-//        style:PMAlertActionStyleCancel
-//        action:^() {
-//            NSLog(@"OK action");
-//            [self.api sbtEnableAvailableScannersDetection:NO];
-//        }]];
-//        self.pairingAlert = alert;
-//        [viewController presentViewController:alert animated:NO completion:^{
-//            NSLog(@"Presented");
-//            [self.api sbtEnableAvailableScannersDetection:YES];
-//        }];
+
 
     }
 
@@ -121,6 +159,111 @@ class STMBarCodeScanner {
 
         return sb.toString()
 
+    }
+
+    fun disconnect(){
+
+        api.dcssdkEnableAutomaticSessionReestablishment(false, connectedId)
+        api.dcssdkTerminateCommunicationSession(connectedId)
+
+    }
+
+    private fun applySettingsToScanner(scannerId:Int){
+
+        val xmlInput = "<inArgs><scannerID>$scannerId</scannerID><cmdArgs><arg-xml><attrib_list><attribute><id>$RMD_ATTR_BEEPER_VOLUME</id><datatype>B</datatype><value>$RMD_ATTR_VALUE_BEEPER_VOLUME_LOW</value></attribute></attrib_list></arg-xml></cmdArgs></inArgs>"
+
+        STMFunctions.debugLog("STMBarCodeScanner", "Sending beeper command to scannerId: $scannerId")
+
+        val result = api.dcssdkExecuteCommandOpCodeInXMLForScanner(DCSSDKDefs.DCSSDK_COMMAND_OPCODE.DCSSDK_RSM_ATTR_SET, xmlInput, null, scannerId)
+
+        if (result == DCSSDKDefs.DCSSDK_RESULT.DCSSDK_RESULT_SUCCESS){
+
+            STMFunctions.debugLog("STMBarCodeScanner", "Successfully updated beeper settings for scanner ID $scannerId")
+
+        }else{
+
+            STMFunctions.debugLog("STMBarCodeScanner", "Failed to update beeper settings from scanner ID $scannerId")
+
+        }
+
+    }
+
+    override fun dcssdkEventFirmwareUpdate(p0: FirmwareUpdateEvent?) {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override fun dcssdkEventCommunicationSessionTerminated(p0: Int) {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override fun dcssdkEventImage(p0: ByteArray?, p1: Int) {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override fun dcssdkEventScannerAppeared(p0: DCSScannerInfo?) {
+
+        val status = if (p0!!.isActive) {"active"} else {"available"}
+
+        val scannerId = p0.scannerID
+
+        STMFunctions.debugLog("STMBarCodeScanner", "Scanner is $status: scannerId: $scannerId name: ${p0.scannerName}")
+
+    }
+
+    override fun dcssdkEventCommunicationSessionEstablished(p0: DCSScannerInfo?) {
+
+        val scannerId = p0!!.scannerID
+
+        connectedId = scannerId
+
+        isDeviceConnected = true
+
+        val result = api.dcssdkEnableAutomaticSessionReestablishment(true, scannerId)
+
+        if (result != DCSSDKDefs.DCSSDK_RESULT.DCSSDK_RESULT_SUCCESS) {
+
+            STMFunctions.debugLog("STMBarCodeScanner", "Automatic Session Reestablishment for scannerId %$scannerId could not be set")
+            return
+
+        }
+
+        STMFunctions.debugLog("STMBarCodeScanner", "Automatic Session Reestablishment for scannerId $scannerId has been set successfully")
+
+        api.dcssdkEnableAvailableScannersDetection(false)
+
+        //TODO run on ui thread
+        dialogFwReconnectScanner!!.dismiss()
+
+        applySettingsToScanner(scannerId)
+
+        val tts = TextToSpeech(MyApplication.appContext){
+
+        }
+
+        tts.speak(MyApplication.appContext!!.getString(R.string.scanner_arrival), TextToSpeech.QUEUE_ADD, null, null)
+
+        WebViewActivity.webInterface!!.scannerConnected()
+
+    }
+
+    override fun dcssdkEventVideo(p0: ByteArray?, p1: Int) {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override fun dcssdkEventAuxScannerAppeared(p0: DCSScannerInfo?, p1: DCSScannerInfo?) {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override fun dcssdkEventBinaryData(p0: ByteArray?, p1: Int) {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override fun dcssdkEventBarcode(p0: ByteArray?, p1: Int, p2: Int) {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override fun dcssdkEventScannerDisappeared(p0: Int) {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
 }

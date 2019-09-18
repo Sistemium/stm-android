@@ -82,6 +82,8 @@ class WebAppInterface internal constructor(private var webViewActivity: WebViewA
 
     }
 
+    var scannerStatusJSFunction = ""
+
     @JavascriptInterface
     fun barCodeScannerOn(parameters: String?) {
 
@@ -89,16 +91,40 @@ class WebAppInterface internal constructor(private var webViewActivity: WebViewA
 
         val mapParameters = gson.fromJson(parameters, Map::class.java)
 
-        var scannerScanJSFunction = mapParameters["scanCallback"]
-        var scannerPowerButtonJSFunction = mapParameters["powerButtonCallback"]
-        var scannerStatusJSFunction = mapParameters["statusCallback"]
+        val scannerScanJSFunction = mapParameters["scanCallback"] as String
+        var scannerPowerButtonJSFunction = mapParameters["powerButtonCallback"] as String
+        scannerStatusJSFunction = mapParameters["statusCallback"] as String
 
         STMBarCodeScanner.sharedScanner?.startBarcodeScanning(webViewActivity)
 
+        if (STMBarCodeScanner.sharedScanner!!.isDeviceConnected){
 
-//        if ([self.iOSModeBarCodeScanner isDeviceConnected]) {
-//            [self scannerIsConnected];
-//        }
+            scannerConnected()
+
+        }
+
+    }
+
+    fun scannerConnected(){
+
+        javascriptCallback("connected", HashMap<Any,Any>(), scannerStatusJSFunction)
+
+    }
+
+    @JavascriptInterface
+    fun barCodeScannerOff(parameters: String?) {
+
+        STMBarCodeScanner.sharedScanner!!.disconnect()
+
+        val mapParameters = gson.fromJson(parameters, Map::class.java)
+
+        val scannerStatusJSFunction = mapParameters["statusCallback"] as String
+
+        if (STMBarCodeScanner.sharedScanner!!.isDeviceConnected){
+
+            javascriptCallback("connected", HashMap<Any,Any>(), scannerStatusJSFunction)
+
+        }
 
     }
 
@@ -743,7 +769,7 @@ class WebAppInterface internal constructor(private var webViewActivity: WebViewA
         val jsFunction = "window.$jsCallbackFunction && $jsCallbackFunction.apply(null,${gson.toJson(arguments)})"
 
         STMFunctions.debugLog("DEBUG", "EvaluateJS")
-//        STMFunctions.debugLog("JSFUNCTION", jsFunction)
+
 
         webViewActivity.webView?.post {
 

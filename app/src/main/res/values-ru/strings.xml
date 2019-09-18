@@ -21,4 +21,6 @@
     <string name="location_failed">Не удалось получить геометку</string>
     <string name="zebra_pairing">Сканер Zebra</string>
     <string name="zebra_pairing_description">Просканируйте, чтобы подключить сканер</string>
+    <string name="cancel">Отменить</string>
+    <string name="scanner_arrival">Сканер штрих кодов подключён</string>
 </resources>
