@@ -356,13 +356,13 @@ class STMSQLIteSchema(private val database: SQLiteDatabase) {
         val columnDDL = columnDDL(columnName, STMConstants.SQLiteText, constraints)
         clauses.add("ALTER TABLE [$tableName] ADD COLUMN $columnDDL")
         clauses.add(createIndexDDL(tableName, columnName))
-        val phantomFields = "INSERT INTO [$parentName] (${STMConstants.DEFAULT_PERSISTING_PRIMARY_KEY}, ${STMConstants.STMPersistingKeyPhantom}, ${STMConstants.STMPersistingOptionLts}, ${STMConstants.STMPersistingKeyVersion})"
-        val phantomData = "SELECT NEW.$columnName, 1, null, null"
+        val phantomFields = "INSERT INTO [$parentName] (${STMConstants.DEFAULT_PERSISTING_PRIMARY_KEY}, ${STMConstants.STMPersistingOptionLts}, ${STMConstants.STMPersistingKeyVersion})"
+        val phantomData = "SELECT NEW.$columnName, 1, null"
         val phantomSource = "WHERE NOT EXISTS (SELECT * FROM $parentName WHERE ${STMConstants.DEFAULT_PERSISTING_PRIMARY_KEY} = NEW.$columnName)"
         val columnNotNull = "NEW.$columnName is not null"
         val createPhantom = arrayListOf(phantomFields, phantomData, phantomSource).joinToString(" ")
         clauses.add(createTriggerDDL("phantom_$columnName", STMConstants.SQLiteBeforeInsert, tableName, createPhantom, columnNotNull))
-        clauses.add(createTriggerDDL("phantom_update_$columnName", "BEFORE UPDATE OF " + columnName, tableName, createPhantom, columnNotNull))
+        clauses.add(createTriggerDDL("phantom_update_$columnName", "BEFORE UPDATE OF $columnName", tableName, createPhantom, columnNotNull))
 
         return clauses
 
