@@ -356,7 +356,7 @@ class STMSQLIteSchema(private val database: SQLiteDatabase) {
         val columnDDL = columnDDL(columnName, STMConstants.SQLiteText, constraints)
         clauses.add("ALTER TABLE [$tableName] ADD COLUMN $columnDDL")
         clauses.add(createIndexDDL(tableName, columnName))
-        val phantomFields = "INSERT INTO [$parentName] (${STMConstants.DEFAULT_PERSISTING_PRIMARY_KEY}, ${STMConstants.STMPersistingOptionLts}, ${STMConstants.STMPersistingKeyVersion})"
+        val phantomFields = "INSERT INTO [$parentName] (${STMConstants.DEFAULT_PERSISTING_PRIMARY_KEY}, ${STMConstants.STMPersistingKeyPhantom}, ${STMConstants.STMPersistingKeyVersion})"
         val phantomData = "SELECT NEW.$columnName, 1, null"
         val phantomSource = "WHERE NOT EXISTS (SELECT * FROM $parentName WHERE ${STMConstants.DEFAULT_PERSISTING_PRIMARY_KEY} = NEW.$columnName)"
         val columnNotNull = "NEW.$columnName is not null"
