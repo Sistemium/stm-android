@@ -17,6 +17,9 @@ import com.zebra.scannercontrol.RMDAttributes.RMD_ATTR_VALUE_BEEPER_VOLUME_LOW
 import android.speech.tts.TextToSpeech
 import com.sistemium.sissales.activities.WebViewActivity
 import com.sistemium.sissales.webInterface.WebAppInterface
+import android.os.Looper
+import android.os.Handler
+import android.support.v4.os.ConfigurationCompat
 
 
 class STMBarCodeScanner:IDcsSdkApiDelegate {
@@ -98,13 +101,12 @@ class STMBarCodeScanner:IDcsSdkApiDelegate {
         dialogFwReconnectScanner?.setContentView(R.layout.dialog_fw_reconnect_scanner)
 
         val cancelButton = dialogFwReconnectScanner?.findViewById(R.id.btn_cancel) as TextView
+
         cancelButton.setOnClickListener {
 
-            activity.runOnUiThread {
+            dialogFwReconnectScanner?.dismiss()
 
-                dialogFwReconnectScanner?.dismiss()
 
-            }
             dialogFwReconnectScanner = null
         }
 
@@ -119,22 +121,18 @@ class STMBarCodeScanner:IDcsSdkApiDelegate {
         val y = x / 3
         barcode.setSize(x, y)
 
-        activity.runOnUiThread {
+        llBarcode.addView(barcode, layoutParams)
 
-            llBarcode.addView(barcode, layoutParams)
-
-            dialogFwReconnectScanner?.setCancelable(false)
-            dialogFwReconnectScanner?.setCanceledOnTouchOutside(false)
-            dialogFwReconnectScanner?.setOnCancelListener {
-                api.dcssdkEnableAvailableScannersDetection(false)
-            }
-            dialogFwReconnectScanner?.show()
-            api.dcssdkEnableAvailableScannersDetection(true)
-            val window = dialogFwReconnectScanner?.window
-            val scale = activity.resources.displayMetrics.density
-            window?.setLayout(LinearLayout.LayoutParams.MATCH_PARENT, (300 * scale + 0.5f).toInt())
-
+        dialogFwReconnectScanner?.setCancelable(false)
+        dialogFwReconnectScanner?.setCanceledOnTouchOutside(false)
+        dialogFwReconnectScanner?.setOnCancelListener {
+            api.dcssdkEnableAvailableScannersDetection(false)
         }
+        dialogFwReconnectScanner?.show()
+        api.dcssdkEnableAvailableScannersDetection(true)
+        val window = dialogFwReconnectScanner?.window
+        val scale = activity.resources.displayMetrics.density
+        window?.setLayout(LinearLayout.LayoutParams.MATCH_PARENT, (300 * scale + 0.5f).toInt())
 
 
     }
@@ -174,7 +172,9 @@ class STMBarCodeScanner:IDcsSdkApiDelegate {
 
         STMFunctions.debugLog("STMBarCodeScanner", "Sending beeper command to scannerId: $scannerId")
 
-        val result = api.dcssdkExecuteCommandOpCodeInXMLForScanner(DCSSDKDefs.DCSSDK_COMMAND_OPCODE.DCSSDK_RSM_ATTR_SET, xmlInput, null, scannerId)
+        val out = java.lang.StringBuilder()
+
+        val result = api.dcssdkExecuteCommandOpCodeInXMLForScanner(DCSSDKDefs.DCSSDK_COMMAND_OPCODE.DCSSDK_RSM_ATTR_SET, xmlInput, out, scannerId)
 
         if (result == DCSSDKDefs.DCSSDK_RESULT.DCSSDK_RESULT_SUCCESS){
 
@@ -231,16 +231,22 @@ class STMBarCodeScanner:IDcsSdkApiDelegate {
 
         api.dcssdkEnableAvailableScannersDetection(false)
 
-        //TODO run on ui thread
         dialogFwReconnectScanner!!.dismiss()
 
         applySettingsToScanner(scannerId)
 
-        val tts = TextToSpeech(MyApplication.appContext){
+        var tts:TextToSpeech? = null
 
+        tts = TextToSpeech(MyApplication.appContext){
+
+            if (it == TextToSpeech.SUCCESS) {
+
+                tts!!.language = ConfigurationCompat.getLocales(MyApplication.appContext!!.resources.configuration)[0]
+
+                tts!!.speak(MyApplication.appContext!!.getString(R.string.scanner_arrival), TextToSpeech.QUEUE_ADD, null, null)
+
+            }
         }
-
-        tts.speak(MyApplication.appContext!!.getString(R.string.scanner_arrival), TextToSpeech.QUEUE_ADD, null, null)
 
         WebViewActivity.webInterface!!.scannerConnected()
 
