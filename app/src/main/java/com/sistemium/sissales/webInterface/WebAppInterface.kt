@@ -111,20 +111,16 @@ class WebAppInterface internal constructor(private var webViewActivity: WebViewA
 
     }
 
+    fun scannerDisconnected(){
+
+        javascriptCallback("disconnected", HashMap<Any,Any>(), scannerStatusJSFunction)
+
+    }
+
     @JavascriptInterface
     fun barCodeScannerOff(parameters: String?) {
 
         STMBarCodeScanner.sharedScanner!!.disconnect()
-
-        val mapParameters = gson.fromJson(parameters, Map::class.java)
-
-        val scannerStatusJSFunction = mapParameters["statusCallback"] as String
-
-        if (STMBarCodeScanner.sharedScanner!!.isDeviceConnected){
-
-            javascriptCallback("connected", HashMap<Any,Any>(), scannerStatusJSFunction)
-
-        }
 
     }
 

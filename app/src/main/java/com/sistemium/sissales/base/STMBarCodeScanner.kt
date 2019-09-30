@@ -193,7 +193,28 @@ class STMBarCodeScanner:IDcsSdkApiDelegate {
     }
 
     override fun dcssdkEventCommunicationSessionTerminated(p0: Int) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+
+        STMFunctions.debugLog("STMBarCodeScanner", "dcssdkEventCommunicationSessionTerminated scannerId: $p0")
+
+        isDeviceConnected = false
+
+        var tts:TextToSpeech? = null
+
+        tts = TextToSpeech(MyApplication.appContext){
+
+            if (it == TextToSpeech.SUCCESS) {
+
+                tts!!.language = ConfigurationCompat.getLocales(MyApplication.appContext!!.resources.configuration)[0]
+
+                tts!!.speak(MyApplication.appContext!!.getString(R.string.scanner_removal), TextToSpeech.QUEUE_ADD, null, null)
+
+            }
+        }
+
+        WebViewActivity.webInterface!!.scannerDisconnected()
+
+        api.dcssdkEnableAvailableScannersDetection(true)
+
     }
 
     override fun dcssdkEventImage(p0: ByteArray?, p1: Int) {
@@ -269,7 +290,7 @@ class STMBarCodeScanner:IDcsSdkApiDelegate {
     }
 
     override fun dcssdkEventScannerDisappeared(p0: Int) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        STMFunctions.debugLog("STMBarCodeScanner","dcssdkEventScannerDisappeared scannerId: $p0")
     }
 
 }

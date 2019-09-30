@@ -23,4 +23,5 @@
     <string name="zebra_pairing_description">Scan the barcode to connect scanner</string>
     <string name="cancel">Cancel</string>
     <string name="scanner_arrival">Scanner device arrival</string>
+    <string name="scanner_removal">Scanner device removal</string>
 </resources>
