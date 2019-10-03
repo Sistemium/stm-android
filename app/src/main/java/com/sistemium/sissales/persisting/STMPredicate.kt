@@ -56,6 +56,8 @@ class STMPredicate(var value: String) {
 
             if (comparator == "!=") comparator = "<>"
 
+            if (comparator == "likei") comparator = "like"
+
             var rightPredicateString = "'${value[value.keys.first()]}'"
 
             if (value[value.keys.first()] is Boolean || value[value.keys.first()] is Number || value[value.keys.first()] == "NULL") rightPredicateString = "${value[value.keys.first()]}"
