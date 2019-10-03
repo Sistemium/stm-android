@@ -20,7 +20,14 @@ import com.sistemium.sissales.webInterface.WebAppInterface
 import android.os.Looper
 import android.os.Handler
 import android.support.v4.os.ConfigurationCompat
+import com.sistemium.sissales.base.session.STMSession
 
+enum class STMBarCodeScannedType(val type:String) {
+    STMBarCodeTypeUnknow(""),
+    STMBarCodeTypeArticle("Article"),
+    STMBarCodeTypeExciseStamp("ExciseStamp"),
+    STMBarCodeTypeStockBatch("StockBatch")
+}
 
 class STMBarCodeScanner:IDcsSdkApiDelegate {
 
@@ -28,6 +35,9 @@ class STMBarCodeScanner:IDcsSdkApiDelegate {
 
     private var connectedId = 0
     private var dialogFwReconnectScanner: Dialog? = null
+    private val barCodeTypes by lazy {
+        STMSession.sharedSession!!.persistenceDelegate.findAllSync("STMBarCodeType", null, null)
+    }
 
     companion object {
         private var INSTANCE:STMBarCodeScanner? = null
@@ -166,6 +176,40 @@ class STMBarCodeScanner:IDcsSdkApiDelegate {
 
     }
 
+    private fun barcodeTypeFromTypesDics(types:ArrayList<Map<*,*>>, barcode:String):STMBarCodeScannedType{
+
+        var matchedType:STMBarCodeScannedType = STMBarCodeScannedType.STMBarCodeTypeUnknow
+
+        main@ for (barCodeType in types) {
+
+            val mask = barCodeType["mask"] as? String ?: continue
+
+            val numberOfMatches = mask.toRegex(RegexOption.IGNORE_CASE).findAll(barcode).count()
+
+            if (numberOfMatches > 0){
+
+                val type = barCodeType["type"] as? String
+
+                for (barcodeType in STMBarCodeScannedType.values()){
+
+                    if (barcodeType.type == type){
+
+                        matchedType = barcodeType
+
+                        break@main
+
+                    }
+
+                }
+
+            }
+
+        }
+
+        return matchedType
+
+    }
+
     private fun applySettingsToScanner(scannerId:Int){
 
         val xmlInput = "<inArgs><scannerID>$scannerId</scannerID><cmdArgs><arg-xml><attrib_list><attribute><id>$RMD_ATTR_BEEPER_VOLUME</id><datatype>B</datatype><value>$RMD_ATTR_VALUE_BEEPER_VOLUME_LOW</value></attribute></attrib_list></arg-xml></cmdArgs></inArgs>"
@@ -286,7 +330,20 @@ class STMBarCodeScanner:IDcsSdkApiDelegate {
     }
 
     override fun dcssdkEventBarcode(p0: ByteArray?, p1: Int, p2: Int) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+
+        val barcode = String(p0!!)
+
+        STMFunctions.debugLog("STMBarCodeScanner", "Got barcode: '$barcode' from scannerId: $p2")
+
+        val type = barcodeTypeFromTypesDics(barCodeTypes, barcode)
+
+        WebViewActivity.webInterface!!.receiveBarCode(barcode, type)
+
+        //        STMBarCodeScan *barCodeScan = [[STMBarCodeScan alloc] init];
+//        barCodeScan.code = barcode;
+//        [self.delegate barCodeScanner:self receiveBarCodeScan:barCodeScan withType:type];
+
+
     }
 
     override fun dcssdkEventScannerDisappeared(p0: Int) {

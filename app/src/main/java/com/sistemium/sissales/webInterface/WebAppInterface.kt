@@ -2,9 +2,6 @@ package com.sistemium.sissales.webInterface
 
 import android.webkit.JavascriptInterface
 import com.sistemium.sissales.activities.WebViewActivity
-import com.sistemium.sissales.base.MyApplication
-import com.sistemium.sissales.base.STMConstants
-import com.sistemium.sissales.base.STMFunctions
 import com.sistemium.sissales.base.STMFunctions.Companion.gson
 import com.sistemium.sissales.base.session.STMCoreAuthController
 import com.sistemium.sissales.interfaces.STMFullStackPersisting
@@ -30,7 +27,9 @@ import com.google.android.gms.location.LocationResult
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
-import com.sistemium.sissales.base.STMBarCodeScanner
+import com.sistemium.sissales.base.*
+import java.lang.reflect.Array
+import kotlin.collections.ArrayList
 
 
 /**
@@ -83,6 +82,7 @@ class WebAppInterface internal constructor(private var webViewActivity: WebViewA
     }
 
     var scannerStatusJSFunction = ""
+    var scannerScanJSFunction = ""
 
     @JavascriptInterface
     fun barCodeScannerOn(parameters: String?) {
@@ -91,7 +91,7 @@ class WebAppInterface internal constructor(private var webViewActivity: WebViewA
 
         val mapParameters = gson.fromJson(parameters, Map::class.java)
 
-        val scannerScanJSFunction = mapParameters["scanCallback"] as String
+        scannerScanJSFunction = mapParameters["scanCallback"] as String
         var scannerPowerButtonJSFunction = mapParameters["powerButtonCallback"] as String
         scannerStatusJSFunction = mapParameters["statusCallback"] as String
 
@@ -114,6 +114,42 @@ class WebAppInterface internal constructor(private var webViewActivity: WebViewA
     fun scannerDisconnected(){
 
         javascriptCallback("disconnected", HashMap<Any,Any>(), scannerStatusJSFunction)
+
+    }
+
+    fun receiveBarCode(barcode:String, type: STMBarCodeScannedType){
+
+//        if (!self.isInActiveTab || !barcode) {
+//            return;
+//        }
+
+        val arguments = arrayListOf(barcode)
+
+        if (type == STMBarCodeScannedType.STMBarCodeTypeStockBatch){
+
+            arguments.add(type.type)
+
+//        NSDictionary *stockBatch = [STMCoreBarCodeController stockBatchForBarcode:barcode].firstObject;
+//
+//        if (!stockBatch) {
+//
+//            NSLog(@"send received barcode %@ with type %@ to WKWebView", barcode, typeString);
+//            return;
+//
+//        }
+//
+//        [arguments addObject:stockBatch];
+//
+//        NSLog(@"send received barcode %@ with type %@ and stockBatch %@ to WKWebView", barcode, typeString, stockBatch);
+
+
+        } else {
+
+            STMFunctions.debugLog("WebAppInterface","send received barcode  with type ${type.type} to WebView")
+
+        }
+
+        evaluateReceiveBarCodeJSFunctionWithArguments(arguments)
 
     }
 
@@ -743,6 +779,22 @@ class WebAppInterface internal constructor(private var webViewActivity: WebViewA
         if (objects.firstOrNull() != null) {
 
             subscription.ltsOffset[entityName] = objects.first()[STMConstants.STMPersistingOptionLts] as String
+
+        }
+
+    }
+
+    private fun evaluateReceiveBarCodeJSFunctionWithArguments(arguments:ArrayList<String>){
+
+        val jsFunction = "$scannerScanJSFunction.apply(null,${STMFunctions.jsonStringFromObject(arguments)})"
+
+        webViewActivity.webView?.post {
+
+            webViewActivity.webView?.evaluateJavascript(jsFunction) {
+
+                STMFunctions.debugLog("DEBUG", "Evaluate finish")
+
+            }
 
         }
 
