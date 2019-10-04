@@ -27,6 +27,9 @@ import com.google.android.gms.location.LocationResult
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
+import android.speech.tts.TextToSpeech
+import android.support.v4.os.ConfigurationCompat
+import com.sistemium.sissales.R
 import com.sistemium.sissales.base.*
 import java.lang.reflect.Array
 import kotlin.collections.ArrayList
@@ -244,9 +247,32 @@ class WebAppInterface internal constructor(private var webViewActivity: WebViewA
 
         val mapParameters = gson.fromJson(parameters, Map::class.java)
 
-        // TODO implement destroyObjectFromScriptMessage
+        val messageSound = mapParameters["sound"] as? String
+        val messageText = mapParameters["text"] as? String
+        val soundCallbackJSFunction = mapParameters["callBack"] as? String
+//        val rate = mapParameters["rate"] as? Double ?: 0.5
+//        val pitch = mapParameters["pitch"] as? Double ?: 1.0
 
-        javascriptCallback(arrayOf("didFinishSpeaking"), null, mapParameters["callBack"] as String)
+        if (messageText != null) {
+
+            var tts:TextToSpeech? = null
+
+            tts = TextToSpeech(MyApplication.appContext){
+
+                if (it == TextToSpeech.SUCCESS) {
+
+                    tts!!.language = ConfigurationCompat.getLocales(MyApplication.appContext!!.resources.configuration)[0]
+
+                    tts!!.speak(messageText, TextToSpeech.QUEUE_ADD, null, null)
+
+                }
+            }
+
+        } else {
+
+            javascriptCallback("message.body have no text ot sound to play", mapParameters)
+
+        }
 
     }
 
