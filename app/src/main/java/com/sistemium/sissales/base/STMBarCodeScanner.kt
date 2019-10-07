@@ -233,7 +233,6 @@ class STMBarCodeScanner:IDcsSdkApiDelegate {
     }
 
     override fun dcssdkEventFirmwareUpdate(p0: FirmwareUpdateEvent?) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
     override fun dcssdkEventCommunicationSessionTerminated(p0: Int) {
@@ -262,7 +261,6 @@ class STMBarCodeScanner:IDcsSdkApiDelegate {
     }
 
     override fun dcssdkEventImage(p0: ByteArray?, p1: Int) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
     override fun dcssdkEventScannerAppeared(p0: DCSScannerInfo?) {
@@ -318,15 +316,12 @@ class STMBarCodeScanner:IDcsSdkApiDelegate {
     }
 
     override fun dcssdkEventVideo(p0: ByteArray?, p1: Int) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
     override fun dcssdkEventAuxScannerAppeared(p0: DCSScannerInfo?, p1: DCSScannerInfo?) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
     override fun dcssdkEventBinaryData(p0: ByteArray?, p1: Int) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
     override fun dcssdkEventBarcode(p0: ByteArray?, p1: Int, p2: Int) {
@@ -338,11 +333,6 @@ class STMBarCodeScanner:IDcsSdkApiDelegate {
         val type = barcodeTypeFromTypesDics(barCodeTypes, barcode)
 
         WebViewActivity.webInterface!!.receiveBarCode(barcode, type)
-
-        //        STMBarCodeScan *barCodeScan = [[STMBarCodeScan alloc] init];
-//        barCodeScan.code = barcode;
-//        [self.delegate barCodeScanner:self receiveBarCodeScan:barCodeScan withType:type];
-
 
     }
 

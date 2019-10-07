@@ -132,19 +132,6 @@ class WebAppInterface internal constructor(private var webViewActivity: WebViewA
 
             arguments.add(type.type)
 
-//        NSDictionary *stockBatch = [STMCoreBarCodeController stockBatchForBarcode:barcode].firstObject;
-//
-//        if (!stockBatch) {
-//
-//            NSLog(@"send received barcode %@ with type %@ to WKWebView", barcode, typeString);
-//            return;
-//
-//        }
-//
-//        [arguments addObject:stockBatch];
-//
-//        NSLog(@"send received barcode %@ with type %@ and stockBatch %@ to WKWebView", barcode, typeString, stockBatch);
-
 
         } else {
 
