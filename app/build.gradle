@@ -84,6 +84,10 @@ configurations.all {
     resolutionStrategy.cacheChangingModulesFor 0, 'seconds'
 }
 
+configurations {
+    all*.exclude group: 'com.google.code.gson'
+}
+
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
@@ -96,6 +100,7 @@ dependencies {
     implementation('com.crashlytics.sdk.android:crashlytics:2.10.0@aar') {
         transitive = true
     }
+
     implementation 'com.github.EdgarJan:Secured-Preference-Store:-SNAPSHOT'
     implementation 'com.github.javiersantos:AppUpdater:master-SNAPSHOT'
     implementation 'com.google.android.gms:play-services-location:16.0.0'
