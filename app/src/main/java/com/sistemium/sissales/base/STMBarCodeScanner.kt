@@ -127,7 +127,7 @@ class STMBarCodeScanner:IDcsSdkApiDelegate {
         val size = Point()
         display.getSize(size)
         val width = size.x
-        val x = width * 9 / 10
+        val x = width * 5 / 10
         val y = x / 3
         barcode.setSize(x, y)
 
