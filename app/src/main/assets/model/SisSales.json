@@ -2,8 +2,8 @@
   "model": {
     "type": "com.apple.IDECoreDataModeler.DataModel",
     "documentVersion": "1.0",
-    "lastSavedToolsVersion": "14135",
-    "systemVersion": "17E202",
+    "lastSavedToolsVersion": "14490.99",
+    "systemVersion": "18G103",
     "minimumToolsVersion": "Xcode 7.3",
     "sourceLanguage": "Objective-C",
     "entity": [
@@ -937,6 +937,13 @@
             "syncable": "YES"
           },
           {
+            "name": "lastSent",
+            "optional": "YES",
+            "attributeType": "Date",
+            "usesScalarValueType": "NO",
+            "syncable": "YES"
+          },
+          {
             "name": "name",
             "optional": "YES",
             "attributeType": "String",
@@ -1585,6 +1592,12 @@
             "syncable": "YES"
           },
           {
+            "name": "lifeTimePredicate",
+            "optional": "YES",
+            "attributeType": "String",
+            "syncable": "YES"
+          },
+          {
             "name": "maxPictureScale",
             "optional": "YES",
             "attributeType": "Double",
@@ -1749,6 +1762,16 @@
             "destinationEntity": "STMOutlet",
             "inverseName": "location",
             "inverseEntity": "STMOutlet",
+            "syncable": "YES"
+          },
+          {
+            "name": "possibleOutlets",
+            "optional": "YES",
+            "toMany": "YES",
+            "deletionRule": "Deny",
+            "destinationEntity": "STMPossibleOutlet",
+            "inverseName": "location",
+            "inverseEntity": "STMPossibleOutlet",
             "syncable": "YES"
           },
           {
@@ -2523,6 +2546,72 @@
         ]
       },
       {
+        "name": "STMPossibleOutlet",
+        "parentEntity": "STMAbstract",
+        "syncable": "YES",
+        "attribute": [
+          {
+            "name": "address",
+            "optional": "YES",
+            "attributeType": "String",
+            "syncable": "YES"
+          },
+          {
+            "name": "name",
+            "optional": "YES",
+            "attributeType": "String",
+            "syncable": "YES"
+          }
+        ],
+        "relationship": [
+          {
+            "name": "location",
+            "optional": "YES",
+            "maxCount": "1",
+            "deletionRule": "Nullify",
+            "destinationEntity": "STMLocation",
+            "inverseName": "possibleOutlets",
+            "inverseEntity": "STMLocation",
+            "syncable": "YES"
+          },
+          {
+            "name": "possibleOutletPhotos",
+            "optional": "YES",
+            "toMany": "YES",
+            "deletionRule": "Cascade",
+            "destinationEntity": "STMPossibleOutletPhoto",
+            "inverseName": "possibleOutlet",
+            "inverseEntity": "STMPossibleOutletPhoto",
+            "syncable": "YES"
+          },
+          {
+            "name": "salesman",
+            "optional": "YES",
+            "maxCount": "1",
+            "deletionRule": "Nullify",
+            "destinationEntity": "STMSalesman",
+            "inverseName": "possibleOutlets",
+            "inverseEntity": "STMSalesman",
+            "syncable": "YES"
+          }
+        ]
+      },
+      {
+        "name": "STMPossibleOutletPhoto",
+        "parentEntity": "STMCorePhoto",
+        "syncable": "YES",
+        "relationship": {
+          "name": "possibleOutlet",
+          "optional": "YES",
+          "maxCount": "1",
+          "deletionRule": "Nullify",
+          "destinationEntity": "STMPossibleOutlet",
+          "inverseName": "possibleOutletPhotos",
+          "inverseEntity": "STMPossibleOutlet",
+          "syncable": "YES"
+        }
+      },
+      {
         "name": "STMPrice",
         "representedClassName": "STMPrice",
         "parentEntity": "STMAbstract",
@@ -3197,6 +3286,16 @@
             "syncable": "YES"
           },
           {
+            "name": "possibleOutlets",
+            "optional": "YES",
+            "toMany": "YES",
+            "deletionRule": "Cascade",
+            "destinationEntity": "STMPossibleOutlet",
+            "inverseName": "salesman",
+            "inverseEntity": "STMPossibleOutlet",
+            "syncable": "YES"
+          },
+          {
             "name": "saleOrders",
             "optional": "YES",
             "toMany": "YES",
@@ -3605,6 +3704,18 @@
             "optional": "YES",
             "attributeType": "Date",
             "usesScalarValueType": "NO",
+            "syncable": "YES"
+          },
+          {
+            "name": "egaisReceiver",
+            "optional": "YES",
+            "attributeType": "String",
+            "syncable": "YES"
+          },
+          {
+            "name": "egaisSender",
+            "optional": "YES",
+            "attributeType": "String",
             "syncable": "YES"
           },
           {
@@ -4251,6 +4362,570 @@
           }
         ]
       }
-    ]
+    ],
+    "elements": {
+      "element": [
+        {
+          "name": "STMAbstract",
+          "positionX": "1341",
+          "positionY": "2106",
+          "width": "128",
+          "height": "105"
+        },
+        {
+          "name": "STMAccount",
+          "positionX": "1323",
+          "positionY": "2088",
+          "width": "128",
+          "height": "165"
+        },
+        {
+          "name": "STMArticle",
+          "positionX": "1163",
+          "positionY": "619",
+          "width": "128",
+          "height": "405"
+        },
+        {
+          "name": "STMArticleBarCode",
+          "positionX": "1368",
+          "positionY": "2133",
+          "width": "128",
+          "height": "75"
+        },
+        {
+          "name": "STMArticleGroup",
+          "positionX": "1386",
+          "positionY": "918",
+          "width": "128",
+          "height": "150"
+        },
+        {
+          "name": "STMArticlePicture",
+          "positionX": "38",
+          "positionY": "792",
+          "width": "128",
+          "height": "73"
+        },
+        {
+          "name": "STMArticlePictureArticle",
+          "positionX": "407",
+          "positionY": "349",
+          "width": "128",
+          "height": "75"
+        },
+        {
+          "name": "STMBarCodeScan",
+          "positionX": "72",
+          "positionY": "2286",
+          "width": "128",
+          "height": "90"
+        },
+        {
+          "name": "STMBarCodeType",
+          "positionX": "218",
+          "positionY": "2286",
+          "width": "128",
+          "height": "105"
+        },
+        {
+          "name": "STMBatteryStatus",
+          "positionX": "648",
+          "positionY": "2286",
+          "width": "128",
+          "height": "75"
+        },
+        {
+          "name": "STMCampaign",
+          "positionX": "1206",
+          "positionY": "2016",
+          "width": "128",
+          "height": "150"
+        },
+        {
+          "name": "STMCampaignGroup",
+          "positionX": "1215",
+          "positionY": "2025",
+          "width": "128",
+          "height": "105"
+        },
+        {
+          "name": "STMCampaignPicture",
+          "positionX": "1197",
+          "positionY": "2007",
+          "width": "128",
+          "height": "60"
+        },
+        {
+          "name": "STMCashing",
+          "positionX": "1368",
+          "positionY": "2133",
+          "width": "128",
+          "height": "165"
+        },
+        {
+          "name": "STMCatalogueAlert",
+          "positionX": "1314",
+          "positionY": "2079",
+          "width": "128",
+          "height": "150"
+        },
+        {
+          "name": "STMClientData",
+          "positionX": "936",
+          "positionY": "2286",
+          "width": "128",
+          "height": "270"
+        },
+        {
+          "name": "STMClientEntity",
+          "positionX": "70",
+          "positionY": "2286",
+          "width": "128",
+          "height": "90"
+        },
+        {
+          "name": "STMCommentary",
+          "positionX": "1359",
+          "positionY": "2124",
+          "width": "128",
+          "height": "105"
+        },
+        {
+          "name": "STMContract",
+          "positionX": "1388",
+          "positionY": "1261",
+          "width": "128",
+          "height": "210"
+        },
+        {
+          "name": "STMContractArticle",
+          "positionX": "1350",
+          "positionY": "2115",
+          "width": "128",
+          "height": "90"
+        },
+        {
+          "name": "STMContractPriceGroup",
+          "positionX": "1359",
+          "positionY": "2124",
+          "width": "128",
+          "height": "90"
+        },
+        {
+          "name": "STMCoreLocation",
+          "positionX": "495",
+          "positionY": "1179",
+          "width": "128",
+          "height": "195"
+        },
+        {
+          "name": "STMCorePhoto",
+          "positionX": "272",
+          "positionY": "1147",
+          "width": "128",
+          "height": "60"
+        },
+        {
+          "name": "STMCorePicture",
+          "positionX": "92",
+          "positionY": "1188",
+          "width": "128",
+          "height": "180"
+        },
+        {
+          "name": "STMDatum",
+          "positionX": "1224",
+          "positionY": "2286",
+          "width": "128",
+          "height": "135"
+        },
+        {
+          "name": "STMDebt",
+          "positionX": "1359",
+          "positionY": "2124",
+          "width": "128",
+          "height": "240"
+        },
+        {
+          "name": "STMDriver",
+          "positionX": "1323",
+          "positionY": "2088",
+          "width": "128",
+          "height": "120"
+        },
+        {
+          "name": "STMEntity",
+          "positionX": "232",
+          "positionY": "681",
+          "width": "128",
+          "height": "255"
+        },
+        {
+          "name": "STMJson",
+          "positionX": "504",
+          "positionY": "2286",
+          "width": "128",
+          "height": "90"
+        },
+        {
+          "name": "STMLegalEntity",
+          "positionX": "1368",
+          "positionY": "2133",
+          "width": "128",
+          "height": "75"
+        },
+        {
+          "name": "STMLegalForm",
+          "positionX": "1368",
+          "positionY": "1546",
+          "width": "128",
+          "height": "105"
+        },
+        {
+          "name": "STMLocation",
+          "positionX": "720",
+          "positionY": "1135",
+          "width": "128",
+          "height": "105"
+        },
+        {
+          "name": "STMLogMessage",
+          "positionX": "792",
+          "positionY": "2286",
+          "width": "128",
+          "height": "75"
+        },
+        {
+          "name": "STMMessage",
+          "positionX": "252",
+          "positionY": "1083",
+          "width": "128",
+          "height": "180"
+        },
+        {
+          "name": "STMMessagePicture",
+          "positionX": "72",
+          "positionY": "999",
+          "width": "128",
+          "height": "73"
+        },
+        {
+          "name": "STMNewsMessage",
+          "positionX": "1368",
+          "positionY": "2133",
+          "width": "128",
+          "height": "210"
+        },
+        {
+          "name": "STMNewsMessagePicture",
+          "positionX": "1368",
+          "positionY": "2133",
+          "width": "128",
+          "height": "60"
+        },
+        {
+          "name": "STMOutlet",
+          "positionX": "954",
+          "positionY": "1620",
+          "width": "128",
+          "height": "360"
+        },
+        {
+          "name": "STMOutletPhoto",
+          "positionX": "513",
+          "positionY": "1278",
+          "width": "128",
+          "height": "73"
+        },
+        {
+          "name": "STMOutletRestriction",
+          "positionX": "1332",
+          "positionY": "2097",
+          "width": "128",
+          "height": "75"
+        },
+        {
+          "name": "STMOutletSalesmanContract",
+          "positionX": "1152",
+          "positionY": "1287",
+          "width": "128",
+          "height": "120"
+        },
+        {
+          "name": "STMPartner",
+          "positionX": "1170",
+          "positionY": "1594",
+          "width": "128",
+          "height": "225"
+        },
+        {
+          "name": "STMPartnerArticle",
+          "positionX": "1359",
+          "positionY": "2124",
+          "width": "128",
+          "height": "105"
+        },
+        {
+          "name": "STMPartnerPriceGroup",
+          "positionX": "1368",
+          "positionY": "2133",
+          "width": "128",
+          "height": "90"
+        },
+        {
+          "name": "STMPhotoReport",
+          "positionX": "1314",
+          "positionY": "2079",
+          "width": "128",
+          "height": "90"
+        },
+        {
+          "name": "STMPrice",
+          "positionX": "1575",
+          "positionY": "517",
+          "width": "128",
+          "height": "90"
+        },
+        {
+          "name": "STMPriceGroup",
+          "positionX": "1368",
+          "positionY": "2133",
+          "width": "128",
+          "height": "120"
+        },
+        {
+          "name": "STMPriceType",
+          "positionX": "1377",
+          "positionY": "262",
+          "width": "128",
+          "height": "150"
+        },
+        {
+          "name": "STMRecordStatus",
+          "positionX": "360",
+          "positionY": "2286",
+          "width": "128",
+          "height": "120"
+        },
+        {
+          "name": "STMRestriction",
+          "positionX": "1350",
+          "positionY": "2115",
+          "width": "128",
+          "height": "120"
+        },
+        {
+          "name": "STMRestrictionArticle",
+          "positionX": "1341",
+          "positionY": "2106",
+          "width": "128",
+          "height": "75"
+        },
+        {
+          "name": "STMSaleOrder",
+          "positionX": "945",
+          "positionY": "901",
+          "width": "128",
+          "height": "360"
+        },
+        {
+          "name": "STMSaleOrderDiscount",
+          "positionX": "1368",
+          "positionY": "2133",
+          "width": "128",
+          "height": "150"
+        },
+        {
+          "name": "STMSaleOrderPosition",
+          "positionX": "1134",
+          "positionY": "999",
+          "width": "128",
+          "height": "225"
+        },
+        {
+          "name": "STMSalesman",
+          "positionX": "974",
+          "positionY": "1242",
+          "width": "128",
+          "height": "210"
+        },
+        {
+          "name": "STMSalesmanOutletRestriction",
+          "positionX": "1323",
+          "positionY": "2088",
+          "width": "128",
+          "height": "90"
+        },
+        {
+          "name": "STMSchedule",
+          "positionX": "504",
+          "positionY": "810",
+          "width": "128",
+          "height": "105"
+        },
+        {
+          "name": "STMScheduledEvent",
+          "positionX": "686",
+          "positionY": "747",
+          "width": "128",
+          "height": "150"
+        },
+        {
+          "name": "STMSchedulePurpose",
+          "positionX": "342",
+          "positionY": "765",
+          "width": "128",
+          "height": "105"
+        },
+        {
+          "name": "STMSearchQuery",
+          "positionX": "1368",
+          "positionY": "2133",
+          "width": "128",
+          "height": "105"
+        },
+        {
+          "name": "STMSetting",
+          "positionX": "1080",
+          "positionY": "2286",
+          "width": "128",
+          "height": "90"
+        },
+        {
+          "name": "STMShipment",
+          "positionX": "1341",
+          "positionY": "2106",
+          "width": "128",
+          "height": "165"
+        },
+        {
+          "name": "STMShipmentEgais",
+          "positionX": "1368",
+          "positionY": "2133",
+          "width": "128",
+          "height": "195"
+        },
+        {
+          "name": "STMShipmentPosition",
+          "positionX": "1332",
+          "positionY": "2097",
+          "width": "128",
+          "height": "120"
+        },
+        {
+          "name": "STMSQLPatch",
+          "positionX": "1368",
+          "positionY": "2133",
+          "width": "128",
+          "height": "105"
+        },
+        {
+          "name": "STMStock",
+          "positionX": "947",
+          "positionY": "540",
+          "width": "128",
+          "height": "105"
+        },
+        {
+          "name": "STMUncashing",
+          "positionX": "1350",
+          "positionY": "2115",
+          "width": "128",
+          "height": "195"
+        },
+        {
+          "name": "STMUncashingPicture",
+          "positionX": "1341",
+          "positionY": "2106",
+          "width": "128",
+          "height": "60"
+        },
+        {
+          "name": "STMUncashingPlace",
+          "positionX": "1332",
+          "positionY": "2097",
+          "width": "128",
+          "height": "90"
+        },
+        {
+          "name": "STMUserNewsMessage",
+          "positionX": "1359",
+          "positionY": "2124",
+          "width": "128",
+          "height": "105"
+        },
+        {
+          "name": "STMVisit",
+          "positionX": "729",
+          "positionY": "1756",
+          "width": "128",
+          "height": "150"
+        },
+        {
+          "name": "STMVisitAnswer",
+          "positionX": "540",
+          "positionY": "1746",
+          "width": "128",
+          "height": "90"
+        },
+        {
+          "name": "STMVisitPhoto",
+          "positionX": "396",
+          "positionY": "1359",
+          "width": "128",
+          "height": "58"
+        },
+        {
+          "name": "STMVisitQuestion",
+          "positionX": "362",
+          "positionY": "1665",
+          "width": "128",
+          "height": "105"
+        },
+        {
+          "name": "STMVisitQuestionDataType",
+          "positionX": "171",
+          "positionY": "1710",
+          "width": "128",
+          "height": "90"
+        },
+        {
+          "name": "STMVisitQuestionGroup",
+          "positionX": "171",
+          "positionY": "1458",
+          "width": "128",
+          "height": "90"
+        },
+        {
+          "name": "STMVisitQuestionSet",
+          "positionX": "7",
+          "positionY": "1566",
+          "width": "128",
+          "height": "105"
+        },
+        {
+          "name": "STMWorkflow",
+          "positionX": "45",
+          "positionY": "675",
+          "width": "128",
+          "height": "105"
+        },
+        {
+          "name": "STMPossibleOutlet",
+          "positionX": "1368",
+          "positionY": "2133",
+          "width": "128",
+          "height": "120"
+        },
+        {
+          "name": "STMPossibleOutletPhoto",
+          "positionX": "1359",
+          "positionY": "2124",
+          "width": "128",
+          "height": "60"
+        }
+      ]
+    }
   }
 }

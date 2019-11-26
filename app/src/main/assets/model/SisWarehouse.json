@@ -2,8 +2,8 @@
   "model": {
     "type": "com.apple.IDECoreDataModeler.DataModel",
     "documentVersion": "1.0",
-    "lastSavedToolsVersion": "14460.32",
-    "systemVersion": "18C54",
+    "lastSavedToolsVersion": "14490.99",
+    "systemVersion": "18G103",
     "minimumToolsVersion": "Xcode 7.3",
     "sourceLanguage": "Objective-C",
     "entity": [
@@ -1923,6 +1923,7 @@
           "name": "code",
           "optional": "YES",
           "attributeType": "String",
+          "indexed": "YES",
           "syncable": "YES"
         },
         "relationship": {
@@ -1991,6 +1992,16 @@
           }
         ],
         "relationship": [
+          {
+            "name": "stockTakingItemMarks",
+            "optional": "YES",
+            "toMany": "YES",
+            "deletionRule": "Cascade",
+            "destinationEntity": "STMStockTakingItemMark",
+            "inverseName": "stockTaking",
+            "inverseEntity": "STMStockTakingItemMark",
+            "syncable": "YES"
+          },
           {
             "name": "stockTakingItems",
             "optional": "YES",
@@ -2067,6 +2078,58 @@
             "destinationEntity": "STMStockTaking",
             "inverseName": "stockTakingItems",
             "inverseEntity": "STMStockTaking",
+            "syncable": "YES"
+          },
+          {
+            "name": "stockTakingItemMarks",
+            "optional": "YES",
+            "toMany": "YES",
+            "deletionRule": "Cascade",
+            "destinationEntity": "STMStockTakingItemMark",
+            "inverseName": "stockTakingItem",
+            "inverseEntity": "STMStockTakingItemMark",
+            "syncable": "YES"
+          }
+        ]
+      },
+      {
+        "name": "STMStockTakingItemMark",
+        "parentEntity": "STMAbstract",
+        "syncable": "YES",
+        "attribute": [
+          {
+            "name": "barcode",
+            "optional": "YES",
+            "attributeType": "String",
+            "syncable": "YES"
+          },
+          {
+            "name": "timestamp",
+            "optional": "YES",
+            "attributeType": "Date",
+            "usesScalarValueType": "NO",
+            "syncable": "YES"
+          }
+        ],
+        "relationship": [
+          {
+            "name": "stockTaking",
+            "optional": "YES",
+            "maxCount": "1",
+            "deletionRule": "Nullify",
+            "destinationEntity": "STMStockTaking",
+            "inverseName": "stockTakingItemMarks",
+            "inverseEntity": "STMStockTaking",
+            "syncable": "YES"
+          },
+          {
+            "name": "stockTakingItem",
+            "optional": "YES",
+            "maxCount": "1",
+            "deletionRule": "Nullify",
+            "destinationEntity": "STMStockTakingItem",
+            "inverseName": "stockTakingItemMarks",
+            "inverseEntity": "STMStockTakingItem",
             "syncable": "YES"
           }
         ]
@@ -2745,7 +2808,7 @@
           "positionX": "1143",
           "positionY": "2097",
           "width": "128",
-          "height": "75"
+          "height": "73"
         },
         {
           "name": "STMStockBatchItem",
@@ -2759,14 +2822,21 @@
           "positionX": "1170",
           "positionY": "2124",
           "width": "128",
-          "height": "105"
+          "height": "120"
         },
         {
           "name": "STMStockTakingItem",
           "positionX": "1161",
           "positionY": "2115",
           "width": "128",
-          "height": "135"
+          "height": "150"
+        },
+        {
+          "name": "STMStockTakingItemMark",
+          "positionX": "1179",
+          "positionY": "2133",
+          "width": "128",
+          "height": "105"
         },
         {
           "name": "STMWarehouse",
