@@ -8,7 +8,7 @@ class STMConstants {
 
     companion object {
 
-        const val model = 370
+        const val model = 371
         const val ISISTEMIUM_PREFIX = "STM"
         const val DEFAULT_PERSISTING_PRIMARY_KEY = "id"
         const val STMPersistingOptionFantoms = "fantoms"
@@ -33,7 +33,7 @@ class STMConstants {
         const val STMPersistingOptionOrderDirectionDescValue = "DESC"
         const val STMPersistingOptionWhere = "where"
         const val PERSISTENCE_PATH = "persistence"
-        const val AUTH_DELAY = 20
+        const val AUTH_DELAY = 25
         const val BACKGROUND_DELAY = 300
         const val syncInterval = 600
         const val LOGMESSAGE_MAX_TIME_INTERVAL_TO_UPLOAD = 1000 * 60 * 60 * 24
