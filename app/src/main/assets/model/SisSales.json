@@ -3,7 +3,7 @@
     "type": "com.apple.IDECoreDataModeler.DataModel",
     "documentVersion": "1.0",
     "lastSavedToolsVersion": "14490.99",
-    "systemVersion": "18G103",
+    "systemVersion": "18G1012",
     "minimumToolsVersion": "Xcode 7.3",
     "sourceLanguage": "Objective-C",
     "entity": [
@@ -573,6 +573,13 @@
             "syncable": "YES"
           },
           {
+            "name": "discount",
+            "optional": "YES",
+            "attributeType": "Decimal",
+            "defaultValueString": "0.0",
+            "syncable": "YES"
+          },
+          {
             "name": "isActive",
             "optional": "YES",
             "attributeType": "Boolean",
@@ -583,6 +590,18 @@
             "name": "name",
             "optional": "YES",
             "attributeType": "String",
+            "syncable": "YES"
+          },
+          {
+            "name": "restrictions",
+            "optional": "YES",
+            "attributeType": "Transformable",
+            "syncable": "YES"
+          },
+          {
+            "name": "variants",
+            "optional": "YES",
+            "attributeType": "Transformable",
             "syncable": "YES"
           }
         ],
@@ -3147,6 +3166,12 @@
             "syncable": "YES"
           },
           {
+            "name": "campaignVariantId",
+            "optional": "YES",
+            "attributeType": "String",
+            "syncable": "YES"
+          },
+          {
             "name": "cost",
             "optional": "YES",
             "attributeType": "Decimal",
@@ -4440,7 +4465,7 @@
           "positionX": "1206",
           "positionY": "2016",
           "width": "128",
-          "height": "150"
+          "height": "195"
         },
         {
           "name": "STMCampaignGroup",
@@ -4681,6 +4706,20 @@
           "height": "90"
         },
         {
+          "name": "STMPossibleOutlet",
+          "positionX": "1368",
+          "positionY": "2133",
+          "width": "128",
+          "height": "120"
+        },
+        {
+          "name": "STMPossibleOutletPhoto",
+          "positionX": "1359",
+          "positionY": "2124",
+          "width": "128",
+          "height": "60"
+        },
+        {
           "name": "STMPrice",
           "positionX": "1575",
           "positionY": "517",
@@ -4741,7 +4780,7 @@
           "positionX": "1134",
           "positionY": "999",
           "width": "128",
-          "height": "225"
+          "height": "240"
         },
         {
           "name": "STMSalesman",
@@ -4910,20 +4949,6 @@
           "positionY": "675",
           "width": "128",
           "height": "105"
-        },
-        {
-          "name": "STMPossibleOutlet",
-          "positionX": "1368",
-          "positionY": "2133",
-          "width": "128",
-          "height": "120"
-        },
-        {
-          "name": "STMPossibleOutletPhoto",
-          "positionX": "1359",
-          "positionY": "2124",
-          "width": "128",
-          "height": "60"
         }
       ]
     }
