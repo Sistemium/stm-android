@@ -27,12 +27,17 @@ import com.google.android.gms.location.LocationResult
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.provider.MediaStore
 import android.speech.tts.TextToSpeech
 import android.support.v4.os.ConfigurationCompat
 import com.sistemium.sissales.R
 import com.sistemium.sissales.base.*
 import java.lang.reflect.Array
 import kotlin.collections.ArrayList
+import android.util.Base64
+
 
 
 /**
@@ -517,9 +522,24 @@ class WebAppInterface internal constructor(private var webViewActivity: WebViewA
 
         val mapParameters = gson.fromJson(parameters, Map::class.java)
 
-        // TODO implement loadImageForPrimaryKey
+        val identifier = mapParameters["imageID"] as String
 
         val callback = mapParameters["callback"]
+
+        STMCorePicturesController.sharedInstance?.loadImageForPrimaryKey(identifier)?.then {
+            val imageData = STMSession.sharedSession!!.filing.getImage(it["resizedImagePath"] as String)
+
+            if (imageData != null && imageData.byteCount > 0){
+
+                MediaStore.Images.Media.insertImage(MyApplication.appContext!!.contentResolver, imageData, it["id"] as String , "")
+
+            }
+
+        }?.fail {
+
+            javascriptCallback("$it", mapParameters)
+
+        }
 
         return javascriptCallback("", mapParameters, callback as String)
 
