@@ -205,7 +205,7 @@ class WebViewActivity : Activity() {
                 } else {
                     val dataString = data.dataString
                     if (dataString != null) {
-                        results = arrayOf(Uri.parse("file:$dataString"))
+                        results = arrayOf(Uri.parse(dataString))
                         nativePath = dataString
                     }
                 }
