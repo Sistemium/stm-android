@@ -96,15 +96,6 @@ class STMCoreAuthController {
 
                 prefStore?.edit()?.putString("rolesResponse", rolesResponseJSON)?.apply()
 
-                if ((value?.get("roles") as? Map<*,*>)?.keys?.contains("salesman") == true){
-
-                }
-
-                if ((value?.get("roles") as? Map<*,*>)?.keys?.contains("driver") == true){
-
-
-                }
-
             }
 
         var configuration:String = ""
