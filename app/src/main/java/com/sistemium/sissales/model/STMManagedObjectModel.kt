@@ -12,11 +12,15 @@ class STMManagedObjectModel(var model: String) {
 
     var entitiesByName: MutableMap<String, STMEntityDescription> = hashMapOf()
 
+    var userDefinedModelVersionIdentifier: Int
+
     private val gson = STMFunctions.gson
 
     init {
 
         val mapModel = gson.fromJson(model, Map::class.java)
+
+        userDefinedModelVersionIdentifier = (mapModel["model"] as? Map<*, *>)?.get("userDefinedModelVersionIdentifier") as? Int ?: 0
 
         val entityArray = (mapModel["model"] as? Map<*, *>)?.get("entity") as? ArrayList<*>
 

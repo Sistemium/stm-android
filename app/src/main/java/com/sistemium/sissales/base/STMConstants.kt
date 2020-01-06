@@ -8,7 +8,6 @@ class STMConstants {
 
     companion object {
 
-        const val model = 371
         const val ISISTEMIUM_PREFIX = "STM"
         const val DEFAULT_PERSISTING_PRIMARY_KEY = "id"
         const val STMPersistingOptionFantoms = "fantoms"

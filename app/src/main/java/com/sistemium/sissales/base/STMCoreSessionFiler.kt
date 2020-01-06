@@ -28,23 +28,6 @@ class STMCoreSessionFiler(org: String, uid: String, var context:Context? = MyApp
     private val picturePath = "$userOrg/pictures"
     private val webPath = "$userOrg/Web/byName"
 
-    override fun bundledModelJSON(modelName: String): String {
-
-        val assetManager = context!!.assets
-        val stream = assetManager.open("model/$modelName.json")
-
-        val scanner = Scanner(stream)
-
-        val jsonModelString = StringBuilder()
-
-        while (scanner.hasNext()) {
-            jsonModelString.append(scanner.nextLine())
-        }
-
-        return jsonModelString.toString()
-
-    }
-
     override fun persistencePath(folderName: String): String {
 
         val path = "$persistenceBasePath/$folderName"

@@ -8,7 +8,6 @@ import android.graphics.Bitmap
 interface STMFiling {
 
     fun persistencePath(folderName: String): String
-    fun bundledModelJSON(modelName: String): String
     fun saveImage(bitmap:Bitmap, folderName:String, fileName:String):String
     fun getImage(localPath:String):Bitmap?
     fun webPath(title:String): String

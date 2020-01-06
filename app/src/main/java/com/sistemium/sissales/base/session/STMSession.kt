@@ -1,19 +1,28 @@
 package com.sistemium.sissales.base.session
 
+import com.github.kittinunf.fuel.Fuel
+import com.github.kittinunf.fuel.android.extension.responseJson
+import com.github.kittinunf.result.Result
+import com.sistemium.sissales.R
+import com.sistemium.sissales.base.MyApplication
 import com.sistemium.sissales.base.STMConstants
 import com.sistemium.sissales.base.STMCoreSessionFiler
+import com.sistemium.sissales.base.STMFunctions
 import com.sistemium.sissales.base.helper.logger.STMLogger
 import com.sistemium.sissales.base.classes.entitycontrollers.STMClientDataController
 import com.sistemium.sissales.base.classes.entitycontrollers.STMEntityController
 import com.sistemium.sissales.base.classes.entitycontrollers.STMRecordStatusController
 import com.sistemium.sissales.enums.STMStorageType
 import com.sistemium.sissales.interfaces.*
+import com.sistemium.sissales.model.STMManagedObjectModel
 import com.sistemium.sissales.model.STMModeller
 import com.sistemium.sissales.model.STMSQLiteDatabaseAdapter
 import com.sistemium.sissales.persisting.STMPersister
 import com.sistemium.sissales.persisting.STMPersisterFantoms
 import com.sistemium.sissales.persisting.STMPersisterRunner
 import com.sistemium.sissales.persisting.STMPersistingInterceptorUniqueProperty
+import java.io.File
+import java.util.*
 
 /**
  * Created by edgarjanvuicik on 08/02/2018.
@@ -59,7 +68,47 @@ class STMSession {
 
         val databasePath = filing.persistencePath(STMConstants.SQL_LITE_PATH) + "/" + databaseFile
 
-        STMModelling.sharedModeler = STMModeller(filing.bundledModelJSON(dataModelName))
+        val header:Map<String,String>? = if (STMCoreAuthController.modelEtag != null) mapOf("if-none-match" to STMCoreAuthController.modelEtag!!) else null
+
+        val (_, response, result) = Fuel.get("https://api.sistemium.com/models/iSisSales.json")
+                .header(header)
+                .responseJson()
+
+        var newModel = ""
+
+        val savedModelPath = databasePath.replace(".db", ".json")
+
+        val file = File(savedModelPath)
+
+        if (file.exists()) {
+
+            val stream = file.inputStream()
+
+            val scanner = Scanner(stream)
+
+            val jsonModelString = StringBuilder()
+
+            while (scanner.hasNext()) {
+                jsonModelString.append(scanner.nextLine())
+            }
+
+            newModel = jsonModelString.toString()
+
+        }
+
+
+        when (result) {
+            is Result.Success -> {
+
+                newModel = result.get().content
+
+                STMCoreAuthController.modelEtag = response.headers["ETag"]?.first()
+
+            }
+
+        }
+
+        STMModelling.sharedModeler = STMModeller(newModel)
 
         val adapter = STMSQLiteDatabaseAdapter(databasePath)
 

@@ -63,6 +63,25 @@ class STMCoreAuthController {
 
             }
 
+        var modelEtag: String? = null
+            get() {
+
+                val prefStore = SecuredPreferenceStore.getSharedInstance()
+                return prefStore.getString("modelEtag", null)
+
+            }
+            set(value) {
+
+                if (field != value){
+
+                    val prefStore = SecuredPreferenceStore.getSharedInstance()
+
+                    prefStore.edit().putString("modelEtag", value).apply()
+
+                }
+
+            }
+
         var tokenHash: String?
             get() {
 
@@ -126,7 +145,7 @@ class STMCoreAuthController {
         var userAgent:String = ""
             get() {
 
-                return "i$configuration/${STMConstants.model}"
+                return "i$configuration/${STMModelling.sharedModeler!!.managedObjectModel.userDefinedModelVersionIdentifier}"
 
             }
 
