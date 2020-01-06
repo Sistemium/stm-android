@@ -3,9 +3,14 @@ package com.sistemium.sissales.persisting
 import android.content.ContentValues
 import android.database.Cursor.FIELD_TYPE_FLOAT
 import android.database.Cursor.FIELD_TYPE_INTEGER
+import android.database.CursorWindow
+import android.database.sqlite.SQLiteBlobTooBigException
+import android.database.sqlite.SQLiteCursor
 import android.database.sqlite.SQLiteDatabase
 import com.sistemium.sissales.base.STMConstants
 import com.sistemium.sissales.base.STMFunctions
+import com.sistemium.sissales.base.helper.logger.STMLogger
+import com.sistemium.sissales.enums.STMLogMessageType
 import com.sistemium.sissales.interfaces.STMModelling
 import com.sistemium.sissales.interfaces.STMPersistingTransaction
 import com.sistemium.sissales.model.STMSQLiteDatabaseAdapter
@@ -326,98 +331,110 @@ class STMSQLiteDatabaseTransaction(private var database: SQLiteDatabase, private
 
 //        STMFunctions.debugLog("QUERY", "execute finished")
 
-        if (c.moveToFirst()) {
+        try {
 
-            val atributeTypes = hashMapOf<String, String?>()
+            if (c.moveToFirst()) {
 
-            c.columnNames.forEach {
+                val atributeTypes = hashMapOf<String, String?>()
 
-                atributeTypes[it] = STMModelling.sharedModeler!!.fieldsForEntityName(STMFunctions.addPrefixToEntityName(tableName))[it]?.attributeType
+                c.columnNames.forEach {
 
-            }
-
-//            STMFunctions.debugLog("QUERY", "result reading preparations finished")
-
-            do {
-
-                val dict = hashMapOf<String, Any?>()
-
-                for (columnName in c.columnNames) {
-
-                    val index = c.getColumnIndex(columnName)
-
-                    val attributeType = atributeTypes[columnName]
-
-                    if (c.isNull(index)) {
-
-                        dict[columnName] = null
-
-                        continue
-
-                    }
-
-                    if (attributeType == "Boolean") {
-
-                        val data = c.getInt(index)
-
-                        dict[columnName] = data != 0
-
-                        continue
-
-                    }
-
-                    if (attributeType == "Transformable") {
-
-                        val str = c.getString(index)
-
-                        if (str.startsWith("{")){
-
-                            val data = STMFunctions.gson.fromJson(c.getString(index), Map::class.java)
-
-                            dict[columnName] = data
-
-                            continue
-
-                        }
-
-                        if (str.startsWith("[")){
-
-                            val data = STMFunctions.gson.fromJson(c.getString(index), ArrayList::class.java)
-
-                            dict[columnName] = data
-
-                            continue
-
-                        }
-
-                    }
-
-                    if (c.getType(index) == FIELD_TYPE_INTEGER) {
-
-                        dict[columnName] = c.getInt(index)
-
-                        continue
-
-                    }
-
-                    if (c.getType(index) == FIELD_TYPE_FLOAT) {
-
-                        dict[columnName] = c.getDouble(index)
-
-                        continue
-
-                    }
-
-                    dict[columnName] = c.getString(index)
+                    atributeTypes[it] = STMModelling.sharedModeler!!.fieldsForEntityName(STMFunctions.addPrefixToEntityName(tableName))[it]?.attributeType
 
                 }
 
-                rez += dict
+//            STMFunctions.debugLog("QUERY", "result reading preparations finished")
 
-            } while (c.moveToNext())
+                do {
+
+                    val dict = hashMapOf<String, Any?>()
+
+                    for (columnName in c.columnNames) {
+
+                        val index = c.getColumnIndex(columnName)
+
+                        val attributeType = atributeTypes[columnName]
+
+                        if (c.isNull(index)) {
+
+                            dict[columnName] = null
+
+                            continue
+
+                        }
+
+                        if (attributeType == "Boolean") {
+
+                            val data = c.getInt(index)
+
+                            dict[columnName] = data != 0
+
+                            continue
+
+                        }
+
+                        if (attributeType == "Transformable") {
+
+                            val str = c.getString(index)
+
+                            if (str.startsWith("{")){
+
+                                val data = STMFunctions.gson.fromJson(c.getString(index), Map::class.java)
+
+                                dict[columnName] = data
+
+                                continue
+
+                            }
+
+                            if (str.startsWith("[")){
+
+                                val data = STMFunctions.gson.fromJson(c.getString(index), ArrayList::class.java)
+
+                                dict[columnName] = data
+
+                                continue
+
+                            }
+
+                        }
+
+                        if (c.getType(index) == FIELD_TYPE_INTEGER) {
+
+                            dict[columnName] = c.getInt(index)
+
+                            continue
+
+                        }
+
+                        if (c.getType(index) == FIELD_TYPE_FLOAT) {
+
+                            dict[columnName] = c.getDouble(index)
+
+                            continue
+
+                        }
+
+                        dict[columnName] = c.getString(index)
+
+                    }
+
+                    rez += dict
+
+                } while (c.moveToNext())
 
 //            STMFunctions.debugLog("QUERY", "result reading finished")
+            }
+
+
+        } catch (e: SQLiteBlobTooBigException){
+
+            database.delete(tableName, where, null)
+
+            STMLogger.sharedLogger!!.importantMessage("SQLiteBlobTooBigException on entity $tableName $_where, decided to delete it")
+
         }
+
         c.close()
 
         return rez
