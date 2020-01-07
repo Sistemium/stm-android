@@ -60,6 +60,10 @@ class ProfileActivity : AppCompatActivity() {
 
         phoneNumber.text = "${STMCoreAuthController.phoneNumber}"
 
+        val toolbarTitle: TextView = findViewById(R.id.toolbar_title)
+
+        toolbarTitle.text = STMCoreAuthController.userAgent
+
         val gridView = findViewById<GridView>(R.id.gridView)
 
         val tabs = arrayListOf<Map<*, *>>()
