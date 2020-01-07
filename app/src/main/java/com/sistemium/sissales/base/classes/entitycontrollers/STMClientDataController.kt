@@ -7,6 +7,7 @@ import com.sistemium.sissales.base.STMFunctions
 import com.sistemium.sissales.base.session.STMCoreAuthController
 import com.sistemium.sissales.interfaces.STMFullStackPersisting
 import android.os.StatFs
+import com.sistemium.sissales.interfaces.STMModelling
 
 /**
  * Created by edgarjanvuicik on 20/02/2018.
@@ -43,7 +44,7 @@ class STMClientDataController {
 
         private var appVersion:String = ""
             get() {
-                return "${BuildConfig.VERSION_CODE}"
+                return "${STMModelling.sharedModeler?.managedObjectModel?.userDefinedModelVersionIdentifier}"
             }
 
         private var bundleVersion:String = ""
@@ -137,14 +138,6 @@ class STMClientDataController {
             if (clientData["buildType"] != buildType){
 
                 clientData["buildType"] = buildType
-
-                haveUpdates = true
-
-            }
-
-            if (clientData["appVersion"] != appVersion){
-
-                clientData["appVersion"] = appVersion
 
                 haveUpdates = true
 
