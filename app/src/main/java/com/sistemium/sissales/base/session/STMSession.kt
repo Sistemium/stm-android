@@ -38,7 +38,7 @@ class STMSession {
 
                 if (INSTANCE == null){
 
-                    INSTANCE = try {STMSession()} catch (e:Exception) { null }
+                    INSTANCE = STMSession()
 
                 }
 
@@ -70,10 +70,6 @@ class STMSession {
 
         val header:Map<String,String>? = if (STMCoreAuthController.modelEtag != null) mapOf("if-none-match" to STMCoreAuthController.modelEtag!!) else null
 
-        val (_, response, result) = Fuel.get("https://api.sistemium.com/models/iSisSales.json")
-                .header(header)
-                .responseJson()
-
         var newModel = ""
 
         val savedModelPath = databasePath.replace(".db", ".json")
@@ -96,6 +92,9 @@ class STMSession {
 
         }
 
+        val (_, response, result) = Fuel.get("https://api.sistemium.com/models/i${STMCoreAuthController.configuration}.json")
+                .header(header)
+                .responseJson()
 
         when (result) {
             is Result.Success -> {
@@ -105,6 +104,12 @@ class STMSession {
                 STMCoreAuthController.modelEtag = response.headers["ETag"]?.first()
 
             }
+
+        }
+
+        if (newModel == ""){
+
+            throw Exception("No model response")
 
         }
 

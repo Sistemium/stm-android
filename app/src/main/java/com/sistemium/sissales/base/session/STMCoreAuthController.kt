@@ -145,7 +145,7 @@ class STMCoreAuthController {
         var userAgent:String = ""
             get() {
 
-                return "i$configuration/${STMModelling.sharedModeler!!.managedObjectModel.userDefinedModelVersionIdentifier}"
+                return "i$configuration/${STMModelling.sharedModeler?.managedObjectModel?.userDefinedModelVersionIdentifier ?: "366"}"
 
             }
 
@@ -447,9 +447,6 @@ class STMCoreAuthController {
 
                     return@then it
 
-                } fail {
-                    //TODO
-                    val test = ""
                 }
 
             }

@@ -3,6 +3,7 @@ package com.sistemium.sissales.base
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.AlertDialog
+import android.content.DialogInterface
 import android.content.Intent
 import android.os.Build
 import android.provider.Settings
@@ -92,7 +93,7 @@ class STMFunctions {
 
         }
 
-        fun handleError(activity: Activity?, message: String) {
+        fun handleError(activity: Activity?, message: String, callback: (DialogInterface, Int) -> Unit = {_,_ ->}) {
 
             activity?.runOnUiThread {
 
@@ -103,7 +104,7 @@ class STMFunctions {
                 }
                 builder.setTitle(activity.resources.getString(R.string.error))
                         .setMessage(message)
-                        .setPositiveButton(android.R.string.ok, { _, _ -> })
+                        .setPositiveButton(android.R.string.ok, callback)
                         .setIcon(android.R.drawable.ic_dialog_alert)
                         .show()
 

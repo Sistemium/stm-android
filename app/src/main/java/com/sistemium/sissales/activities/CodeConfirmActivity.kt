@@ -15,6 +15,8 @@ import com.sistemium.sissales.R
 import com.sistemium.sissales.base.STMFunctions
 import com.sistemium.sissales.base.session.STMCoreAuthController
 import kotlinx.android.synthetic.main.activity_code_confirm.*
+import kotlinx.android.synthetic.main.activity_code_confirm.toolbar
+import kotlinx.android.synthetic.main.activity_profile.*
 import nl.komponents.kovenant.then
 
 
@@ -75,6 +77,15 @@ class CodeConfirmActivity : AppCompatActivity() {
                     }
 
                     finish()
+
+                } fail {
+
+                    STMFunctions.handleError(this, it.message ?: ""){ _,_ ->
+
+                        finish()
+
+                    }
+
 
                 }
 
