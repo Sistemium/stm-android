@@ -92,7 +92,21 @@ class STMSQLiteDatabaseTransaction(private var database: SQLiteDatabase, private
 
         }
 
-        return selectFrom(tableName, "id = '$pk'", null).firstOrNull()
+        var select: Map<*, *>? = null
+
+        try {
+
+            select = selectFrom(tableName, "id = '$pk'", null).firstOrNull()
+
+        } catch (e: SQLiteBlobTooBigException){
+
+            database.delete(tableName, "id = '$pk'", null)
+
+            STMLogger.sharedLogger!!.importantMessage("SQLiteBlobTooBigException on entity $tableName WHERE id = '$pk', decided to delete it")
+
+        }
+
+        return select
 
     }
 
@@ -331,8 +345,6 @@ class STMSQLiteDatabaseTransaction(private var database: SQLiteDatabase, private
 
 //        STMFunctions.debugLog("QUERY", "execute finished")
 
-        try {
-
             if (c.moveToFirst()) {
 
                 val atributeTypes = hashMapOf<String, String?>()
@@ -427,13 +439,7 @@ class STMSQLiteDatabaseTransaction(private var database: SQLiteDatabase, private
             }
 
 
-        } catch (e: SQLiteBlobTooBigException){
 
-            database.delete(tableName, where, null)
-
-            STMLogger.sharedLogger!!.importantMessage("SQLiteBlobTooBigException on entity $tableName $_where, decided to delete it")
-
-        }
 
         c.close()
 
