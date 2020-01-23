@@ -40,13 +40,13 @@ open class BaseInstrumentaltTest {
 
         val databasePath = filing!!.persistencePath(STMConstants.SQL_LITE_PATH) + "/" + databaseFile
 
-        STMModelling.sharedModeler = STMModeller(filing!!.bundledModelJSON(dataModelName))
-
-        val adapter = STMSQLiteDatabaseAdapter(databasePath)
-
-        val runner = STMPersisterRunner(hashMapOf(STMStorageType.STMStorageTypeSQLiteDatabase to adapter))
-
-        persister = STMPersister(runner)
+//        STMModelling.sharedModeler = STMModeller(filing!!.bundledModelJSON(dataModelName))
+//
+//        val adapter = STMSQLiteDatabaseAdapter(databasePath)
+//
+//        val runner = STMPersisterRunner(hashMapOf(STMStorageType.STMStorageTypeSQLiteDatabase to adapter))
+//
+//        persister = STMPersister(runner)
 
     }
 
