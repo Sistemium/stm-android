@@ -13,7 +13,7 @@
                       <PersistentState>
                         <option name="values">
                           <map>
-                            <entry key="resourceDirectory" value="warehouseRealease" />
+                            <entry key="resourceDirectory" value="vfsRelease" />
                           </map>
                         </option>
                       </PersistentState>
@@ -86,8 +86,8 @@
                                   <option name="values">
                                     <map>
                                       <entry key="backgroundAssetType" value="COLOR" />
-                                      <entry key="backgroundColor" value="e9e9e9" />
-                                      <entry key="foregroundImage" value="$PROJECT_DIR$/app/src/main/res/drawable/icons8_box_512.png" />
+                                      <entry key="backgroundColor" value="ffffff" />
+                                      <entry key="foregroundImage" value="$USER_HOME$/Desktop/logo.png" />
                                     </map>
                                   </option>
                                 </PersistentState>
