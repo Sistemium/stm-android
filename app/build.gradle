@@ -63,11 +63,13 @@ android {
             debuggable = true
         }
         vfsDebug {
+            initWith(buildTypes.debug)
             applicationIdSuffix = '.vfsDebug'
             debuggable = true
             manifestPlaceholders = [appName: 'VFS-debug']
         }
         vfsRelease {
+            initWith(buildTypes.release)
             applicationIdSuffix = '.vfs'
             manifestPlaceholders = [appName: 'VFS']
         }
