@@ -13,7 +13,7 @@
                       <PersistentState>
                         <option name="values">
                           <map>
-                            <entry key="resourceDirectory" value="vfsRelease" />
+                            <entry key="resourceDirectory" value="vfsDebug" />
                           </map>
                         </option>
                       </PersistentState>
@@ -86,8 +86,8 @@
                                   <option name="values">
                                     <map>
                                       <entry key="backgroundAssetType" value="COLOR" />
-                                      <entry key="backgroundColor" value="ffffff" />
-                                      <entry key="foregroundImage" value="$USER_HOME$/Desktop/logo.png" />
+                                      <entry key="backgroundColor" value="8ed9ec" />
+                                      <entry key="foregroundImage" value="$USER_HOME$/Desktop/vfs-drops-192.png" />
                                     </map>
                                   </option>
                                 </PersistentState>
