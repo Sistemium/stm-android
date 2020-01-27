@@ -52,7 +52,9 @@ class WebAppInterface internal constructor(private var webViewActivity: WebViewA
 
     private var unsyncedInfoJSFunction:String? = null
 
-    private var persistenceDelegate: STMFullStackPersisting = STMSession.sharedSession!!.persistenceDelegate
+    private val persistenceDelegate: STMFullStackPersisting by lazy {
+        STMSession.sharedSession!!.persistenceDelegate
+    }
 
     @JavascriptInterface
     fun errorCatcher(parameters: String?) {
