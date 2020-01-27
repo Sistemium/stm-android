@@ -15,6 +15,7 @@ import android.view.WindowManager
 import android.view.inputmethod.InputMethodManager
 import android.widget.Button
 import android.widget.EditText
+import com.sistemium.sissales.BuildConfig
 import com.sistemium.sissales.R
 import com.sistemium.sissales.base.STMFunctions
 import com.sistemium.sissales.base.session.STMCoreAuthController
@@ -25,6 +26,27 @@ class AuthActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        if (BuildConfig.APPLICATION_ID.contains(".vfs")){
+
+            STMCoreAuthController.accountOrg = "vfs"
+            STMCoreAuthController.userID = "vfsId"
+
+            val intent = Intent(this, WebViewActivity::class.java)
+
+            val url = "https://vfsm.sistemium.com"
+
+            val manifest = "$url/manifest.json"
+
+            intent.putExtra("url", url)
+            intent.putExtra("manifest", manifest)
+            intent.putExtra("title", "VFS")
+            startActivity(intent)
+
+            finish()
+            return
+
+        }
 
         if (!isTaskRoot) {
             finish()
