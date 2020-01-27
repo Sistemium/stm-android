@@ -26,8 +26,7 @@ import nl.komponents.kovenant.Promise
 import nl.komponents.kovenant.then
 import java.io.File
 import android.support.v4.os.HandlerCompat.postDelayed
-
-
+import com.sistemium.sissales.base.STMCoreSessionFiler
 
 
 @SuppressLint("SetJavaScriptEnabled")
@@ -116,7 +115,7 @@ class WebViewActivity : Activity() {
 
                 }
 
-                val webPath = STMSession.sharedSession!!.filing.webPath(title)+"/index.html"
+                val webPath = STMCoreSessionFiler.sharedSession!!.webPath(title)+"/index.html"
 
                 val webFolder = File(webPath)
 
@@ -134,7 +133,7 @@ class WebViewActivity : Activity() {
 
                 loadFromManifest(manifest, title, url) success {
 
-                    val oldFolder = File(STMSession.sharedSession!!.filing.webPath(title))
+                    val oldFolder = File(STMCoreSessionFiler.sharedSession!!.webPath(title))
 
                     STMFunctions.deleteRecursive(oldFolder)
 
@@ -334,7 +333,7 @@ class WebViewActivity : Activity() {
 
         return task {
 
-            val webPath = STMSession.sharedSession!!.filing.tempWebPath(title)
+            val webPath = STMCoreSessionFiler.sharedSession!!.tempWebPath(title)
 
             val (_, response, result) = Fuel.get(manifest).responseJson()
 

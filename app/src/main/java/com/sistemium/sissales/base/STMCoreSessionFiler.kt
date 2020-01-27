@@ -15,12 +15,38 @@ import java.util.*
 import android.provider.MediaStore.Images.Media.getBitmap
 import android.app.Activity
 import android.graphics.BitmapFactory
+import com.sistemium.sissales.base.session.STMCoreAuthController
+import com.sistemium.sissales.base.session.STMSession
 
 
 /**
  * Created by edgarjanvuicik on 27/11/2017.
  */
 class STMCoreSessionFiler(org: String, uid: String, var context:Context? = MyApplication.appContext) : STMFiling {
+
+    companion object {
+
+        private var INSTANCE: STMFiling? = null
+
+        var sharedSession: STMFiling?
+            get() {
+
+                if (INSTANCE == null){
+
+                    INSTANCE = STMCoreSessionFiler(STMCoreAuthController.accountOrg!!, STMCoreAuthController.iSisDB
+                            ?: STMCoreAuthController.userID!!)
+
+                }
+
+                return INSTANCE
+
+            }
+            set(value) {
+
+                INSTANCE = value
+
+            }
+    }
 
     private val userOrg = context!!.filesDir.absolutePath + "/" + org
     private val userDocuments = "$userOrg/$uid"

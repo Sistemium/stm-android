@@ -21,6 +21,7 @@ import com.github.kittinunf.fuel.android.extension.responseJson
 import com.github.kittinunf.fuel.core.Blob
 import com.github.kittinunf.fuel.core.DataPart
 import com.github.kittinunf.fuel.core.FuelManager
+import com.sistemium.sissales.base.STMCoreSessionFiler
 import com.sistemium.sissales.base.helper.logger.STMLogger
 import com.sistemium.sissales.base.session.STMCoreAuthController
 import com.sistemium.sissales.base.session.STMSession
@@ -79,7 +80,7 @@ class STMCorePicturesController {
 
             if (attributes["imagePath"] == null) continue
 
-            val imageData = STMSession.sharedSession!!.filing.getImage(attributes["imagePath"] as String)
+            val imageData = STMCoreSessionFiler.sharedSession!!.getImage(attributes["imagePath"] as String)
 
             if (imageData != null && imageData.byteCount > 0){
 
@@ -136,7 +137,7 @@ class STMCorePicturesController {
 
         val bitmap = Bitmap.createBitmap(file)
 
-        return STMSession.sharedSession!!.filing.saveImage(bitmap, entityName, fileName)
+        return STMCoreSessionFiler.sharedSession!!.saveImage(bitmap, entityName, fileName)
 
     }
 
@@ -344,7 +345,7 @@ class STMCorePicturesController {
 
         val bitmap = Bitmap.createScaledBitmap(file, (file.width * scale).toInt(), (file.height * scale).toInt(), false)
 
-        return STMSession.sharedSession!!.filing.saveImage(bitmap, entityName, resizedFileName)
+        return STMCoreSessionFiler.sharedSession!!.saveImage(bitmap, entityName, resizedFileName)
 
     }
 
@@ -352,7 +353,7 @@ class STMCorePicturesController {
 
         val bitmap = Bitmap.createScaledBitmap(file, STMConstants.THUMBNAIL_SIZE, STMConstants.THUMBNAIL_SIZE, false)
 
-        return STMSession.sharedSession!!.filing.saveImage(bitmap, entityName,  thumbnailFileName)
+        return STMCoreSessionFiler.sharedSession!!.saveImage(bitmap, entityName,  thumbnailFileName)
 
     }
 

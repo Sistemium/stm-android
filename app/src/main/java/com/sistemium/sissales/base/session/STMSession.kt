@@ -52,9 +52,6 @@ class STMSession {
             }
     }
 
-    var uid: String = STMCoreAuthController.userID!!
-    var filing: STMFiling = STMCoreSessionFiler(STMCoreAuthController.accountOrg!!, STMCoreAuthController.iSisDB
-            ?: uid)
     var persistenceDelegate: STMFullStackPersisting
     var logger: STMLogger? = null
     var settingsController: STMSettingsController? = null
@@ -66,7 +63,7 @@ class STMSession {
 
         val databaseFile = "$dataModelName.db"
 
-        val databasePath = filing.persistencePath(STMConstants.SQL_LITE_PATH) + "/" + databaseFile
+        val databasePath = STMCoreSessionFiler.sharedSession!!.persistencePath(STMConstants.SQL_LITE_PATH) + "/" + databaseFile
 
         val header:Map<String,String>? = if (STMCoreAuthController.modelEtag != null) mapOf("if-none-match" to STMCoreAuthController.modelEtag!!) else null
 

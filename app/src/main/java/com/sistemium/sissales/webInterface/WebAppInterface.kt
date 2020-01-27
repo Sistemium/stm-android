@@ -529,7 +529,7 @@ class WebAppInterface internal constructor(private var webViewActivity: WebViewA
         val callback = mapParameters["callback"]
 
         STMCorePicturesController.sharedInstance?.loadImageForPrimaryKey(identifier)?.then {
-            val imageData = STMSession.sharedSession!!.filing.getImage(it["resizedImagePath"] as String)
+            val imageData = STMCoreSessionFiler.sharedSession!!.getImage(it["resizedImagePath"] as String)
 
             if (imageData != null && imageData.byteCount > 0){
 
