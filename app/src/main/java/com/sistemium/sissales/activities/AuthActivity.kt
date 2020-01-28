@@ -36,7 +36,7 @@ class AuthActivity : AppCompatActivity() {
 
             val url = "https://vfsm.sistemium.com"
 
-            val manifest = "$url/manifest.json"
+            val manifest = "$url/app.manifest"
 
             intent.putExtra("url", url)
             intent.putExtra("manifest", manifest)
