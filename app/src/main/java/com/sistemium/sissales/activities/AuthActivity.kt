@@ -27,27 +27,6 @@ class AuthActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        if (BuildConfig.APPLICATION_ID.contains(".vfs")){
-
-            STMCoreAuthController.accountOrg = "vfs"
-            STMCoreAuthController.userID = "vfsId"
-
-            val intent = Intent(this, WebViewActivity::class.java)
-
-            val url = "https://vfsm.sistemium.com"
-
-            val manifest = "$url/app.manifest"
-
-            intent.putExtra("url", url)
-            intent.putExtra("manifest", manifest)
-            intent.putExtra("title", "VFS")
-            startActivity(intent)
-
-            finish()
-            return
-
-        }
-
         if (!isTaskRoot) {
             finish()
             return
@@ -72,6 +51,20 @@ class AuthActivity : AppCompatActivity() {
 
     @SuppressLint("PrivateResource")
     private fun setup() {
+
+        if (BuildConfig.APPLICATION_ID.contains(".vfs")){
+
+            val intent = Intent(this, WebViewActivity::class.java)
+
+            val url = "https://vfsm.sistemium.com"
+
+            intent.putExtra("url", url)
+            intent.putExtra("title", "VFS")
+            startActivity(intent)
+
+            return
+
+        }
 
         window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE)
         setContentView(R.layout.activity_auth)
