@@ -28,8 +28,7 @@ import com.sistemium.sissales.base.classes.entitycontrollers.STMEntityController
 import com.sistemium.sissales.interfaces.STMModelling
 import android.content.pm.PackageManager
 import android.content.ComponentName
-
-
+import com.sistemium.sissales.BuildConfig
 
 
 /**
@@ -138,7 +137,7 @@ class STMCoreAuthController {
 
                 }
 
-                return ""
+                return "vfsd"
 
             }
 
@@ -316,7 +315,7 @@ class STMCoreAuthController {
         var dataModelName: String = ""
             get() {
 
-                return STMCoreAuthController.configuration
+                return configuration
 
             }
 
@@ -429,8 +428,6 @@ class STMCoreAuthController {
         @SuppressLint("PrivateResource")
         fun logIn(): Promise<Map<*, *>, Exception> {
 
-            val accessToken = STMCoreAuthController.accessToken
-
             if (accessToken != null) {
 
                 val myIntent = Intent(MyApplication.appContext, ProfileActivity::class.java)
@@ -482,49 +479,69 @@ class STMCoreAuthController {
 
             }
 
-            return task {
+            if (BuildConfig.APPLICATION_ID.contains(".vfs")){
 
-                val (_, _, result) = Fuel.get("https://api.sistemium.com/pha/roles", listOf("access_token" to accessToken))
-                        .header(mapOf("user-agent" to userAgent, "DeviceUUID" to STMFunctions.deviceUUID(), "Authorization" to accessToken!!))
-                        .responseJson()
+                return task {
 
-                when (result) {
-                    is Result.Success -> {
+                    val (_, _, result) = Fuel.get("https://oauth.it/api/roles", listOf("access_token" to accessToken))
+                            .header(mapOf("user-agent" to userAgent, "DeviceUUID" to STMFunctions.deviceUUID(), "Authorization" to accessToken!!))
+                            .responseJson()
 
-                        val roles = STMFunctions.gson.fromJson(result.get().content, Map::class.java)
+                    if (result !is Result.Success) throw Exception("Server Error")
 
-                        rolesResponse = roles
+                    val roles = STMFunctions.gson.fromJson(result.get().content, Map::class.java)
 
-                        accountOrg = (roles["roles"] as? Map<*, *>)?.get("org") as? String
+                    accountOrg = "vfsd"
+                    userID = (roles["account"] as? Map<*, *>)?.get("id") as? String
+                    userName = (roles["account"] as? Map<*, *>)?.get("name") as? String
+                    socketURL = "socket3.sistemium.com"
+                    entityResource = "vfsd/Entity"
+                    rolesResponse = roles
 
-                        iSisDB = (roles["roles"] as? Map<*, *>)?.get("iSisDB") as? String
+                    return@task roles
 
-                        val tabs = (roles["roles"] as? Map<*, *>)?.get("stcTabs") as? ArrayList<*>
+                }
 
-                        if (tabs != null) {
+            } else {
 
-                            stcTabs = tabs
+                return task {
 
-                        } else {
+                    val (_, _, result) = Fuel.get("https://api.sistemium.com/pha/roles", listOf("access_token" to accessToken))
+                            .header(mapOf("user-agent" to userAgent, "DeviceUUID" to STMFunctions.deviceUUID(), "Authorization" to accessToken!!))
+                            .responseJson()
 
-                            val tab = (roles["roles"] as? Map<*, *>)?.get("stcTabs") as? Map<*, *>
+                    if (result !is Result.Success) throw Exception("Wrong SMS Code")
 
-                            if (tab != null) {
+                    val roles = STMFunctions.gson.fromJson(result.get().content, Map::class.java)
 
-                                stcTabs = arrayListOf(tab)
+                    rolesResponse = roles
 
-                            }
+                    accountOrg = (roles["roles"] as? Map<*, *>)?.get("org") as? String
+
+                    iSisDB = (roles["roles"] as? Map<*, *>)?.get("iSisDB") as? String
+
+                    val tabs = (roles["roles"] as? Map<*, *>)?.get("stcTabs") as? ArrayList<*>
+
+                    if (tabs != null) {
+
+                        stcTabs = tabs
+
+                    } else {
+
+                        val tab = (roles["roles"] as? Map<*, *>)?.get("stcTabs") as? Map<*, *>
+
+                        if (tab != null) {
+
+                            stcTabs = arrayListOf(tab)
 
                         }
 
-                        startSession()
-
-                        return@task roles
-
                     }
-                }
 
-                throw Exception("Wrong SMS Code")
+                    startSession()
+
+                    return@task roles
+                }
 
             }
 
