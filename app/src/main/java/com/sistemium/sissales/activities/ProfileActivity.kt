@@ -58,7 +58,7 @@ class ProfileActivity : AppCompatActivity() {
 
         val phoneNumber: TextView = findViewById(R.id.phoneNumber)
 
-        phoneNumber.text = "${STMCoreAuthController.phoneNumber}"
+        phoneNumber.text = STMCoreAuthController.phoneNumber ?: ""
 
         val toolbarTitle: TextView = findViewById(R.id.toolbar_title)
 
