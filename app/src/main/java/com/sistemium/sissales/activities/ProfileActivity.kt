@@ -68,7 +68,7 @@ class ProfileActivity : AppCompatActivity() {
 
         val tabs = arrayListOf<Map<*, *>>()
 
-        for (tab in STMCoreAuthController.stcTabs!!) {
+        for (tab in STMCoreAuthController.stcTabs ?: arrayListOf<Map<*,*>>()) {
 
             if (tab is Map<*, *> && tab["name"] == "STMWKWebView") {
 
