@@ -3,30 +3,33 @@ package com.sistemium.sissales.activities
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
-import android.net.Uri
-import android.os.Bundle
-import android.webkit.*
-import com.sistemium.sissales.R
-import com.sistemium.sissales.webInterface.WebAppInterface
-import com.sistemium.sissales.base.STMFunctions
-import nl.komponents.kovenant.task
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.net.ConnectivityManager
+import android.net.Uri
+import android.os.Bundle
 import android.os.Handler
+import android.view.View
+import android.webkit.*
+import android.webkit.WebView
 import com.github.javiersantos.appupdater.AppUpdater
 import com.github.javiersantos.appupdater.enums.UpdateFrom
 import com.github.kittinunf.fuel.Fuel
 import com.github.kittinunf.fuel.android.extension.responseJson
 import com.sistemium.sissales.base.MyApplication
+import com.sistemium.sissales.base.STMCoreSessionFiler
+import com.sistemium.sissales.base.STMFunctions
 import com.sistemium.sissales.base.classes.entitycontrollers.STMCorePhotosController
 import com.sistemium.sissales.base.helper.logger.STMLogger
 import com.sistemium.sissales.base.session.STMSession
+import com.sistemium.sissales.webInterface.WebAppInterface
 import nl.komponents.kovenant.Promise
+import nl.komponents.kovenant.task
 import nl.komponents.kovenant.then
+import com.sistemium.sissales.R
+import com.sistemium.sissales.base.session.STMCoreAuthController
 import java.io.File
-import android.support.v4.os.HandlerCompat.postDelayed
-import com.sistemium.sissales.base.STMCoreSessionFiler
 
 
 @SuppressLint("SetJavaScriptEnabled")
@@ -62,6 +65,7 @@ class WebViewActivity : Activity() {
         webView?.settings?.allowContentAccess = true
         webView?.settings?.allowUniversalAccessFromFileURLs = true
         webView?.settings?.allowFileAccessFromFileURLs = true
+        webView?.settings?.userAgentString = "Mozilla/5.0 (Linux; Android 4.1.1; Galaxy Nexus Build/JRO03C) AppleWebKit/535.19 (KHTML, like Gecko) Chrome/18.0.1025.166 Mobile Safari/535.19"
 
         webInterface = WebAppInterface(this)
 
@@ -97,23 +101,39 @@ class WebViewActivity : Activity() {
 
         initUpdater()
 
+        webView?.webViewClient = object : WebViewClient() {
+
+            override fun onReceivedError(view: WebView?, request: WebResourceRequest?, error: WebResourceError?) {
+                err = error.toString()
+                STMFunctions.debugLog("CHROME", error.toString())
+            }
+
+            override fun shouldOverrideUrlLoading(view: WebView?, request: WebResourceRequest?): Boolean {
+                if (request?.url?.toString()?.contains("access-token=") == true && manifest == null){
+
+                    STMCoreAuthController.accessToken = request.url.toString().split("access-token=").last()
+
+                    webView?.destroy()
+
+                    STMCoreAuthController.logIn()
+
+                }
+                return false
+            }
+
+        }
+
+        if(manifest == null) {
+
+            netDirectLoad(url)
+
+            return
+
+        }
+
         task {
 
             runOnUiThread {
-
-
-                webView?.webViewClient = object : WebViewClient() {
-
-                    override fun onReceivedError(view: WebView?, request: WebResourceRequest?, error: WebResourceError?) {
-                        err = error.toString()
-                        STMFunctions.debugLog("CHROME", error.toString())
-                    }
-
-                    override fun shouldOverrideUrlLoading(view: WebView?, request: WebResourceRequest?): Boolean {
-                        return false
-                    }
-
-                }
 
                 val webPath = STMCoreSessionFiler.sharedSession!!.webPath(title)+"/index.html"
 
@@ -159,12 +179,40 @@ class WebViewActivity : Activity() {
 
                     }
 
-
                 }
 
             }
 
         }
+
+    }
+
+    private fun netDirectLoad(url:String){
+
+        webView!!.settings!!.setAppCacheEnabled(false)
+        webView!!.settings!!.cacheMode = WebSettings.LOAD_NO_CACHE
+
+        val dataDir = this.applicationInfo.dataDir
+
+        val appWebViewDir = File("$dataDir/app_webview/")
+        STMFunctions.deleteRecursive(appWebViewDir)
+
+        if ((getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager)
+                        .activeNetworkInfo?.isConnected == true){
+
+            webView!!.loadUrl(url, hashMapOf("Pragma" to "no-cache", "Cache-Control" to "no-cache"))
+
+        } else {
+
+            STMFunctions.handleError(this, resources.getString(R.string.no_internet)){ _,_ ->
+
+                netDirectLoad(url)
+
+            }
+
+        }
+
+        return
 
     }
 
