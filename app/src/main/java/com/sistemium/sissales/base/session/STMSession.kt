@@ -89,7 +89,15 @@ class STMSession {
 
         }
 
-        val (_, response, result) = Fuel.get("https://api.sistemium.com/models/i${STMCoreAuthController.configuration}.json")
+        var path = "https://api.sistemium.com/models/i${STMCoreAuthController.configuration}.json"
+
+        if (STMCoreAuthController.configuration.contains("vfs")){
+
+            path = "https://api.sistemium.com/models/${STMCoreAuthController.configuration}.json"
+
+        }
+
+        val (_, response, result) = Fuel.get(path)
                 .header(header)
                 .responseJson()
 
