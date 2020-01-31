@@ -329,7 +329,7 @@ class WebViewActivity : Activity() {
 
     }
 
-    fun loadFromManifest(manifest:String, title:String, url:String): Promise<String, Exception> {
+    private fun loadFromManifest(manifest:String, title:String, url:String): Promise<String, Exception> {
 
         return task {
 
