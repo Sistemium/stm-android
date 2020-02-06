@@ -136,7 +136,7 @@ class STMSyncer : STMDefantomizingOwner, STMDataDownloadingOwner, STMDataSyncing
         socketTransport!!.findAllAsync(entityName, options, null)
                 .then {
 
-                    val responseOffset = it[STMConstants.STMPersistingOptionOffset] as String
+                    val responseOffset = it[STMConstants.STMPersistingOptionOffset] as? String
 
                     val pageSize = (it[STMConstants.STMPersistingOptionPageSize] as Double).toInt()
 

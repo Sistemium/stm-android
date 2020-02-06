@@ -131,7 +131,7 @@ class STMCoreAuthController {
 
                 }
 
-                if ((rolesResponse?.get("roles") as? Map<*,*>)?.keys != null){
+                if ((rolesResponse?.get("roles") as? Map<*,*>)?.keys?.size ?: 0 > 0){
 
                     return "SisWarehouse"
 

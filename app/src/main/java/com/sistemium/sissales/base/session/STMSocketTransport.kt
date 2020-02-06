@@ -122,6 +122,8 @@ class STMSocketTransport(private var socketUrlString: String, private var owner:
 
                 }.fail {
 
+                    STMFunctions.debugLog("",entityName)
+
                     deferred.reject(it)
 
                 }

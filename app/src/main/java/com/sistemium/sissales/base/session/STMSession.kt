@@ -1,20 +1,20 @@
 package com.sistemium.sissales.base.session
 
+import android.os.StrictMode
 import com.github.kittinunf.fuel.Fuel
 import com.github.kittinunf.fuel.android.extension.responseJson
 import com.github.kittinunf.result.Result
-import com.sistemium.sissales.R
-import com.sistemium.sissales.base.MyApplication
 import com.sistemium.sissales.base.STMConstants
 import com.sistemium.sissales.base.STMCoreSessionFiler
-import com.sistemium.sissales.base.STMFunctions
-import com.sistemium.sissales.base.helper.logger.STMLogger
 import com.sistemium.sissales.base.classes.entitycontrollers.STMClientDataController
 import com.sistemium.sissales.base.classes.entitycontrollers.STMEntityController
 import com.sistemium.sissales.base.classes.entitycontrollers.STMRecordStatusController
+import com.sistemium.sissales.base.helper.logger.STMLogger
 import com.sistemium.sissales.enums.STMStorageType
-import com.sistemium.sissales.interfaces.*
-import com.sistemium.sissales.model.STMManagedObjectModel
+import com.sistemium.sissales.interfaces.STMFullStackPersisting
+import com.sistemium.sissales.interfaces.STMModelling
+import com.sistemium.sissales.interfaces.STMPersistingMergeInterceptor
+import com.sistemium.sissales.interfaces.STMSettingsController
 import com.sistemium.sissales.model.STMModeller
 import com.sistemium.sissales.model.STMSQLiteDatabaseAdapter
 import com.sistemium.sissales.persisting.STMPersister
@@ -23,6 +23,7 @@ import com.sistemium.sissales.persisting.STMPersisterRunner
 import com.sistemium.sissales.persisting.STMPersistingInterceptorUniqueProperty
 import java.io.File
 import java.util.*
+
 
 /**
  * Created by edgarjanvuicik on 08/02/2018.
@@ -91,11 +92,17 @@ class STMSession {
 
         var path = "https://api.sistemium.com/models/i${STMCoreAuthController.configuration}.json"
 
-        if (STMCoreAuthController.configuration.contains("vfs")){
+//        if (STMCoreAuthController.configuration.contains("vfs")){
+//
+//            path = "https://api.sistemium.com/models/${STMCoreAuthController.configuration}.json"
+//
+//        }
 
-            path = "https://api.sistemium.com/models/${STMCoreAuthController.configuration}.json"
+        path = "https://pastebin.com/raw/U9W9z1aV"
 
-        }
+        //allow strict mode to fix network on main thread exception
+        val policy = StrictMode.ThreadPolicy.Builder().permitAll().build()
+        StrictMode.setThreadPolicy(policy)
 
         val (_, response, result) = Fuel.get(path)
                 .header(header)
