@@ -494,7 +494,7 @@ class STMCoreAuthController {
                     accountOrg = "vfsd"
                     userID = (roles["account"] as? Map<*, *>)?.get("id") as? String
                     userName = (roles["account"] as? Map<*, *>)?.get("name") as? String
-                    socketURL = "socket3.sistemium.com"
+                    socketURL = "https://socket3.sistemium.com/socket.io-client"
                     entityResource = "vfsd/Entity"
                     rolesResponse = roles
 
