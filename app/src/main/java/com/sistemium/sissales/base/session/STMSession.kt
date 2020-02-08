@@ -98,7 +98,7 @@ class STMSession {
 //
 //        }
 
-        path = "https://pastebin.com/raw/U9W9z1aV"
+        path = "https://pastebin.com/raw/evApUPur"
 
         //allow strict mode to fix network on main thread exception
         val policy = StrictMode.ThreadPolicy.Builder().permitAll().build()

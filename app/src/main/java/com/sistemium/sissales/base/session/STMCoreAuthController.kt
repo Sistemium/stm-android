@@ -497,6 +497,13 @@ class STMCoreAuthController {
                     socketURL = "https://socket3.sistemium.com/socket.io-client"
                     entityResource = "vfsd/Entity"
                     rolesResponse = roles
+                    stcTabs = arrayListOf(hashMapOf(
+                            "name" to "STMWKWebView",
+                            "title" to "VFS",
+                            "imageName" to "3colors-colorless.png",
+                            "appManifestURI" to "https://vfsm.sistemium.com/app.manifest",
+                            "url" to "http://localhost:8080/"
+                    ))
 
                     return@task roles
 
