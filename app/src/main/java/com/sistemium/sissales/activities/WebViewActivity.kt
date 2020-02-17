@@ -65,7 +65,6 @@ class WebViewActivity : Activity() {
         webView?.settings?.allowContentAccess = true
         webView?.settings?.allowUniversalAccessFromFileURLs = true
         webView?.settings?.allowFileAccessFromFileURLs = true
-        webView?.settings?.userAgentString = "Mozilla/5.0 (Linux; Android 4.1.1; Galaxy Nexus Build/JRO03C) AppleWebKit/535.19 (KHTML, like Gecko) Chrome/18.0.1025.166 Mobile Safari/535.19"
 
         webInterface = WebAppInterface(this)
 
@@ -104,7 +103,6 @@ class WebViewActivity : Activity() {
         webView?.webViewClient = object : WebViewClient() {
 
             override fun onReceivedError(view: WebView?, request: WebResourceRequest?, error: WebResourceError?) {
-                err = error.toString()
                 STMFunctions.debugLog("CHROME", error.toString())
             }
 
@@ -191,6 +189,7 @@ class WebViewActivity : Activity() {
 
         webView!!.settings!!.setAppCacheEnabled(false)
         webView!!.settings!!.cacheMode = WebSettings.LOAD_NO_CACHE
+        webView?.settings?.userAgentString = "Mozilla/5.0 (Linux; Android 4.1.1; Galaxy Nexus Build/JRO03C) AppleWebKit/535.19 (KHTML, like Gecko) Chrome/18.0.1025.166 Mobile Safari/535.19"
 
         val dataDir = this.applicationInfo.dataDir
 
@@ -409,13 +408,13 @@ class WebViewActivity : Activity() {
 
                     File(path.removeSuffix("/" + path.split("/").last())).mkdirs()
 
-                    if (res.component1()!!.isNotEmpty()){
+                    if (res.component1()?.isNotEmpty() == true){
 
                         STMFunctions.debugLog("WebViewActivity","finished downloading $file saved to $webPath/$file")
 
                         File("$webPath/$file").writeBytes(res.component1()!!)
 
-                    }else{
+                    } else {
 
                         STMFunctions.debugLog("WebViewActivity","did not received any bytes of file $file")
 
