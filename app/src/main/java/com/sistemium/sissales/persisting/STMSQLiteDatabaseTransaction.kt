@@ -210,11 +210,7 @@ class STMSQLiteDatabaseTransaction(private var database: SQLiteDatabase, private
 
         try {
 
-            val test = database.rawQuery("select * from $tableName where id = '$pk'", null)
-
             val changes = database.update(tableName, cv, "[id] = ?", arrayOf(pk))
-
-            test.close()
 
             if (changes == 0) {
 
