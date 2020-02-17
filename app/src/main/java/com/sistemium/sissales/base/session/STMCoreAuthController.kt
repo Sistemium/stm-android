@@ -501,8 +501,8 @@ class STMCoreAuthController {
                             "name" to "STMWKWebView",
                             "title" to "VFS",
                             "imageName" to "3colors-colorless.png",
-                            "appManifestURI" to "https://vfsm.sistemium.com/app.manifest",
-                            "url" to "http://localhost:8080/"
+                            "appManifestURI" to "https://vfsm2.sistemium.com/app.manifest",
+                            "url" to "https://vfsm2.sistemium.com"
                     ))
 
                     return@task roles
