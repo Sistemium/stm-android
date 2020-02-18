@@ -10,7 +10,6 @@ import android.net.ConnectivityManager
 import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
-import android.view.View
 import android.webkit.*
 import android.webkit.WebView
 import com.github.javiersantos.appupdater.AppUpdater
@@ -22,15 +21,14 @@ import com.sistemium.sissales.base.STMCoreSessionFiler
 import com.sistemium.sissales.base.STMFunctions
 import com.sistemium.sissales.base.classes.entitycontrollers.STMCorePhotosController
 import com.sistemium.sissales.base.helper.logger.STMLogger
+import com.sistemium.sissales.base.session.STMCoreAuthController
 import com.sistemium.sissales.base.session.STMSession
 import com.sistemium.sissales.webInterface.WebAppInterface
 import nl.komponents.kovenant.Promise
 import nl.komponents.kovenant.task
 import nl.komponents.kovenant.then
-import com.sistemium.sissales.R
-import com.sistemium.sissales.base.session.STMCoreAuthController
 import java.io.File
-
+import com.sistemium.sissales.R
 
 @SuppressLint("SetJavaScriptEnabled")
 class WebViewActivity : Activity() {
@@ -115,6 +113,12 @@ class WebViewActivity : Activity() {
 
                     STMCoreAuthController.logIn()
 
+                }
+                if (request?.url?.toString()?.startsWith("tel:") == true) {
+                    val intent = Intent(Intent.ACTION_DIAL,
+                            Uri.parse(request.url.toString()))
+                    startActivity(intent)
+                    return true
                 }
                 return false
             }
