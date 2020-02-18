@@ -38,6 +38,8 @@ class MyApplication : Application(), Application.ActivityLifecycleCallbacks, Com
         var inBackground: Boolean = false
         set(value) {
 
+            if (STMCoreAuthController.accessToken == null) return
+
             if (field != value) {
 
                 field = value
@@ -75,7 +77,7 @@ class MyApplication : Application(), Application.ActivityLifecycleCallbacks, Com
 
         if (level == ComponentCallbacks2.TRIM_MEMORY_UI_HIDDEN) {
 
-            MyApplication.inBackground = true
+            inBackground = true
 
         }
 
@@ -83,7 +85,7 @@ class MyApplication : Application(), Application.ActivityLifecycleCallbacks, Com
 
     override fun onActivityResumed(p0: Activity?) {
 
-        MyApplication.inBackground = false
+        inBackground = false
 
     }
 
