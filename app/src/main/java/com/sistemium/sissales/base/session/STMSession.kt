@@ -94,7 +94,7 @@ class STMSession {
 
         if (STMCoreAuthController.configuration.contains("vfs")){
 
-            path = "https://pastebin.com/raw/EdXfzCU6"
+            path = "https://api.sistemium.com/models/${STMCoreAuthController.configuration}.json"
 
         }
 
