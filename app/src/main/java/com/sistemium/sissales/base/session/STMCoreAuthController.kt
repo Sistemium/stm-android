@@ -137,7 +137,7 @@ class STMCoreAuthController {
 
                 }
 
-                return "vfsd"
+                return "vfs"
 
             }
 
@@ -491,11 +491,11 @@ class STMCoreAuthController {
 
                     val roles = STMFunctions.gson.fromJson(result.get().content, Map::class.java)
 
-                    accountOrg = "vfsd"
+                    accountOrg = if (BuildConfig.APPLICATION_ID.contains("vfsDebug")) "vfsd" else "vfs"
                     userID = (roles["account"] as? Map<*, *>)?.get("id") as? String
                     userName = (roles["account"] as? Map<*, *>)?.get("name") as? String
                     socketURL = "https://socket3.sistemium.com/socket.io-client"
-                    entityResource = "vfsd/Entity"
+                    entityResource = "$accountOrg/Entity"
                     rolesResponse = roles
                     stcTabs = arrayListOf(hashMapOf(
                             "name" to "STMWKWebView",
