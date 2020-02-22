@@ -162,7 +162,7 @@ class STMPredicate(var value: String) {
 
                         } else {
 
-                            STMFunctions.removePrefixFromEntityName(relationships[key.removeSuffix(STMConstants.RELATIONSHIP_SUFFIX)]!!.destinationEntityName)
+                            STMFunctions.removePrefixFromEntityName(relationships[key.removeSuffix(STMConstants.RELATIONSHIP_SUFFIX)]?.destinationEntityName ?: "")
 
                         }
 
