@@ -2,9 +2,9 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-      <module fileurl="file://$PROJECT_DIR$/barcode_scanner_library_v2.4.6.0/barcode_scanner_library_v2.4.6.0.iml" filepath="$PROJECT_DIR$/barcode_scanner_library_v2.4.6.0/barcode_scanner_library_v2.4.6.0.iml" />
-      <module fileurl="file://$PROJECT_DIR$/stm-android.iml" filepath="$PROJECT_DIR$/stm-android.iml" />
+      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" group="stm-android/app" />
+      <module fileurl="file://$PROJECT_DIR$/barcode_scanner_library_v2.4.6.0/barcode_scanner_library_v2.4.6.0.iml" filepath="$PROJECT_DIR$/barcode_scanner_library_v2.4.6.0/barcode_scanner_library_v2.4.6.0.iml" group="stm-android/barcode_scanner_library_v2.4.6.0" />
+      <module fileurl="file://$PROJECT_DIR$/stm-android.iml" filepath="$PROJECT_DIR$/stm-android.iml" group="stm-android" />
     </modules>
   </component>
 </project>
