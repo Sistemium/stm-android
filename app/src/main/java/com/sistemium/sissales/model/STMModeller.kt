@@ -31,14 +31,10 @@ class STMModeller(modelJSON: String) : STMModelling {
 
         }
 
-        _storageForEntityName[entityName] = STMStorageType.STMStorageTypeNone
-
         val prefixedEntityName = STMFunctions.addPrefixToEntityName(entityName)
 
         val entity = entitiesByName[prefixedEntityName]
-                ?: return _storageForEntityName[entityName]!!
-
-        val storeOption = entity.userInfo["STORE"]
+                ?: return STMStorageType.STMStorageTypeNone
 
         if (entity.abstract) {
             _storageForEntityName[entityName] = STMStorageType.STMStorageTypeAbstract
@@ -46,12 +42,7 @@ class STMModeller(modelJSON: String) : STMModelling {
             return _storageForEntityName[entityName]!!
         }
 
-        if (storeOption == null || storeOption == "FMDB" || storeOption == "STMSQLiteDatabaseOperation") {
-
-            _storageForEntityName[entityName] = STMStorageType.STMStorageTypeSQLiteDatabase
-
-            return _storageForEntityName[entityName]!!
-        }
+        _storageForEntityName[entityName] = STMStorageType.STMStorageTypeSQLiteDatabase
 
         return _storageForEntityName[entityName]!!
 

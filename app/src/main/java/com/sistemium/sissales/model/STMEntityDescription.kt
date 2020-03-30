@@ -14,9 +14,6 @@ class STMEntityDescription(entity: Map<*, *>) {
 
     val relationshipsByName: MutableMap<String, STMRelationshipDescription> = hashMapOf()
 
-    val userInfo: Map<*, *>
-        get() = attributesByName["userInfo"] as? Map<*, *> ?: hashMapOf<Any, Any>()
-
     val parentEntity = entity["parentEntity"] as? String
 
     init {
@@ -51,7 +48,7 @@ class STMEntityDescription(entity: Map<*, *>) {
 
         }
 
-        return entityName == other.entityName && abstract == other.abstract && attributesByName == other.attributesByName && relationshipsByName == other.relationshipsByName && userInfo == other.userInfo
+        return entityName == other.entityName && abstract == other.abstract && attributesByName == other.attributesByName && relationshipsByName == other.relationshipsByName
 
     }
 
@@ -59,7 +56,8 @@ class STMEntityDescription(entity: Map<*, *>) {
         var result = entityName.hashCode()
         result = 31 * result + abstract.hashCode()
         result = 31 * result + attributesByName.hashCode()
-        result = 31 * result + userInfo.hashCode()
+        result = 31 * result + relationshipsByName.hashCode()
+        result = 31 * result + parentEntity.hashCode()
         return result
     }
 
