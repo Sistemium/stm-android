@@ -112,9 +112,31 @@ class STMSyncer : STMDefantomizingOwner, STMDataDownloadingOwner, STMDataSyncing
 
                     STMFunctions.debugLog("STMSyncer", "updateResource error: $it")
 
+                    checkGoneEntity(entityName, it, itemData["id"].toString())
+
                     dataSyncingDelegate!!.setSynced(false, entityName, itemData, itemVersion)
 
                 }
+
+    }
+
+    fun checkGoneEntity(entityName:String, e:Exception, id:String){
+
+        if (e.localizedMessage == "410"){
+
+            STMFunctions.debugLog("STMSyncer","destroy gone entity name: $entityName, id: $id")
+
+            val options = hashMapOf(
+                    STMConstants.STMPersistingOptionRecordstatuses to false
+            )
+
+            session!!.persistenceDelegate.destroy(entityName, id, options).fail {
+
+                STMLogger.sharedLogger!!.errorMessage("Error destroy gone entity: ${it.localizedMessage}")
+
+            }
+
+        }
 
     }
 

@@ -280,6 +280,12 @@ class STMSocketTransport(private var socketUrlString: String, private var owner:
         val stResponse = array.firstOrNull() as? JSONObject
                 ?: return Pair(null, Exception("No stResponse "))
 
+        if (stResponse.has("error")) {
+
+            return Pair(null, java.lang.Exception(stResponse["error"].toString()))
+
+        }
+
         return Pair(STMFunctions.gson.fromJson(stResponse.toString(), Map::class.java), null)
 
     }
