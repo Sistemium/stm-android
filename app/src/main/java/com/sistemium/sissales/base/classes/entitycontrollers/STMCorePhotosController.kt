@@ -3,11 +3,11 @@ package com.sistemium.sissales.base.classes.entitycontrollers
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.AlertDialog
-import android.support.v4.app.ActivityCompat.startActivityForResult
+import androidx.core.app.ActivityCompat.startActivityForResult
 import android.provider.MediaStore
 import android.content.Intent
 import com.sistemium.sissales.base.MyApplication
-import android.support.v4.app.ActivityCompat.startActivityForResult
+import androidx.core.app.ActivityCompat.startActivityForResult
 import android.content.DialogInterface
 import android.graphics.Bitmap
 import android.net.Uri

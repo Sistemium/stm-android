@@ -5,7 +5,6 @@ import android.app.Application
 import android.content.ComponentCallbacks2
 import android.content.Context
 import android.os.Bundle
-import com.crashlytics.android.Crashlytics
 import com.sistemium.sissales.activities.ProfileActivity
 import com.sistemium.sissales.base.classes.entitycontrollers.STMCoreObjectsController
 import com.sistemium.sissales.base.helper.logger.STMLogger
@@ -15,7 +14,6 @@ import com.sistemium.sissales.base.session.STMSyncer
 import com.sistemium.sissales.enums.STMSocketEvent
 import devliving.online.securedpreferencestore.DefaultRecoveryHandler
 import devliving.online.securedpreferencestore.SecuredPreferenceStore
-import io.fabric.sdk.android.Fabric
 import nl.komponents.kovenant.task
 
 /**
@@ -97,7 +95,6 @@ class MyApplication : Application(), Application.ActivityLifecycleCallbacks, Com
         SecuredPreferenceStore.init(applicationContext, null, null, seedKey, DefaultRecoveryHandler())
 
         this.registerActivityLifecycleCallbacks(this)
-        Fabric.with(this, Crashlytics())
 
     }
 

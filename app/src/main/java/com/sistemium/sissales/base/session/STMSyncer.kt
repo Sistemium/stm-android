@@ -325,7 +325,7 @@ class STMSyncer : STMDefantomizingOwner, STMDataDownloadingOwner, STMDataSyncing
 
             STMFunctions.debugLog("STMSyncer", "change STMEntity url from ${entity["url"]} to ${STMCoreAuthController.entityResource}")
 
-            val attributes = HashMap(entity as Map)
+            val attributes = HashMap(entity)
 
             attributes["url"] = STMCoreAuthController.entityResource
 

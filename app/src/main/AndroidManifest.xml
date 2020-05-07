@@ -52,11 +52,6 @@
             android:name=".activities.ProfileActivity"
             android:label=""
             android:theme="@style/AppTheme.NoActionBar" />
-
-        <meta-data
-            android:name="io.fabric.ApiKey"
-            android:value="035bda92bd5b13402aaf2c6cb5f66b8ff23f2166"
-            />
     </application>
 
 </manifest>

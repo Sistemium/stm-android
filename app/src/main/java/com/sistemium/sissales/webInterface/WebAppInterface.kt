@@ -31,7 +31,7 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.provider.MediaStore
 import android.speech.tts.TextToSpeech
-import android.support.v4.os.ConfigurationCompat
+import androidx.core.os.ConfigurationCompat
 import com.sistemium.sissales.R
 import com.sistemium.sissales.base.*
 import java.lang.reflect.Array

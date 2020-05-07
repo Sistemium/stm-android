@@ -19,7 +19,7 @@ import com.sistemium.sissales.activities.WebViewActivity
 import com.sistemium.sissales.webInterface.WebAppInterface
 import android.os.Looper
 import android.os.Handler
-import android.support.v4.os.ConfigurationCompat
+import androidx.core.os.ConfigurationCompat
 import com.sistemium.sissales.base.session.STMSession
 
 enum class STMBarCodeScannedType(val type:String) {
