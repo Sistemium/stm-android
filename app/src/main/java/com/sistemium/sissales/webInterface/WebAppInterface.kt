@@ -1,43 +1,39 @@
 package com.sistemium.sissales.webInterface
 
+
+import android.annotation.SuppressLint
+import android.content.ClipData
+import android.content.ClipboardManager
+import android.content.ContentResolver
+import android.content.Context
+import android.database.Cursor
+import android.location.Location
+import android.os.Bundle
+import android.os.Looper
+import android.provider.ContactsContract
+import android.provider.MediaStore
+import android.speech.tts.TextToSpeech
 import android.webkit.JavascriptInterface
+import androidx.core.os.ConfigurationCompat
+import com.google.android.gms.common.ConnectionResult
+import com.google.android.gms.common.api.GoogleApiClient
+import com.google.android.gms.location.LocationCallback
+import com.google.android.gms.location.LocationRequest
+import com.google.android.gms.location.LocationRequest.PRIORITY_HIGH_ACCURACY
+import com.google.android.gms.location.LocationResult
+import com.google.android.gms.location.LocationServices
 import com.sistemium.sissales.activities.WebViewActivity
+import com.sistemium.sissales.base.*
 import com.sistemium.sissales.base.STMFunctions.Companion.gson
+import com.sistemium.sissales.base.classes.entitycontrollers.STMCorePhotosController
+import com.sistemium.sissales.base.classes.entitycontrollers.STMCorePicturesController
 import com.sistemium.sissales.base.session.STMCoreAuthController
+import com.sistemium.sissales.base.session.STMSession
 import com.sistemium.sissales.interfaces.STMFullStackPersisting
 import com.sistemium.sissales.persisting.STMPredicate
 import nl.komponents.kovenant.Promise
 import nl.komponents.kovenant.then
-import android.location.Location
-import android.os.Bundle
-import com.google.android.gms.common.api.GoogleApiClient
-import com.sistemium.sissales.base.classes.entitycontrollers.STMCorePhotosController
-import com.sistemium.sissales.base.classes.entitycontrollers.STMCorePicturesController
-import com.sistemium.sissales.base.session.STMSession
-
 import java.util.*
-import com.google.android.gms.location.LocationServices
-import com.google.android.gms.common.ConnectionResult
-import com.google.android.gms.location.LocationRequest
-import android.annotation.SuppressLint
-import android.os.Looper
-import com.google.android.gms.location.LocationCallback
-import com.google.android.gms.location.LocationRequest.PRIORITY_HIGH_ACCURACY
-import com.google.android.gms.location.LocationResult
-import android.content.ClipData
-import android.content.ClipboardManager
-import android.content.Context
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
-import android.provider.MediaStore
-import android.speech.tts.TextToSpeech
-import androidx.core.os.ConfigurationCompat
-import com.sistemium.sissales.R
-import com.sistemium.sissales.base.*
-import java.lang.reflect.Array
-import kotlin.collections.ArrayList
-import android.util.Base64
-
 
 
 /**
@@ -360,6 +356,78 @@ class WebAppInterface internal constructor(private var webViewActivity: WebViewA
         val callback = mapParameters["callback"]
 
         javascriptCallback(arrayOf(STMCoreAuthController.rolesResponse), mapParameters, callback as String)
+
+    }
+
+    @JavascriptInterface
+    fun getContacts(parameters: String?) {
+
+        STMFunctions.debugLog("DEBUG", "getContacts")
+
+        val mapParameters = gson.fromJson(parameters, Map::class.java)
+
+        val callback = mapParameters["callback"]
+
+        var resultArray = arrayOf<Map<String,Any>>()
+
+        val resolver: ContentResolver = MyApplication.appContext!!.contentResolver
+        val cursor = resolver.query(ContactsContract.Contacts.CONTENT_URI, null, null, null,
+                null)!!
+
+        if (cursor.count > 0) {
+            while (cursor.moveToNext()) {
+                val contactDictionary = hashMapOf<String, Any>()
+                val id = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts._ID))
+                val name = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME))
+
+                contactDictionary["name"] = name
+                contactDictionary["id"] = id
+
+                val phoneNumber = (cursor.getString(
+                        cursor.getColumnIndex(ContactsContract.Contacts.HAS_PHONE_NUMBER))).toInt()
+
+                var phoneNumberArray = arrayOf<String>()
+
+                if (phoneNumber > 0) {
+                    val cursorPhone = resolver.query(
+                            ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
+                            null, ContactsContract.CommonDataKinds.Phone.CONTACT_ID + "=?", arrayOf(id), null)!!
+
+                    if(cursorPhone.count > 0) {
+                        while (cursorPhone.moveToNext()) {
+                            val phoneNumValue = cursorPhone.getString(
+                                    cursorPhone.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER)).replace(" ", "")
+                            phoneNumberArray = phoneNumberArray.plusElement(phoneNumValue)
+                        }
+                    }
+                    cursorPhone.close()
+                }
+
+                contactDictionary["phones"] = phoneNumberArray
+
+                var emailArray = arrayOf<String>()
+
+                val cursorEmail = resolver.query(
+                        ContactsContract.CommonDataKinds.Email.CONTENT_URI,
+                        null, ContactsContract.CommonDataKinds.Email.CONTACT_ID + "=?", arrayOf(id), null)!!
+
+                if(cursorEmail.count > 0) {
+                    while (cursorEmail.moveToNext()) {
+                        val emailValue = cursorEmail.getString(
+                                cursorEmail.getColumnIndex(ContactsContract.CommonDataKinds.Email.DATA))
+                        emailArray = emailArray.plusElement(emailValue)
+                    }
+                }
+                cursorEmail.close()
+
+                contactDictionary["email"] = emailArray
+
+                resultArray = resultArray.plusElement(contactDictionary)
+            }
+        }
+        cursor.close()
+
+        javascriptCallback(resultArray, mapParameters, callback as String)
 
     }
 
