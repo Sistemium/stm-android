@@ -2,18 +2,16 @@ package com.sistemium.sissales.webInterface
 
 
 import android.annotation.SuppressLint
-import android.content.ClipData
-import android.content.ClipboardManager
-import android.content.ContentResolver
-import android.content.Context
-import android.database.Cursor
+import android.content.*
 import android.location.Location
+import android.net.Uri
 import android.os.Bundle
 import android.os.Looper
 import android.provider.ContactsContract
 import android.provider.MediaStore
 import android.speech.tts.TextToSpeech
 import android.webkit.JavascriptInterface
+import androidx.core.content.ContextCompat.startActivity
 import androidx.core.os.ConfigurationCompat
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.api.GoogleApiClient
@@ -150,6 +148,36 @@ class WebAppInterface internal constructor(private var webViewActivity: WebViewA
     fun barCodeScannerOff(parameters: String?) {
 
         STMBarCodeScanner.sharedScanner!!.disconnect()
+
+    }
+
+    @JavascriptInterface
+    fun navigate(parameters: String?) {
+
+        STMFunctions.debugLog("DEBUG", "navigate")
+
+        val mapParameters = gson.fromJson(parameters, Map::class.java)
+
+        val latitude = mapParameters["latitude"]
+        val longitude = mapParameters["longitude"]
+
+        when(mapParameters["navigator"]){
+            "Waze" -> {
+                try {
+                    val url = "https://www.waze.com/ul?ll=$latitude%2C$longitude&navigate=yes"
+                    val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
+                    webViewActivity.startActivity(intent)
+                } catch (ex: ActivityNotFoundException) {
+                    val intent = Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=com.waze"))
+                    webViewActivity.startActivity(intent)
+                }
+            }
+            else -> {
+                val intent = Intent(Intent.ACTION_VIEW,
+                        Uri.parse("http://maps.google.com/maps?daddr=$latitude,$longitude"))
+                webViewActivity.startActivity(intent)
+            }
+        }
 
     }
 
