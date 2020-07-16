@@ -442,6 +442,8 @@ class STMCoreAuthController {
 
                     MyApplication.appContext?.startActivity(myIntent, options.toBundle())
 
+                    STMLogger.sharedLogger!!.importantMessage("login success")
+
                     return@then it
 
                 }
