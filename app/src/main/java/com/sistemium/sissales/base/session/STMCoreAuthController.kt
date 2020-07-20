@@ -4,15 +4,12 @@ import android.annotation.SuppressLint
 import android.app.ActivityOptions
 import android.content.Context
 import android.content.Intent
-import android.webkit.WebView
 import com.github.kittinunf.fuel.Fuel
 import com.github.kittinunf.fuel.android.extension.responseJson
-import com.github.kittinunf.fuel.core.FuelManager
 import com.github.kittinunf.result.Result
 import com.sistemium.sissales.R
 import com.sistemium.sissales.activities.ProfileActivity
 import com.sistemium.sissales.base.MyApplication
-import com.sistemium.sissales.base.STMConstants
 import com.sistemium.sissales.base.STMFunctions
 import com.sistemium.sissales.base.helper.logger.STMLogger
 import com.sistemium.sissales.enums.STMLogMessageType
@@ -22,12 +19,9 @@ import nl.komponents.kovenant.task
 import nl.komponents.kovenant.then
 import java.io.File
 import java.util.*
-import android.text.format.DateUtils
 import com.sistemium.sissales.base.classes.entitycontrollers.STMCorePicturesController
 import com.sistemium.sissales.base.classes.entitycontrollers.STMEntityController
 import com.sistemium.sissales.interfaces.STMModelling
-import android.content.pm.PackageManager
-import android.content.ComponentName
 import com.sistemium.sissales.BuildConfig
 
 
@@ -39,30 +33,31 @@ class STMCoreAuthController {
 
     companion object {
 
-        var accessToken: String? = null
+        var accessToken: String?
             get() {
-
                 val prefStore = SecuredPreferenceStore.getSharedInstance()
                 return prefStore.getString("accessToken", null)
-
             }
             set(value) {
 
-                if (field != value){
+                val prefStore = SecuredPreferenceStore.getSharedInstance()
+                val property = prefStore.getString("accessToken", null)
 
-                    val prefStore = SecuredPreferenceStore.getSharedInstance()
+                if (property != value){
 
                     prefStore.edit().putString("accessToken", value).apply()
 
-                    lastAuth = STMFunctions.stringFrom(Date())
+                    if (value != null){
+                        lastAuth = STMFunctions.stringFrom(Date())
 
-                    tokenHash = STMFunctions.md5FromString(value!!)
+                        tokenHash = STMFunctions.md5FromString(value)
+                    }
 
                 }
 
             }
 
-        var modelEtag: String? = null
+        var modelEtag: String?
             get() {
 
                 val prefStore = SecuredPreferenceStore.getSharedInstance()
@@ -71,13 +66,9 @@ class STMCoreAuthController {
             }
             set(value) {
 
-                if (field != value){
+                val prefStore = SecuredPreferenceStore.getSharedInstance()
 
-                    val prefStore = SecuredPreferenceStore.getSharedInstance()
-
-                    prefStore.edit().putString("modelEtag", value).apply()
-
-                }
+                prefStore.edit().putString("modelEtag", value).apply()
 
             }
 
@@ -116,7 +107,7 @@ class STMCoreAuthController {
 
             }
 
-        var configuration:String = ""
+        val configuration:String
             get() {
 
                 if ((rolesResponse?.get("roles") as? Map<*,*>)?.keys?.contains("salesman") == true){
@@ -141,7 +132,7 @@ class STMCoreAuthController {
 
             }
 
-        var userAgent:String = ""
+        val userAgent:String
             get() {
 
                 return "i$configuration/${STMModelling.sharedModeler?.managedObjectModel?.userDefinedModelVersionIdentifier ?: "366"}"
@@ -312,7 +303,7 @@ class STMCoreAuthController {
 
             }
 
-        var dataModelName: String = ""
+        val dataModelName: String
             get() {
 
                 return configuration
