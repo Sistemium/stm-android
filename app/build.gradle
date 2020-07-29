@@ -14,9 +14,9 @@ android {
     defaultConfig {
         applicationId "com.sistemium"
         minSdkVersion 21
-        targetSdkVersion 28
-        versionCode 418
-        versionName "1.1.36"
+        targetSdkVersion 29
+        versionCode 419
+        versionName "1.1.37"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
