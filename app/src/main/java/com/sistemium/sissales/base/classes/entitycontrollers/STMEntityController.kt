@@ -213,7 +213,7 @@ class STMEntityController private constructor() {
 
             STMLogger.sharedLogger!!.errorMessage(message)
 
-            val newStcEntitiesArray = ArrayList(entitiesArray)
+            val newStcEntitiesArray = entitiesArray!!.clone() as ArrayList<Map<*, *>>
 
             newStcEntitiesArray.removeAll(duplicates)
 

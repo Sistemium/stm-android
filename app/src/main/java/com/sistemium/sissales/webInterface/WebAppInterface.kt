@@ -693,7 +693,7 @@ class WebAppInterface internal constructor(private var webViewActivity: WebViewA
 
         val clipboard = MyApplication.appContext!!.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager?
         val clip = ClipData.newPlainText("label", text)
-        clipboard!!.primaryClip = clip
+        clipboard!!.setPrimaryClip(clip)
 
         return javascriptCallback(arrayOf<Any>(), mapParameters, callback as String)
 
