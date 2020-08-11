@@ -460,18 +460,6 @@ class STMCoreAuthController {
 
         private fun requestRoles(): Promise<Map<*, *>, Exception> {
 
-            if (rolesResponse != null) {
-
-                return task {
-
-                    startSession()
-
-                    return@task rolesResponse!!
-
-                }
-
-            }
-
             if (BuildConfig.APPLICATION_ID.contains(".vfs")){
 
                 return task {
@@ -480,7 +468,18 @@ class STMCoreAuthController {
                             .header(mapOf("user-agent" to userAgent, "DeviceUUID" to STMFunctions.deviceUUID(), "Authorization" to accessToken!!))
                             .responseJson()
 
-                    if (result !is Result.Success) throw Exception("Server Error")
+                    if (result !is Result.Success) {
+
+                        if (rolesResponse != null) {
+
+                            startSession()
+
+                            return@task rolesResponse!!
+
+                        }
+
+                        throw Exception("Wrong SMS Code")
+                    }
 
                     val roles = STMFunctions.gson.fromJson(result.get().content, Map::class.java)
 
@@ -510,7 +509,18 @@ class STMCoreAuthController {
                             .header(mapOf("user-agent" to userAgent, "DeviceUUID" to STMFunctions.deviceUUID(), "Authorization" to accessToken!!))
                             .responseJson()
 
-                    if (result !is Result.Success) throw Exception("Wrong SMS Code")
+                    if (result !is Result.Success) {
+
+                        if (rolesResponse != null) {
+
+                            startSession()
+
+                            return@task rolesResponse!!
+
+                        }
+
+                        throw Exception("Wrong SMS Code")
+                    }
 
                     val roles = STMFunctions.gson.fromJson(result.get().content, Map::class.java)
 
