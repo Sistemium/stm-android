@@ -18,6 +18,7 @@ import com.sistemium.sissales.base.session.STMSession
 import kotlinx.android.synthetic.main.activity_profile.*
 import com.github.javiersantos.appupdater.AppUpdater
 import com.github.javiersantos.appupdater.enums.UpdateFrom
+import com.sistemium.sissales.BuildConfig
 import com.sistemium.sissales.base.STMFunctions
 
 
@@ -194,7 +195,7 @@ class ProfileActivity : AppCompatActivity() {
 
         if (ContextCompat.checkSelfPermission(this,
                         Manifest.permission.READ_CONTACTS)
-                != PackageManager.PERMISSION_GRANTED) {
+                != PackageManager.PERMISSION_GRANTED && BuildConfig.APPLICATION_ID.contains(".vfs")) {
 
             permissions.add(Manifest.permission.READ_CONTACTS)
 
