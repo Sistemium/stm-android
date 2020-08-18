@@ -66,7 +66,7 @@ class WebViewActivity : Activity() {
 
         webInterface = WebAppInterface(this)
 
-        webView?.addJavascriptInterface(webInterface, "stmAndroid")
+        webView?.addJavascriptInterface(webInterface!!, "stmAndroid")
         webView?.settings?.mediaPlaybackRequiresUserGesture = false
         webView?.webChromeClient = object : WebChromeClient() {
 
@@ -127,7 +127,7 @@ class WebViewActivity : Activity() {
 
         if(manifest == null) {
 
-            netDirectLoad(url)
+            netDirectLoad(url!!)
 
             return
 
@@ -137,7 +137,7 @@ class WebViewActivity : Activity() {
 
             runOnUiThread {
 
-                val webPath = STMCoreSessionFiler.sharedSession!!.webPath(title)+"/index.html"
+                val webPath = STMCoreSessionFiler.sharedSession!!.webPath(title!!)+"/index.html"
 
                 val webFolder = File(webPath)
 
@@ -153,7 +153,7 @@ class WebViewActivity : Activity() {
 
                 }
 
-                loadFromManifest(manifest, title, url) success {
+                loadFromManifest(manifest, title, url!!) success {
 
                     val oldFolder = File(STMCoreSessionFiler.sharedSession!!.webPath(title))
 

@@ -10,11 +10,11 @@ apply plugin: 'com.google.firebase.crashlytics'
 
 
 android {
-    compileSdkVersion 29
+    compileSdkVersion 30
     defaultConfig {
         applicationId "com.sistemium"
         minSdkVersion 21
-        targetSdkVersion 29
+        targetSdkVersion 30
         versionCode 419
         versionName "1.1.37"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -82,10 +82,6 @@ configurations.all {
     resolutionStrategy.cacheChangingModulesFor 0, 'seconds'
 }
 
-configurations {
-    all*.exclude group: 'com.google.code.gson'
-}
-
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
@@ -98,7 +94,7 @@ dependencies {
     implementation 'com.github.EdgarJan:Secured-Preference-Store:-SNAPSHOT'
     implementation 'com.github.javiersantos:AppUpdater:master-SNAPSHOT'
     implementation 'com.google.android.gms:play-services-location:17.0.0'
-    implementation project(path: ':barcode_scanner_library_v2.4.6.0')
-    implementation 'com.google.firebase:firebase-analytics-ktx:17.4.4'
-    implementation 'com.google.firebase:firebase-crashlytics:17.1.1'
+    implementation project(path: ':BarcodeScannerLibrary')
+    implementation 'com.google.firebase:firebase-analytics-ktx:17.5.0'
+    implementation 'com.google.firebase:firebase-crashlytics:17.2.1'
 }

@@ -81,7 +81,25 @@ class MyApplication : Application(), Application.ActivityLifecycleCallbacks, Com
 
     }
 
-    override fun onActivityResumed(p0: Activity?) {
+    override fun onActivityPaused(p0: Activity) {
+    }
+
+    override fun onActivityStarted(p0: Activity) {
+    }
+
+    override fun onActivityDestroyed(p0: Activity) {
+    }
+
+    override fun onActivitySaveInstanceState(p0: Activity, p1: Bundle) {
+    }
+
+    override fun onActivityStopped(p0: Activity) {
+    }
+
+    override fun onActivityCreated(p0: Activity, p1: Bundle?) {
+    }
+
+    override fun onActivityResumed(p0: Activity) {
 
         inBackground = false
 
@@ -98,11 +116,6 @@ class MyApplication : Application(), Application.ActivityLifecycleCallbacks, Com
 
     }
 
-    override fun onActivityPaused(p0: Activity?) {}
-    override fun onActivityStarted(p0: Activity?) {}
-    override fun onActivityDestroyed(p0: Activity?) {}
-    override fun onActivitySaveInstanceState(p0: Activity?, p1: Bundle?) {}
-    override fun onActivityStopped(p0: Activity?) {}
-    override fun onActivityCreated(p0: Activity?, p1: Bundle?) {}
+
 
 }

@@ -64,7 +64,7 @@ class CodeConfirmActivity : AppCompatActivity() {
 
             supportActionBar?.setDisplayHomeAsUpEnabled(false)
 
-            STMCoreAuthController.requestAccessToken(id, smsCodeEdit.text.toString()) then {
+            STMCoreAuthController.requestAccessToken(id!!, smsCodeEdit.text.toString()) then {
 
                 STMCoreAuthController.logIn() then {
 

@@ -4,13 +4,11 @@ import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.AlertDialog
 import android.content.DialogInterface
-import android.content.Intent
 import android.os.Build
 import android.provider.Settings
 import android.util.Log
 import com.google.gson.GsonBuilder
 import com.sistemium.sissales.R
-import com.sistemium.sissales.activities.AuthActivity
 import com.sistemium.sissales.base.session.STMCoreAuthController
 import com.sistemium.sissales.base.session.STMSession
 import java.io.File
