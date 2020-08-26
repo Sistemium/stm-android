@@ -81,24 +81,4 @@ class ProfileActivityController(private var activity: ProfileActivity) {
 
     }
 
-    @SuppressLint("SetTextI18n")
-    fun debug(debug:String){
-
-        activity.runOnUiThread {
-
-            if (got % 40 == 0){
-
-                activity.progressInfo?.text = ""
-
-            }
-            got += 1
-
-            activity.progressInfo?.text = activity.progressInfo?.text.toString() + debug + '\n'
-
-            STMSession.sharedSession?.syncer?.socketTransport
-
-        }
-
-    }
-
 }
