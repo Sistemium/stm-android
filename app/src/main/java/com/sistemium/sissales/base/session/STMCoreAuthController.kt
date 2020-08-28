@@ -23,6 +23,7 @@ import com.sistemium.sissales.base.classes.entitycontrollers.STMCorePicturesCont
 import com.sistemium.sissales.base.classes.entitycontrollers.STMEntityController
 import com.sistemium.sissales.interfaces.STMModelling
 import com.sistemium.sissales.BuildConfig
+import com.sistemium.sissales.activities.TabBarControllerActivity
 
 
 /**
@@ -421,9 +422,7 @@ class STMCoreAuthController {
 
             if (accessToken != null) {
 
-                val myIntent = Intent(MyApplication.appContext, ProfileActivity::class.java)
-
-                myIntent.putExtra("accessToken", accessToken)
+                val myIntent = Intent(MyApplication.appContext, TabBarControllerActivity::class.java)
 
                 myIntent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
 

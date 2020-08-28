@@ -50,7 +50,7 @@
                 android:value=".activities.AuthActivity" />
         </activity>
         <activity
-            android:name=".activities.ProfileActivity"
+            android:name=".activities.TabBarControllerActivity"
             android:label=""
             android:theme="@style/AppTheme.NoActionBar" />
     </application>
