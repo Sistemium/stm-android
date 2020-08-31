@@ -8,6 +8,7 @@ import com.sistemium.sissales.base.session.STMSession
 import com.sistemium.sissales.interfaces.STMModelling
 import com.sistemium.sissales.persisting.STMPredicate
 import java.util.*
+import kotlin.collections.HashMap
 
 class STMCoreObjectsController {
 
@@ -56,7 +57,7 @@ class STMCoreObjectsController {
 
                 val relations = STMModelling.sharedModeler?.objectRelationshipsForEntityName(prefixedName,true, false) ?: continue
 
-                val options = hashMapOf(
+                val options:HashMap<String,Any> = hashMapOf(
                         STMPersistingOptionRecordstatuses to false,
                         STMPersistingOptionPageSize to 1500
                 )
