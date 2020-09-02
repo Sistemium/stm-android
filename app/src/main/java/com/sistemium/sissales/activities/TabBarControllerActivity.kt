@@ -1,12 +1,15 @@
 package com.sistemium.sissales.activities
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.viewpager.widget.ViewPager
+import com.google.android.material.tabs.TabLayout
 import com.sistemium.sissales.BuildConfig
 import com.sistemium.sissales.R
 import com.sistemium.sissales.base.STMFunctions
@@ -15,6 +18,7 @@ import com.sistemium.sissales.base.session.STMCoreAuthController
 
 class TabBarControllerActivity : AppCompatActivity() {
 
+    @SuppressLint("ClickableViewAccessibility")
     override fun onCreate(savedInstanceState: Bundle?) {
 
         STMFunctions.memoryFix()
@@ -27,7 +31,7 @@ class TabBarControllerActivity : AppCompatActivity() {
 
         for (tab in STMCoreAuthController.stcTabs ?: arrayListOf<Map<*,*>>()) {
 
-            if (tab is Map<*, *> && tab["name"] == "STMWKWebView") {
+            if (tab is Map<*, *>) {
 
                 tabs.add(tab)
 
@@ -37,7 +41,14 @@ class TabBarControllerActivity : AppCompatActivity() {
 
         val sectionsPagerAdapter = SectionsPagerAdapter(this, supportFragmentManager, tabs)
 
+        val viewPager: ViewPager = findViewById(R.id.view_pager)
+        viewPager.adapter = sectionsPagerAdapter
+        viewPager.setOnTouchListener { _, _ ->
+            true
+        }
 
+        val tabLayout: TabLayout = findViewById(R.id.tabs)
+        tabLayout.setupWithViewPager(viewPager)
 
     }
 
