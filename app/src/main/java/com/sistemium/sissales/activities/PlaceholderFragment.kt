@@ -76,11 +76,11 @@ class PlaceholderFragment(private val tab:Map<*, *>) : Fragment() {
 
                             activity?.runOnUiThread {
 
-//                                startActivity(Intent(this@ProfileActivity, AuthActivity::class.java))
-//
-//                                STMCoreAuthController.logout()
-//
-//                                finish()
+                                startActivity(Intent(activity, AuthActivity::class.java))
+
+                                STMCoreAuthController.logout()
+
+                                activity?.finish()
 
                             }
 
