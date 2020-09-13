@@ -1,5 +1,6 @@
 package com.sistemium.sissales.base.session
 
+import com.sistemium.sissales.activities.PlaceholderFragment
 import com.sistemium.sissales.activities.ProfileActivity
 import com.sistemium.sissales.base.STMConstants.Companion.STMPersistingOptionLts
 import com.sistemium.sissales.base.STMConstants.Companion.STM_ENTITY_NAME
@@ -54,7 +55,7 @@ class STMSyncerHelper : STMDefantomizing, STMDataDownloading {
 
         }
 
-        ProfileActivity.profileActivityController?.setMaxProgress(_entitiesNames.size)
+        PlaceholderFragment.profileActivityController?.setMaxProgress(_entitiesNames.size)
 
         for (entityName in _entitiesNames) {
 
@@ -82,7 +83,7 @@ class STMSyncerHelper : STMDefantomizing, STMDataDownloading {
 
         STMFunctions.debugLog("STMSyncerHelper", "stopDownloading")
 
-        ProfileActivity.profileActivityController?.setProgressInfo(-1)
+        PlaceholderFragment.profileActivityController?.setProgressInfo(-1)
 
         downloadingQueue?.shutdown()
 
@@ -181,7 +182,7 @@ class STMSyncerHelper : STMDefantomizing, STMDataDownloading {
 
         STMFunctions.debugLog("STMSyncerHelper", "DEFANTOMIZING_START with queue of $count")
 
-        ProfileActivity.profileActivityController?.setMaxProgress(count)
+        PlaceholderFragment.profileActivityController?.setMaxProgress(count)
 
         if (count == 0) defantomizingFinished()
 
@@ -257,7 +258,7 @@ class STMSyncerHelper : STMDefantomizing, STMDataDownloading {
 
         STMFunctions.debugLog("STMSyncerHelper", "doneWith $entityName remain ${downloadingOperations.size} to receive")
 
-        ProfileActivity.profileActivityController?.addProgress(1)
+        PlaceholderFragment.profileActivityController?.addProgress(1)
 
         if (downloadingOperations.size > 0) {
 
@@ -275,7 +276,7 @@ class STMSyncerHelper : STMDefantomizing, STMDataDownloading {
 
         STMFunctions.debugLog("STMSyncerHelper", "    $entityName: got ${result.size} objects")
 
-        ProfileActivity.profileActivityController?.setProgressInfo(result.size)
+        PlaceholderFragment.profileActivityController?.setProgressInfo(result.size)
 
         if (result.size < pageSize) {
 
@@ -291,7 +292,7 @@ class STMSyncerHelper : STMDefantomizing, STMDataDownloading {
     private fun defantomizingFinished() {
 
         STMFunctions.debugLog("STMSyncedHelper", "DEFANTOMIZING_FINISHED")
-        ProfileActivity.profileActivityController?.setProgressInfo(-1)
+        PlaceholderFragment.profileActivityController?.setProgressInfo(-1)
         this.defantomizing = null
         defantomizingOwner!!.defantomizingFinished()
 
@@ -308,7 +309,7 @@ class STMSyncerHelper : STMDefantomizing, STMDataDownloading {
 
         STMFunctions.debugLog("STMSyncerHelper", "doneWith $entityName $identifier ($count)")
 
-        ProfileActivity.profileActivityController?.addProgress(1)
+        PlaceholderFragment.profileActivityController?.addProgress(1)
 
         if (count == 0) {
 

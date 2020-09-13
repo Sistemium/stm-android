@@ -24,6 +24,12 @@ import kotlinx.android.synthetic.main.activity_profile.*
  */
 class PlaceholderFragment(private val tab:Map<*, *>) : Fragment() {
 
+    companion object {
+
+        var profileActivityController: ProfileActivityController? = null
+
+    }
+
     var progressBar: ProgressBar? = null
 
     var progressInfo: TextView? = null
@@ -38,7 +44,7 @@ class PlaceholderFragment(private val tab:Map<*, *>) : Fragment() {
             inflater.inflate(R.layout.activity_profile, container, false)
         }
 
-//        ProfileActivity.profileActivityController = ProfileActivityController(this)
+        profileActivityController = ProfileActivityController(this)
 //        activity?.setContentView(R.layout.activity_profile)
 //        setSupportActionBar(toolbar)
 

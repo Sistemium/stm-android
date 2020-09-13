@@ -26,7 +26,7 @@ class ProfileActivity : AppCompatActivity() {
 
     companion object {
 
-        var profileActivityController: ProfileActivityController? = null
+        //var profileActivityController: ProfileActivityController? = null
 
     }
 
@@ -39,7 +39,7 @@ class ProfileActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
 
         super.onCreate(savedInstanceState)
-        profileActivityController = ProfileActivityController(this)
+        //profileActivityController = ProfileActivityController(this)
         setContentView(R.layout.activity_profile)
         setSupportActionBar(toolbar)
 
@@ -47,7 +47,7 @@ class ProfileActivity : AppCompatActivity() {
 
         progressBar!!.visibility = View.INVISIBLE
 
-        progressInfo = findViewById(R.id.progress_info)
+        //progressInfo = findViewById(R.id.progress_info)
 
         val profileName: TextView = findViewById(R.id.profileName)
 
@@ -60,7 +60,7 @@ class ProfileActivity : AppCompatActivity() {
         val toolbarTitle: TextView = findViewById(R.id.toolbar_title)
         toolbarTitle.text = STMCoreAuthController.userAgent
 
-        val gridView = findViewById<GridView>(R.id.gridView)
+        //val gridView = findViewById<GridView>(R.id.gridView)
 
         val logout:ImageButton = findViewById(R.id.logout)
 

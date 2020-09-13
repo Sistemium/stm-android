@@ -3,6 +3,7 @@ package com.sistemium.sissales.activityController
 import android.annotation.SuppressLint
 import android.view.View
 import com.sistemium.sissales.R
+import com.sistemium.sissales.activities.PlaceholderFragment
 import com.sistemium.sissales.activities.ProfileActivity
 import com.sistemium.sissales.base.MyApplication
 import com.sistemium.sissales.base.classes.entitycontrollers.STMEntityController
@@ -13,7 +14,7 @@ import kotlinx.android.synthetic.main.content_profile.*
 /**
  * Created by edgarjanvuicik on 20/03/2018.
  */
-class ProfileActivityController(private var activity: ProfileActivity) {
+class ProfileActivityController(private var placeholder: PlaceholderFragment) {
 
     companion object {
 
@@ -23,17 +24,15 @@ class ProfileActivityController(private var activity: ProfileActivity) {
 
     fun setMaxProgress(max: Int) {
 
-        activity.runOnUiThread {
+        placeholder.activity!!.runOnUiThread {
 
-            activity.gridView.visibility = if (STMEntityController.downloadableEntityReady()) View.VISIBLE else View.INVISIBLE
+            placeholder.progressBar!!.max = max
 
-            activity.progressBar!!.max = max
-
-            activity.progressBar!!.progress = 0
+            placeholder.progressBar!!.progress = 0
 
             if (max > 0) {
 
-                activity.progressBar!!.visibility = View.VISIBLE
+                placeholder.progressBar!!.visibility = View.VISIBLE
 
             }
 
@@ -43,13 +42,13 @@ class ProfileActivityController(private var activity: ProfileActivity) {
 
     fun addProgress(progress: Int) {
 
-        activity.runOnUiThread {
+        placeholder.activity!!.runOnUiThread {
 
-            activity.progressBar!!.progress += progress
+            placeholder.activity!!.progressBar!!.progress += progress
 
-            if (activity.progressBar!!.progress >= activity.progressBar!!.max) {
+            if (placeholder.activity!!.progressBar!!.progress >= placeholder.activity!!.progressBar!!.max) {
 
-                activity.progressBar!!.visibility = View.INVISIBLE
+                placeholder.activity!!.progressBar!!.visibility = View.INVISIBLE
 
             }
 
@@ -59,21 +58,19 @@ class ProfileActivityController(private var activity: ProfileActivity) {
 
     fun setProgressInfo(info: Int) {
 
-        activity.runOnUiThread {
+        placeholder.activity!!.runOnUiThread {
 
             got += info
 
             val text = "${MyApplication.appContext!!.getString(R.string.receive)} $got ${MyApplication.appContext!!.getString(R.string.objects)}"
 
-            activity.progressInfo?.text = text
+            placeholder.progressInfo?.text = text
 
             if (info == -1) {
 
-                activity.gridView.visibility = if (STMEntityController.downloadableEntityReady()) View.VISIBLE else View.INVISIBLE
-
                 got = 0
 
-                activity.progressInfo?.text = ""
+                placeholder.progressInfo?.text = ""
 
             }
 
