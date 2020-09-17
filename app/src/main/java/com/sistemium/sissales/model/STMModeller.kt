@@ -1,9 +1,11 @@
 package com.sistemium.sissales.model
 
 import com.sistemium.sissales.base.STMFunctions
+import com.sistemium.sissales.base.session.STMDownloadingOperation
 import com.sistemium.sissales.enums.STMStorageType
 import com.sistemium.sissales.interfaces.STMFullStackPersisting
 import com.sistemium.sissales.interfaces.STMModelling
+import java.util.concurrent.ConcurrentHashMap
 
 /**
  * Created by edgarjanvuicik on 10/11/2017.
@@ -17,7 +19,7 @@ class STMModeller(modelJSON: String) : STMModelling {
 
     override val entitiesByName: Map<String, STMEntityDescription> = managedObjectModel.entitiesByName
 
-    private val _storageForEntityName = hashMapOf<String, STMStorageType>()
+    private val _storageForEntityName = ConcurrentHashMap<String, STMStorageType>()
 
     private var _fieldsForEntityName = hashMapOf<String, Map<String, STMAttributeDescription>>()
 
