@@ -16,6 +16,7 @@ import androidx.lifecycle.Observer
 import com.sistemium.sissales.R
 import com.sistemium.sissales.activityController.ProfileActivityController
 import com.sistemium.sissales.base.MyApplication
+import com.sistemium.sissales.base.STMFunctions
 import com.sistemium.sissales.base.session.STMCoreAuthController
 import kotlinx.android.synthetic.main.activity_profile.*
 
@@ -38,66 +39,66 @@ class PlaceholderFragment(private val tab:Map<*, *>) : Fragment() {
             inflater: LayoutInflater, container: ViewGroup?,
             savedInstanceState: Bundle?
     ): View? {
-        val root =  if (tab["name"] == "STMProfile") {
-            inflater.inflate(R.layout.activity_profile, container, false)
-        } else{
-            inflater.inflate(R.layout.activity_profile, container, false)
-        }
-
-        profileActivityController = ProfileActivityController(this)
+       if (tab["name"] == "STMProfile") {
+           val root = inflater.inflate(R.layout.activity_profile, container, false)
+           profileActivityController = ProfileActivityController(this)
 //        activity?.setContentView(R.layout.activity_profile)
 //        setSupportActionBar(toolbar)
 
-        progressBar = root.findViewById(R.id.progressBar)
+           progressBar = root.findViewById(R.id.progressBar)
 
-        progressBar!!.visibility = View.INVISIBLE
+           progressBar!!.visibility = View.INVISIBLE
 
-        progressInfo = root.findViewById(R.id.progress_info)
+           progressInfo = root.findViewById(R.id.progress_info)
 
-        val profileName: TextView = root.findViewById(R.id.profileName)
+           val profileName: TextView = root.findViewById(R.id.profileName)
 
-        profileName.text = "${STMCoreAuthController.userName}"
+           profileName.text = "${STMCoreAuthController.userName}"
 
-        val phoneNumber: TextView = root.findViewById(R.id.phoneNumber)
+           val phoneNumber: TextView = root.findViewById(R.id.phoneNumber)
 
-        phoneNumber.text = STMCoreAuthController.phoneNumber ?: ""
+           phoneNumber.text = STMCoreAuthController.phoneNumber ?: ""
 
-        val toolbarTitle: TextView = root.findViewById(R.id.toolbar_title)
-        toolbarTitle.text = STMCoreAuthController.userAgent
+           val toolbarTitle: TextView = root.findViewById(R.id.toolbar_title)
+           toolbarTitle.text = STMCoreAuthController.userAgent
 
-        val logout: ImageButton = root.findViewById(R.id.logout)
+           val logout: ImageButton = root.findViewById(R.id.logout)
 
-        logout.setOnClickListener{
+           logout.setOnClickListener{
 
-            activity?.runOnUiThread {
+               activity?.runOnUiThread {
 
-                val builder: AlertDialog.Builder = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    AlertDialog.Builder(activity, android.R.style.Theme_Material_Dialog_Alert)
-                } else {
-                    AlertDialog.Builder(activity)
-                }
-                builder.setTitle(this.resources.getString(R.string.logout))
-                        .setMessage(this.resources.getString(R.string.you_sure))
-                        .setPositiveButton(android.R.string.ok) { _, _ ->
+                   val builder: AlertDialog.Builder = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                       AlertDialog.Builder(activity, android.R.style.Theme_Material_Dialog_Alert)
+                   } else {
+                       AlertDialog.Builder(activity)
+                   }
+                   builder.setTitle(this.resources.getString(R.string.logout))
+                           .setMessage(this.resources.getString(R.string.you_sure))
+                           .setPositiveButton(android.R.string.ok) { _, _ ->
 
-                            activity?.runOnUiThread {
+                               activity?.runOnUiThread {
 
-                                startActivity(Intent(activity, AuthActivity::class.java))
+                                   startActivity(Intent(activity, AuthActivity::class.java))
 
-                                STMCoreAuthController.logout()
+                                   STMCoreAuthController.logout()
 
-                                activity?.finish()
+                                   activity?.finish()
 
-                            }
+                               }
 
-                        }
-                        .setNegativeButton(android.R.string.cancel) { _, _ -> }
-                        .show()
+                           }
+                           .setNegativeButton(android.R.string.cancel) { _, _ -> }
+                           .show()
 
-            }
+               }
 
+           }
+           return root;
+        } else{
+           val root = inflater.inflate(R.layout.activity_profile, container, false)
+           return root;
         }
 
-        return root
     }
 }
