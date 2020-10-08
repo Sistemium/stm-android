@@ -15,18 +15,19 @@ android {
         applicationId "com.sistemium"
         minSdkVersion 21
         targetSdkVersion 30
-        versionCode 420
-        versionName "1.1.38"
+        versionCode 422
+        versionName "1.1.40"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
         debug {
             applicationIdSuffix ".sissalesdebug"
             manifestPlaceholders = [appName: "SisSales-debug"]
+            debuggable = true
         }
         release {
             applicationIdSuffix ".sissales"
-            minifyEnabled false
+            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             manifestPlaceholders = [appName: "SisSales"]
         }
@@ -34,7 +35,6 @@ android {
             initWith(buildTypes.debug)
             applicationIdSuffix ".driverdebug"
             manifestPlaceholders = [appName: "SisDriver-debug"]
-            debuggable = true
         }
         driverRelease {
             initWith(buildTypes.release)
@@ -50,12 +50,10 @@ android {
             initWith(buildTypes.debug)
             applicationIdSuffix ".warehousedebug"
             manifestPlaceholders = [appName: "SisWarehouse-debug"]
-            debuggable = true
         }
         vfsDebug {
             initWith(buildTypes.debug)
             applicationIdSuffix = '.vfsDebug'
-            debuggable = true
             manifestPlaceholders = [appName: 'VFS-debug']
         }
         vfsRelease {
