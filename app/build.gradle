@@ -15,8 +15,8 @@ android {
         applicationId "com.sistemium"
         minSdkVersion 21
         targetSdkVersion 30
-        versionCode 422
-        versionName "1.1.40"
+        versionCode 423
+        versionName "1.1.41"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
