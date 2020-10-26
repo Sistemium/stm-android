@@ -111,19 +111,19 @@ class STMCoreAuthController {
         val configuration:String
             get() {
 
-                if ((rolesResponse?.get("roles") as? Map<*,*>)?.keys?.contains("salesman") == true){
+                if (BuildConfig.APPLICATION_ID.contains(".sissales")){
 
                     return "SisSales"
 
                 }
 
-                if ((rolesResponse?.get("roles") as? Map<*,*>)?.keys?.contains("driver") == true){
+                if (BuildConfig.APPLICATION_ID.contains(".driver")){
 
                     return "SisDriver"
 
                 }
 
-                if ((rolesResponse?.get("roles") as? Map<*,*>)?.keys?.contains("warehouse") == true){
+                if (BuildConfig.APPLICATION_ID.contains(".warehouse")){
 
                     return "SisWarehouse"
 
