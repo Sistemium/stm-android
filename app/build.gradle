@@ -15,8 +15,8 @@ android {
         applicationId "com.sistemium"
         minSdkVersion 21
         targetSdkVersion 30
-        versionCode 425
-        versionName "1.1.43"
+        versionCode 426
+        versionName "1.1.44"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
@@ -82,7 +82,7 @@ configurations.all {
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
-    implementation 'androidx.constraintlayout:constraintlayout:2.0.2'
+    implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
     implementation 'nl.komponents.kovenant:kovenant:3.3.0'
     implementation 'com.github.kittinunf.fuel:fuel-android:1.15.0'
@@ -92,6 +92,6 @@ dependencies {
     implementation 'com.github.javiersantos:AppUpdater:master-SNAPSHOT'
     implementation 'com.google.android.gms:play-services-location:17.1.0'
     implementation project(path: ':BarcodeScannerLibrary')
-    implementation 'com.google.firebase:firebase-analytics-ktx:17.6.0'
+    implementation 'com.google.firebase:firebase-analytics-ktx:18.0.0'
     implementation 'com.google.firebase:firebase-crashlytics:17.2.2'
 }
