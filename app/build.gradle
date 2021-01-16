@@ -4,10 +4,6 @@ apply plugin: 'kotlin-android'
 
 apply plugin: 'kotlin-android-extensions'
 
-apply plugin: 'com.google.gms.google-services'
-
-apply plugin: 'com.google.firebase.crashlytics'
-
 
 android {
     compileSdkVersion 30
@@ -24,41 +20,6 @@ android {
             applicationIdSuffix ".sissalesdebug"
             manifestPlaceholders = [appName: "SisSales-debug"]
             debuggable = true
-        }
-        release {
-            applicationIdSuffix ".sissales"
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-            manifestPlaceholders = [appName: "SisSales"]
-        }
-        driverDebug {
-            initWith(buildTypes.debug)
-            applicationIdSuffix ".driverdebug"
-            manifestPlaceholders = [appName: "SisDriver-debug"]
-        }
-        driverRelease {
-            initWith(buildTypes.release)
-            applicationIdSuffix ".driver"
-            manifestPlaceholders = [appName: "SisDriver"]
-        }
-        warehouseRealease {
-            initWith(buildTypes.release)
-            applicationIdSuffix ".warehouse"
-            manifestPlaceholders = [appName: "SisWarehouse"]
-        }
-        warehouseDebug {
-            initWith(buildTypes.debug)
-            applicationIdSuffix ".warehousedebug"
-            manifestPlaceholders = [appName: "SisWarehouse-debug"]
-        }
-        vfsDebug {
-            initWith(buildTypes.debug)
-            applicationIdSuffix = '.vfsDebug'
-            manifestPlaceholders = [appName: 'VFS-debug']
-        }
-        vfsRelease {
-            initWith(buildTypes.release)
-            applicationIdSuffix = '.vfs'
-            manifestPlaceholders = [appName: 'VFS']
         }
     }
 
@@ -91,6 +52,4 @@ dependencies {
     implementation 'com.github.javiersantos:AppUpdater:master-SNAPSHOT'
     implementation 'com.google.android.gms:play-services-location:17.1.0'
     implementation project(path: ':BarcodeScannerLibrary')
-    implementation 'com.google.firebase:firebase-analytics-ktx:18.0.0'
-    implementation 'com.google.firebase:firebase-crashlytics:17.3.0'
 }
