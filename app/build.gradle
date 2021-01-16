@@ -25,36 +25,6 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             manifestPlaceholders = [appName: "SisSales"]
         }
-        driverDebug {
-            initWith(buildTypes.debug)
-            applicationIdSuffix ".driverdebug"
-            manifestPlaceholders = [appName: "SisDriver-debug"]
-        }
-        driverRelease {
-            initWith(buildTypes.release)
-            applicationIdSuffix ".driver"
-            manifestPlaceholders = [appName: "SisDriver"]
-        }
-        warehouseRealease {
-            initWith(buildTypes.release)
-            applicationIdSuffix ".warehouse"
-            manifestPlaceholders = [appName: "SisWarehouse"]
-        }
-        warehouseDebug {
-            initWith(buildTypes.debug)
-            applicationIdSuffix ".warehousedebug"
-            manifestPlaceholders = [appName: "SisWarehouse-debug"]
-        }
-        vfsDebug {
-            initWith(buildTypes.debug)
-            applicationIdSuffix = '.vfsDebug'
-            manifestPlaceholders = [appName: 'VFS-debug']
-        }
-        vfsRelease {
-            initWith(buildTypes.release)
-            applicationIdSuffix = '.vfs'
-            manifestPlaceholders = [appName: 'VFS']
-        }
     }
 
     lintOptions {
