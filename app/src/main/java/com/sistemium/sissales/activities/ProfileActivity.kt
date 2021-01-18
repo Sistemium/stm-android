@@ -1,24 +1,16 @@
 package com.sistemium.sissales.activities
 
-import android.Manifest
 import android.app.AlertDialog
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
-import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
 import androidx.appcompat.app.AppCompatActivity
 import android.view.View
 import android.widget.*
 import com.sistemium.sissales.R
 import com.sistemium.sissales.activityController.ProfileActivityController
 import com.sistemium.sissales.base.session.STMCoreAuthController
-import com.sistemium.sissales.base.session.STMSession
 import kotlinx.android.synthetic.main.activity_profile.*
-import com.github.javiersantos.appupdater.AppUpdater
-import com.github.javiersantos.appupdater.enums.UpdateFrom
-import com.sistemium.sissales.BuildConfig
 import com.sistemium.sissales.base.STMFunctions
 
 
@@ -34,8 +26,6 @@ class ProfileActivity : AppCompatActivity() {
 
     var progressInfo: TextView? = null
 
-    var currentTab: Map<*, *>? = null
-
     override fun onCreate(savedInstanceState: Bundle?) {
 
         STMFunctions.memoryFix()
@@ -44,8 +34,6 @@ class ProfileActivity : AppCompatActivity() {
         profileActivityController = ProfileActivityController(this)
         setContentView(R.layout.activity_profile)
         setSupportActionBar(toolbar)
-
-        initPermissions()
 
         progressBar = findViewById(R.id.progressBar)
 
@@ -64,8 +52,6 @@ class ProfileActivity : AppCompatActivity() {
         val toolbarTitle: TextView = findViewById(R.id.toolbar_title)
 
         toolbarTitle.text = STMCoreAuthController.userAgent
-
-        val gridView = findViewById<GridView>(R.id.gridView)
 
         val tabs = arrayListOf<Map<*, *>>()
 
@@ -112,103 +98,10 @@ class ProfileActivity : AppCompatActivity() {
 
         }
 
-        val profileAdapter = ProfileAdapter(this, tabs)
-
-        gridView.adapter = profileAdapter
-
-        gridView.onItemClickListener = AdapterView.OnItemClickListener { _, _, position, _ ->
-            currentTab = tabs[position]
-
-            val intent = Intent(this@ProfileActivity, WebViewActivity::class.java)
-
-            var url = currentTab!!["url"] as? String
-
-            val manifest = currentTab!!["appManifestURI"] as? String
-
-            if (url == null && manifest != null){
-
-                url = manifest.replace(manifest.split("/").last(), "")
-
-            }
-
-            //debug
-//            url = url?.replace("http://lamac.local:3000", "http://10.0.1.5:3000")
-//            url = url?.replace("http://lamac.local:3000", "http://192.168.0.103:3000")
-//            if (manifest == null){
-//                manifest = "$url/app.manifest"
-//            }
-            //debug
-
-            intent.putExtra("url", url)
-            intent.putExtra("manifest", manifest)
-            intent.putExtra("title", currentTab!!["title"] as String)
-            startActivity(intent)
-            profileAdapter.notifyDataSetChanged()
-
-        }
-
     }
 
     override fun onBackPressed() {
         this.moveTaskToBack(true)
-    }
-
-    private fun initPermissions(){
-
-        val permissions = arrayListOf<String>()
-
-        if (ContextCompat.checkSelfPermission(this,
-                        Manifest.permission.CAMERA)
-                != PackageManager.PERMISSION_GRANTED) {
-
-            permissions.add(Manifest.permission.CAMERA)
-
-        }
-
-        if (ContextCompat.checkSelfPermission(this,
-                        Manifest.permission.READ_EXTERNAL_STORAGE)
-                != PackageManager.PERMISSION_GRANTED) {
-
-            permissions.add(Manifest.permission.READ_EXTERNAL_STORAGE)
-        }
-
-        if (ContextCompat.checkSelfPermission(this,
-                        Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                != PackageManager.PERMISSION_GRANTED) {
-
-            permissions.add(Manifest.permission.WRITE_EXTERNAL_STORAGE)
-        }
-
-        if (ContextCompat.checkSelfPermission(this,
-                        Manifest.permission.ACCESS_FINE_LOCATION)
-                != PackageManager.PERMISSION_GRANTED) {
-
-            permissions.add(Manifest.permission.ACCESS_FINE_LOCATION)
-
-        }
-
-        if ( ContextCompat.checkSelfPermission( this, Manifest.permission.ACCESS_COARSE_LOCATION ) != PackageManager.PERMISSION_GRANTED ) {
-
-            permissions.add(Manifest.permission.ACCESS_COARSE_LOCATION)
-
-        }
-
-        if (ContextCompat.checkSelfPermission(this,
-                        Manifest.permission.READ_CONTACTS)
-                != PackageManager.PERMISSION_GRANTED && BuildConfig.APPLICATION_ID.contains(".vfs")) {
-
-            permissions.add(Manifest.permission.READ_CONTACTS)
-
-        }
-
-        if (permissions.isNotEmpty()){
-
-            ActivityCompat.requestPermissions(this,
-                    permissions.toTypedArray(),
-                    0)
-
-        }
-
     }
 
 }

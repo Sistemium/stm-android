@@ -1,6 +1,5 @@
 package com.sistemium.sissales.base.session
 
-import com.sistemium.sissales.activities.WebViewActivity
 import com.sistemium.sissales.base.STMConstants
 import com.sistemium.sissales.base.STMConstants.Companion.NOTIFICATION_SYNCER_SENDIG_DATA
 import com.sistemium.sissales.base.STMFunctions
@@ -32,7 +31,6 @@ class STMSyncer : STMDefantomizingOwner, STMDataDownloadingOwner, STMDataSyncing
 
         if (value){
 
-            WebViewActivity.webInterface?.postJSNotification(NOTIFICATION_SYNCER_SENDIG_DATA)
 
         }
 

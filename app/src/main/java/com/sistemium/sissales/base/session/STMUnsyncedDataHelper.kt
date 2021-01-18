@@ -1,6 +1,5 @@
 package com.sistemium.sissales.base.session
 
-import com.sistemium.sissales.activities.WebViewActivity
 import com.sistemium.sissales.base.STMConstants
 import com.sistemium.sissales.base.STMConstants.Companion.NOTIFICATION_SYNCER_HAVE_NO_UNSYNCED_OBJECTS
 import com.sistemium.sissales.base.STMConstants.Companion.NOTIFICATION_SYNCER_HAVE_UNSYNCED_OBJECTS
@@ -125,12 +124,6 @@ class STMUnsyncedDataHelper : STMDataSyncing {
 
     private fun startHandleUnsyncedObjects() {
 
-        if (subscriberDelegate == null || isPaused) {
-
-            return checkUnsyncedObjects()
-
-        }
-
         if (!syncingState) {
 
             syncingState = true
@@ -197,7 +190,6 @@ class STMUnsyncedDataHelper : STMDataSyncing {
     private fun finishHandleUnsyncedObjects() {
 
         syncingState = false
-        checkUnsyncedObjects()
         initPrivateData()
         subscriberDelegate?.finishUnsyncedProcess()
 
@@ -378,19 +370,7 @@ class STMUnsyncedDataHelper : STMDataSyncing {
 
         initPrivateData()
 
-        checkUnsyncedObjects()
-
         finishHandleUnsyncedObjects()
-
-    }
-
-    private fun checkUnsyncedObjects(){
-
-        val somethingToUpload = anyObjectToSend()
-
-        val notificationName = if (somethingToUpload != null) NOTIFICATION_SYNCER_HAVE_UNSYNCED_OBJECTS else NOTIFICATION_SYNCER_HAVE_NO_UNSYNCED_OBJECTS
-
-        WebViewActivity.webInterface?.postJSNotification(notificationName)
 
     }
 

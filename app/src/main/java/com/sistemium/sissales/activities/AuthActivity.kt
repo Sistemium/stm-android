@@ -52,20 +52,6 @@ class AuthActivity : AppCompatActivity() {
     @SuppressLint("PrivateResource")
     private fun setup() {
 
-        if (BuildConfig.APPLICATION_ID.contains(".vfs")){
-
-            val intent = Intent(this, WebViewActivity::class.java)
-
-            val url = "https://vfsm.sistemium.com"
-
-            intent.putExtra("url", url)
-            intent.putExtra("title", "VFS")
-            startActivity(intent)
-
-            return
-
-        }
-
         window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE)
         setContentView(R.layout.activity_auth)
         setSupportActionBar(toolbar)
