@@ -84,10 +84,6 @@ class STMPersister(private val runner: STMPersistingRunning) : STMFullStackPersi
 
         }
 
-        val res = if (result.count() != 0) result else attributeArray
-
-        notifyObservingEntityName(STMFunctions.addPrefixToEntityName(entityName), res, options)
-
         return result
 
     }
@@ -176,12 +172,6 @@ class STMPersister(private val runner: STMPersistingRunning) : STMFullStackPersi
 
         }
 
-        if (recordStatuses?.count() != null && recordStatuses.count() > 0) {
-
-            notifyObservingEntityName(recordStatusEntity, recordStatuses, options)
-
-        }
-
         return count
 
     }
@@ -209,86 +199,6 @@ class STMPersister(private val runner: STMPersistingRunning) : STMFullStackPersi
         val interceptor = beforeMergeInterceptors[entityName] ?: return attributes
 
         return interceptor.interceptedAttributes(attributes, options, persistingTransaction)
-
-    }
-
-    //STMPersistingObservable
-
-    private val subscriptions = ConcurrentHashMap<String, STMPersistingObservingSubscription>()
-
-    override fun notifyObservingEntityName(entityName: String, items: ArrayList<*>, options: Map<*, *>?) {
-
-        for (subscription in this.subscriptions.values) {
-
-            if (subscription.entityName != entityName) continue
-
-            val unmatchedOptions = subscription.options?.filter {
-
-                if (it.value is Boolean) {
-
-                    return@filter it.value != (options?.get(it.key) != null)
-
-                }
-
-                return@filter it.value == options?.get(it.key)
-
-            }
-
-            if (unmatchedOptions?.count() != null && unmatchedOptions.count() != 0) {
-
-                continue
-
-            }
-
-            var _items = items
-
-            if (subscription.predicate != null) {
-
-                _items = ArrayList(items.filter(subscription.predicate!!))
-
-            }
-
-            _items = ArrayList(_items)
-
-            if (_items.count() == 0) continue
-
-            if (subscription.entityName != null) {
-
-                subscription.callback?.invoke(_items)
-
-            } else {
-
-                subscription.callbackWithEntityName?.invoke(entityName, _items)
-
-            }
-
-        }
-
-    }
-
-    override fun observeEntity(entityName: String, predicate: ((Any) -> Boolean)?, options: Map<*, *>, callback: (ArrayList<*>) -> Unit): String {
-
-        val subscription = STMPersistingObservingSubscription(entityName, options, predicate)
-
-        subscription.callback = callback
-
-        subscriptions[subscription.identifier] = subscription
-
-        return subscription.identifier
-
-    }
-
-    override fun cancelSubscription(subscriptionId: String): Boolean {
-
-        val result = subscriptions[subscriptionId] != null
-
-        if (result) {
-
-            subscriptions.remove(subscriptionId)
-
-        }
-
-        return result
 
     }
 
