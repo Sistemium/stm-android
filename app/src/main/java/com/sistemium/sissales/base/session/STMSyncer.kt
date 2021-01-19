@@ -47,11 +47,8 @@ class STMSyncer : STMDataDownloadingOwner, STMSocketConnectionOwner, STMRemoteDa
             return field
 
         }
-    private var isDefantomizing = false
 
     fun prepareToDestroy(){
-
-        unsubscribeFromUnsyncedObjects()
 
         if (isRunning) {
 
@@ -68,8 +65,6 @@ class STMSyncer : STMDataDownloadingOwner, STMSocketConnectionOwner, STMRemoteDa
 
     override fun socketReceiveAuthorization() {
 
-        subscribeToUnsyncedObjects()
-
         initTimer()
 
         val downloadableEntityNames = STMEntityController.sharedInstance!!.downloadableEntityNames()
@@ -80,26 +75,6 @@ class STMSyncer : STMDataDownloadingOwner, STMSocketConnectionOwner, STMRemoteDa
         }
 
         socketTransport!!.socketSendEvent(STMSocketEvent.STMSocketEventSubscribe, downloadableEntityResources)
-
-    }
-
-    fun checkGoneEntity(entityName:String, e:Exception, id:String){
-
-        if (e.localizedMessage == "410"){
-
-            STMFunctions.debugLog("STMSyncer","destroy gone entity name: $entityName, id: $id")
-
-            val options = hashMapOf(
-                    STMConstants.STMPersistingOptionRecordstatuses to false
-            )
-
-            session!!.persistenceDelegate.destroy(entityName, id, options).fail {
-
-                STMLogger.sharedLogger!!.errorMessage("Error destroy gone entity: ${it.localizedMessage}")
-
-            }
-
-        }
 
     }
 
@@ -153,7 +128,6 @@ class STMSyncer : STMDataDownloadingOwner, STMSocketConnectionOwner, STMRemoteDa
 
     override fun entitiesChanged() {
 
-        subscribeToUnsyncedObjects()
         receiveData()
 
     }
@@ -267,19 +241,6 @@ class STMSyncer : STMDataDownloadingOwner, STMSocketConnectionOwner, STMRemoteDa
 
     }
 
-    private fun subscribeToUnsyncedObjects() {
-
-        unsubscribeFromUnsyncedObjects()
-        dataSyncingDelegate!!.startSyncing()
-
-    }
-
-    private fun unsubscribeFromUnsyncedObjects() {
-
-        dataSyncingDelegate!!.pauseSyncing()
-
-    }
-
     private fun initTimer() {
 
         syncTimer?.cancel()
@@ -331,7 +292,6 @@ class STMSyncer : STMDataDownloadingOwner, STMSocketConnectionOwner, STMRemoteDa
     private fun stopSyncerActivity() {
 
         releaseTimer()
-        unsubscribeFromUnsyncedObjects()
         isSendingData = false
         dataDownloadingDelegate!!.stopDownloading()
 
