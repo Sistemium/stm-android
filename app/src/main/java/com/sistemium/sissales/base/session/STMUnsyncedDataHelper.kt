@@ -1,8 +1,11 @@
 package com.sistemium.sissales.base.session
 
 import com.sistemium.sissales.base.STMConstants
+import com.sistemium.sissales.base.STMConstants.Companion.NOTIFICATION_SYNCER_HAVE_NO_UNSYNCED_OBJECTS
+import com.sistemium.sissales.base.STMConstants.Companion.NOTIFICATION_SYNCER_HAVE_UNSYNCED_OBJECTS
 import com.sistemium.sissales.base.STMConstants.Companion.STMPersistingOptionLts
 import com.sistemium.sissales.base.STMFunctions
+import com.sistemium.sissales.base.helper.logger.STMLogger
 import com.sistemium.sissales.base.classes.entitycontrollers.STMEntityController
 import com.sistemium.sissales.interfaces.STMDataSyncing
 import com.sistemium.sissales.interfaces.STMDataSyncingSubscriber
@@ -70,6 +73,15 @@ class STMUnsyncedDataHelper : STMDataSyncing {
         val subpredicates = arrayListOf<STMPredicate>()
 
         if (entityName == "STMLogMessage") {
+
+            val uploadLogType = session?.settingsController?.stringValueForSettings("uploadLog.type", "syncer")
+            val logMessageSyncTypes = STMLogger.sharedLogger!!.syncingTypesForSettingType(uploadLogType).map {
+
+                return@map STMPredicate("'$it'")
+
+            }
+
+            subpredicates.add(STMPredicate("type IN (${logMessageSyncTypes.joinToString(", ")})"))
 
             val date = Date()
 
@@ -193,6 +205,8 @@ class STMUnsyncedDataHelper : STMDataSyncing {
                 logs.add("${it.value.size} ${it.key} objects")
             }
 
+            STMLogger.sharedLogger!!.importantMessage("erroredObjectsByEntity contains ${logs.joinToString(", ")}")
+
         }
 
         erroredObjectsByEntity = hashMapOf()
@@ -221,6 +235,8 @@ class STMUnsyncedDataHelper : STMDataSyncing {
                 if (!sentImportantErrors.contains(errorMessage)){
 
                     sentImportantErrors.add(errorMessage)
+
+                    STMLogger.sharedLogger!!.importantMessage(errorMessage)
 
                 }
 

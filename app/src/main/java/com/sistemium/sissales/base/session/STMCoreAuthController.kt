@@ -11,12 +11,15 @@ import com.sistemium.sissales.R
 import com.sistemium.sissales.activities.ProfileActivity
 import com.sistemium.sissales.base.MyApplication
 import com.sistemium.sissales.base.STMFunctions
+import com.sistemium.sissales.base.helper.logger.STMLogger
+import com.sistemium.sissales.enums.STMLogMessageType
 import devliving.online.securedpreferencestore.SecuredPreferenceStore
 import nl.komponents.kovenant.Promise
 import nl.komponents.kovenant.task
 import nl.komponents.kovenant.then
 import java.io.File
 import java.util.*
+import com.sistemium.sissales.base.classes.entitycontrollers.STMCorePicturesController
 import com.sistemium.sissales.base.classes.entitycontrollers.STMEntityController
 import com.sistemium.sissales.interfaces.STMModelling
 import com.sistemium.sissales.BuildConfig
@@ -310,6 +313,7 @@ class STMCoreAuthController {
         fun logout(){
 
             STMSession.sharedSession!!.syncer?.prepareToDestroy()
+            STMLogger.sharedLogger!!.saveLogMessageWithText("logout", STMLogMessageType.STMLogMessageTypeImportant)
 
             userID = null
             accessToken = null
@@ -326,6 +330,8 @@ class STMCoreAuthController {
             STMSession.sharedSession = null
             STMModelling.sharedModeler = null
             STMEntityController.sharedInstance= null
+            STMCorePicturesController.sharedInstance = null
+
 
             STMFunctions.deleteRecursive(File(MyApplication.appContext!!.cacheDir
                     .absolutePath))
@@ -426,6 +432,8 @@ class STMCoreAuthController {
                 return requestRoles() then {
 
                     MyApplication.appContext?.startActivity(myIntent, options.toBundle())
+
+                    STMLogger.sharedLogger!!.importantMessage("login success")
 
                     return@then it
 

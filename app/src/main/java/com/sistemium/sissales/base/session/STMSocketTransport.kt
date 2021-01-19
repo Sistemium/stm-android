@@ -3,6 +3,7 @@ package com.sistemium.sissales.base.session
 import com.sistemium.sissales.base.MyApplication
 import com.sistemium.sissales.base.STMConstants
 import com.sistemium.sissales.base.STMFunctions
+import com.sistemium.sissales.base.helper.logger.STMLogger
 import com.sistemium.sissales.base.classes.entitycontrollers.STMClientDataController
 import com.sistemium.sissales.base.classes.entitycontrollers.STMEntityController
 import com.sistemium.sissales.base.classes.entitycontrollers.STMRemoteController
@@ -139,6 +140,11 @@ class STMSocketTransport(private var socketUrlString: String, private var owner:
 
         if (!isReady) {
 
+            val errorMessage = "socket not connected while sendEvent"
+            socketLostConnection(errorMessage)
+
+            deferred.reject(Exception(errorMessage))
+
             return deferred.promise
 
         }
@@ -254,6 +260,7 @@ class STMSocketTransport(private var socketUrlString: String, private var owner:
 
     override fun closeSocket() {
 
+        STMLogger.sharedLogger!!.infoMessage("close Socket")
         socket?.off()
         socket?.disconnect()
         owner.socketWillClosed()
@@ -285,6 +292,8 @@ class STMSocketTransport(private var socketUrlString: String, private var owner:
 
     fun startSocket() {
 
+        STMLogger.sharedLogger!!.infoMessage("STMSocketTransport")
+
         val o = IO.Options()
 
         val u = URI(socketUrlString.replace("//socket.", "//socket-v2.")) //production
@@ -304,6 +313,8 @@ class STMSocketTransport(private var socketUrlString: String, private var owner:
     private fun addEventObservers() {
 
         socket?.off()
+
+        STMLogger.sharedLogger!!.infoMessage("addEventObserversToSocket")
 
         socket!!.on(STMSocketEvent.STMSocketEventConnect.toString()) {
 
@@ -490,6 +501,8 @@ class STMSocketTransport(private var socketUrlString: String, private var owner:
 
         val logMessage = "send authorization data $dataDic"
 
+        STMLogger.sharedLogger!!.infoMessage(logMessage)
+
         val eventNum = STMSocketEvent.STMSocketEventAuthorization
 
         val event = eventNum.toString()
@@ -497,18 +510,67 @@ class STMSocketTransport(private var socketUrlString: String, private var owner:
         socket!!.emit(event, JSONObject(dataDic), object: AckWithTimeOut(STMConstants.AUTH_DELAY.toLong() * 1000){
 
             override fun call(vararg args: Any?) {
-                receiveAuthorizationAckWithData()
+                receiveAuthorizationAckWithData(args)
             }
 
         })
 
     }
 
-    private fun receiveAuthorizationAckWithData() {
+    private fun receiveAuthorizationAckWithData(data: Array<*>) {
+
+        if (data.firstOrNull() is NoAck) {
+
+            notAuthorizedWithError("receiveAuthorizationAckWithData authorization timeout")
+
+        }
+
+        var logMessage = "receiveAuthorizationAckWithData ${data.firstOrNull()}"
+
+        STMLogger.sharedLogger!!.infoMessage(logMessage)
+
+        val dataDic = data.firstOrNull() as? JSONObject
+                ?: return notAuthorizedWithError("socket receiveAuthorizationAck with data.firstOrNull() is not a JSONObject")
+
+        if (!dataDic.has("isAuthorized")) {
+
+            STMFunctions.debugLog("STMSocketTransport", dataDic.toString())
+
+            delayedAuthorization()
+
+        }
+
+        isAuthorized = dataDic.getBoolean("isAuthorized")
+
+        if (!isAuthorized) {
+
+            notAuthorizedWithError("socket receiveAuthorizationAck with dataDic.isAuthorized == false")
+
+        }
+
+        logMessage = "socket authorized"
+
+        STMLogger.sharedLogger!!.infoMessage(logMessage)
 
         owner.socketReceiveAuthorization()
 
         checkAppState()
+
+    }
+
+    private fun notAuthorizedWithError(errorString: String) {
+
+        STMLogger.sharedLogger?.importantMessage(errorString)
+
+    }
+
+    private fun delayedAuthorization() {
+
+        android.os.Handler(MyApplication.appContext!!.mainLooper).postDelayed({
+
+            emitAuthorization()
+
+        }, STMConstants.AUTH_DELAY.toLong() * 1000)
 
     }
 
@@ -520,7 +582,9 @@ class STMSocketTransport(private var socketUrlString: String, private var owner:
 
     }
 
-    private fun socketLostConnection() {
+    private fun socketLostConnection(infoString: String) {
+
+        STMLogger.sharedLogger!!.infoMessage("Socket lost connection: $infoString")
 
         owner.socketWillClosed()
 

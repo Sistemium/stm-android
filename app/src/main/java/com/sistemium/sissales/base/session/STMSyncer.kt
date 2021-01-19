@@ -1,8 +1,11 @@
 package com.sistemium.sissales.base.session
 
 import com.sistemium.sissales.base.STMConstants
+import com.sistemium.sissales.base.STMConstants.Companion.NOTIFICATION_SYNCER_SENDIG_DATA
 import com.sistemium.sissales.base.STMFunctions
+import com.sistemium.sissales.base.helper.logger.STMLogger
 import com.sistemium.sissales.base.classes.entitycontrollers.STMClientDataController
+import com.sistemium.sissales.base.classes.entitycontrollers.STMCorePicturesController
 import com.sistemium.sissales.base.classes.entitycontrollers.STMEntityController
 import com.sistemium.sissales.enums.STMSocketEvent
 import com.sistemium.sissales.interfaces.*
@@ -127,6 +130,7 @@ class STMSyncer : STMDefantomizingOwner, STMDataDownloadingOwner, STMDataSyncing
 
             session!!.persistenceDelegate.destroy(entityName, id, options).fail {
 
+                STMLogger.sharedLogger!!.errorMessage("Error destroy gone entity: ${it.localizedMessage}")
 
             }
 
@@ -177,6 +181,10 @@ class STMSyncer : STMDefantomizingOwner, STMDataDownloadingOwner, STMDataSyncing
         }
 
         STMFunctions.debugLog("STMSyncer", "dataDownloadingFinished")
+
+        STMCorePicturesController.sharedInstance!!.checkNotUploadedPhotos()
+
+        STMLogger.sharedLogger!!.infoMessage("dataDownloadingFinished")
 
         startDefantomization()
 
@@ -254,13 +262,76 @@ class STMSyncer : STMDefantomizingOwner, STMDataDownloadingOwner, STMDataSyncing
 
         settings = null
 
+        if (!checkStcEntities()) {
+
+            session?.logger?.errorMessage("checkStcEntities fail")
+
+        }
+
+        if (STMCoreAuthController.socketURL == null) {
+
+            session?.logger?.errorMessage("Syncer has no socketURL")
+
+            return
+
+        }
+
         STMEntityController.sharedInstance!!.checkEntitiesForDuplicates()
 
         STMClientDataController.checkClientData()
 
+        session?.logger?.infoMessage("Syncer start")
+
         socketTransport = STMSocketTransport(STMCoreAuthController.socketURL!!, this, this)
 
         isRunning = true
+
+    }
+
+    fun sendEventViaSocket(event: STMSocketEvent, value: Any) {
+
+        socketTransport?.socketSendEvent(event, value)
+
+    }
+
+    private fun checkStcEntities(): Boolean {
+
+        STMEntityController.sharedInstance!!.persistenceDelegate = session?.persistenceDelegate
+
+        val stcEntities = STMEntityController.sharedInstance!!.stcEntities
+
+        val entity = stcEntities?.get("STMEntity")
+
+        if (entity == null) {
+
+            if (STMCoreAuthController.entityResource == null) {
+
+                session?.logger?.errorMessage("ERROR! syncer have no settings, something really wrong here, needs attention!")
+                return false
+
+            }
+
+            val attributes = hashMapOf(
+                    "name" to STMFunctions.removePrefixFromEntityName("STMEntity"),
+                    "url" to STMCoreAuthController.entityResource
+            )
+
+            session?.persistenceDelegate?.mergeSync("STMEntity", attributes, hashMapOf(STMConstants.STMPersistingOptionLts to STMFunctions.stringFrom(Date())))
+
+
+        } else if (entity["url"] != null && entity["url"] != STMCoreAuthController.entityResource) {
+
+            STMFunctions.debugLog("STMSyncer", "change STMEntity url from ${entity["url"]} to ${STMCoreAuthController.entityResource}")
+
+            val attributes = HashMap(entity)
+
+            attributes["url"] = STMCoreAuthController.entityResource
+
+            session?.persistenceDelegate?.mergeSync("STMEntity", attributes, hashMapOf(STMConstants.STMPersistingOptionLts to STMFunctions.stringFrom(Date())))
+
+        }
+
+        return true
 
     }
 
@@ -315,6 +386,8 @@ class STMSyncer : STMDefantomizingOwner, STMDataDownloadingOwner, STMDataSyncing
     private fun receiveData() {
 
         if (!isRunning) return
+
+        STMLogger.sharedLogger!!.infoMessage("STMSyncer")
 
         if (dataDownloadingDelegate!!.downloadingQueue != null) {
 
