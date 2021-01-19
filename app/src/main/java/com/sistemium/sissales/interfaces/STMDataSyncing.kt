@@ -7,8 +7,6 @@ import com.sistemium.sissales.persisting.STMPredicate
  */
 interface STMDataSyncing {
 
-    var subscriberDelegate: STMDataSyncingSubscriber?
-
     fun startSyncing()
     fun pauseSyncing()
 

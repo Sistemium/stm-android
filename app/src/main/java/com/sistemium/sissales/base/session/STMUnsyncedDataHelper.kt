@@ -5,7 +5,6 @@ import com.sistemium.sissales.base.STMConstants.Companion.STMPersistingOptionLts
 import com.sistemium.sissales.base.STMFunctions
 import com.sistemium.sissales.base.classes.entitycontrollers.STMEntityController
 import com.sistemium.sissales.interfaces.STMDataSyncing
-import com.sistemium.sissales.interfaces.STMDataSyncingSubscriber
 import com.sistemium.sissales.interfaces.STMModelling
 import com.sistemium.sissales.persisting.STMPredicate
 import java.util.*
@@ -17,16 +16,10 @@ import kotlin.collections.HashSet
  */
 class STMUnsyncedDataHelper : STMDataSyncing {
 
-    override var subscriberDelegate: STMDataSyncingSubscriber? = null
-        set(value) {
-            isPaused = true
-            field = value
-        }
     var session: STMSession? = null
     private var isPaused = false
     private var syncingState = false
     private var erroredObjectsByEntity = hashMapOf<String, HashSet<String>>()
-    private var subscriptions = arrayListOf<String>()
 
     override fun startSyncing() {
 
@@ -168,17 +161,12 @@ class STMUnsyncedDataHelper : STMDataSyncing {
 
         STMFunctions.debugLog("STMUnsyncedDataHelper", "syncing entityName: $entityName xid:${itemData["id"]} ")
 
-        val itemVersion = itemData[STMConstants.STMPersistingKeyVersion] as String
-
-        subscriberDelegate?.haveUnsynced(entityName, itemData, itemVersion)
-
     }
 
     private fun finishHandleUnsyncedObjects() {
 
         syncingState = false
         initPrivateData()
-        subscriberDelegate?.finishUnsyncedProcess()
 
     }
 

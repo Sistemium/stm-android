@@ -15,7 +15,7 @@ import kotlin.collections.HashMap
 /**
  * Created by edgarjanvuicik on 09/02/2018.
  */
-class STMSyncer : STMDataDownloadingOwner, STMDataSyncingSubscriber, STMSocketConnectionOwner, STMRemoteDataEventHandling {
+class STMSyncer : STMDataDownloadingOwner, STMSocketConnectionOwner, STMRemoteDataEventHandling {
 
     var dataDownloadingDelegate: STMDataDownloading? = null
     var dataSyncingDelegate: STMDataSyncing? = null
@@ -80,38 +80,6 @@ class STMSyncer : STMDataDownloadingOwner, STMDataSyncingSubscriber, STMSocketCo
         }
 
         socketTransport!!.socketSendEvent(STMSocketEvent.STMSocketEventSubscribe, downloadableEntityResources)
-
-    }
-
-    override fun finishUnsyncedProcess() {
-
-        isSendingData = false
-
-    }
-
-    override fun haveUnsynced(entityName: String, itemData: Map<*, *>, itemVersion: String) {
-
-        isSendingData = true
-        socketTransport!!.mergeAsync(entityName, itemData, null)
-                .then {
-
-                    if (it["data"] == null) {
-
-                        STMFunctions.debugLog("STMSyncer", "updateResource error: $it")
-
-                    }
-
-                    dataSyncingDelegate!!.setSynced(true, entityName, it["data"] as Map<*, *>, itemVersion)
-
-                }.fail {
-
-                    STMFunctions.debugLog("STMSyncer", "updateResource error: $it")
-
-                    checkGoneEntity(entityName, it, itemData["id"].toString())
-
-                    dataSyncingDelegate!!.setSynced(false, entityName, itemData, itemVersion)
-
-                }
 
     }
 
@@ -302,16 +270,13 @@ class STMSyncer : STMDataDownloadingOwner, STMDataSyncingSubscriber, STMSocketCo
     private fun subscribeToUnsyncedObjects() {
 
         unsubscribeFromUnsyncedObjects()
-        dataSyncingDelegate!!.subscriberDelegate = this
         dataSyncingDelegate!!.startSyncing()
 
     }
 
     private fun unsubscribeFromUnsyncedObjects() {
 
-        dataSyncingDelegate!!.subscriberDelegate = null
         dataSyncingDelegate!!.pauseSyncing()
-        finishUnsyncedProcess()
 
     }
 
@@ -365,14 +330,10 @@ class STMSyncer : STMDataDownloadingOwner, STMDataSyncingSubscriber, STMSocketCo
 
     private fun stopSyncerActivity() {
 
-        if (dataSyncingDelegate!!.subscriberDelegate != null) {
-
-            releaseTimer()
-            unsubscribeFromUnsyncedObjects()
-            isSendingData = false
-            dataDownloadingDelegate!!.stopDownloading()
-
-        }
+        releaseTimer()
+        unsubscribeFromUnsyncedObjects()
+        isSendingData = false
+        dataDownloadingDelegate!!.stopDownloading()
 
     }
 

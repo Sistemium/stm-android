@@ -165,7 +165,6 @@ class STMSession {
         val unsyncedHelper = STMUnsyncedDataHelper()
         unsyncedHelper.session = this
         STMEntityController.sharedInstance!!.owner = syncer
-        unsyncedHelper.subscriberDelegate = syncer
         syncer.dataSyncingDelegate = unsyncedHelper
         syncer.session = this
         this.syncer = syncer
