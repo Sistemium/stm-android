@@ -355,8 +355,6 @@ class STMSocketTransport(private var socketUrlString: String, private var owner:
 
         socket!!.on(STMSocketEvent.STMSocketEventRemoteRequests.toString()) {
 
-            //TODO
-
             STMFunctions.debugLog("STMSocketTransport","got Remote Request")
 
         }

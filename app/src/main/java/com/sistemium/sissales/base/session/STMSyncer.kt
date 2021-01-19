@@ -15,10 +15,9 @@ import kotlin.collections.HashMap
 /**
  * Created by edgarjanvuicik on 09/02/2018.
  */
-class STMSyncer : STMDefantomizingOwner, STMDataDownloadingOwner, STMDataSyncingSubscriber, STMSocketConnectionOwner, STMRemoteDataEventHandling {
+class STMSyncer : STMDataDownloadingOwner, STMDataSyncingSubscriber, STMSocketConnectionOwner, STMRemoteDataEventHandling {
 
     var dataDownloadingDelegate: STMDataDownloading? = null
-    var defantomizingDelegate: STMDefantomizing? = null
     var dataSyncingDelegate: STMDataSyncing? = null
     var session: STMSession? = null
     private var needRepeatDownload = false
@@ -182,43 +181,12 @@ class STMSyncer : STMDefantomizingOwner, STMDataDownloadingOwner, STMDataSyncing
 
         STMLogger.sharedLogger!!.infoMessage("dataDownloadingFinished")
 
-        startDefantomization()
-
-    }
-
-    override fun defantomizingFinished() {
-
-        isDefantomizing = false
-
     }
 
     override fun entitiesChanged() {
 
         subscribeToUnsyncedObjects()
         receiveData()
-
-    }
-
-    override fun defantomizeEntityName(entityName: String, identifier: String) {
-
-        if (!isDefantomizing) return defantomizingDelegate!!.stopDefantomization()
-        socketTransport!!.findAllAsync(entityName, null, identifier)
-                .then {
-
-                    if (it["error"]?.toString() != null) {
-
-                        throw Exception(it["error"].toString())
-
-                    }
-
-                    defantomizingDelegate!!.defantomizedEntityName(entityName, identifier, it["data"] as Map<*, *>, null)
-
-                }
-                .fail {
-
-                    defantomizingDelegate!!.defantomizedEntityName(entityName, identifier, null, it)
-
-                }
 
     }
 
@@ -395,26 +363,6 @@ class STMSyncer : STMDefantomizingOwner, STMDataDownloadingOwner, STMDataSyncing
 
     }
 
-    private fun startDefantomization() {
-
-        if (!socketTransport!!.isReady) {
-
-            defantomizingDelegate!!.stopDefantomization()
-
-        }
-
-        if (isDefantomizing) {
-
-            return
-
-        }
-
-        isDefantomizing = true
-
-        defantomizingDelegate!!.startDefantomization()
-
-    }
-
     private fun stopSyncerActivity() {
 
         if (dataSyncingDelegate!!.subscriberDelegate != null) {
@@ -423,7 +371,6 @@ class STMSyncer : STMDefantomizingOwner, STMDataDownloadingOwner, STMDataSyncing
             unsubscribeFromUnsyncedObjects()
             isSendingData = false
             dataDownloadingDelegate!!.stopDownloading()
-            defantomizingDelegate!!.stopDefantomization()
 
         }
 

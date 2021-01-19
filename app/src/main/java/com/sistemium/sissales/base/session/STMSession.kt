@@ -159,11 +159,8 @@ class STMSession {
 
         val syncer = STMSyncer()
         val syncerHelper = STMSyncerHelper()
-        syncerHelper.persistenceFantomsDelegate = STMPersisterFantoms()
         syncerHelper.dataDownloadingOwner = syncer
-        syncerHelper.defantomizingOwner = syncer
         syncer.dataDownloadingDelegate = syncerHelper
-        syncer.defantomizingDelegate = syncerHelper
 
         val unsyncedHelper = STMUnsyncedDataHelper()
         unsyncedHelper.session = this
