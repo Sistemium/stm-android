@@ -12,7 +12,6 @@ android {
         targetSdkVersion 30
         versionCode 428
         versionName "1.1.46"
-        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
         debug {
@@ -53,5 +52,4 @@ dependencies {
     implementation 'com.bandyer:socket.io-client:1.0.9'
     implementation 'com.github.EdgarJan:Secured-Preference-Store:-SNAPSHOT'
     implementation 'com.github.javiersantos:AppUpdater:master-SNAPSHOT'
-    implementation 'com.google.android.gms:play-services-location:17.1.0'
 }

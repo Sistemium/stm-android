@@ -1,2 +1,0 @@
-adb backup -f /Users/edgarjanvuicik/Desktop/data.ab com.sistemium.sissalesdebug
-dd if=/Users/edgarjanvuicik/Desktop/data.ab bs=24 skip=1 | python -c "import zlib,sys;sys.stdout.write(zlib.decompress(sys.stdin.read()))" > /Users/edgarjanvuicik/Desktop/data.tar
