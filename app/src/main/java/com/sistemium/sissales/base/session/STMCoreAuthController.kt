@@ -12,7 +12,6 @@ import com.sistemium.sissales.activities.ProfileActivity
 import com.sistemium.sissales.base.MyApplication
 import com.sistemium.sissales.base.STMFunctions
 import com.sistemium.sissales.base.helper.logger.STMLogger
-import com.sistemium.sissales.enums.STMLogMessageType
 import devliving.online.securedpreferencestore.SecuredPreferenceStore
 import nl.komponents.kovenant.Promise
 import nl.komponents.kovenant.task
@@ -313,8 +312,6 @@ class STMCoreAuthController {
         fun logout(){
 
             STMSession.sharedSession!!.syncer?.prepareToDestroy()
-            STMLogger.sharedLogger!!.saveLogMessageWithText("logout", STMLogMessageType.STMLogMessageTypeImportant)
-
             userID = null
             accessToken = null
             stcTabs = null

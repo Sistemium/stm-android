@@ -3,14 +3,11 @@ package com.sistemium.sissales.persisting
 import android.content.ContentValues
 import android.database.Cursor.FIELD_TYPE_FLOAT
 import android.database.Cursor.FIELD_TYPE_INTEGER
-import android.database.CursorWindow
 import android.database.sqlite.SQLiteBlobTooBigException
-import android.database.sqlite.SQLiteCursor
 import android.database.sqlite.SQLiteDatabase
 import com.sistemium.sissales.base.STMConstants
 import com.sistemium.sissales.base.STMFunctions
 import com.sistemium.sissales.base.helper.logger.STMLogger
-import com.sistemium.sissales.enums.STMLogMessageType
 import com.sistemium.sissales.interfaces.STMModelling
 import com.sistemium.sissales.interfaces.STMPersistingTransaction
 import com.sistemium.sissales.model.STMSQLiteDatabaseAdapter
