@@ -11,7 +11,6 @@ import com.sistemium.sissales.R
 import com.sistemium.sissales.activities.ProfileActivity
 import com.sistemium.sissales.base.MyApplication
 import com.sistemium.sissales.base.STMFunctions
-import com.sistemium.sissales.base.helper.logger.STMLogger
 import devliving.online.securedpreferencestore.SecuredPreferenceStore
 import nl.komponents.kovenant.Promise
 import nl.komponents.kovenant.task
@@ -429,8 +428,6 @@ class STMCoreAuthController {
                 return requestRoles() then {
 
                     MyApplication.appContext?.startActivity(myIntent, options.toBundle())
-
-                    STMLogger.sharedLogger!!.importantMessage("login success")
 
                     return@then it
 

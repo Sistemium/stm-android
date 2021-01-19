@@ -4,7 +4,6 @@ import android.util.Log
 import com.sistemium.sissales.base.STMConstants
 import com.sistemium.sissales.base.STMFunctions
 import com.sistemium.sissales.base.session.STMSession
-import com.sistemium.sissales.enums.STMLogMessageType
 import java.util.*
 
 /**
@@ -55,19 +54,16 @@ class STMLogger private constructor() {
 
         STMFunctions.debugLog("test", text)
 
-        saveLogMessageWithText(text, STMLogMessageType.STMLogMessageTypeInfo)
 
     }
 
     fun errorMessage(text: String) {
 
-        saveLogMessageWithText(text, STMLogMessageType.STMLogMessageTypeError)
 
     }
 
     fun importantMessage(text: String) {
 
-        saveLogMessageWithText(text, STMLogMessageType.STMLogMessageTypeImportant)
 
     }
 
@@ -119,30 +115,8 @@ class STMLogger private constructor() {
 
     }
 
-    fun saveLogMessageWithText(text: String, numType: STMLogMessageType) {
+    fun saveLogMessageWithText(text: String) {
 
-        var type = numType.toString()
-
-        if (!availableTypes.contains(type)) type = "info"
-
-        val uploadTypes = syncingTypesForSettingType(uploadLogType)
-
-        if (uploadTypes.contains(type)) {
-
-            val logMessageDic = hashMapOf(
-                    "text" to text,
-                    "type" to type
-            )
-
-            nsLogMessageWithType(logMessageDic["type"], logMessageDic["text"])
-
-            saveLogMessageDic(logMessageDic)
-
-        } else {
-
-            nsLogMessageWithType(type, text)
-
-        }
 
     }
 

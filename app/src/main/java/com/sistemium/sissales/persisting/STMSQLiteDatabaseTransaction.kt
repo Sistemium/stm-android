@@ -7,7 +7,6 @@ import android.database.sqlite.SQLiteBlobTooBigException
 import android.database.sqlite.SQLiteDatabase
 import com.sistemium.sissales.base.STMConstants
 import com.sistemium.sissales.base.STMFunctions
-import com.sistemium.sissales.base.helper.logger.STMLogger
 import com.sistemium.sissales.interfaces.STMModelling
 import com.sistemium.sissales.interfaces.STMPersistingTransaction
 import com.sistemium.sissales.model.STMSQLiteDatabaseAdapter
@@ -98,8 +97,6 @@ class STMSQLiteDatabaseTransaction(private var database: SQLiteDatabase, private
         } catch (e: SQLiteBlobTooBigException){
 
             database.delete(tableName, "id = '$pk'", null)
-
-            STMLogger.sharedLogger!!.importantMessage("SQLiteBlobTooBigException on entity $tableName WHERE id = '$pk', decided to delete it")
 
         }
 

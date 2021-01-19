@@ -19,14 +19,6 @@ class STMClientEntityController {
 
             val result = STMSession.sharedSession!!.persistenceDelegate.findAllSync("STMClientEntity", predicate, null)
 
-            if (result.count() > 1) {
-
-                val logMessage = "more than one clientEntity with name $name"
-
-                STMSession.sharedSession!!.logger!!.errorMessage(logMessage)
-
-            }
-
             var clientEntity = result.lastOrNull()
 
             if (clientEntity == null) {
