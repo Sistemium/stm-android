@@ -36,13 +36,6 @@ class STMSyncerHelper : STMDataDownloading {
         if (_entitiesNames == null) {
 
             val names = hashSetOf(STM_ENTITY_NAME)
-            names.addAll(STMEntityController.sharedInstance!!.downloadableEntityNames())
-
-            if (STMEntityController.sharedInstance!!.entityWithName("STMSetting") != null) {
-
-                names.add("STMSetting")
-
-            }
 
             _entitiesNames = ArrayList(names)
 
