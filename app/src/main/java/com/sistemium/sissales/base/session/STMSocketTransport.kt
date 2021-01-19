@@ -6,7 +6,6 @@ import com.sistemium.sissales.base.STMFunctions
 import com.sistemium.sissales.base.helper.logger.STMLogger
 import com.sistemium.sissales.base.classes.entitycontrollers.STMClientDataController
 import com.sistemium.sissales.base.classes.entitycontrollers.STMEntityController
-import com.sistemium.sissales.base.classes.entitycontrollers.STMRemoteController
 import com.sistemium.sissales.enums.STMSocketEvent
 import com.sistemium.sissales.interfaces.STMRemoteDataEventHandling
 import com.sistemium.sissales.interfaces.STMSocketConnection
@@ -351,10 +350,6 @@ class STMSocketTransport(private var socketUrlString: String, private var owner:
         socket!!.on(STMSocketEvent.STMSocketEventRemoteCommands.toString()) {
 
             STMFunctions.debugLog("STMSocketTransport","got Remote Commands")
-
-            if (it.first() is JSONObject){
-                STMRemoteController.receiveRemoteCommands(it.first() as JSONObject)
-            }
 
         }
 

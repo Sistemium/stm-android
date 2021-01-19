@@ -17,7 +17,6 @@ import nl.komponents.kovenant.task
 import nl.komponents.kovenant.then
 import java.io.File
 import java.util.*
-import com.sistemium.sissales.base.classes.entitycontrollers.STMCorePicturesController
 import com.sistemium.sissales.base.classes.entitycontrollers.STMEntityController
 import com.sistemium.sissales.interfaces.STMModelling
 import com.sistemium.sissales.BuildConfig
@@ -326,8 +325,6 @@ class STMCoreAuthController {
             STMSession.sharedSession = null
             STMModelling.sharedModeler = null
             STMEntityController.sharedInstance= null
-            STMCorePicturesController.sharedInstance = null
-
 
             STMFunctions.deleteRecursive(File(MyApplication.appContext!!.cacheDir
                     .absolutePath))

@@ -1,11 +1,9 @@
 package com.sistemium.sissales.base.session
 
 import com.sistemium.sissales.base.STMConstants
-import com.sistemium.sissales.base.STMConstants.Companion.NOTIFICATION_SYNCER_SENDIG_DATA
 import com.sistemium.sissales.base.STMFunctions
 import com.sistemium.sissales.base.helper.logger.STMLogger
 import com.sistemium.sissales.base.classes.entitycontrollers.STMClientDataController
-import com.sistemium.sissales.base.classes.entitycontrollers.STMCorePicturesController
 import com.sistemium.sissales.base.classes.entitycontrollers.STMEntityController
 import com.sistemium.sissales.enums.STMSocketEvent
 import com.sistemium.sissales.interfaces.*
@@ -181,8 +179,6 @@ class STMSyncer : STMDefantomizingOwner, STMDataDownloadingOwner, STMDataSyncing
         }
 
         STMFunctions.debugLog("STMSyncer", "dataDownloadingFinished")
-
-        STMCorePicturesController.sharedInstance!!.checkNotUploadedPhotos()
 
         STMLogger.sharedLogger!!.infoMessage("dataDownloadingFinished")
 
