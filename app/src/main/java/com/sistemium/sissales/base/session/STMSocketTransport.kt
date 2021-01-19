@@ -415,48 +415,6 @@ class STMSocketTransport(private var socketUrlString: String, private var owner:
 
         }
 
-        socket!!.on(Socket.EVENT_MESSAGE){
-
-            STMFunctions.debugLog("SOCKET", "EVENT_MESSAGE")
-
-        }
-
-        socket!!.on(Socket.EVENT_RECONNECT){
-
-            STMFunctions.debugLog("SOCKET", "EVENT_RECONNECT")
-
-        }
-
-        socket!!.on(Socket.EVENT_RECONNECTING){
-
-            STMFunctions.debugLog("SOCKET", "EVENT_RECONNECTING")
-
-        }
-
-        socket!!.on(Socket.EVENT_RECONNECT_ATTEMPT){
-
-            STMFunctions.debugLog("SOCKET", "EVENT_RECONNECT_ATTEMPT ${it.first()}")
-
-            if ((it.first() as Int) % 10 == 0){
-
-//                STMLogger.sharedLogger?.importantMessage("EVENT_RECONNECT_ATTEMPT ${it.first()}")
-
-            }
-
-        }
-
-        socket!!.on(Socket.EVENT_RECONNECT_ERROR){
-
-            STMFunctions.debugLog("SOCKET", "EVENT_RECONNECT_ERROR")
-
-        }
-
-        socket!!.on(Socket.EVENT_RECONNECT_FAILED){
-
-            STMFunctions.debugLog("SOCKET", "EVENT_RECONNECT_FAILED")
-
-        }
-
     }
 
     override fun reconnectSocket() {
