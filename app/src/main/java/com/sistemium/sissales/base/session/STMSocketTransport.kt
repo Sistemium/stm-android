@@ -421,18 +421,6 @@ class STMSocketTransport(private var socketUrlString: String, private var owner:
 
         }
 
-        socket!!.on(Socket.EVENT_PING){
-
-//            STMFunctions.debugLog("SOCKET", "EVENT_PING")
-
-        }
-
-        socket!!.on(Socket.EVENT_PONG){
-
-//            STMFunctions.debugLog("SOCKET", "EVENT_PONG")
-
-        }
-
         socket!!.on(Socket.EVENT_RECONNECT){
 
             STMFunctions.debugLog("SOCKET", "EVENT_RECONNECT")
