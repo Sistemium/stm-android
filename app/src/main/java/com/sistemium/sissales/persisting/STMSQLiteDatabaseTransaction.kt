@@ -3,23 +3,16 @@ package com.sistemium.sissales.persisting
 import android.content.ContentValues
 import android.database.Cursor.FIELD_TYPE_FLOAT
 import android.database.Cursor.FIELD_TYPE_INTEGER
-import android.database.CursorWindow
 import android.database.sqlite.SQLiteBlobTooBigException
-import android.database.sqlite.SQLiteCursor
 import android.database.sqlite.SQLiteDatabase
 import com.sistemium.sissales.base.STMConstants
 import com.sistemium.sissales.base.STMFunctions
-import com.sistemium.sissales.base.helper.logger.STMLogger
-import com.sistemium.sissales.enums.STMLogMessageType
 import com.sistemium.sissales.interfaces.STMModelling
 import com.sistemium.sissales.interfaces.STMPersistingTransaction
 import com.sistemium.sissales.model.STMSQLiteDatabaseAdapter
 import java.util.*
 import kotlin.collections.ArrayList
 
-/**
- * Created by edgarjanvuicik on 30/11/2017.
- */
 class STMSQLiteDatabaseTransaction(private var database: SQLiteDatabase, private var adapter: STMSQLiteDatabaseAdapter) : STMPersistingTransaction {
 
     var operation: STMSQLiteDatabaseOperation? = null
@@ -101,8 +94,6 @@ class STMSQLiteDatabaseTransaction(private var database: SQLiteDatabase, private
         } catch (e: SQLiteBlobTooBigException){
 
             database.delete(tableName, "id = '$pk'", null)
-
-            STMLogger.sharedLogger!!.importantMessage("SQLiteBlobTooBigException on entity $tableName WHERE id = '$pk', decided to delete it")
 
         }
 

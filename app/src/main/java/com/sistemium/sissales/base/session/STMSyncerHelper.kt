@@ -4,7 +4,6 @@ import com.sistemium.sissales.activities.ProfileActivity
 import com.sistemium.sissales.base.STMConstants.Companion.STMPersistingOptionLts
 import com.sistemium.sissales.base.STMConstants.Companion.STM_ENTITY_NAME
 import com.sistemium.sissales.base.STMFunctions
-import com.sistemium.sissales.base.helper.logger.STMLogger
 import com.sistemium.sissales.base.classes.entitycontrollers.STMClientEntityController
 import com.sistemium.sissales.base.classes.entitycontrollers.STMEntityController
 import com.sistemium.sissales.interfaces.*
@@ -102,7 +101,7 @@ class STMSyncerHelper : STMDefantomizing, STMDataDownloading {
 
         if (error != null) {
 
-            return doneDownloadingEntityName(entityName, error.localizedMessage)
+            return doneDownloadingEntityName(entityName)
 
         }
 
@@ -122,7 +121,7 @@ class STMSyncerHelper : STMDefantomizing, STMDataDownloading {
 
         if (dataRecieved.size == 0) {
 
-            return doneDownloadingEntityName(entityName, null)
+            return doneDownloadingEntityName(entityName)
 
         }
 
@@ -135,7 +134,7 @@ class STMSyncerHelper : STMDefantomizing, STMDataDownloading {
 
                 .fail {
 
-                    doneDownloadingEntityName(entityName, it.localizedMessage)
+                    doneDownloadingEntityName(entityName)
 
                 }
 
@@ -241,13 +240,7 @@ class STMSyncerHelper : STMDefantomizing, STMDataDownloading {
 
     }
 
-    private fun doneDownloadingEntityName(entityName: String, errorMessage: String?) {
-
-        if (errorMessage != null) {
-
-            STMLogger.sharedLogger!!.errorMessage(errorMessage)
-
-        }
+    private fun doneDownloadingEntityName(entityName: String) {
 
         val operation = downloadingOperations[entityName]
 
@@ -280,7 +273,7 @@ class STMSyncerHelper : STMDefantomizing, STMDataDownloading {
         if (result.size < pageSize) {
 
             STMClientEntityController.setEtag(entityName, offset)
-            return doneDownloadingEntityName(entityName, null)
+            return doneDownloadingEntityName(entityName)
 
         }
 

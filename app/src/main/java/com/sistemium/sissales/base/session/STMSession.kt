@@ -9,7 +9,6 @@ import com.sistemium.sissales.base.STMCoreSessionFiler
 import com.sistemium.sissales.base.classes.entitycontrollers.STMClientDataController
 import com.sistemium.sissales.base.classes.entitycontrollers.STMEntityController
 import com.sistemium.sissales.base.classes.entitycontrollers.STMRecordStatusController
-import com.sistemium.sissales.base.helper.logger.STMLogger
 import com.sistemium.sissales.enums.STMStorageType
 import com.sistemium.sissales.interfaces.STMFullStackPersisting
 import com.sistemium.sissales.interfaces.STMModelling
@@ -54,7 +53,6 @@ class STMSession {
     }
 
     var persistenceDelegate: STMFullStackPersisting
-    var logger: STMLogger? = null
     var settingsController: STMSettingsController? = null
     var syncer: STMSyncer? = null
 
@@ -149,9 +147,6 @@ class STMSession {
         settingsController = settings
         val settingsInterceptor = settingsController as STMPersistingMergeInterceptor
         persister.beforeMergeEntityName(STMConstants.STM_SETTING_NAME, settingsInterceptor)
-
-        logger = STMLogger.sharedLogger
-        logger?.session = this
 
     }
 
