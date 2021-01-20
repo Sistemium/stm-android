@@ -296,8 +296,6 @@ class STMSocketTransport(private var socketUrlString: String, private var owner:
         val o = IO.Options()
 
         val u = URI(socketUrlString.replace("//socket.", "//socket-v2.")) //production
-//        val u = URI("http://10.0.1.5:8000/socket.io-client") //work
-//        val u = URI("http://192.168.0.105:8000/socket.io-client") //home
 
         o.path = u.path + "/"
 
@@ -452,54 +450,6 @@ class STMSocketTransport(private var socketUrlString: String, private var owner:
         }
 
         return "url"
-
-    }
-
-    private fun updateEventHandleWithData(data: Array<*>) {
-
-        STMFunctions.debugLog("STMSocketTransport", "updateEventHandleWithData")
-
-        val receivedData = data.firstOrNull() as? JSONObject
-
-        if (receivedData?.get("resource") != null) {
-
-            val entityName = (receivedData["resource"] as String).split("/").last()
-
-            val d = receivedData["data"] as? JSONObject
-
-            if (d != null && d.has("id")) {
-
-                remoteDataEventHandling.remoteUpdated(entityName, STMFunctions.gson.fromJson(d.toString(), Map::class.java))
-
-            } else {
-
-                remoteDataEventHandling.remoteHasNewData(entityName)
-
-            }
-
-        }
-
-    }
-
-    private fun destroyEventHandleWithData(data: Array<*>) {
-
-        STMFunctions.debugLog("STMSocketTransport", "destroyEventHandleWithData")
-
-        val receivedData = data.firstOrNull() as? JSONObject
-
-        if (receivedData?.get("resource") != null) {
-
-            val entityName = (receivedData["resource"] as String).split("/").last()
-
-            val d = receivedData["data"] as? JSONObject?
-
-            if (d != null && d.has("id")) {
-
-                remoteDataEventHandling.remoteDestroyed(entityName, d["id"] as String)
-
-            }
-
-        }
 
     }
 
