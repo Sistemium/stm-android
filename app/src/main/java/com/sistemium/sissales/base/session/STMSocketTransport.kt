@@ -341,7 +341,9 @@ class STMSocketTransport(private var socketUrlString: String, private var owner:
         }
 
         owner.socketReceiveAuthorization()
-        
+
+        checkAppState()
+
     }
 
     private fun notAuthorizedWithError() {
@@ -356,6 +358,14 @@ class STMSocketTransport(private var socketUrlString: String, private var owner:
             emitAuthorization()
 
         }, STMConstants.AUTH_DELAY.toLong() * 1000)
+
+    }
+
+    private fun checkAppState() {
+
+        val appState = if (MyApplication.inBackground) "UIApplicationStateBackground" else "UIApplicationStateActive"
+
+        socketSendEvent(STMSocketEvent.STMSocketEventStatusChange, appState)
 
     }
 
