@@ -1,6 +1,7 @@
 package com.sistemium.sissales.base
 
 import android.app.Application
+import android.content.ComponentCallbacks2
 import android.content.Context
 import com.sistemium.sissales.base.classes.entitycontrollers.STMCoreObjectsController
 import com.sistemium.sissales.base.session.STMCoreAuthController
@@ -56,6 +57,17 @@ class MyApplication : Application() {
             }
 
         }
+    }
+
+    override fun onTrimMemory(level: Int) {
+        super.onTrimMemory(level)
+
+        if (level == ComponentCallbacks2.TRIM_MEMORY_UI_HIDDEN) {
+
+            inBackground = true
+
+        }
+
     }
 
     override fun onCreate() {
