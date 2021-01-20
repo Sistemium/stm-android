@@ -84,8 +84,6 @@ class ProfileActivity : AppCompatActivity() {
 
                                 startActivity(Intent(this@ProfileActivity, AuthActivity::class.java))
 
-                                STMCoreAuthController.logout()
-
                                 finish()
 
                             }

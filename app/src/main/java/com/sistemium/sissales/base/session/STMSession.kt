@@ -8,7 +8,6 @@ import com.sistemium.sissales.base.STMConstants
 import com.sistemium.sissales.base.STMCoreSessionFiler
 import com.sistemium.sissales.base.classes.entitycontrollers.STMClientDataController
 import com.sistemium.sissales.base.classes.entitycontrollers.STMEntityController
-import com.sistemium.sissales.base.classes.entitycontrollers.STMRecordStatusController
 import com.sistemium.sissales.base.helper.logger.STMLogger
 import com.sistemium.sissales.enums.STMStorageType
 import com.sistemium.sissales.interfaces.STMFullStackPersisting
@@ -18,7 +17,6 @@ import com.sistemium.sissales.interfaces.STMSettingsController
 import com.sistemium.sissales.model.STMModeller
 import com.sistemium.sissales.model.STMSQLiteDatabaseAdapter
 import com.sistemium.sissales.persisting.STMPersister
-import com.sistemium.sissales.persisting.STMPersisterFantoms
 import com.sistemium.sissales.persisting.STMPersisterRunner
 import com.sistemium.sissales.persisting.STMPersistingInterceptorUniqueProperty
 import java.io.File
@@ -136,10 +134,6 @@ class STMSession {
         entityNameInterceptor.propertyName = "name"
 
         persister.beforeMergeEntityName(entityNameInterceptor.entityName!!, entityNameInterceptor)
-
-        val recordStatusInterceptor = STMRecordStatusController()
-
-        persister.beforeMergeEntityName(STMConstants.STM_RECORDSTATUS_NAME, recordStatusInterceptor)
 
         this.persistenceDelegate = persister
 

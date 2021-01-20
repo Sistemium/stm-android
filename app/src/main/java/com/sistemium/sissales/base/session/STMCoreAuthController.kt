@@ -307,30 +307,6 @@ class STMCoreAuthController {
 
             }
 
-        fun logout(){
-
-            STMSession.sharedSession!!.syncer?.prepareToDestroy()
-            userID = null
-            accessToken = null
-            stcTabs = null
-            iSisDB = null
-            phoneNumber = null
-            userName = null
-            socketURL = null
-            entityResource = null
-            requestID = null
-            accountOrg = null
-            rolesResponse = null
-            lastAuth = null
-            STMSession.sharedSession = null
-            STMModelling.sharedModeler = null
-            STMEntityController.sharedInstance= null
-
-            STMFunctions.deleteRecursive(File(MyApplication.appContext!!.cacheDir
-                    .absolutePath))
-
-        }
-
         fun requestNewSMSCode(phoneNumber: String): Promise<String?, Exception> {
 
             return task {

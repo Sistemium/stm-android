@@ -24,16 +24,7 @@ class STMSyncer : STMDataDownloadingOwner, STMSocketConnectionOwner, STMRemoteDa
     private var isRunning = false
     var socketTransport: STMSocketConnection? = null
     private var isSendingData = false
-    set(value) {
 
-        if (value){
-
-
-        }
-
-        field = value
-
-    }
     private var syncTimer: Timer? = null
     private var settings: Map<*, *>? = null
         get() {
@@ -47,21 +38,6 @@ class STMSyncer : STMDataDownloadingOwner, STMSocketConnectionOwner, STMRemoteDa
             return field
 
         }
-
-    fun prepareToDestroy(){
-
-        if (isRunning) {
-
-            socketTransport?.closeSocket()
-
-            releaseTimer()
-
-            isRunning = false
-
-        }
-
-
-    }
 
     override fun socketReceiveAuthorization() {
 
@@ -126,39 +102,9 @@ class STMSyncer : STMDataDownloadingOwner, STMSocketConnectionOwner, STMRemoteDa
 
     }
 
-    override fun entitiesChanged() {
-
-        receiveData()
-
-    }
-
     override fun socketWillClosed() {
 
         stopSyncerActivity()
-
-    }
-
-    override fun remoteUpdated(entityName: String, attributes: Map<*, *>) {
-
-        STMFunctions.debugLog("STMSyncer", "remoteUpdated entity name: $entityName, id: ${attributes["id"]}")
-
-        session!!.persistenceDelegate.mergeSync(entityName, attributes, hashMapOf(STMConstants.STMPersistingOptionLts to STMFunctions.stringFrom(Date())))
-
-    }
-
-    override fun remoteHasNewData(entityName: String) {
-
-        STMFunctions.debugLog("STMSyncer", "remoteHasNewData for entity name: $entityName")
-
-        receiveEntities(arrayListOf(entityName))
-
-    }
-
-    override fun remoteDestroyed(entityName: String, id: String) {
-
-        STMFunctions.debugLog("STMSyncer", "remoteDestroyed entity name: $entityName, id: $id")
-        val options = hashMapOf(STMConstants.STMPersistingOptionRecordstatuses to false)
-        session!!.persistenceDelegate.destroySync(entityName, id, options)
 
     }
 
@@ -294,22 +240,6 @@ class STMSyncer : STMDataDownloadingOwner, STMSocketConnectionOwner, STMRemoteDa
         releaseTimer()
         isSendingData = false
         dataDownloadingDelegate!!.stopDownloading()
-
-    }
-
-    private fun receiveEntities(entitiesNames: ArrayList<String>) {
-
-        val existingNames = entitiesNames.map {
-
-            STMFunctions.addPrefixToEntityName(it)
-
-        }
-
-        if (existingNames.isNotEmpty()) {
-
-            dataDownloadingDelegate!!.startDownloading(ArrayList(existingNames))
-
-        }
 
     }
 
