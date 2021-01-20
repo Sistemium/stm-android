@@ -22,7 +22,7 @@ import java.net.URI
  * Created by edgarjanvuicik on 14/02/2018.
  */
 
-class STMSocketTransport(private var socketUrlString: String, private var owner: STMSocketConnectionOwner, private var remoteDataEventHandling: STMRemoteDataEventHandling) : STMSocketConnection {
+class STMSocketTransport(private var socketUrlString: String, private var owner: STMSocketConnectionOwner) : STMSocketConnection {
 
     override var isReady: Boolean = false
         get() {
@@ -38,44 +38,6 @@ class STMSocketTransport(private var socketUrlString: String, private var owner:
     init {
 
         startSocket()
-
-    }
-
-    override fun mergeAsync(entityName: String, attributes: Map<*, *>, options: Map<*, *>?): Promise<Map<*, *>, Exception> {
-
-        val deferred = deferred<Map<*, *>, Exception>()
-
-        val resource = STMEntityController.sharedInstance!!.resourceForEntity(entityName)
-
-        val value = hashMapOf(
-                "method" to STMConstants.kSocketUpdateMethod,
-                "resource" to resource,
-                "id" to attributes["id"],
-                "attrs" to attributes
-        )
-
-        socketSendEvent(STMSocketEvent.STMSocketEventJSData, value)
-                .then {
-
-                    val (result, error) = respondOnData(it)
-
-                    if (error != null) {
-
-                        deferred.reject(error)
-
-                    } else {
-
-                        deferred.resolve(result!!)
-
-                    }
-
-                }.fail {
-
-                    deferred.reject(it)
-
-                }
-
-        return deferred.promise
 
     }
 

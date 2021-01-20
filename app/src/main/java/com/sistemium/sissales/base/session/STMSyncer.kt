@@ -188,7 +188,7 @@ class STMSyncer : STMDataDownloadingOwner, STMSocketConnectionOwner, STMRemoteDa
 
         session?.logger?.infoMessage("Syncer start")
 
-        socketTransport = STMSocketTransport(STMCoreAuthController.socketURL!!, this, this)
+        socketTransport = STMSocketTransport(STMCoreAuthController.socketURL!!, this)
 
         isRunning = true
 
