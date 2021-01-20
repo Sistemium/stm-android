@@ -2,7 +2,6 @@ package com.sistemium.sissales.base.session
 
 import com.sistemium.sissales.base.STMConstants
 import com.sistemium.sissales.base.STMFunctions
-import com.sistemium.sissales.base.helper.logger.STMLogger
 import com.sistemium.sissales.base.classes.entitycontrollers.STMClientDataController
 import com.sistemium.sissales.base.classes.entitycontrollers.STMEntityController
 import com.sistemium.sissales.enums.STMSocketEvent
@@ -98,8 +97,6 @@ class STMSyncer : STMDataDownloadingOwner, STMSocketConnectionOwner, STMRemoteDa
 
         STMFunctions.debugLog("STMSyncer", "dataDownloadingFinished")
 
-        STMLogger.sharedLogger!!.infoMessage("dataDownloadingFinished")
-
     }
 
     override fun socketWillClosed() {
@@ -114,15 +111,9 @@ class STMSyncer : STMDataDownloadingOwner, STMSocketConnectionOwner, STMRemoteDa
 
         settings = null
 
-        if (!checkStcEntities()) {
-
-            session?.logger?.errorMessage("checkStcEntities fail")
-
-        }
+        checkStcEntities()
 
         if (STMCoreAuthController.socketURL == null) {
-
-            session?.logger?.errorMessage("Syncer has no socketURL")
 
             return
 
@@ -131,8 +122,6 @@ class STMSyncer : STMDataDownloadingOwner, STMSocketConnectionOwner, STMRemoteDa
         STMEntityController.sharedInstance!!.checkEntitiesForDuplicates()
 
         STMClientDataController.checkClientData()
-
-        session?.logger?.infoMessage("Syncer start")
 
         socketTransport = STMSocketTransport(STMCoreAuthController.socketURL!!, this)
 
@@ -158,7 +147,6 @@ class STMSyncer : STMDataDownloadingOwner, STMSocketConnectionOwner, STMRemoteDa
 
             if (STMCoreAuthController.entityResource == null) {
 
-                session?.logger?.errorMessage("ERROR! syncer have no settings, something really wrong here, needs attention!")
                 return false
 
             }
@@ -222,8 +210,6 @@ class STMSyncer : STMDataDownloadingOwner, STMSocketConnectionOwner, STMRemoteDa
     private fun receiveData() {
 
         if (!isRunning) return
-
-        STMLogger.sharedLogger!!.infoMessage("STMSyncer")
 
         if (dataDownloadingDelegate!!.downloadingQueue != null) {
 

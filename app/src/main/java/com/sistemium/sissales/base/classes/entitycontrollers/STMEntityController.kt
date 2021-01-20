@@ -2,7 +2,6 @@ package com.sistemium.sissales.base.classes.entitycontrollers
 
 import com.sistemium.sissales.base.STMConstants
 import com.sistemium.sissales.base.STMFunctions
-import com.sistemium.sissales.base.helper.logger.STMLogger
 import com.sistemium.sissales.base.session.STMCoreAuthController
 import com.sistemium.sissales.interfaces.STMDataDownloadingOwner
 import com.sistemium.sissales.interfaces.STMFullStackPersisting
@@ -194,8 +193,6 @@ class STMEntityController private constructor() {
 
             val message = "Entity $it have ${duplicates.size} duplicates"
 
-            STMLogger.sharedLogger!!.errorMessage(message)
-
             val newStcEntitiesArray = entitiesArray!!.clone() as ArrayList<Map<*, *>>
 
             newStcEntitiesArray.removeAll(duplicates)
@@ -204,12 +201,6 @@ class STMEntityController private constructor() {
             val predicate = STMPredicate.primaryKeyPredicate(duplicates.map { return@map it["id"] }.toTypedArray())
 
             persistenceDelegate?.destroyAllSync(STMConstants.STM_ENTITY_NAME, predicate, hashMapOf(STMConstants.STMPersistingOptionRecordstatuses to false))
-
-        }
-
-        if (totalDuplicates == 0) {
-
-            STMLogger.sharedLogger!!.infoMessage("stc.entity duplicates not found")
 
         }
 
