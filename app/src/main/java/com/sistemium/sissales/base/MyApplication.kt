@@ -14,7 +14,7 @@ import devliving.online.securedpreferencestore.SecuredPreferenceStore
 /**
  * Created by edgarjanvuicik on 02/02/2018.
  */
-class MyApplication : Application(), ComponentCallbacks2 {
+class MyApplication : Application() {
 
     companion object {
 
