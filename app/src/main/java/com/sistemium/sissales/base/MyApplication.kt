@@ -1,10 +1,8 @@
 package com.sistemium.sissales.base
 
-import android.app.Activity
 import android.app.Application
 import android.content.ComponentCallbacks2
 import android.content.Context
-import android.os.Bundle
 import com.sistemium.sissales.base.classes.entitycontrollers.STMCoreObjectsController
 import com.sistemium.sissales.base.session.STMCoreAuthController
 import com.sistemium.sissales.base.session.STMSession
@@ -16,7 +14,7 @@ import devliving.online.securedpreferencestore.SecuredPreferenceStore
 /**
  * Created by edgarjanvuicik on 02/02/2018.
  */
-class MyApplication : Application(), Application.ActivityLifecycleCallbacks, ComponentCallbacks2 {
+class MyApplication : Application(), ComponentCallbacks2 {
 
     companion object {
 
@@ -72,38 +70,12 @@ class MyApplication : Application(), Application.ActivityLifecycleCallbacks, Com
 
     }
 
-    override fun onActivityPaused(p0: Activity) {
-    }
-
-    override fun onActivityStarted(p0: Activity) {
-    }
-
-    override fun onActivityDestroyed(p0: Activity) {
-    }
-
-    override fun onActivitySaveInstanceState(p0: Activity, p1: Bundle) {
-    }
-
-    override fun onActivityStopped(p0: Activity) {
-    }
-
-    override fun onActivityCreated(p0: Activity, p1: Bundle?) {
-    }
-
-    override fun onActivityResumed(p0: Activity) {
-
-        inBackground = false
-
-    }
-
     override fun onCreate() {
         super.onCreate()
         appContext = applicationContext
 
         val seedKey = "SecuredSeedData".toByteArray()
         SecuredPreferenceStore.init(applicationContext, null, null, seedKey, DefaultRecoveryHandler())
-
-        this.registerActivityLifecycleCallbacks(this)
 
     }
 
