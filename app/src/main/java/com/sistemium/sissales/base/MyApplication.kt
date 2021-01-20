@@ -2,10 +2,8 @@ package com.sistemium.sissales.base
 
 import android.app.Activity
 import android.app.Application
-import android.content.ComponentCallbacks2
 import android.content.Context
 import android.os.Bundle
-import com.sistemium.sissales.activities.ProfileActivity
 import com.sistemium.sissales.base.classes.entitycontrollers.STMCoreObjectsController
 import com.sistemium.sissales.base.helper.logger.STMLogger
 import com.sistemium.sissales.base.session.STMCoreAuthController
@@ -14,12 +12,11 @@ import com.sistemium.sissales.base.session.STMSyncer
 import com.sistemium.sissales.enums.STMSocketEvent
 import devliving.online.securedpreferencestore.DefaultRecoveryHandler
 import devliving.online.securedpreferencestore.SecuredPreferenceStore
-import nl.komponents.kovenant.task
 
 /**
  * Created by edgarjanvuicik on 02/02/2018.
  */
-class MyApplication : Application(), Application.ActivityLifecycleCallbacks, ComponentCallbacks2 {
+class MyApplication : Application(), Application.ActivityLifecycleCallbacks {
 
     companion object {
 
@@ -68,17 +65,6 @@ class MyApplication : Application(), Application.ActivityLifecycleCallbacks, Com
             }
 
         }
-    }
-
-    override fun onTrimMemory(level: Int) {
-        super.onTrimMemory(level)
-
-        if (level == ComponentCallbacks2.TRIM_MEMORY_UI_HIDDEN) {
-
-            inBackground = true
-
-        }
-
     }
 
     override fun onActivityPaused(p0: Activity) {
