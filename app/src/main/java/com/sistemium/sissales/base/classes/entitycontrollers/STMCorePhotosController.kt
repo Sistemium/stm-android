@@ -70,20 +70,20 @@ class STMCorePhotosController {
                 takePictureIntent = null
             }
         }
-        val contentSelectionIntent = Intent(Intent.ACTION_GET_CONTENT)
-        contentSelectionIntent.addCategory(Intent.CATEGORY_OPENABLE)
-        contentSelectionIntent.type = "*/*"
-        val intentArray: Array<Intent?>
-        intentArray = if (takePictureIntent != null) {
-            arrayOf(takePictureIntent)
-        } else {
-            arrayOfNulls(0)
-        }
-        val chooserIntent = Intent(Intent.ACTION_CHOOSER)
-        chooserIntent.putExtra(Intent.EXTRA_INTENT, contentSelectionIntent)
-        chooserIntent.putExtra(Intent.EXTRA_TITLE, "Image Chooser")
-        chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, intentArray)
-        startActivityForResult(activity, chooserIntent, 1, null)
+//        val contentSelectionIntent = Intent(Intent.ACTION_GET_CONTENT)
+//        contentSelectionIntent.addCategory(Intent.CATEGORY_OPENABLE)
+//        contentSelectionIntent.type = "*/*"
+//        val intentArray: Array<Intent?>
+//        intentArray = if (takePictureIntent != null) {
+//            arrayOf(takePictureIntent)
+//        } else {
+//            arrayOfNulls(0)
+//        }
+//        val chooserIntent = Intent(Intent.ACTION_CHOOSER)
+//        chooserIntent.putExtra(Intent.EXTRA_INTENT, contentSelectionIntent)
+//        chooserIntent.putExtra(Intent.EXTRA_TITLE, "Image Chooser")
+//        chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, intentArray)
+        startActivityForResult(activity, takePictureIntent!!, 1, null)
 
         return mCM
 
