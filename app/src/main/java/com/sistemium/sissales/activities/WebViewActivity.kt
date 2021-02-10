@@ -384,6 +384,8 @@ class WebViewActivity : Activity() {
 
         return task {
 
+            val files = hashMapOf<String, ByteArray>()
+
             val webPath = STMCoreSessionFiler.sharedSession!!.tempWebPath(title)
 
             val (_, response, result) = Fuel.get(manifest).responseJson()
@@ -394,7 +396,7 @@ class WebViewActivity : Activity() {
 
             val savedTag = prefStore?.getString("${title}ETag", null)
 
-            if (etag != savedTag && etag != null){
+//            if (etag != savedTag && etag != null){
 
                 STMFunctions.debugLog("STMCoreAuthController","update available")
 
@@ -404,25 +406,32 @@ class WebViewActivity : Activity() {
 
                     val (_,_, res) =  Fuel.download("$url/$file").destination { _, _ ->
 
-                        File.createTempFile("temp", ".tmp")
+                        File.createTempFile("temp-${file.replace(".","").replace("/","")}", ".tmp")
 
                     }.response()
 
                     val path = "$webPath/$file"
 
-                    File(path.removeSuffix("/" + path.split("/").last())).mkdirs()
-
                     if (res.component1()?.isNotEmpty() == true){
 
-                        STMFunctions.debugLog("WebViewActivity","finished downloading $file saved to $webPath/$file")
-
-                        File("$webPath/$file").writeBytes(res.component1()!!)
+                        files[path] = res.component1()!!
+                        STMFunctions.debugLog("______________________________________", path)
 
                     } else {
 
-                        STMFunctions.debugLog("WebViewActivity","did not received any bytes of file $file")
+                        throw Exception("did not received any bytes of file $file, aborting load")
 
                     }
+
+                }
+
+                for ((path, file) in files){
+
+                    File(path.removeSuffix("/" + path.split("/").last())).mkdirs()
+
+                    STMFunctions.debugLog("WebViewActivity","finished downloading file saved to $path")
+
+                    File(path).writeBytes(file)
 
                 }
 
@@ -430,7 +439,7 @@ class WebViewActivity : Activity() {
 
                 return@task webPath
 
-            }
+//            }
 
             throw Exception("no update")
 
