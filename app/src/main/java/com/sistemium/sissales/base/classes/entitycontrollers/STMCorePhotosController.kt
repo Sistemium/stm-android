@@ -2,20 +2,15 @@ package com.sistemium.sissales.base.classes.entitycontrollers
 
 import android.annotation.SuppressLint
 import android.app.Activity
-import android.app.AlertDialog
-import androidx.core.app.ActivityCompat.startActivityForResult
-import android.provider.MediaStore
 import android.content.Intent
-import com.sistemium.sissales.base.MyApplication
-import androidx.core.app.ActivityCompat.startActivityForResult
-import android.content.DialogInterface
 import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Environment
-import android.webkit.ValueCallback
+import android.provider.MediaStore
+import androidx.core.app.ActivityCompat.startActivityForResult
+import androidx.core.content.FileProvider
 import com.sistemium.sissales.base.STMConstants
 import com.sistemium.sissales.base.STMFunctions
-import com.sistemium.sissales.base.session.STMSession
 import java.io.File
 import java.io.IOException
 import java.text.SimpleDateFormat
@@ -54,6 +49,7 @@ class STMCorePhotosController {
         var mCM: String? = null
 
         var takePictureIntent: Intent? = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+
         if (takePictureIntent!!.resolveActivity(activity.packageManager) != null) {
             var photoFile: File? = null
             try {
@@ -65,31 +61,32 @@ class STMCorePhotosController {
 
             if (photoFile != null) {
                 mCM = photoFile.absolutePath
-                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(photoFile))
+                val photoURI = FileProvider.getUriForFile(activity, activity.applicationContext.packageName.toString() + ".provider", photoFile)
+
+                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI)
             } else {
                 takePictureIntent = null
             }
         }
-//        val contentSelectionIntent = Intent(Intent.ACTION_GET_CONTENT)
-//        contentSelectionIntent.addCategory(Intent.CATEGORY_OPENABLE)
-//        contentSelectionIntent.type = "*/*"
-//        val intentArray: Array<Intent?>
-//        intentArray = if (takePictureIntent != null) {
-//            arrayOf(takePictureIntent)
-//        } else {
-//            arrayOfNulls(0)
-//        }
-//        val chooserIntent = Intent(Intent.ACTION_CHOOSER)
-//        chooserIntent.putExtra(Intent.EXTRA_INTENT, contentSelectionIntent)
-//        chooserIntent.putExtra(Intent.EXTRA_TITLE, "Image Chooser")
-//        chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, intentArray)
-        startActivityForResult(activity, takePictureIntent!!, 1, null)
+        val contentSelectionIntent = Intent(Intent.ACTION_GET_CONTENT)
+        contentSelectionIntent.addCategory(Intent.CATEGORY_OPENABLE)
+        contentSelectionIntent.type = "*/*"
+        val intentArray: Array<Intent?> = if (takePictureIntent != null) {
+            arrayOf(takePictureIntent)
+        } else {
+            arrayOfNulls(0)
+        }
+        val chooserIntent = Intent(Intent.ACTION_CHOOSER)
+        chooserIntent.putExtra(Intent.EXTRA_INTENT, contentSelectionIntent)
+        chooserIntent.putExtra(Intent.EXTRA_TITLE, "Image Chooser")
+        chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, intentArray)
+        startActivityForResult(activity, chooserIntent, 1, null)
 
         return mCM
 
     }
 
-    fun newPhotoObject(photoEntityName:String, file:Bitmap):Map<*,*>{
+    fun newPhotoObject(photoEntityName: String, file: Bitmap):Map<*, *>{
 
         val picture = STMCorePicturesController.sharedInstance!!.setImagesFromData(file, hashMapOf(STMConstants.DEFAULT_PERSISTING_PRIMARY_KEY to STMFunctions.uuidString()), photoEntityName)
 
@@ -107,7 +104,7 @@ class STMCorePhotosController {
 
     }
 
-    fun uploadPhotoEntityName(photoEntityName:String, attributes:Map<*,*>, image:Bitmap){
+    fun uploadPhotoEntityName(photoEntityName: String, attributes: Map<*, *>, image: Bitmap){
 
         STMCorePicturesController.sharedInstance!!.uploadImageEntityName(photoEntityName, attributes, image)
 
