@@ -396,7 +396,7 @@ class WebViewActivity : Activity() {
 
             val savedTag = prefStore?.getString("${title}ETag", null)
 
-//            if (etag != savedTag && etag != null){
+            if (etag != savedTag && etag != null){
 
                 STMFunctions.debugLog("STMCoreAuthController","update available")
 
@@ -415,7 +415,6 @@ class WebViewActivity : Activity() {
                     if (res.component1()?.isNotEmpty() == true){
 
                         files[path] = res.component1()!!
-                        STMFunctions.debugLog("______________________________________", path)
 
                     } else {
 
@@ -439,7 +438,7 @@ class WebViewActivity : Activity() {
 
                 return@task webPath
 
-//            }
+            }
 
             throw Exception("no update")
 
