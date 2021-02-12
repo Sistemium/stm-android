@@ -6,6 +6,7 @@ import com.github.kittinunf.fuel.android.extension.responseJson
 import com.github.kittinunf.result.Result
 import com.sistemium.sissales.base.STMConstants
 import com.sistemium.sissales.base.STMCoreSessionFiler
+import com.sistemium.sissales.base.STMFunctions
 import com.sistemium.sissales.base.classes.entitycontrollers.STMClientDataController
 import com.sistemium.sissales.base.classes.entitycontrollers.STMEntityController
 import com.sistemium.sissales.base.classes.entitycontrollers.STMRecordStatusController
@@ -17,10 +18,7 @@ import com.sistemium.sissales.interfaces.STMPersistingMergeInterceptor
 import com.sistemium.sissales.interfaces.STMSettingsController
 import com.sistemium.sissales.model.STMModeller
 import com.sistemium.sissales.model.STMSQLiteDatabaseAdapter
-import com.sistemium.sissales.persisting.STMPersister
-import com.sistemium.sissales.persisting.STMPersisterFantoms
-import com.sistemium.sissales.persisting.STMPersisterRunner
-import com.sistemium.sissales.persisting.STMPersistingInterceptorUniqueProperty
+import com.sistemium.sissales.persisting.*
 import java.io.File
 import java.util.*
 
@@ -153,6 +151,8 @@ class STMSession {
         logger = STMLogger.sharedLogger
         logger?.session = this
 
+        applyPatches()
+
     }
 
     fun setupSyncer() {
@@ -173,6 +173,41 @@ class STMSession {
         syncer.session = this
         this.syncer = syncer
         syncer.startSyncer()
+
+    }
+
+    private fun applyPatches(){
+
+        val notProcessed = STMPredicate("isProcessed IS NULL")
+
+        val options:HashMap<String,Any> = hashMapOf(
+                STMConstants.STMPersistingOptionOrder to "ord",
+                STMConstants.STMPersistingOptionOrderDirection to "ASC"
+        )
+
+        val result =  try {
+            this.persistenceDelegate.findAllSync("STMSQLPatch", notProcessed, options)
+        } catch (e:Exception){
+            arrayListOf()
+        }
+
+        if (result.count() == 0){
+            STMFunctions.debugLog("STMSession","No not-processed patches")
+            return
+        }
+
+        for (path in result){
+//            STMFunctions.debugLog("_____", path["condition"])
+//            NSString *result = [fmdb executePatchForCondition:patch[@"condition"] patch:patch[@"patch"]];
+//            if ([result hasPrefix:@"Success"]) {
+//            NSMutableDictionary *mPatch = patch.mutableCopy;
+//            mPatch[@"isProcessed"] = @YES;
+//            NSDictionary *fieldstoUpdate = @{STMPersistingOptionFieldsToUpdate: @[@"isProcessed"]};
+//            NSError *error;
+//            [persister updateSync:@"STMSQLPatch" attributes:mPatch.copy options:fieldstoUpdate error:&error];
+//            }
+//            [STMLogger.sharedLogger importantMessage:result];
+        }
 
     }
 
