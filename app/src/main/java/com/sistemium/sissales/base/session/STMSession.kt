@@ -21,6 +21,7 @@ import com.sistemium.sissales.model.STMSQLiteDatabaseAdapter
 import com.sistemium.sissales.persisting.*
 import java.io.File
 import java.util.*
+import android.database.sqlite.SQLiteDatabase
 
 
 /**
@@ -151,7 +152,7 @@ class STMSession {
         logger = STMLogger.sharedLogger
         logger?.session = this
 
-        applyPatches()
+        applyPatches(adapter.database)
 
     }
 
@@ -176,7 +177,7 @@ class STMSession {
 
     }
 
-    private fun applyPatches(){
+    private fun applyPatches(database: SQLiteDatabase?){
 
         val notProcessed = STMPredicate("isProcessed IS NULL")
 
@@ -197,7 +198,7 @@ class STMSession {
         }
 
         for (path in result){
-//            STMFunctions.debugLog("_____", path["condition"])
+            STMFunctions.debugLog("_____", path["condition"] as? String ?: "")
 //            NSString *result = [fmdb executePatchForCondition:patch[@"condition"] patch:patch[@"patch"]];
 //            if ([result hasPrefix:@"Success"]) {
 //            NSMutableDictionary *mPatch = patch.mutableCopy;
