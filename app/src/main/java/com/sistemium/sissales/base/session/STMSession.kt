@@ -22,6 +22,7 @@ import com.sistemium.sissales.persisting.*
 import java.io.File
 import java.util.*
 import android.database.sqlite.SQLiteDatabase
+import kotlin.collections.HashMap
 
 
 /**
@@ -186,7 +187,7 @@ class STMSession {
                 STMConstants.STMPersistingOptionOrderDirection to "ASC"
         )
 
-        val result =  try {
+        val result = try {
             this.persistenceDelegate.findAllSync("STMSQLPatch", notProcessed, options)
         } catch (e:Exception){
             arrayListOf()
@@ -197,18 +198,51 @@ class STMSession {
             return
         }
 
-        for (path in result){
-            STMFunctions.debugLog("_____", path["condition"] as? String ?: "")
-//            NSString *result = [fmdb executePatchForCondition:patch[@"condition"] patch:patch[@"patch"]];
-//            if ([result hasPrefix:@"Success"]) {
-//            NSMutableDictionary *mPatch = patch.mutableCopy;
-//            mPatch[@"isProcessed"] = @YES;
-//            NSDictionary *fieldstoUpdate = @{STMPersistingOptionFieldsToUpdate: @[@"isProcessed"]};
-//            NSError *error;
-//            [persister updateSync:@"STMSQLPatch" attributes:mPatch.copy options:fieldstoUpdate error:&error];
-//            }
-//            [STMLogger.sharedLogger importantMessage:result];
+        for (patch in result){
+
+            val condition = patch["condition"] as? String
+            val patchString = patch["patch"] as? String
+
+            if (condition != null && patchString != null){
+
+                val patchResult = executePatch(condition, patchString, database)
+
+                if (patchResult.startsWith("Success")){
+                    val mMap = patch.toMutableMap()
+                    mMap["isProcessed"] = true
+
+                    this.persistenceDelegate.mergeSync("STMSQLPatch", mMap, hashMapOf(STMConstants.STMPersistingOptionLts to STMFunctions.stringFrom(Date())))
+
+                }
+
+                STMFunctions.debugLog("STMSession", patchResult)
+
+            }
+
         }
+
+    }
+
+    private fun executePatch(condition:String, patch:String, database: SQLiteDatabase?):String {
+
+        val result = database?.rawQuery(condition, null)
+
+        if (result!){
+
+
+
+        }
+
+//        if (![result next]) {
+//            return [@"Successfully skipped unnecessary patch: " stringByAppendingString:patch];
+//        }
+//        [result close];
+//        if (![self.database executeStatements:patch]) {
+//            return @"Error while executing patch";
+//        }
+//        return [@"Successfully executed patch: " stringByAppendingString:patch];
+
+        return ""
 
     }
 
