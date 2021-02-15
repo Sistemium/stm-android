@@ -225,9 +225,11 @@ class STMSession {
 
     private fun executePatch(condition:String, patch:String, database: SQLiteDatabase?):String {
 
-        val result = database?.rawQuery(condition, null)
+        if (database == null) return "Error, no database"
 
-        if (result!){
+        val result = database.rawQuery(condition, null)
+
+        if (result.count > 0){
 
 
 
