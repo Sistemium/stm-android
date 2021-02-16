@@ -230,7 +230,7 @@ class STMSession {
 
         val result = database.rawQuery(condition, null)
 
-        if (result.count > 0){
+        if (result.count == 0){
 
             return "Successfully skipped unnecessary patch: $patch"
 
@@ -245,7 +245,7 @@ class STMSession {
         }
 
         return "Successfully executed patch: $patch"
-        
+
     }
 
 }
