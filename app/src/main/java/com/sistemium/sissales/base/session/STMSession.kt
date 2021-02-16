@@ -22,6 +22,7 @@ import com.sistemium.sissales.persisting.*
 import java.io.File
 import java.util.*
 import android.database.sqlite.SQLiteDatabase
+import java.sql.SQLException
 import kotlin.collections.HashMap
 
 
@@ -231,21 +232,20 @@ class STMSession {
 
         if (result.count > 0){
 
-
+            return "Successfully skipped unnecessary patch: $patch"
 
         }
 
-//        if (![result next]) {
-//            return [@"Successfully skipped unnecessary patch: " stringByAppendingString:patch];
-//        }
-//        [result close];
-//        if (![self.database executeStatements:patch]) {
-//            return @"Error while executing patch";
-//        }
-//        return [@"Successfully executed patch: " stringByAppendingString:patch];
+        result.close()
 
-        return ""
+        try{
+            database.execSQL(patch)
+        } catch (e: SQLException) {
+            return "Error while executing patch"
+        }
 
+        return "Successfully executed patch: $patch"
+        
     }
 
 }
