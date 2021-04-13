@@ -568,6 +568,8 @@ class WebAppInterface internal constructor(private var webViewActivity: WebViewA
 
         }.fail {
 
+            STMFunctions.debugLog("resolveLocation", "resolveLocation failed")
+
             javascriptCallback(MyApplication.appContext!!.resources.getString(com.sistemium.sissales.R.string.location_failed),mapParameters)
 
         }
@@ -635,6 +637,8 @@ class WebAppInterface internal constructor(private var webViewActivity: WebViewA
 
         }?.fail {
 
+            STMFunctions.debugLog("sendToCameraRoll", "sendToCameraRoll failed")
+
             javascriptCallback("$it", mapParameters)
 
         }
@@ -659,6 +663,8 @@ class WebAppInterface internal constructor(private var webViewActivity: WebViewA
             javascriptCallback(arrayListOf(it), mapParameters, callback as String)
 
         }?.fail {
+
+            STMFunctions.debugLog("loadImage", "loadImage failed")
 
             javascriptCallback("$it", mapParameters)
 

@@ -74,6 +74,8 @@ open class BaseInstrumentaltTest {
 
         }.fail {
 
+            STMFunctions.debugLog("expectSuccess", "expectSuccess failed")
+
             synchronized(lock) {
                 lock.notify()
 

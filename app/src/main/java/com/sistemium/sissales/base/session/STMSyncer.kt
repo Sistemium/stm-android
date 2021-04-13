@@ -166,6 +166,8 @@ class STMSyncer : STMDefantomizingOwner, STMDataDownloadingOwner, STMDataSyncing
 
                 }.fail {
 
+                    STMFunctions.debugLog("receiveData", "receiveData failed entityName $entityName")
+
                     dataDownloadingDelegate!!.dataReceivedSuccessfully(entityName, null, null, null, it)
 
                 }
@@ -221,6 +223,8 @@ class STMSyncer : STMDefantomizingOwner, STMDataDownloadingOwner, STMDataSyncing
 
                 }
                 .fail {
+
+                    STMFunctions.debugLog("defantomizeEntityName", "defantomizeEntityName failed entityName $entityName")
 
                     defantomizingDelegate!!.defantomizedEntityName(entityName, identifier, null, it)
 

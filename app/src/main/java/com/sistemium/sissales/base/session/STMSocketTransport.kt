@@ -72,6 +72,8 @@ class STMSocketTransport(private var socketUrlString: String, private var owner:
 
                 }.fail {
 
+                    STMFunctions.debugLog("mergeAsync", "mergeAsync failed entityname $entityName")
+
                     deferred.reject(it)
 
                 }
@@ -122,7 +124,7 @@ class STMSocketTransport(private var socketUrlString: String, private var owner:
 
                 }.fail {
 
-                    STMFunctions.debugLog("",entityName)
+                    STMFunctions.debugLog("mergeAsync", "mergeAsync failed entityname $entityName")
 
                     deferred.reject(it)
 

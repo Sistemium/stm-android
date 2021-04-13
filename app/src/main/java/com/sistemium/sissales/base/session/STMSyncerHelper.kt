@@ -135,6 +135,8 @@ class STMSyncerHelper : STMDefantomizing, STMDataDownloading {
 
                 .fail {
 
+                    STMFunctions.debugLog("dataReceivedSuccessfully", "dataReceivedSuccessfully failed entityName $entityName")
+
                     doneDownloadingEntityName(entityName, it.localizedMessage)
 
                 }
@@ -217,6 +219,8 @@ class STMSyncerHelper : STMDefantomizing, STMDataDownloading {
                     persistenceFantomsDelegate?.destroyFantomSync(entityName, identifier)
 
                 } else {
+
+                    STMFunctions.debugLog("defantomizedEntityName", "defantomizedEntityName not implemented")
 
                     TODO("not implemented")
 //                @synchronized (self) {

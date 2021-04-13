@@ -303,6 +303,8 @@ class WebViewActivity : Activity() {
 
             }.fail {
 
+                STMFunctions.debugLog("onActivityResult", "onActivityResult failed")
+
                 STMLogger.sharedLogger!!.importantMessage(it.localizedMessage)
 
                 webInterface!!.javascriptCallback(it, photoMapParameters)

@@ -360,6 +360,7 @@ class STMCoreAuthController {
 
                     is Result.Failure -> {
 
+
                         if (result.error.localizedMessage.startsWith("java.net.UnknownHostException: Unable to resolve host")) {
 
                             throw Exception(MyApplication.appContext!!.getString(R.string.no_internet))
