@@ -24,14 +24,14 @@
 
     <application
         android:name=".base.MyApplication"
-        android:allowBackup="true"
+        android:allowBackup="false"
         android:fullBackupContent="@xml/backup_descriptor"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:icon="@mipmap/ic_launcher"
         android:roundIcon="@mipmap/ic_launcher_round"
         tools:ignore="GoogleAppIndexingWarning"
-        tools:replace="android:label"
+        tools:replace="android:label,android:allowBackup"
         android:label="${appName}" >
         <activity
             android:name=".activities.WebViewActivity"
