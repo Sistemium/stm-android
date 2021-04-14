@@ -64,6 +64,8 @@ open class BaseInstrumentaltTest {
 
         promise.then {
 
+            STMFunctions.debugLog("expectSuccess", "expectSuccess success")
+
             synchronized(lock) {
 
                 error = false

@@ -129,6 +129,8 @@ class STMSyncerHelper : STMDefantomizing, STMDataDownloading {
         STMSession.sharedSession!!.persistenceDelegate.mergeMany(entityName, dataRecieved, hashMapOf(STMPersistingOptionLts to STMFunctions.stringFrom(Date())))
                 .then {
 
+                    STMFunctions.debugLog("dataReceivedSuccessfully", "dataReceivedSuccessfully success entityName $entityName")
+
                     findAllResultMergedWithSuccess(dataRecieved, entityName, offset!!, pageSize!!)
 
                 }
@@ -237,7 +239,13 @@ class STMSyncerHelper : STMDefantomizing, STMDataDownloading {
 
             persistenceFantomsDelegate!!.mergeFantomAsync(entityName, attributes!!).then {
 
+                STMFunctions.debugLog("STMSyncerHelper", "defantomizedEntityName success entityname $entityName")
+
                 doneWithEntityName(entityName, identifier)
+
+            }.fail {
+
+                STMFunctions.debugLog("STMSyncerHelper", "defantomizedEntityName failed entityname $entityName")
 
             }
 

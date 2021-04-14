@@ -58,6 +58,8 @@ class STMSocketTransport(private var socketUrlString: String, private var owner:
         socketSendEvent(STMSocketEvent.STMSocketEventJSData, value)
                 .then {
 
+                    STMFunctions.debugLog("mergeAsync", "mergeAsync success entityname $entityName")
+
                     val (result, error) = respondOnData(it)
 
                     if (error != null) {
@@ -109,6 +111,8 @@ class STMSocketTransport(private var socketUrlString: String, private var owner:
 
         socketSendEvent(STMSocketEvent.STMSocketEventJSData, value)
                 .then {
+
+                    STMFunctions.debugLog("mergeAsync", "mergeAsync success entityname $entityName")
 
                     val (result, error) = respondOnData(it)
 

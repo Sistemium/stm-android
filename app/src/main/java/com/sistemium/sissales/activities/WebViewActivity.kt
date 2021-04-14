@@ -296,6 +296,8 @@ class WebViewActivity : Activity() {
 
             STMSession.sharedSession!!.persistenceDelegate.merge(photoEntityName, attributes.toMap(), null).then {
 
+                STMFunctions.debugLog("onActivityResult", "onActivityResult success")
+
                 val callback = photoMapParameters["callback"] as String
                 webInterface!!.javascriptCallback(arrayListOf(it), photoMapParameters, callback)
 

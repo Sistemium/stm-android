@@ -434,9 +434,6 @@ class STMSQLiteDatabaseTransaction(private var database: SQLiteDatabase, private
 //            STMFunctions.debugLog("QUERY", "result reading finished")
             }
 
-
-
-
         c.close()
 
         return rez

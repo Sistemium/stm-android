@@ -49,6 +49,8 @@ class STMUnsyncedDataHelper : STMDataSyncing {
 
     override fun setSynced(success: Boolean, entityName: String, itemData: Map<*, *>, itemVersion: String): Boolean {
 
+        STMFunctions.debugLog("setSynced", "performing setSynced success: $success")
+
         if (!success) {
 
             STMFunctions.debugLog("STMUnsyncedDataHelper", "failToSync $entityName ${itemData["id"]}")
@@ -125,9 +127,15 @@ class STMUnsyncedDataHelper : STMDataSyncing {
 
     private fun startHandleUnsyncedObjects() {
 
+        STMFunctions.debugLog("DEBUG", "startHandleUnsyncedObjects")
+
         if (subscriberDelegate == null || isPaused) {
 
             return checkUnsyncedObjects()
+
+        } else {
+
+            STMFunctions.debugLog("DEBUG", "cannot check unsynced subscriberDelegate == null: ${subscriberDelegate == null}, isPaused: $isPaused")
 
         }
 
@@ -136,11 +144,17 @@ class STMUnsyncedDataHelper : STMDataSyncing {
             syncingState = true
             sendNextUnsyncedObject()
 
+        } else {
+
+            STMFunctions.debugLog("DEBUG", "cannot sendNextUnsyncedObject because we already are in syncingState")
+
         }
 
     }
 
     private fun anyObjectToSend(): Map<*, *>? {
+
+        STMFunctions.debugLog("anyObjectToSend", "lets search for anyObjectToSend")
 
         for (entityName in STMEntityController.sharedInstance!!.uploadableEntitiesNames!!) {
 
@@ -163,7 +177,11 @@ class STMUnsyncedDataHelper : STMDataSyncing {
 
     private fun sendNextUnsyncedObject() {
 
+        STMFunctions.debugLog("sendNextUnsyncedObject", "performing sendNextUnsyncedObject")
+
         if (!syncingState) {
+
+            STMFunctions.debugLog("sendNextUnsyncedObject", "syncingState is false so lets finishHandleUnsyncedObjects")
 
             return finishHandleUnsyncedObjects()
 
@@ -177,7 +195,11 @@ class STMUnsyncedDataHelper : STMDataSyncing {
 
     private fun sendUnsyncedObject(objectToSend: Map<*, *>?) {
 
+        STMFunctions.debugLog("sendUnsyncedObject", "performing sendUnsyncedObject")
+
         if (objectToSend == null) {
+
+            STMFunctions.debugLog("sendUnsyncedObject", "null object to send lets finishHandleUnsyncedObjects")
 
             return finishHandleUnsyncedObjects()
 
@@ -189,6 +211,8 @@ class STMUnsyncedDataHelper : STMDataSyncing {
         STMFunctions.debugLog("STMUnsyncedDataHelper", "syncing entityName: $entityName xid:${itemData["id"]} ")
 
         val itemVersion = itemData[STMConstants.STMPersistingKeyVersion] as String
+
+        STMFunctions.debugLog("sendUnsyncedObject", "subscriberDelegate is null: ${subscriberDelegate == null}")
 
         subscriberDelegate?.haveUnsynced(entityName, itemData, itemVersion)
 
@@ -225,9 +249,15 @@ class STMUnsyncedDataHelper : STMDataSyncing {
 
     private fun findSyncableObjectWithEntityName(entityName: String, exclude: ArrayList<String> = ArrayList()): Map<*, *>? {
 
+        STMFunctions.debugLog("DEBUG", "findSyncableObjectWithEntityName entityname $entityName")
+
         val unsyncedObject = unsyncedObjectWithEntityName(entityName, exclude) ?: return null
 
+        STMFunctions.debugLog("DEBUG", "found unsynced entityname $entityName with size: ${unsyncedObject.size}")
+
         val parentNames = STMModelling.sharedModeler!!.toOneRelationshipsForEntityName(entityName).values.filter {
+
+            STMFunctions.debugLog("DEBUG", "lets find parentnames for entityname $entityName")
 
             val column = it.relationshipName + STMConstants.RELATIONSHIP_SUFFIX
 
@@ -258,6 +288,8 @@ class STMUnsyncedDataHelper : STMDataSyncing {
 
         if (parentNames.isNotEmpty()) {
 
+            STMFunctions.debugLog("DEBUG", "findSyncableObjectWithEntityName entityname $entityName has parrents count: ${parentNames.size}, first parrent is: ${parentNames.first()}")
+
             val nexExclude = ArrayList(exclude + unsyncedObject["id"] as String)
 
             return findSyncableObjectWithEntityName(entityName, nexExclude)
@@ -269,6 +301,8 @@ class STMUnsyncedDataHelper : STMDataSyncing {
     }
 
     private fun unsyncedObjectWithEntityName(entityName: String, exclude: ArrayList<String> = ArrayList()): Map<*, *>? {
+
+        STMFunctions.debugLog("DEBUG", "searching unsyncedObjectWithEntityName entityname $entityName")
 
         val subpredicates = arrayListOf<STMPredicate>()
         val unsyncedPredicate = predicateForUnsyncedObjectsWithEntityName(entityName)
@@ -285,15 +319,25 @@ class STMUnsyncedDataHelper : STMDataSyncing {
 
         return try {
 
+            STMFunctions.debugLog("DEBUG", "searching unsyncedObjectWithEntityName entityname $entityName will perform findall")
+
             val result = session!!.persistenceDelegate.findAllSync(entityName, predicate, options)
+
+            STMFunctions.debugLog("DEBUG", "searching unsyncedObjectWithEntityName entityname $entityName done perform findall result size: ${result.size}")
 
             for (obj in result) {
                 
                 val pk = obj[STMConstants.DEFAULT_PERSISTING_PRIMARY_KEY] as String
-                
+
+                STMFunctions.debugLog("test", "temp debug1")
+
                 val isErrored = erroredObjectsByEntity[entityName]?.contains(pk)
 
+                STMFunctions.debugLog("test", "temp debug2")
+
                 if (!exclude.contains(pk) && (isErrored == null || isErrored == false)) {
+
+                    STMFunctions.debugLog("test", "temp debug3")
 
                     return obj
 
@@ -301,9 +345,14 @@ class STMUnsyncedDataHelper : STMDataSyncing {
 
             }
 
+            STMFunctions.debugLog("DEBUG", "searching unsyncedObjectWithEntityName entityname $entityName found nothing will return null")
+
+
             null
 
         } catch (e: Exception) {
+
+            STMFunctions.debugLog("DEBUG", "searching unsyncedObjectWithEntityName entityname $entityName something went wrong")
 
             STMFunctions.debugLog("STMUnsyncedDataHelper", e.toString())
 

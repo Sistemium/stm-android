@@ -562,6 +562,8 @@ class WebAppInterface internal constructor(private var webViewActivity: WebViewA
 
         persistenceDelegate.merge("STMLocation", atributes.toMap(), null).then {
 
+            STMFunctions.debugLog("resolveLocation", "resolveLocation success")
+
             val callback = mapParameters["callback"]
 
             javascriptCallback(arrayOf(it), mapParameters, callback as String)
@@ -627,6 +629,9 @@ class WebAppInterface internal constructor(private var webViewActivity: WebViewA
         val callback = mapParameters["callback"]
 
         STMCorePicturesController.sharedInstance?.loadImageForPrimaryKey(identifier)?.then {
+
+            STMFunctions.debugLog("sendToCameraRoll", "sendToCameraRoll success")
+
             val imageData = STMCoreSessionFiler.sharedSession!!.getImage(it["resizedImagePath"] as String)
 
             if (imageData != null && imageData.byteCount > 0){
@@ -659,6 +664,8 @@ class WebAppInterface internal constructor(private var webViewActivity: WebViewA
         val callback = mapParameters["callback"]
 
         STMCorePicturesController.sharedInstance?.loadImageForPrimaryKey(identifier)?.then {
+
+            STMFunctions.debugLog("loadImage", "loadImage success")
 
             javascriptCallback(arrayListOf(it), mapParameters, callback as String)
 
@@ -725,10 +732,14 @@ class WebAppInterface internal constructor(private var webViewActivity: WebViewA
         if (xidString != null) {
             return persistenceDelegate.destroy(entityName, xidString, null).then {
 
+                STMFunctions.debugLog("DEBUG", "destroyObjectFromScriptMessage success")
+
                 val result: Map<*, *> = hashMapOf("objectXid" to xidString)
 
                 return@then arrayListOf(result)
 
+            } .fail {
+                STMFunctions.debugLog("DEBUG", "destroyObjectFromScriptMessage failed")
             }
         } else {
 
@@ -750,8 +761,12 @@ class WebAppInterface internal constructor(private var webViewActivity: WebViewA
         if (xidString != null) {
             return persistenceDelegate.find(entityName, xidString, options).then {
 
+                STMFunctions.debugLog("DEBUG", "arrayOfObjectsRequestedByScriptMessage success")
+
                 return@then arrayListOf(it!!)
 
+            } .fail {
+                STMFunctions.debugLog("DEBUG", "arrayOfObjectsRequestedByScriptMessage failed")
             }
         }
 

@@ -96,9 +96,13 @@ class STMSyncer : STMDefantomizingOwner, STMDataDownloadingOwner, STMDataSyncing
 
     override fun haveUnsynced(entityName: String, itemData: Map<*, *>, itemVersion: String) {
 
+        STMFunctions.debugLog("haveUnsynced", "performing haveUnsynced entityname $entityName")
+
         isSendingData = true
         socketTransport!!.mergeAsync(entityName, itemData, null)
                 .then {
+
+                    STMFunctions.debugLog("STMSyncer", "haveUnsynced success")
 
                     if (it["data"] == null) {
 
@@ -158,6 +162,8 @@ class STMSyncer : STMDefantomizingOwner, STMDataDownloadingOwner, STMDataSyncing
         socketTransport!!.findAllAsync(entityName, options, null)
                 .then {
 
+                    STMFunctions.debugLog("receiveData", "receiveData success entityName $entityName")
+
                     val responseOffset = it[STMConstants.STMPersistingOptionOffset] as? String
 
                     val pageSize = (it[STMConstants.STMPersistingOptionPageSize] as Double).toInt()
@@ -212,6 +218,8 @@ class STMSyncer : STMDefantomizingOwner, STMDataDownloadingOwner, STMDataSyncing
         if (!isDefantomizing) return defantomizingDelegate!!.stopDefantomization()
         socketTransport!!.findAllAsync(entityName, null, identifier)
                 .then {
+
+                    STMFunctions.debugLog("defantomizeEntityName", "defantomizeEntityName success entityName $entityName")
 
                     if (it["error"]?.toString() != null) {
 
