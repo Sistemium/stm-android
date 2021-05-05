@@ -2,6 +2,7 @@ package com.sistemium.sissales.activityController
 
 import android.annotation.SuppressLint
 import android.view.View
+import com.sistemium.sissales.BuildConfig
 import com.sistemium.sissales.R
 import com.sistemium.sissales.activities.ProfileActivity
 import com.sistemium.sissales.base.MyApplication
@@ -26,6 +27,12 @@ class ProfileActivityController(private var activity: ProfileActivity) {
         activity.runOnUiThread {
 
             activity.gridView.visibility = if (STMEntityController.downloadableEntityReady()) View.VISIBLE else View.INVISIBLE
+
+            if (BuildConfig.APPLICATION_ID.contains(".vfs") && STMEntityController.downloadableEntityReady()){
+
+                activity.openWeb()
+
+            }
 
             activity.progressBar!!.max = max
 
@@ -70,6 +77,12 @@ class ProfileActivityController(private var activity: ProfileActivity) {
             if (info == -1) {
 
                 activity.gridView.visibility = if (STMEntityController.downloadableEntityReady()) View.VISIBLE else View.INVISIBLE
+
+                if (BuildConfig.APPLICATION_ID.contains(".vfs") && STMEntityController.downloadableEntityReady()){
+
+                    activity.openWeb()
+
+                }
 
                 got = 0
 

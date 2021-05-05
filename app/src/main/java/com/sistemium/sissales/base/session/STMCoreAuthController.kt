@@ -422,7 +422,7 @@ class STMCoreAuthController {
 
             if (accessToken != null) {
 
-                val myIntent = Intent(MyApplication.appContext, ProfileActivity::class.java)
+                var myIntent = Intent(MyApplication.appContext, ProfileActivity::class.java)
 
                 myIntent.putExtra("accessToken", accessToken)
 
@@ -433,8 +433,6 @@ class STMCoreAuthController {
                 return requestRoles() then {
 
                     MyApplication.appContext?.startActivity(myIntent, options.toBundle())
-
-                    STMLogger.sharedLogger!!.importantMessage("login success")
 
                     return@then it
 

@@ -16,9 +16,6 @@ import com.zebra.scannercontrol.RMDAttributes.RMD_ATTR_BEEPER_VOLUME
 import com.zebra.scannercontrol.RMDAttributes.RMD_ATTR_VALUE_BEEPER_VOLUME_LOW
 import android.speech.tts.TextToSpeech
 import com.sistemium.sissales.activities.WebViewActivity
-import com.sistemium.sissales.webInterface.WebAppInterface
-import android.os.Looper
-import android.os.Handler
 import androidx.core.os.ConfigurationCompat
 import com.sistemium.sissales.base.session.STMSession
 

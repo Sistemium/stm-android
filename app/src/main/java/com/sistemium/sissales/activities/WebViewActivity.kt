@@ -49,7 +49,7 @@ class WebViewActivity : Activity() {
     override fun onCreate(savedInstanceState: Bundle?) {
 
         STMFunctions.memoryFix()
-
+        
         super.onCreate(savedInstanceState)
         setContentView(R.layout.webview)
         WebView.setWebContentsDebuggingEnabled(true)
@@ -57,6 +57,7 @@ class WebViewActivity : Activity() {
         webView = findViewById(R.id.webView1)
         webView?.settings?.javaScriptEnabled = true
 
+        webView?.settings?.databaseEnabled = true
         webView?.settings?.domStorageEnabled = true
 
         webView?.settings?.allowFileAccess = true
@@ -96,8 +97,6 @@ class WebViewActivity : Activity() {
         val manifest = intent.getStringExtra("manifest")
         val title = intent.getStringExtra("title")
 
-        initUpdater()
-
         webView?.webViewClient = object : WebViewClient() {
 
             override fun onReceivedError(view: WebView?, request: WebResourceRequest?, error: WebResourceError?) {
@@ -131,6 +130,12 @@ class WebViewActivity : Activity() {
 
             return
 
+        } else {
+
+            initUpdater()
+
+            STMFunctions.initPermissions(this)
+
         }
 
         task {
@@ -153,7 +158,7 @@ class WebViewActivity : Activity() {
 
                 }
 
-                loadFromManifest(manifest, title, url!!) success {
+                loadFromManifest(manifest!!, title, url!!) success {
 
                     val oldFolder = File(STMCoreSessionFiler.sharedSession!!.webPath(title))
 

@@ -20,6 +20,7 @@ import com.github.javiersantos.appupdater.AppUpdater
 import com.github.javiersantos.appupdater.enums.UpdateFrom
 import com.sistemium.sissales.BuildConfig
 import com.sistemium.sissales.base.STMFunctions
+import com.sistemium.sissales.base.classes.entitycontrollers.STMEntityController
 
 
 class ProfileActivity : AppCompatActivity() {
@@ -36,6 +37,10 @@ class ProfileActivity : AppCompatActivity() {
 
     var currentTab: Map<*, *>? = null
 
+    val tabs = arrayListOf<Map<*, *>>()
+
+    var profileAdapter: ProfileAdapter? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
 
         STMFunctions.memoryFix()
@@ -45,7 +50,7 @@ class ProfileActivity : AppCompatActivity() {
         setContentView(R.layout.activity_profile)
         setSupportActionBar(toolbar)
 
-        initPermissions()
+        STMFunctions.initPermissions(this)
 
         progressBar = findViewById(R.id.progressBar)
 
@@ -66,8 +71,6 @@ class ProfileActivity : AppCompatActivity() {
         toolbarTitle.text = STMCoreAuthController.userAgent
 
         val gridView = findViewById<GridView>(R.id.gridView)
-
-        val tabs = arrayListOf<Map<*, *>>()
 
         for (tab in STMCoreAuthController.stcTabs ?: arrayListOf<Map<*,*>>()) {
 
@@ -112,103 +115,60 @@ class ProfileActivity : AppCompatActivity() {
 
         }
 
-        val profileAdapter = ProfileAdapter(this, tabs)
+        profileAdapter = ProfileAdapter(this, tabs)
 
         gridView.adapter = profileAdapter
 
         gridView.onItemClickListener = AdapterView.OnItemClickListener { _, _, position, _ ->
             currentTab = tabs[position]
 
-            val intent = Intent(this@ProfileActivity, WebViewActivity::class.java)
+            openWeb()
 
-            var url = currentTab!!["url"] as? String
+        }
 
-            val manifest = currentTab!!["appManifestURI"] as? String
+        if (BuildConfig.APPLICATION_ID.contains(".vfs") && STMEntityController.downloadableEntityReady()){
 
-            if (url == null && manifest != null){
+            openWeb()
 
-                url = manifest.replace(manifest.split("/").last(), "")
+        }
 
-            }
+    }
 
-            //debug
+    fun openWeb(){
+
+        if (currentTab == null){
+            currentTab = tabs.first()
+        }
+
+        val intent = Intent(this@ProfileActivity, WebViewActivity::class.java)
+
+        var url = currentTab!!["url"] as? String
+
+        val manifest = currentTab!!["appManifestURI"] as? String
+
+        if (url == null && manifest != null){
+
+            url = manifest.replace(manifest.split("/").last(), "")
+
+        }
+
+        //debug
 //            url = url?.replace("http://lamac.local:3000", "http://10.0.1.5:3000")
 //            url = url?.replace("http://lamac.local:3000", "http://192.168.0.103:3000")
 //            if (manifest == null){
 //                manifest = "$url/app.manifest"
 //            }
-            //debug
+        //debug
 
-            intent.putExtra("url", url)
-            intent.putExtra("manifest", manifest)
-            intent.putExtra("title", currentTab!!["title"] as String)
-            startActivity(intent)
-            profileAdapter.notifyDataSetChanged()
-
-        }
-
+        intent.putExtra("url", url)
+        intent.putExtra("manifest", manifest)
+        intent.putExtra("title", currentTab!!["title"] as String)
+        startActivity(intent)
+        profileAdapter?.notifyDataSetChanged()
     }
 
     override fun onBackPressed() {
         this.moveTaskToBack(true)
-    }
-
-    private fun initPermissions(){
-
-        val permissions = arrayListOf<String>()
-
-        if (ContextCompat.checkSelfPermission(this,
-                        Manifest.permission.CAMERA)
-                != PackageManager.PERMISSION_GRANTED) {
-
-            permissions.add(Manifest.permission.CAMERA)
-
-        }
-
-        if (ContextCompat.checkSelfPermission(this,
-                        Manifest.permission.READ_EXTERNAL_STORAGE)
-                != PackageManager.PERMISSION_GRANTED) {
-
-            permissions.add(Manifest.permission.READ_EXTERNAL_STORAGE)
-        }
-
-        if (ContextCompat.checkSelfPermission(this,
-                        Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                != PackageManager.PERMISSION_GRANTED) {
-
-            permissions.add(Manifest.permission.WRITE_EXTERNAL_STORAGE)
-        }
-
-        if (ContextCompat.checkSelfPermission(this,
-                        Manifest.permission.ACCESS_FINE_LOCATION)
-                != PackageManager.PERMISSION_GRANTED) {
-
-            permissions.add(Manifest.permission.ACCESS_FINE_LOCATION)
-
-        }
-
-        if ( ContextCompat.checkSelfPermission( this, Manifest.permission.ACCESS_COARSE_LOCATION ) != PackageManager.PERMISSION_GRANTED ) {
-
-            permissions.add(Manifest.permission.ACCESS_COARSE_LOCATION)
-
-        }
-
-        if (ContextCompat.checkSelfPermission(this,
-                        Manifest.permission.READ_CONTACTS)
-                != PackageManager.PERMISSION_GRANTED && BuildConfig.APPLICATION_ID.contains(".vfs")) {
-
-            permissions.add(Manifest.permission.READ_CONTACTS)
-
-        }
-
-        if (permissions.isNotEmpty()){
-
-            ActivityCompat.requestPermissions(this,
-                    permissions.toTypedArray(),
-                    0)
-
-        }
-
     }
 
 }

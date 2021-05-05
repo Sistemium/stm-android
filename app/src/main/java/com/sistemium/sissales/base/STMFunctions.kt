@@ -1,13 +1,19 @@
 package com.sistemium.sissales.base
 
+import android.Manifest
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.AlertDialog
+import android.content.Context
 import android.content.DialogInterface
+import android.content.pm.PackageManager
 import android.os.Build
 import android.provider.Settings
 import android.util.Log
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import com.google.gson.GsonBuilder
+import com.sistemium.sissales.BuildConfig
 import com.sistemium.sissales.R
 import com.sistemium.sissales.base.session.STMCoreAuthController
 import com.sistemium.sissales.base.session.STMSession
@@ -136,6 +142,65 @@ class STMFunctions {
             }
 
         }
+
+        fun initPermissions(activity: Activity){
+
+            val permissions = arrayListOf<String>()
+
+            if (ContextCompat.checkSelfPermission(activity,
+                            Manifest.permission.CAMERA)
+                    != PackageManager.PERMISSION_GRANTED) {
+
+                permissions.add(Manifest.permission.CAMERA)
+
+            }
+
+            if (ContextCompat.checkSelfPermission(activity,
+                            Manifest.permission.READ_EXTERNAL_STORAGE)
+                    != PackageManager.PERMISSION_GRANTED) {
+
+                permissions.add(Manifest.permission.READ_EXTERNAL_STORAGE)
+            }
+
+            if (ContextCompat.checkSelfPermission(activity,
+                            Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                    != PackageManager.PERMISSION_GRANTED) {
+
+                permissions.add(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+            }
+
+            if (ContextCompat.checkSelfPermission(activity,
+                            Manifest.permission.ACCESS_FINE_LOCATION)
+                    != PackageManager.PERMISSION_GRANTED) {
+
+                permissions.add(Manifest.permission.ACCESS_FINE_LOCATION)
+
+            }
+
+            if ( ContextCompat.checkSelfPermission( activity, Manifest.permission.ACCESS_COARSE_LOCATION ) != PackageManager.PERMISSION_GRANTED ) {
+
+                permissions.add(Manifest.permission.ACCESS_COARSE_LOCATION)
+
+            }
+
+            if (ContextCompat.checkSelfPermission(activity,
+                            Manifest.permission.READ_CONTACTS)
+                    != PackageManager.PERMISSION_GRANTED && BuildConfig.APPLICATION_ID.contains(".vfs")) {
+
+                permissions.add(Manifest.permission.READ_CONTACTS)
+
+            }
+
+            if (permissions.isNotEmpty()){
+
+                ActivityCompat.requestPermissions(activity,
+                        permissions.toTypedArray(),
+                        0)
+
+            }
+
+        }
+
 
     }
 
