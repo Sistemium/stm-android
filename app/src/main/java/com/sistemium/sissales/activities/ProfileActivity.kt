@@ -50,8 +50,6 @@ class ProfileActivity : AppCompatActivity() {
         setContentView(R.layout.activity_profile)
         setSupportActionBar(toolbar)
 
-        STMFunctions.initPermissions(this)
-
         progressBar = findViewById(R.id.progressBar)
 
         progressBar!!.visibility = View.INVISIBLE
@@ -134,11 +132,17 @@ class ProfileActivity : AppCompatActivity() {
 
     }
 
+    private var weOpened = false
+
     fun openWeb(){
+
+        if (weOpened) return
 
         if (currentTab == null){
             currentTab = tabs.first()
         }
+
+        weOpened = true
 
         val intent = Intent(this@ProfileActivity, WebViewActivity::class.java)
 
@@ -164,7 +168,6 @@ class ProfileActivity : AppCompatActivity() {
         intent.putExtra("manifest", manifest)
         intent.putExtra("title", currentTab!!["title"] as String)
         startActivity(intent)
-        profileAdapter?.notifyDataSetChanged()
     }
 
     override fun onBackPressed() {
