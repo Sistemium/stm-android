@@ -103,6 +103,26 @@ class WebViewActivity : Activity() {
                 STMFunctions.debugLog("CHROME", error.toString())
             }
 
+            //https://stackoverflow.com/questions/39979950/webviewclient-not-calling-shouldoverrideurlloading
+            override fun shouldOverrideUrlLoading(view: WebView?, url: String?): Boolean {
+                if (url?.contains("access-token=") == true && manifest == null){
+
+                    STMCoreAuthController.accessToken = url.toString().split("access-token=").last()
+
+                    webView?.destroy()
+
+                    STMCoreAuthController.logIn()
+
+                }
+                if (url?.startsWith("tel:") == true) {
+                    val intent = Intent(Intent.ACTION_DIAL,
+                            Uri.parse(url.toString()))
+                    startActivity(intent)
+                    return true
+                }
+                return false
+            }
+
             override fun shouldOverrideUrlLoading(view: WebView?, request: WebResourceRequest?): Boolean {
                 if (request?.url?.toString()?.contains("access-token=") == true && manifest == null){
 
