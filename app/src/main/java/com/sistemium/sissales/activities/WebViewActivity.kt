@@ -10,12 +10,14 @@ import android.net.ConnectivityManager
 import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
+import android.view.WindowManager
 import android.webkit.*
 import android.webkit.WebView
 import com.github.javiersantos.appupdater.AppUpdater
 import com.github.javiersantos.appupdater.enums.UpdateFrom
 import com.github.kittinunf.fuel.Fuel
 import com.github.kittinunf.fuel.android.extension.responseJson
+import com.sistemium.sissales.BuildConfig
 import com.sistemium.sissales.base.MyApplication
 import com.sistemium.sissales.base.STMCoreSessionFiler
 import com.sistemium.sissales.base.STMFunctions
@@ -53,6 +55,9 @@ class WebViewActivity : Activity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.webview)
         WebView.setWebContentsDebuggingEnabled(true)
+        if (BuildConfig.APPLICATION_ID.contains(".warehouse")){
+            window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+        }
 
         webView = findViewById(R.id.webView1)
         webView?.settings?.javaScriptEnabled = true
