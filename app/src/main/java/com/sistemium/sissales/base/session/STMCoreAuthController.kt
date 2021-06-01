@@ -495,6 +495,22 @@ class STMCoreAuthController {
                             "appManifestURI" to "https://vfsm2.sistemium.com/app.manifest",
                             "url" to "https://vfsm2.sistemium.com"
                     ))
+                    if (BuildConfig.APPLICATION_ID.contains("Debug")){
+                        stcTabs = arrayListOf(hashMapOf(
+                                "name" to "STMWKWebView",
+                                "title" to "VFS Debug",
+                                "imageName" to "3colors-colorless.png",
+                                "appManifestURI" to "https://vfsm3.sistemium.com/app.manifest",
+                                "url" to "https://vfsm3.sistemium.com"
+                        ),hashMapOf(
+                                "name" to "STMWKWebView",
+                                "title" to "VFS",
+                                "imageName" to "3colors-colorless.png",
+                                "appManifestURI" to "https://vfsm2.sistemium.com/app.manifest",
+                                "url" to "https://vfsm2.sistemium.com"
+                        ))
+                    }
+
 
                     return@task roles
 
