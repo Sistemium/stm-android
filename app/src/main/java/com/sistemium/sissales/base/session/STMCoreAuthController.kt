@@ -23,6 +23,7 @@ import com.sistemium.sissales.base.classes.entitycontrollers.STMCorePicturesCont
 import com.sistemium.sissales.base.classes.entitycontrollers.STMEntityController
 import com.sistemium.sissales.interfaces.STMModelling
 import com.sistemium.sissales.BuildConfig
+import com.sistemium.sissales.base.STMCoreSessionFiler
 
 
 /**
@@ -59,7 +60,7 @@ class STMCoreAuthController {
 
         var modelEtag: String?
             get() {
-
+                
                 val prefStore = SecuredPreferenceStore.getSharedInstance()
                 return prefStore.getString("modelEtag", null)
 
@@ -335,6 +336,12 @@ class STMCoreAuthController {
 
             STMFunctions.deleteRecursive(File(MyApplication.appContext!!.cacheDir
                     .absolutePath))
+
+            STMCoreSessionFiler.sharedSession = null
+
+            modelEtag = null
+
+
 
         }
 
