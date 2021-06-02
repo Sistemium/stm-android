@@ -30,7 +30,9 @@ class ProfileActivityController(private var activity: ProfileActivity) {
 
             if (BuildConfig.APPLICATION_ID.contains(".vfs") && STMEntityController.downloadableEntityReady()){
 
-                activity.openWeb()
+                if(!activity.webOpened){
+                    activity.openWeb()
+                }
 
             }
 
@@ -80,7 +82,9 @@ class ProfileActivityController(private var activity: ProfileActivity) {
 
                 if (BuildConfig.APPLICATION_ID.contains(".vfs") && STMEntityController.downloadableEntityReady()){
 
-                    activity.openWeb()
+                    if(!activity.webOpened){
+                        activity.openWeb()
+                    }
 
                 }
 

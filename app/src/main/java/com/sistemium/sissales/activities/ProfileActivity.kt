@@ -132,17 +132,15 @@ class ProfileActivity : AppCompatActivity() {
 
     }
 
-    private var weOpened = false
+    var webOpened = false
 
     fun openWeb(){
 
-        if (weOpened) return
+        webOpened = true
 
         if (currentTab == null){
             currentTab = tabs.first()
         }
-
-        weOpened = true
 
         val intent = Intent(this@ProfileActivity, WebViewActivity::class.java)
 
