@@ -2,12 +2,14 @@ package com.sistemium.sissales.activities
 
 import android.annotation.SuppressLint
 import android.app.Activity
+import android.app.Application
 import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.ConnectivityManager
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.view.WindowManager
@@ -49,6 +51,13 @@ class WebViewActivity : Activity() {
     private val updateHandler = Handler()
 
     override fun onCreate(savedInstanceState: Bundle?) {
+
+        //https://stackoverflow.com/questions/51843546/android-pie-9-0-webview-in-multi-process
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+            if (packageName != Application.getProcessName()) {
+                WebView.setDataDirectorySuffix(Application.getProcessName())
+            }
+        }
 
         STMFunctions.memoryFix()
         
