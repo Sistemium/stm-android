@@ -279,8 +279,6 @@ class WebAppInterface internal constructor(private var webViewActivity: WebViewA
 
                 if (it == TextToSpeech.SUCCESS) {
 
-                    tts!!.language = ConfigurationCompat.getLocales(MyApplication.appContext!!.resources.configuration)[0]
-
                     tts!!.speak(messageText, TextToSpeech.QUEUE_ADD, null, null)
 
                 }
