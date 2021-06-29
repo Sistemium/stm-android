@@ -92,5 +92,5 @@ dependencies {
     implementation 'com.google.android.gms:play-services-location:18.0.0'
     implementation project(path: ':BarcodeScannerLibrary')
     implementation 'com.google.firebase:firebase-analytics-ktx:19.0.0'
-    implementation 'com.google.firebase:firebase-crashlytics:18.0.1'
+    implementation 'com.google.firebase:firebase-crashlytics:18.1.0'
 }
