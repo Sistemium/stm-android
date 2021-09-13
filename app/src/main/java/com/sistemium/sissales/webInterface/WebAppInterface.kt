@@ -556,7 +556,7 @@ class WebAppInterface internal constructor(private var webViewActivity: WebViewA
         atributes["speed"] = location.speed
         atributes["verticalAccuracy"] = location.accuracy
         atributes["isFantom"] = 0
-        atributes["timestamp"] = STMFunctions.stringFrom(Date(location.time))
+        atributes["timestamp"] = STMFunctions.stringFrom(Date())
 
         persistenceDelegate.merge("STMLocation", atributes.toMap(), null).then {
 
