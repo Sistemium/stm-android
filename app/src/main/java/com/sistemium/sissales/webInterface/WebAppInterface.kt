@@ -728,7 +728,10 @@ class WebAppInterface internal constructor(private var webViewActivity: WebViewA
         val xidString = parameters[STMConstants.DEFAULT_PERSISTING_PRIMARY_KEY] as? String
 
         if (xidString != null) {
-            return persistenceDelegate.destroy(entityName, xidString, null).then {
+
+            val options = parameters["options"] as? Map<*, *>
+
+            return persistenceDelegate.destroy(entityName, xidString, options).then {
 
                 STMFunctions.debugLog("DEBUG", "destroyObjectFromScriptMessage success")
 
