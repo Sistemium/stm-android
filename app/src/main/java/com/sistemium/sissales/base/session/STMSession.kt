@@ -22,6 +22,8 @@ import com.sistemium.sissales.persisting.*
 import java.io.File
 import java.util.*
 import android.database.sqlite.SQLiteDatabase
+import android.os.Build
+import com.sistemium.sissales.BuildConfig
 import java.sql.SQLException
 import kotlin.collections.HashMap
 
@@ -92,6 +94,10 @@ class STMSession {
         }
 
         var path = "https://api.sistemium.com/models/i${STMCoreAuthController.configuration}.json"
+
+        if (BuildConfig.DEBUG){
+            path = "https://api.sistemium.com/models/dev/i${STMCoreAuthController.configuration}.json"
+        }
 
         if (STMCoreAuthController.configuration.contains("vfs")){
 
