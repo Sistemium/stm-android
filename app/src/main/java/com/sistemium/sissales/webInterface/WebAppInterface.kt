@@ -493,13 +493,13 @@ class WebAppInterface internal constructor(private var webViewActivity: WebViewA
                     override fun onLocationResult(p0: LocationResult?) {
                         val location = p0!!.lastLocation
 
-                        if (bestLocation == null || bestLocation!!.accuracy > location.accuracy) {
+                        if (location.time > startTime.time - 60000 && (bestLocation == null || bestLocation!!.accuracy > location.accuracy)) {
 
                             bestLocation = location
 
                         }
 
-                        if (bestLocation!!.accuracy <= accuracy || Date().time - timeout > startTime.time){
+                        if (bestLocation != null && (bestLocation!!.accuracy <= accuracy || Date().time - timeout > startTime.time)){
 
                             resolveLocation(bestLocation, mapParameters)
 
