@@ -472,8 +472,6 @@ class WebAppInterface internal constructor(private var webViewActivity: WebViewA
 
         val startTime = Date()
 
-        var bestLocation:Location? = null
-
         val mFusedLocationClient = LocationServices.getFusedLocationProviderClient(MyApplication.appContext!!)
 
         var googleApiClient:GoogleApiClient? = null
@@ -487,6 +485,8 @@ class WebAppInterface internal constructor(private var webViewActivity: WebViewA
                 val locationRequest = LocationRequest()
                 locationRequest.priority = PRIORITY_HIGH_ACCURACY
                 locationRequest.interval = 0
+
+                var bestLocation:Location? = null
 
                 mFusedLocationClient.requestLocationUpdates(locationRequest, object:LocationCallback(){
 
