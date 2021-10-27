@@ -32,6 +32,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         tools:ignore="GoogleAppIndexingWarning"
         tools:replace="android:label,android:allowBackup"
+        android:usesCleartextTraffic="true"
         android:label="${appName}" >
         <activity
             android:name=".activities.WebViewActivity"
