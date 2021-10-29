@@ -89,21 +89,6 @@ class WebViewActivity : Activity() {
 
         webView?.addJavascriptInterface(webInterface!!, "stmAndroid")
         webView?.settings?.mediaPlaybackRequiresUserGesture = false
-        webView?.setDownloadListener(DownloadListener { url, userAgent, contentDisposition, mimetype, contentLength ->
-            val request = DownloadManager.Request(
-                    Uri.parse(url))
-            request.allowScanningByMediaScanner()
-            request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED) //Notify client once download is completed!
-            var filename = URLUtil.guessFileName(url, contentDisposition, mimetype)
-            if (contentDisposition.contains("UTF-8")){
-                filename = contentDisposition.split("UTF-8''").last()
-            }
-            request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, filename)
-            val dm = getSystemService(DOWNLOAD_SERVICE) as DownloadManager
-            dm.enqueue(request)
-            Toast.makeText(applicationContext, R.string.downloading,  //To notify the Client that the file is being downloaded
-                    Toast.LENGTH_LONG).show()
-        })
         webView?.webChromeClient = object : WebChromeClient() {
 
             override fun onShowFileChooser(webView: WebView?, filePathCallback: ValueCallback<Array<Uri>>?, fileChooserParams: FileChooserParams?): Boolean {

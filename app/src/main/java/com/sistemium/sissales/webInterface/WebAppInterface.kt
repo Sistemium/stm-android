@@ -2,17 +2,19 @@ package com.sistemium.sissales.webInterface
 
 
 import android.annotation.SuppressLint
+import android.app.Activity
+import android.app.DownloadManager
 import android.content.*
 import android.location.Location
 import android.net.Uri
 import android.os.Bundle
+import android.os.Environment
 import android.os.Looper
 import android.provider.ContactsContract
 import android.provider.MediaStore
 import android.speech.tts.TextToSpeech
 import android.webkit.JavascriptInterface
-import androidx.core.content.ContextCompat.startActivity
-import androidx.core.os.ConfigurationCompat
+import android.widget.Toast
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.api.GoogleApiClient
 import com.google.android.gms.location.LocationCallback
@@ -20,6 +22,7 @@ import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationRequest.PRIORITY_HIGH_ACCURACY
 import com.google.android.gms.location.LocationResult
 import com.google.android.gms.location.LocationServices
+import com.sistemium.sissales.R
 import com.sistemium.sissales.activities.WebViewActivity
 import com.sistemium.sissales.base.*
 import com.sistemium.sissales.base.STMFunctions.Companion.gson
@@ -601,6 +604,49 @@ class WebAppInterface internal constructor(private var webViewActivity: WebViewA
         webViewActivity.photoMapParameters = mapParameters
 
         webViewActivity.filePath = STMCorePhotosController.sharedInstance!!.selectImage(webViewActivity)
+
+    }
+
+    @JavascriptInterface
+    fun downloadFile(parameters: String?) {
+
+        STMFunctions.debugLog("DEBUG", "downloadFile")
+
+        val mapParameters = gson.fromJson(parameters, Map::class.java)
+
+        val url = mapParameters["url"] as String
+
+        val name = mapParameters["name"] as String
+
+        val request = DownloadManager.Request(Uri.parse(url))
+        request.allowScanningByMediaScanner()
+        request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED)
+        request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, name)
+        val dm = MyApplication.appContext!!.getSystemService(Activity.DOWNLOAD_SERVICE) as DownloadManager
+
+        try {
+
+            val downloadReference = dm.enqueue(request)
+
+            val callback = mapParameters["callback"]
+
+            return if (downloadReference != 0L) {
+
+                Toast.makeText(MyApplication.appContext!!, R.string.downloading,  //To notify the Client that the file is being downloaded
+                        Toast.LENGTH_LONG).show()
+
+                javascriptCallback(arrayListOf<String>(), mapParameters, callback as String)
+
+
+            } else{
+
+                javascriptCallback("error", mapParameters)
+
+            }
+
+        } catch (ex: Exception) {
+            javascriptCallback("No file write permissions", mapParameters)
+        }
 
     }
 
