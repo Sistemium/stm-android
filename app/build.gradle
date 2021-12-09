@@ -91,6 +91,8 @@ dependencies {
     implementation 'com.github.javiersantos:AppUpdater:master-SNAPSHOT'
     implementation 'com.google.android.gms:play-services-location:18.0.0'
     implementation project(path: ':BarcodeScannerLibrary')
+    implementation platform('com.google.firebase:firebase-bom:29.0.1')
     implementation 'com.google.firebase:firebase-analytics-ktx:20.0.0'
     implementation 'com.google.firebase:firebase-crashlytics:18.2.5'
+    implementation 'com.google.firebase:firebase-messaging-ktx'
 }

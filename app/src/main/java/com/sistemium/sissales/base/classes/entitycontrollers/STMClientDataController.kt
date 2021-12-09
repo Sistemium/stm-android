@@ -7,6 +7,7 @@ import com.sistemium.sissales.base.STMFunctions
 import com.sistemium.sissales.base.session.STMCoreAuthController
 import com.sistemium.sissales.interfaces.STMFullStackPersisting
 import android.os.StatFs
+import com.sistemium.sissales.base.MyApplication
 import com.sistemium.sissales.interfaces.STMModelling
 
 /**
@@ -40,6 +41,11 @@ class STMClientDataController {
         private var bundleIdentifier:String = ""
             get() {
                 return STMCoreAuthController.configuration
+            }
+
+        private var deviceToken:String = ""
+            get() {
+                return STMCoreAuthController.deviceToken ?: ""
             }
 
         private var appVersion:String = ""
@@ -114,6 +120,14 @@ class STMClientDataController {
             if (clientData["bundleIdentifier"] != bundleIdentifier){
 
                 clientData["bundleIdentifier"] = bundleIdentifier
+
+                haveUpdates = true
+
+            }
+
+            if (clientData["deviceToken"] != deviceToken){
+
+                clientData["deviceToken"] = deviceToken
 
                 haveUpdates = true
 

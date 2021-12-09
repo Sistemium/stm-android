@@ -1,5 +1,7 @@
 package com.sistemium.sissales.base.session
 
+import com.google.android.gms.tasks.OnCompleteListener
+import com.google.firebase.messaging.FirebaseMessaging
 import com.sistemium.sissales.activities.WebViewActivity
 import com.sistemium.sissales.base.STMConstants
 import com.sistemium.sissales.base.STMConstants.Companion.NOTIFICATION_SYNCER_SENDIG_DATA
@@ -292,7 +294,20 @@ class STMSyncer : STMDefantomizingOwner, STMDataDownloadingOwner, STMDataSyncing
 
         STMEntityController.sharedInstance!!.checkEntitiesForDuplicates()
 
-        STMClientDataController.checkClientData()
+        FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener { task ->
+            if (!task.isSuccessful) {
+                STMLogger.sharedLogger!!.infoMessage("Fetching FCM registration token failed")
+                return@OnCompleteListener
+            }
+
+            val token = task.result
+
+            STMLogger.sharedLogger!!.infoMessage("Got deviceToken: $token")
+            STMCoreAuthController.deviceToken = token
+
+            STMClientDataController.checkClientData()
+
+        })
 
         session?.logger?.infoMessage("Syncer start")
 

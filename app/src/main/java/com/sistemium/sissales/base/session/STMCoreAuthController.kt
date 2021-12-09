@@ -304,6 +304,22 @@ class STMCoreAuthController {
 
             }
 
+        var deviceToken: String?
+            get() {
+
+                val prefStore = MyApplication.appContext?.getSharedPreferences("Sistemium", Context.MODE_PRIVATE)
+
+                return prefStore?.getString("deviceToken", null)
+
+            }
+            set(value) {
+
+                val prefStore = MyApplication.appContext?.getSharedPreferences("Sistemium", Context.MODE_PRIVATE)
+
+                prefStore?.edit()?.putString("deviceToken", value)?.apply()
+
+            }
+
         val dataModelName: String
             get() {
 
@@ -517,7 +533,6 @@ class STMCoreAuthController {
                                 "url" to "https://vfsm2.sistemium.com"
                         ))
                     }
-
 
                     return@task roles
 

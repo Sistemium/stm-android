@@ -53,8 +53,6 @@ class STMLogger private constructor() {
 
     fun infoMessage(text: String) {
 
-        STMFunctions.debugLog("test", text)
-
         saveLogMessageWithText(text, STMLogMessageType.STMLogMessageTypeInfo)
 
     }
