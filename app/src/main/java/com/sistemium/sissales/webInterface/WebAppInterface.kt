@@ -493,8 +493,8 @@ class WebAppInterface internal constructor(private var webViewActivity: WebViewA
 
                 mFusedLocationClient.requestLocationUpdates(locationRequest, object:LocationCallback(){
 
-                    override fun onLocationResult(p0: LocationResult?) {
-                        val location = p0!!.lastLocation
+                    override fun onLocationResult(p0: LocationResult) {
+                        val location = p0.lastLocation
 
                         if (location.time > startTime.time - 60000 && (bestLocation == null || bestLocation!!.accuracy > location.accuracy)) {
 
@@ -513,7 +513,7 @@ class WebAppInterface internal constructor(private var webViewActivity: WebViewA
                         }
                     }
 
-                }, Looper.myLooper())
+                }, Looper.myLooper()!!)
 
             }
 
