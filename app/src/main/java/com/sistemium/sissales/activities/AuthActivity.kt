@@ -114,7 +114,6 @@ class AuthActivity : AppCompatActivity() {
 
         phoneNumberEdit.addTextChangedListener(textWatcher)
 
-        val clickButton: Button = findViewById(R.id.button)
         val onClickListener = View.OnClickListener {
 
             val spinner: ConstraintLayout = findViewById(R.id.loading_screen)
@@ -157,7 +156,53 @@ class AuthActivity : AppCompatActivity() {
 
         }
 
-        clickButton.setOnClickListener(onClickListener)
+        sendButton.setOnClickListener(onClickListener)
+
+        val demo: Button = findViewById(R.id.demo)
+
+        val demoOnClickListener = View.OnClickListener {
+
+            val spinner: ConstraintLayout = findViewById(R.id.loading_screen)
+
+            spinner.visibility = View.VISIBLE
+
+            val view = this.currentFocus
+            if (view != null) {
+                val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                imm.hideSoftInputFromWindow(view.windowToken, 0)
+            }
+
+            STMCoreAuthController.requestNewSMSCode(phoneNumberEdit.text.toString()) then {
+
+                val myIntent = Intent(this@AuthActivity, CodeConfirmActivity::class.java)
+                myIntent.putExtra("ID", it)
+                myIntent.putExtra("mobileNumber", phoneNumberEdit.text.toString())
+
+                val options = ActivityOptions.makeCustomAnimation(this, R.anim.abc_fade_in, R.anim.abc_fade_out)
+
+                this@AuthActivity.startActivity(myIntent, options.toBundle())
+
+                this.runOnUiThread {
+
+                    spinner.visibility = View.INVISIBLE
+
+                }
+
+            } fail {
+
+                this.runOnUiThread {
+
+                    spinner.visibility = View.INVISIBLE
+
+                }
+
+                STMFunctions.handleError(this, it.localizedMessage)
+
+            }
+
+        }
+
+        demo.setOnClickListener(demoOnClickListener)
 
     }
 
