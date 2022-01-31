@@ -17,8 +17,11 @@ import android.widget.EditText
 import androidx.constraintlayout.widget.ConstraintLayout
 import com.sistemium.sissales.BuildConfig
 import com.sistemium.sissales.R
+import com.sistemium.sissales.base.MyApplication
+import com.sistemium.sissales.base.STMCoreSessionFiler
 import com.sistemium.sissales.base.STMFunctions
 import com.sistemium.sissales.base.session.STMCoreAuthController
+import com.sistemium.sissales.base.session.STMSession
 import kotlinx.android.synthetic.main.activity_auth.*
 import nl.komponents.kovenant.then
 
@@ -162,43 +165,20 @@ class AuthActivity : AppCompatActivity() {
 
         val demoOnClickListener = View.OnClickListener {
 
-            val spinner: ConstraintLayout = findViewById(R.id.loading_screen)
+            STMCoreAuthController.accountOrg = "DEMO org"
+            STMCoreAuthController.iSisDB = "demo_sales"
+            STMCoreAuthController.userID = "user id DEMO"
+            STMCoreAuthController.isDemo = true
 
-            spinner.visibility = View.VISIBLE
+            STMSession.sharedSession!!.persistenceDelegate
 
-            val view = this.currentFocus
-            if (view != null) {
-                val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-                imm.hideSoftInputFromWindow(view.windowToken, 0)
-            }
+            val myIntent = Intent(MyApplication.appContext, ProfileActivity::class.java)
 
-            STMCoreAuthController.requestNewSMSCode(phoneNumberEdit.text.toString()) then {
+            myIntent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
 
-                val myIntent = Intent(this@AuthActivity, CodeConfirmActivity::class.java)
-                myIntent.putExtra("ID", it)
-                myIntent.putExtra("mobileNumber", phoneNumberEdit.text.toString())
+            val options = ActivityOptions.makeCustomAnimation(MyApplication.appContext, R.anim.abc_fade_in, R.anim.abc_fade_out)
 
-                val options = ActivityOptions.makeCustomAnimation(this, R.anim.abc_fade_in, R.anim.abc_fade_out)
-
-                this@AuthActivity.startActivity(myIntent, options.toBundle())
-
-                this.runOnUiThread {
-
-                    spinner.visibility = View.INVISIBLE
-
-                }
-
-            } fail {
-
-                this.runOnUiThread {
-
-                    spinner.visibility = View.INVISIBLE
-
-                }
-
-                STMFunctions.handleError(this, it.localizedMessage)
-
-            }
+            MyApplication.appContext?.startActivity(myIntent, options.toBundle())
 
         }
 

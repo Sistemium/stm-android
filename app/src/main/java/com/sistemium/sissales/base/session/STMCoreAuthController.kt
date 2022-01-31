@@ -34,6 +34,8 @@ class STMCoreAuthController {
 
     companion object {
 
+        var isDemo = false
+
         var accessToken: String?
             get() {
                 val prefStore = SecuredPreferenceStore.getSharedInstance()
