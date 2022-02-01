@@ -24,6 +24,7 @@ import java.util.*
 import android.database.sqlite.SQLiteDatabase
 import android.os.Build
 import com.sistemium.sissales.BuildConfig
+import com.sistemium.sissales.base.MyApplication
 import java.sql.SQLException
 import kotlin.collections.HashMap
 
@@ -69,17 +70,52 @@ class STMSession {
 
         val databasePath = STMCoreSessionFiler.sharedSession!!.persistencePath(STMConstants.SQL_LITE_PATH) + "/" + databaseFile
 
-        val header:Map<String,String>? = if (STMCoreAuthController.modelEtag != null) mapOf("if-none-match" to STMCoreAuthController.modelEtag!!) else null
+        val newModel = getModel()
+
+        STMModelling.sharedModeler = STMModeller(newModel)
+
+        val adapter = STMSQLiteDatabaseAdapter(databasePath)
+
+        val runner = STMPersisterRunner(hashMapOf(STMStorageType.STMStorageTypeSQLiteDatabase to adapter))
+
+        val persister = STMPersister(runner)
+
+        val entityNameInterceptor = STMPersistingInterceptorUniqueProperty()
+        entityNameInterceptor.entityName = STMConstants.STM_ENTITY_NAME
+        entityNameInterceptor.propertyName = "name"
+
+        persister.beforeMergeEntityName(entityNameInterceptor.entityName!!, entityNameInterceptor)
+
+        val recordStatusInterceptor = STMRecordStatusController()
+
+        persister.beforeMergeEntityName(STMConstants.STM_RECORDSTATUS_NAME, recordStatusInterceptor)
+
+        this.persistenceDelegate = persister
+
+        val settings = STMCoreSettingsController()
+        settings.persistenceDelegate = persistenceDelegate
+        STMClientDataController.persistenceDelegate = persistenceDelegate
+        settingsController = settings
+        val settingsInterceptor = settingsController as STMPersistingMergeInterceptor
+        persister.beforeMergeEntityName(STMConstants.STM_SETTING_NAME, settingsInterceptor)
+
+        logger = STMLogger.sharedLogger
+        logger?.session = this
+
+        applyPatches(adapter.database)
+
+    }
+
+    fun getModel() : String {
 
         var newModel = ""
 
-        val savedModelPath = databasePath.replace(".db", ".json")
+        val dataModelName = STMCoreAuthController.dataModelName
 
-        val file = File(savedModelPath)
+        if (STMCoreAuthController.isDemo){
 
-        if (file.exists()) {
-
-            val stream = file.inputStream()
+            val assetManager = MyApplication.appContext!!.assets
+            val stream = assetManager.open("demo/$dataModelName/$dataModelName.json")
 
             val scanner = Scanner(stream)
 
@@ -89,9 +125,20 @@ class STMSession {
                 jsonModelString.append(scanner.nextLine())
             }
 
-            newModel = jsonModelString.toString()
+            return jsonModelString.toString()
 
+        } else {
+
+            val databaseFile = "$dataModelName.db"
+
+            val databasePath = STMCoreSessionFiler.sharedSession!!.persistencePath(STMConstants.SQL_LITE_PATH) + "/" + databaseFile
+
+            val savedModelPath = databasePath.replace(".db", ".json")
+
+            newModel = getSavedModel(savedModelPath) ?: ""
         }
+
+        val header:Map<String,String>? = if (STMCoreAuthController.modelEtag != null) mapOf("if-none-match" to STMCoreAuthController.modelEtag!!) else null
 
         var path = "https://api.sistemium.com/models/i${STMCoreAuthController.configuration}.json"
 
@@ -130,37 +177,32 @@ class STMSession {
 
         }
 
-        STMModelling.sharedModeler = STMModeller(newModel)
+        return newModel
+    }
 
-        val adapter = STMSQLiteDatabaseAdapter(databasePath)
+    fun getSavedModel(savedModelPath: String): String?{
 
-        val runner = STMPersisterRunner(hashMapOf(STMStorageType.STMStorageTypeSQLiteDatabase to adapter))
+        var newModel : String? = null
 
-        val persister = STMPersister(runner)
+        val file = File(savedModelPath)
 
-        val entityNameInterceptor = STMPersistingInterceptorUniqueProperty()
-        entityNameInterceptor.entityName = STMConstants.STM_ENTITY_NAME
-        entityNameInterceptor.propertyName = "name"
+        if (file.exists()) {
 
-        persister.beforeMergeEntityName(entityNameInterceptor.entityName!!, entityNameInterceptor)
+            val stream = file.inputStream()
 
-        val recordStatusInterceptor = STMRecordStatusController()
+            val scanner = Scanner(stream)
 
-        persister.beforeMergeEntityName(STMConstants.STM_RECORDSTATUS_NAME, recordStatusInterceptor)
+            val jsonModelString = StringBuilder()
 
-        this.persistenceDelegate = persister
+            while (scanner.hasNext()) {
+                jsonModelString.append(scanner.nextLine())
+            }
 
-        val settings = STMCoreSettingsController()
-        settings.persistenceDelegate = persistenceDelegate
-        STMClientDataController.persistenceDelegate = persistenceDelegate
-        settingsController = settings
-        val settingsInterceptor = settingsController as STMPersistingMergeInterceptor
-        persister.beforeMergeEntityName(STMConstants.STM_SETTING_NAME, settingsInterceptor)
+            newModel = jsonModelString.toString()
 
-        logger = STMLogger.sharedLogger
-        logger?.session = this
+        }
 
-        applyPatches(adapter.database)
+        return newModel
 
     }
 

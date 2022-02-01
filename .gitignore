@@ -11,4 +11,4 @@
 .idea/misc.xml
 BarcodeScannerLibrary
 app/google-services.json
-app/src/main/java/com/sistemium/sissales/demo/*
+app/src/main/assets/demo/*
