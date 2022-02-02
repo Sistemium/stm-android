@@ -25,6 +25,8 @@ import android.database.sqlite.SQLiteDatabase
 import android.os.Build
 import com.sistemium.sissales.BuildConfig
 import com.sistemium.sissales.base.MyApplication
+import java.io.InputStream
+import java.io.OutputStream
 import java.sql.SQLException
 import kotlin.collections.HashMap
 
@@ -112,31 +114,32 @@ class STMSession {
 
         val dataModelName = STMCoreAuthController.dataModelName
 
-        if (STMCoreAuthController.isDemo){
+        val databaseFile = "$dataModelName.db"
+
+        val databasePath = STMCoreSessionFiler.sharedSession!!.persistencePath(STMConstants.SQL_LITE_PATH) + "/" + databaseFile
+
+        val savedModelPath = databasePath.replace(".db", ".json")
+
+        if (STMCoreAuthController.isDemo) {
 
             val assetManager = MyApplication.appContext!!.assets
-            val stream = assetManager.open("demo/$dataModelName/$dataModelName.json")
+            val assetModelStream = assetManager.open("demo/$dataModelName/$dataModelName.json")
+            val modelStream = File(savedModelPath).outputStream()
 
-            val scanner = Scanner(stream)
+            copyFile(assetModelStream, modelStream)
 
-            val jsonModelString = StringBuilder()
+            val assetDataStream = assetManager.open("demo/$dataModelName/DEMO.db")
+            val dataStream = File(databasePath).outputStream()
+            copyFile(assetDataStream, dataStream)
 
-            while (scanner.hasNext()) {
-                jsonModelString.append(scanner.nextLine())
-            }
+            assetModelStream.close()
+            assetDataStream.close()
+            modelStream.close()
+            dataStream.close()
 
-            return jsonModelString.toString()
-
-        } else {
-
-            val databaseFile = "$dataModelName.db"
-
-            val databasePath = STMCoreSessionFiler.sharedSession!!.persistencePath(STMConstants.SQL_LITE_PATH) + "/" + databaseFile
-
-            val savedModelPath = databasePath.replace(".db", ".json")
-
-            newModel = getSavedModel(savedModelPath) ?: ""
         }
+
+        newModel = getSavedModel(savedModelPath) ?: ""
 
         val header:Map<String,String>? = if (STMCoreAuthController.modelEtag != null) mapOf("if-none-match" to STMCoreAuthController.modelEtag!!) else null
 
@@ -178,6 +181,14 @@ class STMSession {
         }
 
         return newModel
+    }
+
+    private fun copyFile(i: InputStream, out: OutputStream) {
+        val buffer = ByteArray(1024)
+        var read: Int
+        while (i.read(buffer).also { read = it } != -1) {
+            out.write(buffer, 0, read)
+        }
     }
 
     fun getSavedModel(savedModelPath: String): String?{

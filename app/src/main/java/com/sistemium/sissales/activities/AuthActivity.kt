@@ -24,6 +24,7 @@ import com.sistemium.sissales.base.session.STMCoreAuthController
 import com.sistemium.sissales.base.session.STMSession
 import kotlinx.android.synthetic.main.activity_auth.*
 import nl.komponents.kovenant.then
+import java.util.*
 
 class AuthActivity : AppCompatActivity() {
 
@@ -165,9 +166,21 @@ class AuthActivity : AppCompatActivity() {
 
         val demoOnClickListener = View.OnClickListener {
 
-            STMCoreAuthController.accountOrg = "DEMO org"
-            STMCoreAuthController.iSisDB = "demo_sales"
-            STMCoreAuthController.userID = "user id DEMO"
+            STMCoreAuthController.userID = "DEMO ID"
+            STMCoreAuthController.userName = "DEMO"
+            STMCoreAuthController.phoneNumber = ""
+
+            val assetManager = MyApplication.appContext!!.assets
+            val rolesAssetStream = assetManager.open("demo/${STMCoreAuthController.dataModelName}/roles-DEMO.json")
+
+            val scanner = Scanner(rolesAssetStream)
+            val jsonModelString = StringBuilder()
+            while (scanner.hasNext()) {
+                jsonModelString.append(scanner.nextLine())
+            }
+
+            STMCoreAuthController.processRoles(jsonModelString.toString())
+            rolesAssetStream.close()
             STMCoreAuthController.isDemo = true
 
             STMSession.sharedSession!!.persistenceDelegate

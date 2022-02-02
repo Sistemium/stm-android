@@ -3,6 +3,7 @@ package com.sistemium.sissales.model
 import android.database.sqlite.SQLiteDatabase
 import com.sistemium.sissales.base.STMConstants
 import com.sistemium.sissales.base.STMFunctions
+import com.sistemium.sissales.base.session.STMCoreAuthController
 import com.sistemium.sissales.enums.STMStorageType
 import com.sistemium.sissales.interfaces.STMAdapting
 import com.sistemium.sissales.interfaces.STMModelling

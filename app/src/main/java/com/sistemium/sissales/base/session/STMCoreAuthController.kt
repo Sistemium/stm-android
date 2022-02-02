@@ -482,6 +482,37 @@ class STMCoreAuthController {
 
         }
 
+        fun processRoles(input: String): Map<*, *> {
+
+            val roles = STMFunctions.gson.fromJson(input, Map::class.java)
+
+            rolesResponse = roles
+
+            accountOrg = (roles["roles"] as? Map<*, *>)?.get("org") as? String
+
+            iSisDB = (roles["roles"] as? Map<*, *>)?.get("iSisDB") as? String
+
+            val tabs = (roles["roles"] as? Map<*, *>)?.get("stcTabs") as? ArrayList<*>
+
+            if (tabs != null) {
+
+                stcTabs = tabs
+
+            } else {
+
+                val tab = (roles["roles"] as? Map<*, *>)?.get("stcTabs") as? Map<*, *>
+
+                if (tab != null) {
+
+                    stcTabs = arrayListOf(tab)
+
+                }
+
+            }
+
+            return roles
+        }
+
         private fun requestRoles(): Promise<Map<*, *>, Exception> {
 
             if (BuildConfig.APPLICATION_ID.contains(".vfs")){
@@ -561,31 +592,7 @@ class STMCoreAuthController {
                         throw Exception("Wrong SMS Code")
                     }
 
-                    val roles = STMFunctions.gson.fromJson(result.get().content, Map::class.java)
-
-                    rolesResponse = roles
-
-                    accountOrg = (roles["roles"] as? Map<*, *>)?.get("org") as? String
-
-                    iSisDB = (roles["roles"] as? Map<*, *>)?.get("iSisDB") as? String
-
-                    val tabs = (roles["roles"] as? Map<*, *>)?.get("stcTabs") as? ArrayList<*>
-
-                    if (tabs != null) {
-
-                        stcTabs = tabs
-
-                    } else {
-
-                        val tab = (roles["roles"] as? Map<*, *>)?.get("stcTabs") as? Map<*, *>
-
-                        if (tab != null) {
-
-                            stcTabs = arrayListOf(tab)
-
-                        }
-
-                    }
+                    val roles = processRoles(result.get().content)
 
                     startSession()
 
