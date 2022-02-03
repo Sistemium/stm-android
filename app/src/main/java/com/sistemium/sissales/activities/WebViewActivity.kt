@@ -31,13 +31,14 @@ import com.sistemium.sissales.webInterface.WebAppInterface
 import nl.komponents.kovenant.Promise
 import nl.komponents.kovenant.task
 import nl.komponents.kovenant.then
-import java.io.File
 import com.sistemium.sissales.R
 import android.webkit.DownloadListener
 import android.widget.Toast
 
 import android.app.DownloadManager
+import android.content.res.AssetManager
 import android.os.Environment
+import java.io.*
 
 
 @SuppressLint("SetJavaScriptEnabled")
@@ -50,10 +51,10 @@ class WebViewActivity : Activity() {
     }
 
     var webView: WebView? = null
-    var filePath:String? = null
-    var photoMapParameters:Map<*,*>? = null
-    private var mUMA:ValueCallback<Array<Uri>>? = null
-    private var err:String?  = null
+    var filePath: String? = null
+    var photoMapParameters: Map<*, *>? = null
+    private var mUMA: ValueCallback<Array<Uri>>? = null
+    private var err: String? = null
     private val updateHandler = Handler()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -66,11 +67,11 @@ class WebViewActivity : Activity() {
         }
 
         STMFunctions.memoryFix()
-        
+
         super.onCreate(savedInstanceState)
         setContentView(R.layout.webview)
         WebView.setWebContentsDebuggingEnabled(true)
-        if (BuildConfig.APPLICATION_ID.contains(".warehouse")){
+        if (BuildConfig.APPLICATION_ID.contains(".warehouse")) {
             window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
         }
 
@@ -105,7 +106,7 @@ class WebViewActivity : Activity() {
             }
 
             override fun onConsoleMessage(consoleMessage: ConsoleMessage?): Boolean {
-                if (consoleMessage!!.message().startsWith("Uncaught Error")){
+                if (consoleMessage!!.message().startsWith("Uncaught Error")) {
                     err = consoleMessage.message()
                 }
                 return super.onConsoleMessage(consoleMessage)
@@ -125,7 +126,7 @@ class WebViewActivity : Activity() {
 
             //https://stackoverflow.com/questions/39979950/webviewclient-not-calling-shouldoverrideurlloading
             override fun shouldOverrideUrlLoading(view: WebView?, url: String?): Boolean {
-                if (url?.contains("access-token=") == true && manifest == null){
+                if (url?.contains("access-token=") == true && manifest == null) {
 
                     STMCoreAuthController.accessToken = url.toString().split("access-token=").last()
 
@@ -144,7 +145,7 @@ class WebViewActivity : Activity() {
             }
 
             override fun shouldOverrideUrlLoading(view: WebView?, request: WebResourceRequest?): Boolean {
-                if (request?.url?.toString()?.contains("access-token=") == true && manifest == null){
+                if (request?.url?.toString()?.contains("access-token=") == true && manifest == null) {
 
                     STMCoreAuthController.accessToken = request.url.toString().split("access-token=").last()
 
@@ -164,7 +165,20 @@ class WebViewActivity : Activity() {
 
         }
 
-        if(manifest == null) {
+        if (STMCoreAuthController.isDemo) {
+            val assetManager = MyApplication.appContext!!.assets
+            assetManager.copyAssetFolder("demo/${STMCoreAuthController.dataModelName}/${title!!}/localHTML", STMCoreSessionFiler.sharedSession!!.webPath(title!!))
+            task {
+                runOnUiThread {
+                    val webPath = "file:///" + STMCoreSessionFiler.sharedSession!!.webPath(title!!) + "/index.html"
+                    webView?.loadUrl(webPath)
+                }
+            }
+
+            return
+        }
+
+        if (manifest == null) {
 
             netDirectLoad(url!!)
 
@@ -182,13 +196,13 @@ class WebViewActivity : Activity() {
 
             runOnUiThread {
 
-                val webPath = STMCoreSessionFiler.sharedSession!!.webPath(title!!)+"/index.html"
+                val webPath = STMCoreSessionFiler.sharedSession!!.webPath(title!!) + "/index.html"
 
                 val webFolder = File(webPath)
 
                 var needLoad = false
 
-                if (webFolder.exists()){
+                if (webFolder.exists()) {
 
                     webView?.loadUrl("file:///$webPath")
 
@@ -206,9 +220,9 @@ class WebViewActivity : Activity() {
 
                     File(it).renameTo(oldFolder)
 
-                    if (needLoad){
+                    if (needLoad) {
 
-                        runOnUiThread{
+                        runOnUiThread {
 
                             webView?.loadUrl("file:///$webPath")
 
@@ -218,9 +232,9 @@ class WebViewActivity : Activity() {
 
                 } fail {
 
-                    STMFunctions.debugLog("WebViewActivity",it.localizedMessage)
+                    STMFunctions.debugLog("WebViewActivity", it.localizedMessage)
 
-                    if (needLoad){
+                    if (needLoad) {
 
                         err = it.localizedMessage
 
@@ -234,7 +248,49 @@ class WebViewActivity : Activity() {
 
     }
 
-    private fun netDirectLoad(url:String){
+    private fun AssetManager.copyAssetFolder(srcName: String, dstName: String): Boolean {
+        return try {
+            var result = true
+            val fileList = this.list(srcName) ?: return false
+            if (fileList.isEmpty()) {
+                result = copyAssetFile(srcName, dstName)
+            } else {
+                val file = File(dstName)
+                result = file.mkdirs()
+                for (filename in fileList) {
+                    result = result and copyAssetFolder(
+                            srcName + File.separator.toString() + filename,
+                            dstName + File.separator.toString() + filename
+                    )
+                }
+            }
+            result
+        } catch (e: IOException) {
+            e.printStackTrace()
+            false
+        }
+    }
+
+    private fun AssetManager.copyAssetFile(srcName: String, dstName: String): Boolean {
+        return try {
+            val inStream = this.open(srcName)
+            val outFile = File(dstName)
+            val out: OutputStream = FileOutputStream(outFile)
+            val buffer = ByteArray(1024)
+            var read: Int
+            while (inStream.read(buffer).also { read = it } != -1) {
+                out.write(buffer, 0, read)
+            }
+            inStream.close()
+            out.close()
+            true
+        } catch (e: IOException) {
+            e.printStackTrace()
+            false
+        }
+    }
+
+    private fun netDirectLoad(url: String) {
 
         webView!!.settings!!.setAppCacheEnabled(false)
         webView!!.settings!!.cacheMode = WebSettings.LOAD_NO_CACHE
@@ -246,13 +302,13 @@ class WebViewActivity : Activity() {
         STMFunctions.deleteRecursive(appWebViewDir)
 
         if ((getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager)
-                        .activeNetworkInfo?.isConnected == true){
+                        .activeNetworkInfo?.isConnected == true) {
 
             webView!!.loadUrl(url, hashMapOf("Pragma" to "no-cache", "Cache-Control" to "no-cache"))
 
         } else {
 
-            STMFunctions.handleError(this, resources.getString(R.string.no_internet)){ _,_ ->
+            STMFunctions.handleError(this, resources.getString(R.string.no_internet)) { _, _ ->
 
                 netDirectLoad(url)
 
@@ -266,13 +322,13 @@ class WebViewActivity : Activity() {
 
     override fun onBackPressed() {
 
-        if (err != null){
+        if (err != null) {
 
             this.goBack()
 
         } else {
 
-            webView?.evaluateJavascript("window.history.back()"){
+            webView?.evaluateJavascript("window.history.back()") {
 
                 STMFunctions.debugLog("DEBUG", "Evaluate finish")
 
@@ -314,7 +370,7 @@ class WebViewActivity : Activity() {
 
             this.photoMapParameters = null
 
-            if (nativePath.isEmpty()){
+            if (nativePath.isEmpty()) {
 
                 return webInterface!!.javascriptCallback("canceled", photoMapParameters)
 
@@ -322,7 +378,7 @@ class WebViewActivity : Activity() {
 
             val photoEntityName = photoMapParameters!!["entityName"] as String
 
-            val file:Bitmap? = if (nativePath.startsWith("content:/")){
+            val file: Bitmap? = if (nativePath.startsWith("content:/")) {
 
                 BitmapFactory.decodeStream(MyApplication.appContext!!.contentResolver.openInputStream(Uri.parse(nativePath)))
 
@@ -335,7 +391,7 @@ class WebViewActivity : Activity() {
 
             val attributes = HashMap(STMCorePhotosController.sharedInstance!!.newPhotoObject(photoEntityName, file!!))
 
-            val photoData = photoMapParameters["data"] as Map<*,*>
+            val photoData = photoMapParameters["data"] as Map<*, *>
 
             attributes.putAll(photoData)
 
@@ -370,7 +426,7 @@ class WebViewActivity : Activity() {
     fun goBack() {
 
         updateHandler.removeCallbacksAndMessages(null)
-        
+
         runOnUiThread {
 
             webView?.destroy()
@@ -381,13 +437,13 @@ class WebViewActivity : Activity() {
 
     }
 
-    private fun filePathsToLoadFromAppManifest(manifest:String):List<String>{
+    private fun filePathsToLoadFromAppManifest(manifest: String): List<String> {
 
         return manifest.split("\n").map {
 
-            return@map it.filter{
+            return@map it.filter {
 
-                if (it == ' '){
+                if (it == ' ') {
 
                     return@filter false
 
@@ -400,7 +456,7 @@ class WebViewActivity : Activity() {
         }.filter {
 
             if (it == "" || it.startsWith("#") || it == "favicon.ico" || it == "robots.txt"
-                    || it == "CACHEMANIFEST"|| it == "CACHE:"|| it == "NETWORK:"|| it == "*"){
+                    || it == "CACHEMANIFEST" || it == "CACHE:" || it == "NETWORK:" || it == "*") {
 
                 return@filter false
 
@@ -412,7 +468,7 @@ class WebViewActivity : Activity() {
 
     }
 
-    private fun initUpdater(){
+    private fun initUpdater() {
 
         val appUpdater = AppUpdater(this)
         appUpdater.setUpdateFrom(UpdateFrom.GOOGLE_PLAY)
@@ -429,7 +485,7 @@ class WebViewActivity : Activity() {
 
     }
 
-    private fun loadFromManifest(manifest:String, title:String, url:String): Promise<String, Exception> {
+    private fun loadFromManifest(manifest: String, title: String, url: String): Promise<String, Exception> {
 
         return task {
 
@@ -445,23 +501,23 @@ class WebViewActivity : Activity() {
 
             val savedTag = prefStore?.getString("${title}ETag", null)
 
-            if (etag != savedTag && etag != null){
+            if (etag != savedTag && etag != null) {
 
-                STMFunctions.debugLog("STMCoreAuthController","update available")
+                STMFunctions.debugLog("STMCoreAuthController", "update available")
 
                 val filePaths = filePathsToLoadFromAppManifest(result.get().content)
 
-                for (file in filePaths){
+                for (file in filePaths) {
 
-                    val (_,_, res) =  Fuel.download("$url/$file").destination { _, _ ->
+                    val (_, _, res) = Fuel.download("$url/$file").destination { _, _ ->
 
-                        File.createTempFile("temp-${file.replace(".","").replace("/","")}", ".tmp")
+                        File.createTempFile("temp-${file.replace(".", "").replace("/", "")}", ".tmp")
 
                     }.response()
 
                     val path = "$webPath/$file"
 
-                    if (res.component1()?.isNotEmpty() == true){
+                    if (res.component1()?.isNotEmpty() == true) {
 
                         files[path] = res.component1()!!
 
@@ -473,11 +529,11 @@ class WebViewActivity : Activity() {
 
                 }
 
-                for ((path, file) in files){
+                for ((path, file) in files) {
 
                     File(path.removeSuffix("/" + path.split("/").last())).mkdirs()
 
-                    STMFunctions.debugLog("WebViewActivity","finished downloading file saved to $path")
+                    STMFunctions.debugLog("WebViewActivity", "finished downloading file saved to $path")
 
                     File(path).writeBytes(file)
 
