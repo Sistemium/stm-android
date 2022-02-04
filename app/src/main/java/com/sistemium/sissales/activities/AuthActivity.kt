@@ -23,6 +23,7 @@ import com.sistemium.sissales.base.STMFunctions
 import com.sistemium.sissales.base.session.STMCoreAuthController
 import com.sistemium.sissales.base.session.STMSession
 import kotlinx.android.synthetic.main.activity_auth.*
+import nl.komponents.kovenant.task
 import nl.komponents.kovenant.then
 import java.util.*
 
@@ -166,32 +167,42 @@ class AuthActivity : AppCompatActivity() {
 
         val demoOnClickListener = View.OnClickListener {
 
-            STMCoreAuthController.userID = "DEMO ID"
-            STMCoreAuthController.userName = "DEMO"
-            STMCoreAuthController.phoneNumber = ""
+            val spinner: ConstraintLayout = findViewById(R.id.loading_screen)
 
-            val assetManager = MyApplication.appContext!!.assets
-            val rolesAssetStream = assetManager.open("demo/${STMCoreAuthController.dataModelName}/roles-DEMO.json")
+            spinner.visibility = View.VISIBLE
 
-            val scanner = Scanner(rolesAssetStream)
-            val jsonModelString = StringBuilder()
-            while (scanner.hasNext()) {
-                jsonModelString.append(scanner.nextLine())
+            task {
+                STMCoreAuthController.userID = "DEMO ID"
+                STMCoreAuthController.userName = "DEMO"
+                STMCoreAuthController.phoneNumber = ""
+
+                val assetManager = MyApplication.appContext!!.assets
+                val rolesAssetStream = assetManager.open("demo/${STMCoreAuthController.dataModelName}/roles-DEMO.json")
+
+                val scanner = Scanner(rolesAssetStream)
+                val jsonModelString = StringBuilder()
+                while (scanner.hasNext()) {
+                    jsonModelString.append(scanner.nextLine())
+                }
+
+                STMCoreAuthController.processRoles(jsonModelString.toString())
+                rolesAssetStream.close()
+                STMCoreAuthController.isDemo = true
+
+                STMSession.sharedSession!!.persistenceDelegate
+
+                val myIntent = Intent(MyApplication.appContext, ProfileActivity::class.java)
+
+                myIntent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+
+                val options = ActivityOptions.makeCustomAnimation(MyApplication.appContext, R.anim.abc_fade_in, R.anim.abc_fade_out)
+
+                MyApplication.appContext?.startActivity(myIntent, options.toBundle())
+
+                runOnUiThread{
+                    spinner.visibility = View.INVISIBLE
+                }
             }
-
-            STMCoreAuthController.processRoles(jsonModelString.toString())
-            rolesAssetStream.close()
-            STMCoreAuthController.isDemo = true
-
-            STMSession.sharedSession!!.persistenceDelegate
-
-            val myIntent = Intent(MyApplication.appContext, ProfileActivity::class.java)
-
-            myIntent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
-
-            val options = ActivityOptions.makeCustomAnimation(MyApplication.appContext, R.anim.abc_fade_in, R.anim.abc_fade_out)
-
-            MyApplication.appContext?.startActivity(myIntent, options.toBundle())
 
         }
 
