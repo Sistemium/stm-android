@@ -167,6 +167,8 @@ class AuthActivity : AppCompatActivity() {
 
         val demoOnClickListener = View.OnClickListener {
 
+            demo.isEnabled = false
+
             val spinner: ConstraintLayout = findViewById(R.id.loading_screen)
 
             spinner.visibility = View.VISIBLE
@@ -197,10 +199,10 @@ class AuthActivity : AppCompatActivity() {
 
                 val options = ActivityOptions.makeCustomAnimation(MyApplication.appContext, R.anim.abc_fade_in, R.anim.abc_fade_out)
 
-                MyApplication.appContext?.startActivity(myIntent, options.toBundle())
-
                 runOnUiThread{
+                    MyApplication.appContext?.startActivity(myIntent, options.toBundle())
                     spinner.visibility = View.INVISIBLE
+                    demo.isEnabled = true
                 }
             }
 
