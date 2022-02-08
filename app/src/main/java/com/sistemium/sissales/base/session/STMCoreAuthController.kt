@@ -346,6 +346,7 @@ class STMCoreAuthController {
             accountOrg = null
             rolesResponse = null
             lastAuth = null
+            STMSession.sharedSession?.persistenceDelegate?.close()
             STMSession.sharedSession = null
             STMModelling.sharedModeler = null
             STMEntityController.sharedInstance= null

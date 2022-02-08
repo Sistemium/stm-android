@@ -16,4 +16,6 @@ interface STMAdapting {
     fun beginTransaction(readOnly: Boolean = false): STMPersistingTransaction
     fun endTransactionWithSuccess(transaction: STMPersistingTransaction, success: Boolean = false)
 
+    fun close()
+
 }

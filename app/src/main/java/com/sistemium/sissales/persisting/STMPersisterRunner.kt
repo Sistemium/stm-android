@@ -12,6 +12,12 @@ import com.sistemium.sissales.interfaces.STMPersistingTransaction
 
 class STMPersisterRunner(private val adapters: HashMap<STMStorageType, STMAdapting>) : STMPersistingRunning {
 
+    override fun close() {
+        adapters.values.forEach{ adapter ->
+            adapter.close()
+        }
+    }
+
     override fun readOnly(block: (persistingTransaction: STMPersistingTransaction) -> ArrayList<Map<*, *>>): ArrayList<Map<*, *>> {
 
         val readOnlyTransactionCoordinator = STMPersisterTransactionCoordinator(adapters, true)

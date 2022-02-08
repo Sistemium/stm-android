@@ -11,6 +11,9 @@ import java.util.concurrent.ConcurrentHashMap
  * Created by edgarjanvuicik on 20/11/2017.
  */
 class STMPersister(private val runner: STMPersistingRunning) : STMFullStackPersisting, STMPersistingIntercepting {
+    override fun close() {
+        runner.close()
+    }
 
     @Throws(Exception::class)
     override fun findSync(entityName: String, identifier: String, options: Map<*, *>?): Map<*, *>? {

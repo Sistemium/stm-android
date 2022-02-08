@@ -133,6 +133,10 @@ class STMSQLiteDatabaseAdapter(private var dbPath: String) : STMAdapting {
 
     }
 
+    override fun close() {
+        database?.close()
+    }
+
     private fun checkModelMapping() {
 
         val _columnsByTable: Map<String, ArrayList<String>>?

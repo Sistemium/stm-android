@@ -5,6 +5,8 @@ package com.sistemium.sissales.interfaces
  */
 interface STMPersistingRunning {
 
+    fun close()
+
     fun readOnly(block: (persistingTransaction: STMPersistingTransaction) -> ArrayList<Map<*, *>>): ArrayList<Map<*, *>>
 
     fun execute(block: (persistingTransaction: STMPersistingTransaction) -> Boolean)
