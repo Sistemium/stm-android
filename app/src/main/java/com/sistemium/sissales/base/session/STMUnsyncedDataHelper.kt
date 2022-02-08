@@ -329,15 +329,9 @@ class STMUnsyncedDataHelper : STMDataSyncing {
                 
                 val pk = obj[STMConstants.DEFAULT_PERSISTING_PRIMARY_KEY] as String
 
-                STMFunctions.debugLog("test", "temp debug1")
-
                 val isErrored = erroredObjectsByEntity[entityName]?.contains(pk)
 
-                STMFunctions.debugLog("test", "temp debug2")
-
                 if (!exclude.contains(pk) && (isErrored == null || isErrored == false)) {
-
-                    STMFunctions.debugLog("test", "temp debug3")
 
                     return obj
 
