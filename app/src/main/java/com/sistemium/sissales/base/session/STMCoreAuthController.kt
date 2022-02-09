@@ -363,7 +363,7 @@ class STMCoreAuthController {
 
             modelEtag = null
 
-
+            isDemo = false
 
         }
 
