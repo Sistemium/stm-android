@@ -23,6 +23,7 @@ import java.io.File
 import java.util.*
 import android.database.sqlite.SQLiteDatabase
 import android.os.Build
+import android.util.Log
 import com.sistemium.sissales.BuildConfig
 import com.sistemium.sissales.base.MyApplication
 import java.io.InputStream

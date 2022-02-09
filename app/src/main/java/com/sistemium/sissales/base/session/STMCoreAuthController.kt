@@ -24,6 +24,7 @@ import com.sistemium.sissales.base.classes.entitycontrollers.STMEntityController
 import com.sistemium.sissales.interfaces.STMModelling
 import com.sistemium.sissales.BuildConfig
 import com.sistemium.sissales.base.STMCoreSessionFiler
+import com.sistemium.sissales.base.classes.entitycontrollers.STMClientDataController
 
 
 /**
@@ -346,12 +347,14 @@ class STMCoreAuthController {
             accountOrg = null
             rolesResponse = null
             lastAuth = null
+            STMSession.sharedSession?.settingsController?.persistenceDelegate = null
             STMSession.sharedSession?.persistenceDelegate?.close()
             STMSession.sharedSession = null
             STMModelling.sharedModeler = null
             STMEntityController.sharedInstance= null
             STMCorePicturesController.sharedInstance = null
-
+            STMClientDataController.persistenceDelegate = null
+            STMLogger.sharedLogger = null
 
             STMFunctions.deleteRecursive(File(MyApplication.appContext!!.cacheDir
                     .absolutePath))

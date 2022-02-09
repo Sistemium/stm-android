@@ -7,5 +7,6 @@ interface STMSettingsController {
 
     fun stringValueForSettings(settingsName: String, group: String): String?
     fun currentSettingsForGroup(group: String): Map<*, *>?
+    var persistenceDelegate: STMFullStackPersisting?
 
 }

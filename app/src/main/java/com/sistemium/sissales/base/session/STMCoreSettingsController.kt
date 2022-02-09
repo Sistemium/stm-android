@@ -12,7 +12,7 @@ import java.util.*
  */
 class STMCoreSettingsController : STMPersistingMergeInterceptor, STMSettingsController {
 
-    var persistenceDelegate: STMFullStackPersisting? = null
+    override var persistenceDelegate: STMFullStackPersisting? = null
         set(value) {
 
             if (value != null) {

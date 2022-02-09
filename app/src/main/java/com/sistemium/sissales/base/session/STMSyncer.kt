@@ -1,5 +1,6 @@
 package com.sistemium.sissales.base.session
 
+import android.util.Log
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.messaging.FirebaseMessaging
 import com.sistemium.sissales.activities.WebViewActivity

@@ -7,6 +7,7 @@ import com.sistemium.sissales.base.STMFunctions
 import com.sistemium.sissales.base.session.STMCoreAuthController
 import com.sistemium.sissales.interfaces.STMFullStackPersisting
 import android.os.StatFs
+import android.util.Log
 import com.sistemium.sissales.base.MyApplication
 import com.sistemium.sissales.interfaces.STMModelling
 
