@@ -191,8 +191,6 @@ class AuthActivity : AppCompatActivity() {
                 rolesAssetStream.close()
                 STMCoreAuthController.isDemo = true
 
-                STMSession.sharedSession!!.persistenceDelegate
-
                 val myIntent = Intent(MyApplication.appContext, ProfileActivity::class.java)
 
                 myIntent.flags = Intent.FLAG_ACTIVITY_NEW_TASK

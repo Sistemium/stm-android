@@ -545,8 +545,12 @@ class STMCoreAuthController {
                     accountOrg = if (BuildConfig.APPLICATION_ID.contains("vfsDebug")) "vfsd" else "vfs"
                     userID = (roles["account"] as? Map<*, *>)?.get("id") as? String
                     userName = (roles["account"] as? Map<*, *>)?.get("name") as? String
-                    socketURL = "https://socket3.sistemium.com/socket.io-client"
-                    entityResource = "$accountOrg/Entity"
+
+                    isDemo = (roles?.get("roles") as? Map<String, *>)?.get("Demo") != null
+                    if (!isDemo){
+                        socketURL = "https://socket3.sistemium.com/socket.io-client"
+                        entityResource = "$accountOrg/Entity"
+                    }
                     rolesResponse = roles
                     stcTabs = arrayListOf(hashMapOf(
                             "name" to "STMWKWebView",
