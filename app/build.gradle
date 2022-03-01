@@ -61,10 +61,12 @@ android {
             manifestPlaceholders = [appName: 'VFS']
         }
     }
-    lint {
-        checkReleaseBuilds false
-    }
 
+    lintOptions {
+
+        checkReleaseBuilds false
+
+    }
 
 }
 
