@@ -139,7 +139,7 @@ class STMCoreAuthController {
         val userAgent:String
             get() {
 
-                return "i$configuration/${STMModelling.sharedModeler?.managedObjectModel?.userDefinedModelVersionIdentifier ?: "366"}"
+                return "i$configuration/${STMModelling.sharedModeler?.managedObjectModel?.userDefinedModelVersionIdentifier ?: "394"}"
 
             }
 
