@@ -33,6 +33,7 @@ import com.sistemium.sissales.base.session.STMSession
 import com.sistemium.sissales.interfaces.STMFullStackPersisting
 import com.sistemium.sissales.persisting.STMPredicate
 import nl.komponents.kovenant.Promise
+import nl.komponents.kovenant.task
 import nl.komponents.kovenant.then
 import java.util.*
 
@@ -806,6 +807,11 @@ class WebAppInterface internal constructor(private var webViewActivity: WebViewA
         val options = parameters["options"] as? Map<*, *>
 
         if (xidString != null) {
+
+            if (options!!["socketSource"] as Boolean) {
+                return findOneWithSocket(entityName, xidString, options)
+            }
+
             return persistenceDelegate.find(entityName, xidString, options).then {
 
                 STMFunctions.debugLog("DEBUG", "arrayOfObjectsRequestedByScriptMessage success")
@@ -822,6 +828,10 @@ class WebAppInterface internal constructor(private var webViewActivity: WebViewA
         val where = parameters["where"] as? Map<*, *>
 
         val predicate = STMPredicate.filterPredicate(filter, where, entityName)
+
+        if (options!!["socketSource"] as Boolean) {
+//            return findWithSocket(parameters, entityName, predicate, options)
+        }
 
         return persistenceDelegate.findAll(entityName, predicate, options)
 
@@ -998,6 +1008,70 @@ class WebAppInterface internal constructor(private var webViewActivity: WebViewA
         }
 
     }
+
+    //socket direct
+
+    private fun findOneWithSocket(entityName: String, xidString: String, options:Map<*,*>?):Promise<ArrayList<Map<*, *>>, Exception> {
+        val unsynced = persistenceDelegate.findSync(entityName, xidString, options)
+        if (unsynced != null && unsynced["deviceTs"]  as String > unsynced["lts"] as String){
+            throw Exception("There are unsynced objects")
+        }
+        return STMSession.sharedSession!!.syncer!!.socketTransport!!.findAllAsync(entityName, null, xidString).then {
+            val errorHeader = it["error"]
+            if (errorHeader != null){
+                throw Exception(it["error"].toString())
+            }
+            return@then arrayListOf(it)
+        }
+    }
+
+//    - (AnyPromise *)findWithSocket:(WKScriptMessage *)scriptMessage entityName:(NSString *)entityName predicate:(NSPredicate *)predicate options:(NSDictionary *)options{
+//
+//        NSError *error;
+//
+//        if (error) return [AnyPromise promiseWithValue:error];
+//
+//        NSMutableArray *checkUnsynced = @[[NSPredicate predicateWithFormat:@"deviceTs > lts"]].mutableCopy;
+//
+//        if (predicate) {
+//            [checkUnsynced addObject:predicate];
+//        }
+//
+//        NSArray *unsynced = [self.persistenceDelegate findAllSync:entityName
+//                predicate:[NSCompoundPredicate
+//        andPredicateWithSubpredicates:checkUnsynced]
+//        options:options error:&error];
+//        if (unsynced.count) {
+//            return [self UNSYNCED_OBJECTS_ERROR];
+//        }
+//
+//        NSDictionary *params = [self paramsForScriptMessage:scriptMessage error:&error];
+//        NSDictionary *socketOptions = @{
+//            @"params":params,
+//            @"pageSize": @(5000)
+//        };
+//
+//        if (error) return [AnyPromise promiseWithValue:error];
+//
+//        return [AnyPromise promiseWithResolverBlock:^(PMKResolver resolve) {
+//
+//            [self.socketTransport findAllAsync:entityName predicate:predicate options:socketOptions completionHandlerWithHeaders:^(BOOL success, NSArray *result, NSDictionary *headers, NSError *error) {
+//
+//            id errorHeader = headers[@"error"];
+//
+//            if (errorHeader) {
+//                error = [STMFunctions errorWithMessage:[NSString stringWithFormat:@"%@", errorHeader]];
+//            }
+//
+//            if (error) {
+//                resolve(error);
+//            } else {
+//                resolve(result);
+//            }
+//        }];
+//
+//        }];
+//    }
 
     // callbacks
 
