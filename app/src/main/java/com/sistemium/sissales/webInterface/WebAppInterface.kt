@@ -36,6 +36,8 @@ import nl.komponents.kovenant.Promise
 import nl.komponents.kovenant.task
 import nl.komponents.kovenant.then
 import java.util.*
+import kotlin.collections.ArrayList
+import kotlin.collections.HashMap
 
 
 /**
@@ -830,7 +832,7 @@ class WebAppInterface internal constructor(private var webViewActivity: WebViewA
         val predicate = STMPredicate.filterPredicate(filter, where, entityName)
 
         if (options!!["socketSource"] as Boolean) {
-//            return findWithSocket(parameters, entityName, predicate, options)
+            return findWithSocket(parameters, entityName, predicate, options)
         }
 
         return persistenceDelegate.findAll(entityName, predicate, options)
@@ -1021,57 +1023,42 @@ class WebAppInterface internal constructor(private var webViewActivity: WebViewA
             if (errorHeader != null){
                 throw Exception(it["error"].toString())
             }
-            return@then arrayListOf(it)
+            return@then arrayListOf(it["data"] as Map<*, *>)
         }
     }
 
-//    - (AnyPromise *)findWithSocket:(WKScriptMessage *)scriptMessage entityName:(NSString *)entityName predicate:(NSPredicate *)predicate options:(NSDictionary *)options{
-//
-//        NSError *error;
-//
-//        if (error) return [AnyPromise promiseWithValue:error];
-//
-//        NSMutableArray *checkUnsynced = @[[NSPredicate predicateWithFormat:@"deviceTs > lts"]].mutableCopy;
-//
-//        if (predicate) {
-//            [checkUnsynced addObject:predicate];
-//        }
-//
-//        NSArray *unsynced = [self.persistenceDelegate findAllSync:entityName
-//                predicate:[NSCompoundPredicate
-//        andPredicateWithSubpredicates:checkUnsynced]
-//        options:options error:&error];
-//        if (unsynced.count) {
-//            return [self UNSYNCED_OBJECTS_ERROR];
-//        }
-//
-//        NSDictionary *params = [self paramsForScriptMessage:scriptMessage error:&error];
-//        NSDictionary *socketOptions = @{
-//            @"params":params,
-//            @"pageSize": @(5000)
-//        };
-//
-//        if (error) return [AnyPromise promiseWithValue:error];
-//
-//        return [AnyPromise promiseWithResolverBlock:^(PMKResolver resolve) {
-//
-//            [self.socketTransport findAllAsync:entityName predicate:predicate options:socketOptions completionHandlerWithHeaders:^(BOOL success, NSArray *result, NSDictionary *headers, NSError *error) {
-//
-//            id errorHeader = headers[@"error"];
-//
-//            if (errorHeader) {
-//                error = [STMFunctions errorWithMessage:[NSString stringWithFormat:@"%@", errorHeader]];
-//            }
-//
-//            if (error) {
-//                resolve(error);
-//            } else {
-//                resolve(result);
-//            }
-//        }];
-//
-//        }];
-//    }
+    private fun findWithSocket(scriptMessage: Map<*, *>, entityName: String, predicate:STMPredicate?, options:Map<*,*>?):Promise<ArrayList<Map<*, *>>, Exception> {
+        var checkUnsynced = STMPredicate("deviceTs > lts")
+        if (predicate != null){
+            checkUnsynced = STMPredicate.combinePredicates(arrayListOf(checkUnsynced, predicate))!!
+        }
+        val unsynced = persistenceDelegate.findAllSync(entityName, checkUnsynced, options)
+        if (unsynced.size > 0){
+            throw Exception("Unsynced objects error")
+        }
+        val params = (scriptMessage["filter"] as? Map<*, *> ?: hashMapOf<Any,Any>()).toMutableMap()
+
+        val where = scriptMessage["where"] as? Map<*, *>
+
+        if (where != null){
+            params["where:"] = params
+        }
+
+        val socketOptions = hashMapOf<Any, Any>(
+                "params" to params,
+                "pageSize" to 5000,
+        )
+
+        ///findAllAsync in ios for some reason not using predicate, so it is also unused here
+        return STMSession.sharedSession!!.syncer!!.socketTransport!!.findAllAsync(entityName, socketOptions, null).then {
+            val errorHeader = it["error"]
+            if (errorHeader != null){
+                throw Exception(it["error"].toString())
+            }
+            return@then it["data"] as ArrayList<Map<*, *>>
+        }
+
+    }
 
     // callbacks
 
