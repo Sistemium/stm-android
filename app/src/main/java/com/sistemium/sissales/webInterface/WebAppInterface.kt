@@ -810,9 +810,9 @@ class WebAppInterface internal constructor(private var webViewActivity: WebViewA
 
         if (xidString != null) {
 
-//            if (options!!["socketSource"] as Boolean) {
-//                return findOneWithSocket(entityName, xidString, options)
-//            }
+            if (options?.get("socketSource") as? Boolean == true) {
+                return findOneWithSocket(entityName, xidString, options)
+            }
 
             return persistenceDelegate.find(entityName, xidString, options).then {
 
@@ -831,9 +831,9 @@ class WebAppInterface internal constructor(private var webViewActivity: WebViewA
 
         val predicate = STMPredicate.filterPredicate(filter, where, entityName)
 
-//        if (options!!["socketSource"] as Boolean) {
-//            return findWithSocket(parameters, entityName, predicate, options)
-//        }
+        if (options?.get("socketSource") as? Boolean == true) {
+            return findWithSocket(parameters, entityName, predicate, options)
+        }
 
         return persistenceDelegate.findAll(entityName, predicate, options)
 
