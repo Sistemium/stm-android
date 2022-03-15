@@ -13,6 +13,7 @@ import android.os.Looper
 import android.provider.ContactsContract
 import android.provider.MediaStore
 import android.speech.tts.TextToSpeech
+import android.util.Log
 import android.webkit.JavascriptInterface
 import android.widget.Toast
 import com.google.android.gms.common.ConnectionResult
@@ -25,6 +26,7 @@ import com.google.android.gms.location.LocationServices
 import com.sistemium.sissales.R
 import com.sistemium.sissales.activities.WebViewActivity
 import com.sistemium.sissales.base.*
+import com.sistemium.sissales.base.STMConstants.Companion.ISISTEMIUM_PREFIX
 import com.sistemium.sissales.base.STMFunctions.Companion.gson
 import com.sistemium.sissales.base.classes.entitycontrollers.STMCorePhotosController
 import com.sistemium.sissales.base.classes.entitycontrollers.STMCorePicturesController
@@ -811,7 +813,7 @@ class WebAppInterface internal constructor(private var webViewActivity: WebViewA
         if (xidString != null) {
 
             if (options?.get("socketSource") as? Boolean == true) {
-                return findOneWithSocket(entityName, xidString, options)
+                return findOneWithSocket(ISISTEMIUM_PREFIX + entityName, xidString, options)
             }
 
             return persistenceDelegate.find(entityName, xidString, options).then {
@@ -832,7 +834,7 @@ class WebAppInterface internal constructor(private var webViewActivity: WebViewA
         val predicate = STMPredicate.filterPredicate(filter, where, entityName)
 
         if (options?.get("socketSource") as? Boolean == true) {
-            return findWithSocket(parameters, entityName, predicate, options)
+            return findWithSocket(parameters, ISISTEMIUM_PREFIX + entityName, predicate, options)
         }
 
         return persistenceDelegate.findAll(entityName, predicate, options)
@@ -1041,7 +1043,7 @@ class WebAppInterface internal constructor(private var webViewActivity: WebViewA
         val where = scriptMessage["where"] as? Map<*, *>
 
         if (where != null){
-            params["where:"] = params
+            params["where:"] = where
         }
 
         val socketOptions = hashMapOf<Any, Any>(
