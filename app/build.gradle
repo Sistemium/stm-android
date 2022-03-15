@@ -61,12 +61,10 @@ android {
             manifestPlaceholders = [appName: 'VFS']
         }
     }
-
-    lintOptions {
-
+    lint {
         checkReleaseBuilds false
-
     }
+
 
 }
 
@@ -92,7 +90,7 @@ dependencies {
     implementation 'com.google.android.gms:play-services-location:19.0.1'
     implementation project(path: ':BarcodeScannerLibrary')
     implementation platform('com.google.firebase:firebase-bom:29.0.1')
-    implementation 'com.google.firebase:firebase-analytics-ktx:20.0.2'
-    implementation 'com.google.firebase:firebase-crashlytics:18.2.7'
+    implementation 'com.google.firebase:firebase-analytics-ktx:20.1.0'
+    implementation 'com.google.firebase:firebase-crashlytics:18.2.9'
     implementation 'com.google.firebase:firebase-messaging-ktx'
 }
