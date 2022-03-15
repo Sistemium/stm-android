@@ -509,7 +509,7 @@ class WebViewActivity : Activity() {
 
                 for (file in filePaths) {
 
-                    val (_, _, res) = Fuel.download("$url/$file").destination { _, _ ->
+                    val (_, _, res) = Fuel.download("$url$file").destination { _, _ ->
 
                         File.createTempFile("temp-${file.replace(".", "").replace("/", "")}", ".tmp")
 
