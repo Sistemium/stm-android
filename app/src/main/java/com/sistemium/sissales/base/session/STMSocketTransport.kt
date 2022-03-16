@@ -109,6 +109,10 @@ class STMSocketTransport(private var socketUrlString: String, private var owner:
 
         }
 
+        if (options != null && options["params"] != null){
+            value["params"] = options["params"]
+        }
+
         socketSendEvent(STMSocketEvent.STMSocketEventJSData, value)
                 .then {
 

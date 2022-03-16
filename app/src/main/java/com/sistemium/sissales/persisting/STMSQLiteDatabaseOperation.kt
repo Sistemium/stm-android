@@ -1,7 +1,6 @@
 package com.sistemium.sissales.persisting
 
 import android.database.sqlite.SQLiteDatabase
-import com.sistemium.sissales.base.STMFunctions
 import com.sistemium.sissales.model.STMSQLiteDatabaseAdapter
 
 /**
@@ -18,13 +17,9 @@ class STMSQLiteDatabaseOperation(val readOnly: Boolean, private var adapter: STM
 
             while (_transaction == null) {
 
-                STMFunctions.debugLog("STMSQLiteDatabaseOperation", "sadly I cannot give you transaction read only: $readOnly")
-
                 lock1.wait()
 
             }
-
-            STMFunctions.debugLog("STMSQLiteDatabaseOperation", "here I can give you a transaction read only: $readOnly")
 
             return@lazy _transaction!!
 
@@ -42,11 +37,7 @@ class STMSQLiteDatabaseOperation(val readOnly: Boolean, private var adapter: STM
 
     override fun run() {
 
-        STMFunctions.debugLog("Syncer", "operation started read only: $readOnly")
-
         if (readOnly) {
-            STMFunctions.debugLog("DEBUG", "removing pool database from array read only: $readOnly")
-            STMFunctions.debugLog("DEBUG", "pool database count before remove: ${adapter.poolDatabases.size} read only: $readOnly")
 
             synchronized(adapter.poolDatabases) {
                 database = adapter.poolDatabases.removeAt(0)
@@ -68,13 +59,7 @@ class STMSQLiteDatabaseOperation(val readOnly: Boolean, private var adapter: STM
                 lock1.notify()
             }
 
-
-
-            STMFunctions.debugLog("STMSQLiteDatabaseOperation", "lets now wait for finish read only: $readOnly")
-
             lock2.wait()
-
-            STMFunctions.debugLog("STMSQLiteDatabaseOperation", "Yay I received finish read only: $readOnly")
 
         }
 
@@ -86,24 +71,15 @@ class STMSQLiteDatabaseOperation(val readOnly: Boolean, private var adapter: STM
 
             if (readOnly) {
 
-                STMFunctions.debugLog("SQLite", "returning pool database to array read only: $readOnly")
-
                 synchronized(adapter.poolDatabases) {
                     adapter.poolDatabases.add(database!!)
                 }
 
-                STMFunctions.debugLog("SQLite", "Returned pooldatabase, pools size: ${adapter.poolDatabases.size} read only: $readOnly")
-
-
             }
-
-            STMFunctions.debugLog("Syncer", "operation ended read only: $readOnly")
 
             lock2.notify()
 
         }
-
-        STMFunctions.debugLog("SQLite", "Finished operation read only: $readOnly")
 
     }
 
