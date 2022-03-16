@@ -38,6 +38,7 @@ class STMConstants {
         const val LOGMESSAGE_MAX_TIME_INTERVAL_TO_UPLOAD = 1000 * 60 * 60 * 24
         const val STMPersistingOptionOrderDirectionAscValue = "ASC"
         const val kSocketUpdateMethod = "update"
+        const val kSocketDestroyMethod = "destroy"
         const val STMPersistingOptionOffset = "offset"
         const val kSocketFindMethod = "find"
         const val kSocketFindAllMethod = "findAll"

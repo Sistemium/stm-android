@@ -138,6 +138,45 @@ class STMSocketTransport(private var socketUrlString: String, private var owner:
 
     }
 
+    override fun destroyAsync(entityName: String, options: Map<*, *>?, identifier: String?): Promise<Map<*, *>, Exception> {
+        val deferred = deferred<Map<*, *>, Exception>()
+
+        val resource = STMEntityController.sharedInstance!!.resourceForEntity(entityName)
+
+        val value = hashMapOf(
+                "method" to STMConstants.kSocketDestroyMethod,
+                "resource" to resource,
+                "id" to identifier,
+        )
+
+        socketSendEvent(STMSocketEvent.STMSocketEventJSData, value)
+                .then {
+
+                    STMFunctions.debugLog("mergeAsync", "destroyAsync success entityname $entityName")
+
+                    val (result, error) = respondOnData(it)
+
+                    if (error != null) {
+
+                        deferred.reject(error)
+
+                    } else {
+
+                        deferred.resolve(result!!)
+
+                    }
+
+                }.fail {
+
+                    STMFunctions.debugLog("mergeAsync", "destroyAsync failed entityname $entityName")
+
+                    deferred.reject(it)
+
+                }
+
+        return deferred.promise
+    }
+
     override fun socketSendEvent(event: STMSocketEvent, value: Any?): Promise<Array<*>, Exception> {
 
         val deferred = deferred<Array<*>, Exception>()

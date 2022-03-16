@@ -35,6 +35,7 @@ import com.sistemium.sissales.base.session.STMSession
 import com.sistemium.sissales.interfaces.STMFullStackPersisting
 import com.sistemium.sissales.persisting.STMPredicate
 import nl.komponents.kovenant.Promise
+import nl.komponents.kovenant.deferred
 import nl.komponents.kovenant.task
 import nl.komponents.kovenant.then
 import java.util.*
@@ -52,7 +53,7 @@ class WebAppInterface internal constructor(private var webViewActivity: WebViewA
 
     private val errorCallback = "iSistemiumIOSErrorCallback"
 
-    private var unsyncedInfoJSFunction:String? = null
+    private var unsyncedInfoJSFunction: String? = null
 
     private val persistenceDelegate: STMFullStackPersisting by lazy {
         STMSession.sharedSession!!.persistenceDelegate
@@ -109,7 +110,7 @@ class WebAppInterface internal constructor(private var webViewActivity: WebViewA
 
         STMBarCodeScanner.sharedScanner?.startBarcodeScanning(webViewActivity)
 
-        if (STMBarCodeScanner.sharedScanner!!.isDeviceConnected){
+        if (STMBarCodeScanner.sharedScanner!!.isDeviceConnected) {
 
             scannerConnected()
 
@@ -117,19 +118,19 @@ class WebAppInterface internal constructor(private var webViewActivity: WebViewA
 
     }
 
-    fun scannerConnected(){
+    fun scannerConnected() {
 
-        javascriptCallback("connected", HashMap<Any,Any>(), scannerStatusJSFunction)
-
-    }
-
-    fun scannerDisconnected(){
-
-        javascriptCallback("disconnected", HashMap<Any,Any>(), scannerStatusJSFunction)
+        javascriptCallback("connected", HashMap<Any, Any>(), scannerStatusJSFunction)
 
     }
 
-    fun receiveBarCode(barcode:String, type: STMBarCodeScannedType){
+    fun scannerDisconnected() {
+
+        javascriptCallback("disconnected", HashMap<Any, Any>(), scannerStatusJSFunction)
+
+    }
+
+    fun receiveBarCode(barcode: String, type: STMBarCodeScannedType) {
 
 //        if (!self.isInActiveTab || !barcode) {
 //            return;
@@ -137,14 +138,14 @@ class WebAppInterface internal constructor(private var webViewActivity: WebViewA
 
         val arguments = arrayListOf(barcode)
 
-        if (type == STMBarCodeScannedType.STMBarCodeTypeStockBatch){
+        if (type == STMBarCodeScannedType.STMBarCodeTypeStockBatch) {
 
             arguments.add(type.type)
 
 
         } else {
 
-            STMFunctions.debugLog("WebAppInterface","send received barcode  with type ${type.type} to WebView")
+            STMFunctions.debugLog("WebAppInterface", "send received barcode  with type ${type.type} to WebView")
 
         }
 
@@ -169,7 +170,7 @@ class WebAppInterface internal constructor(private var webViewActivity: WebViewA
         val latitude = mapParameters["latitude"]
         val longitude = mapParameters["longitude"]
 
-        when(mapParameters["navigator"]){
+        when (mapParameters["navigator"]) {
             "Waze" -> {
                 try {
                     val url = "https://www.waze.com/ul?ll=$latitude%2C$longitude&navigate=yes"
@@ -281,9 +282,9 @@ class WebAppInterface internal constructor(private var webViewActivity: WebViewA
 
         if (messageText != null) {
 
-            var tts:TextToSpeech? = null
+            var tts: TextToSpeech? = null
 
-            tts = TextToSpeech(MyApplication.appContext){
+            tts = TextToSpeech(MyApplication.appContext) {
 
                 if (it == TextToSpeech.SUCCESS) {
 
@@ -402,7 +403,7 @@ class WebAppInterface internal constructor(private var webViewActivity: WebViewA
 
         val callback = mapParameters["callback"]
 
-        var resultArray = arrayOf<Map<String,Any>>()
+        var resultArray = arrayOf<Map<String, Any>>()
 
         val resolver: ContentResolver = MyApplication.appContext!!.contentResolver
         val cursor = resolver.query(ContactsContract.Contacts.CONTENT_URI, null, null, null,
@@ -427,7 +428,7 @@ class WebAppInterface internal constructor(private var webViewActivity: WebViewA
                             ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
                             null, ContactsContract.CommonDataKinds.Phone.CONTACT_ID + "=?", arrayOf(id), null)!!
 
-                    if(cursorPhone.count > 0) {
+                    if (cursorPhone.count > 0) {
                         while (cursorPhone.moveToNext()) {
                             val phoneNumValue = cursorPhone.getString(
                                     cursorPhone.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER)).replace(" ", "")
@@ -445,7 +446,7 @@ class WebAppInterface internal constructor(private var webViewActivity: WebViewA
                         ContactsContract.CommonDataKinds.Email.CONTENT_URI,
                         null, ContactsContract.CommonDataKinds.Email.CONTACT_ID + "=?", arrayOf(id), null)!!
 
-                if(cursorEmail.count > 0) {
+                if (cursorEmail.count > 0) {
                     while (cursorEmail.moveToNext()) {
                         val emailValue = cursorEmail.getString(
                                 cursorEmail.getColumnIndex(ContactsContract.CommonDataKinds.Email.DATA))
@@ -472,7 +473,7 @@ class WebAppInterface internal constructor(private var webViewActivity: WebViewA
 
         val mapParameters = gson.fromJson(parameters, Map::class.java)
 
-        val accuracy = (mapParameters["accuracy"] as? Double)?.toInt()  ?: 0
+        val accuracy = (mapParameters["accuracy"] as? Double)?.toInt() ?: 0
 
         var timeout = (mapParameters["timeout"] as? Double) ?: 30000.0
 
@@ -482,10 +483,10 @@ class WebAppInterface internal constructor(private var webViewActivity: WebViewA
 
         val mFusedLocationClient = LocationServices.getFusedLocationProviderClient(MyApplication.appContext!!)
 
-        var googleApiClient:GoogleApiClient? = null
+        var googleApiClient: GoogleApiClient? = null
 
         val locationListener = object : GoogleApiClient.ConnectionCallbacks,
-                GoogleApiClient.OnConnectionFailedListener{
+                GoogleApiClient.OnConnectionFailedListener {
 
             @SuppressLint("MissingPermission")
             override fun onConnected(p0: Bundle?) {
@@ -494,9 +495,9 @@ class WebAppInterface internal constructor(private var webViewActivity: WebViewA
                 locationRequest.priority = PRIORITY_HIGH_ACCURACY
                 locationRequest.interval = 0
 
-                var bestLocation:Location? = null
+                var bestLocation: Location? = null
 
-                mFusedLocationClient.requestLocationUpdates(locationRequest, object:LocationCallback(){
+                mFusedLocationClient.requestLocationUpdates(locationRequest, object : LocationCallback() {
 
                     override fun onLocationResult(p0: LocationResult) {
                         val location = p0.lastLocation
@@ -507,7 +508,7 @@ class WebAppInterface internal constructor(private var webViewActivity: WebViewA
 
                         }
 
-                        if (bestLocation != null && (bestLocation!!.accuracy <= accuracy || Date().time - timeout > startTime.time)){
+                        if (bestLocation != null && (bestLocation!!.accuracy <= accuracy || Date().time - timeout > startTime.time)) {
 
                             resolveLocation(bestLocation, mapParameters)
 
@@ -543,11 +544,11 @@ class WebAppInterface internal constructor(private var webViewActivity: WebViewA
 
     }
 
-    fun resolveLocation(location:Location?, mapParameters:Map<*,*>){
+    fun resolveLocation(location: Location?, mapParameters: Map<*, *>) {
 
-        if (location == null){
+        if (location == null) {
 
-            return javascriptCallback(MyApplication.appContext!!.resources.getString(com.sistemium.sissales.R.string.location_failed),mapParameters)
+            return javascriptCallback(MyApplication.appContext!!.resources.getString(com.sistemium.sissales.R.string.location_failed), mapParameters)
 
         }
 
@@ -578,7 +579,7 @@ class WebAppInterface internal constructor(private var webViewActivity: WebViewA
 
             STMFunctions.debugLog("resolveLocation", "resolveLocation failed")
 
-            javascriptCallback(MyApplication.appContext!!.resources.getString(com.sistemium.sissales.R.string.location_failed),mapParameters)
+            javascriptCallback(MyApplication.appContext!!.resources.getString(com.sistemium.sissales.R.string.location_failed), mapParameters)
 
         }
 
@@ -643,7 +644,7 @@ class WebAppInterface internal constructor(private var webViewActivity: WebViewA
                 javascriptCallback(arrayListOf<String>(), mapParameters, callback as String)
 
 
-            } else{
+            } else {
 
                 javascriptCallback("error", mapParameters)
 
@@ -683,9 +684,9 @@ class WebAppInterface internal constructor(private var webViewActivity: WebViewA
 
             val imageData = STMCoreSessionFiler.sharedSession!!.getImage(it["resizedImagePath"] as String)
 
-            if (imageData != null && imageData.byteCount > 0){
+            if (imageData != null && imageData.byteCount > 0) {
 
-                MediaStore.Images.Media.insertImage(MyApplication.appContext!!.contentResolver, imageData, it["id"] as String , "")
+                MediaStore.Images.Media.insertImage(MyApplication.appContext!!.contentResolver, imageData, it["id"] as String, "")
 
             }
 
@@ -761,7 +762,7 @@ class WebAppInterface internal constructor(private var webViewActivity: WebViewA
 
     }
 
-    fun postJSNotification(notification:String){
+    fun postJSNotification(notification: String) {
 
         if (unsyncedInfoJSFunction == null) return
 
@@ -782,6 +783,12 @@ class WebAppInterface internal constructor(private var webViewActivity: WebViewA
 
             val options = parameters["options"] as? Map<*, *>
 
+            if (options?.get("socketSource") as? Boolean == true) {
+                return STMSession.sharedSession!!.syncer!!.socketTransport!!.destroyAsync(STMFunctions.addPrefixToEntityName(entityName), null, xidString).then {
+                    return@then arrayListOf(it)
+                }
+            }
+
             return persistenceDelegate.destroy(entityName, xidString, options).then {
 
                 STMFunctions.debugLog("DEBUG", "destroyObjectFromScriptMessage success")
@@ -790,7 +797,7 @@ class WebAppInterface internal constructor(private var webViewActivity: WebViewA
 
                 return@then arrayListOf(result)
 
-            } .fail {
+            }.fail {
                 STMFunctions.debugLog("DEBUG", "destroyObjectFromScriptMessage failed")
             }
         } else {
@@ -813,7 +820,7 @@ class WebAppInterface internal constructor(private var webViewActivity: WebViewA
         if (xidString != null) {
 
             if (options?.get("socketSource") as? Boolean == true) {
-                return findOneWithSocket(ISISTEMIUM_PREFIX + entityName, xidString, options)
+                return findOneWithSocket(STMFunctions.addPrefixToEntityName(entityName), xidString, options)
             }
 
             return persistenceDelegate.find(entityName, xidString, options).then {
@@ -822,7 +829,7 @@ class WebAppInterface internal constructor(private var webViewActivity: WebViewA
 
                 return@then arrayListOf(it!!)
 
-            } .fail {
+            }.fail {
                 STMFunctions.debugLog("DEBUG", "arrayOfObjectsRequestedByScriptMessage failed")
             }
         }
@@ -834,7 +841,7 @@ class WebAppInterface internal constructor(private var webViewActivity: WebViewA
         val predicate = STMPredicate.filterPredicate(filter, where, entityName)
 
         if (options?.get("socketSource") as? Boolean == true) {
-            return findWithSocket(parameters, ISISTEMIUM_PREFIX + entityName, predicate, options)
+            return findWithSocket(parameters, STMFunctions.addPrefixToEntityName(entityName), predicate, options)
         }
 
         return persistenceDelegate.findAll(entityName, predicate, options)
@@ -864,7 +871,27 @@ class WebAppInterface internal constructor(private var webViewActivity: WebViewA
 
         }
 
-        return persistenceDelegate.mergeMany(entityName, parametersData, null)
+        val options = parameters["options"] as? Map<*, *>
+
+        if (options?.get("socketSource") as? Boolean == true) {
+            val deferred = deferred<ArrayList<Map<*, *>>, Exception>()
+
+            val response = arrayListOf<Map<*, *>>()
+            for (data in parametersData) {
+                STMSession.sharedSession!!.syncer!!.socketTransport!!.mergeAsync(STMFunctions.addPrefixToEntityName(entityName), data as Map<*, *>, null).then {
+                    response.add(it)
+                    if (response.size == parametersData.size) {
+                        deferred.resolve(response)
+                    }
+                }.fail {
+                    deferred.reject(java.lang.Exception(it))
+                }
+            }
+            return deferred.promise
+
+        } else {
+            return persistenceDelegate.mergeMany(entityName, parametersData, null)
+        }
 
     }
 
@@ -997,7 +1024,7 @@ class WebAppInterface internal constructor(private var webViewActivity: WebViewA
 
     }
 
-    private fun evaluateReceiveBarCodeJSFunctionWithArguments(arguments:ArrayList<String>){
+    private fun evaluateReceiveBarCodeJSFunctionWithArguments(arguments: ArrayList<String>) {
 
         val jsFunction = "$scannerScanJSFunction.apply(null,${STMFunctions.jsonStringFromObject(arguments)})"
 
@@ -1015,34 +1042,34 @@ class WebAppInterface internal constructor(private var webViewActivity: WebViewA
 
     //socket direct
 
-    private fun findOneWithSocket(entityName: String, xidString: String, options:Map<*,*>?):Promise<ArrayList<Map<*, *>>, Exception> {
+    private fun findOneWithSocket(entityName: String, xidString: String, options: Map<*, *>?): Promise<ArrayList<Map<*, *>>, Exception> {
         val unsynced = persistenceDelegate.findSync(entityName, xidString, options)
-        if (unsynced != null && unsynced["deviceTs"]  as String > unsynced["lts"] as String){
+        if (unsynced != null && unsynced["deviceTs"] as String > unsynced["lts"] as String) {
             throw Exception("There are unsynced objects")
         }
         return STMSession.sharedSession!!.syncer!!.socketTransport!!.findAllAsync(entityName, null, xidString).then {
             val errorHeader = it["error"]
-            if (errorHeader != null){
+            if (errorHeader != null) {
                 throw Exception(it["error"].toString())
             }
             return@then arrayListOf(it["data"] as Map<*, *>)
         }
     }
 
-    private fun findWithSocket(scriptMessage: Map<*, *>, entityName: String, predicate:STMPredicate?, options:Map<*,*>?):Promise<ArrayList<Map<*, *>>, Exception> {
+    private fun findWithSocket(scriptMessage: Map<*, *>, entityName: String, predicate: STMPredicate?, options: Map<*, *>?): Promise<ArrayList<Map<*, *>>, Exception> {
         var checkUnsynced = STMPredicate("deviceTs > lts")
-        if (predicate != null){
+        if (predicate != null) {
             checkUnsynced = STMPredicate.combinePredicates(arrayListOf(checkUnsynced, predicate))!!
         }
         val unsynced = persistenceDelegate.findAllSync(entityName, checkUnsynced, options)
-        if (unsynced.size > 0){
+        if (unsynced.size > 0) {
             throw Exception("Unsynced objects error")
         }
-        val params = (scriptMessage["filter"] as? Map<*, *> ?: hashMapOf<Any,Any>()).toMutableMap()
+        val params = (scriptMessage["filter"] as? Map<*, *> ?: hashMapOf<Any, Any>()).toMutableMap()
 
         val where = scriptMessage["where"] as? Map<*, *>
 
-        if (where != null){
+        if (where != null) {
             params["where:"] = where
         }
 
@@ -1054,7 +1081,7 @@ class WebAppInterface internal constructor(private var webViewActivity: WebViewA
         ///findAllAsync in ios for some reason not using predicate, so it is also unused here
         return STMSession.sharedSession!!.syncer!!.socketTransport!!.findAllAsync(entityName, socketOptions, null).then {
             val errorHeader = it["error"]
-            if (errorHeader != null){
+            if (errorHeader != null) {
                 throw Exception(it["error"].toString())
             }
             return@then it["data"] as ArrayList<Map<*, *>>
