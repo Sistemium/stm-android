@@ -66,7 +66,7 @@ class STMPredicate(var value: String) {
 
                 val valueArray = (value[value.keys.first()] as ArrayList<*>).map { v -> STMPredicate("'$v'") }
 
-                return STMPredicate("$key IN (${valueArray.joinToString(", ")})")
+                return STMPredicate("[$key] IN (${valueArray.joinToString(", ")})")
 
             }
 
@@ -79,7 +79,7 @@ class STMPredicate(var value: String) {
                             .containsKey(key.removeSuffix(STMConstants.RELATIONSHIP_SUFFIX))
             ){
 
-                return STMPredicate("$key $comparator $rightPredicateString")
+                return STMPredicate("[$key] $comparator $rightPredicateString")
 
             }
 
