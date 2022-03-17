@@ -345,8 +345,8 @@ class STMSocketTransport(private var socketUrlString: String, private var owner:
 
         val o = IO.Options()
 
-        val u = URI(socketUrlString.replace("//socket.", "//socket-v2.")) //production
-//        val u = URI("http://10.0.1.5:8000/socket.io-client") //work
+//        val u = URI(socketUrlString.replace("//socket.", "//socket-v2.")) //production
+        val u = URI("https://socket2.sistemium.ru/socket.io-client") //work
 //        val u = URI("http://192.168.0.105:8000/socket.io-client") //home
 
         o.path = u.path + "/"

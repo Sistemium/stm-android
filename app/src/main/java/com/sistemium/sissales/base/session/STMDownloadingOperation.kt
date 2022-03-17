@@ -15,8 +15,6 @@ class STMDownloadingOperation(var entityName: String) : Runnable {
 
     override fun run() {
 
-        STMFunctions.debugLog("STMDownloadingOperation", "start downloadEntityName: $entityName")
-
         var lastKnownEtag: String? = STMClientEntityController.clientEntityWithName(entityName)["eTag"] as? String
 
         if (lastKnownEtag == null) lastKnownEtag = "*"
