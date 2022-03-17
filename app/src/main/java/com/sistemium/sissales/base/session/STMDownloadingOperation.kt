@@ -1,6 +1,5 @@
 package com.sistemium.sissales.base.session
 
-import com.sistemium.sissales.base.STMFunctions
 import com.sistemium.sissales.base.classes.entitycontrollers.STMClientEntityController
 
 /**
