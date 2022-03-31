@@ -191,6 +191,31 @@ class STMFunctions {
 
             }
 
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                if (ContextCompat.checkSelfPermission(activity,
+                                Manifest.permission.BLUETOOTH_CONNECT)
+                        != PackageManager.PERMISSION_GRANTED) {
+
+                    permissions.add(Manifest.permission.BLUETOOTH_CONNECT)
+                }
+                if (ContextCompat.checkSelfPermission(activity,
+                                Manifest.permission.BLUETOOTH_ADMIN)
+                        != PackageManager.PERMISSION_GRANTED) {
+                    permissions.add(Manifest.permission.BLUETOOTH_ADMIN)
+                }
+                if (ContextCompat.checkSelfPermission(activity,
+                                Manifest.permission.BLUETOOTH)
+                        != PackageManager.PERMISSION_GRANTED) {
+                    permissions.add(Manifest.permission.BLUETOOTH)
+                }
+                if (ContextCompat.checkSelfPermission(activity,
+                                Manifest.permission.BLUETOOTH_SCAN)
+                        != PackageManager.PERMISSION_GRANTED) {
+                    permissions.add(Manifest.permission.BLUETOOTH_SCAN)
+                }
+            }
+
+
             if (permissions.isNotEmpty()){
 
                 ActivityCompat.requestPermissions(activity,

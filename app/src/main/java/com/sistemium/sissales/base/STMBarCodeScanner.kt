@@ -137,6 +137,10 @@ class STMBarCodeScanner:IDcsSdkApiDelegate {
         }
         dialogFwReconnectScanner?.show()
         api.dcssdkEnableAvailableScannersDetection(true)
+        api.dcssdkSetOperationalMode(DCSSDKDefs.DCSSDK_MODE.DCSSDK_OPMODE_BT_NORMAL);
+        api.dcssdkSetOperationalMode(DCSSDKDefs.DCSSDK_MODE.DCSSDK_OPMODE_SNAPI);
+        api.dcssdkSetOperationalMode(DCSSDKDefs.DCSSDK_MODE.DCSSDK_OPMODE_BT_LE);
+        api.dcssdkSetOperationalMode(DCSSDKDefs.DCSSDK_MODE.DCSSDK_OPMODE_USB_CDC);
         val window = dialogFwReconnectScanner?.window
         val scale = activity.resources.displayMetrics.density
         window?.setLayout(LinearLayout.LayoutParams.MATCH_PARENT, (300 * scale + 0.5f).toInt())
