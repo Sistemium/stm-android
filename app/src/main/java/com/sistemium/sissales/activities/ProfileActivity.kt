@@ -154,6 +154,10 @@ class ProfileActivity : AppCompatActivity() {
 
         }
 
+        if (url?.endsWith("/") != true){
+            url += "/"
+        }
+
         //debug
 //            url = url?.replace("http://lamac.local:3000", "http://10.0.1.5:3000")
 //            url = url?.replace("http://lamac.local:3000", "http://192.168.0.103:3000")
