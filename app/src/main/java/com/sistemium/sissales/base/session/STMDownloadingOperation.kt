@@ -18,7 +18,7 @@ class STMDownloadingOperation(var entityName: String) : Runnable {
 
         if (lastKnownEtag == null) lastKnownEtag = "*"
 
-        owner!!.dataDownloadingOwner!!.receiveData(entityName, lastKnownEtag)
+        owner?.dataDownloadingOwner?.receiveData(entityName, lastKnownEtag)
 
         synchronized(lock) {
 

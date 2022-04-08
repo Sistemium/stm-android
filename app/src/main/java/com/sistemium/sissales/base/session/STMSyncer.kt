@@ -163,6 +163,7 @@ class STMSyncer : STMDefantomizingOwner, STMDataDownloadingOwner, STMDataSyncing
         )
 
         socketTransport!!.findAllAsync(entityName, options, null)
+
                 .then {
 
                     STMFunctions.debugLog("receiveData", "receiveData success entityName $entityName")
@@ -180,7 +181,6 @@ class STMSyncer : STMDefantomizingOwner, STMDataDownloadingOwner, STMDataSyncing
                     dataDownloadingDelegate!!.dataReceivedSuccessfully(entityName, null, null, null, it)
 
                 }
-
     }
 
     override fun dataDownloadingFinished() {
@@ -413,7 +413,7 @@ class STMSyncer : STMDefantomizingOwner, STMDataDownloadingOwner, STMDataSyncing
 
     }
 
-    private fun receiveData() {
+    fun receiveData() {
 
         if (!isRunning) return
 

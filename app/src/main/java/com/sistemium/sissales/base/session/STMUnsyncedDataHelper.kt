@@ -37,7 +37,7 @@ class STMUnsyncedDataHelper : STMDataSyncing {
 
         isPaused = false
 
-        startHandleUnsyncedObjects()
+//        startHandleUnsyncedObjects()
 
     }
 
@@ -357,61 +357,61 @@ class STMUnsyncedDataHelper : STMDataSyncing {
     }
 
     private fun subscribeUnsynced() {
-
-        subscriptions.forEach {
-
-            session!!.persistenceDelegate.cancelSubscription(it)
-
-        }
-
-        subscriptions.clear()
-
-        initPrivateData()
-
-        STMEntityController.sharedInstance!!.persistenceDelegate = session!!.persistenceDelegate
-
-        for (entityName in STMEntityController.sharedInstance!!.uploadableEntitiesNames!!) {
-
-            val onlyLocalChanges = hashMapOf(STMPersistingOptionLts to false)
-
-            val sid = session!!.persistenceDelegate.observeEntity(entityName, {
-
-                val obj = it as Map<*, *>
-
-                if (entityName == "STMLogMessage") {
-
-                    //TODO not implemented
-
-//                    val uploadLogType = session?.settingsController?.stringValueForSettings("uploadLog.type", "syncer")
-//                    val logMessageSyncTypes = STMLogger.sharedLogger.syncingTypesForSettingType(uploadLogType).map {
-//                        return@map STMPredicate("\"$it\"")
-//                    }
-//                    subpredicates.add(STMPredicate("IN", STMPredicate("type"), STMPredicate(", ", logMessageSyncTypes)))
-//                    val date = Date()
-//                    date.time -= STMConstants.LOGMESSAGE_MAX_TIME_INTERVAL_TO_UPLOAD
-//                    subpredicates.add(STMPredicate(" > ", STMPredicate("deviceCts"), STMPredicate("\"${STMFunctions.stringFrom(date)}\"")))
-
-                    return@observeEntity false
-
-                }
-
-                if (obj["deviceTs"] != null && (obj["deviceTs"] as String > obj["lts"] as String || obj["lts"] == null)) {
-                    return@observeEntity true
-                }
-
-                return@observeEntity false
-
-            }, onlyLocalChanges, {
-
-                STMFunctions.debugLog("STMUnsyncedDataHelper", "observeEntity $entityName data count ${it.size}")
-
-                startHandleUnsyncedObjects()
-
-            })
-
-            subscriptions.add(sid)
-
-        }
+//
+//        subscriptions.forEach {
+//
+//            session!!.persistenceDelegate.cancelSubscription(it)
+//
+//        }
+//
+//        subscriptions.clear()
+//
+//        initPrivateData()
+//
+//        STMEntityController.sharedInstance!!.persistenceDelegate = session!!.persistenceDelegate
+//
+//        for (entityName in STMEntityController.sharedInstance!!.uploadableEntitiesNames!!) {
+//
+//            val onlyLocalChanges = hashMapOf(STMPersistingOptionLts to false)
+//
+//            val sid = session!!.persistenceDelegate.observeEntity(entityName, {
+//
+//                val obj = it as Map<*, *>
+//
+//                if (entityName == "STMLogMessage") {
+//
+//                    //TODO not implemented
+//
+////                    val uploadLogType = session?.settingsController?.stringValueForSettings("uploadLog.type", "syncer")
+////                    val logMessageSyncTypes = STMLogger.sharedLogger.syncingTypesForSettingType(uploadLogType).map {
+////                        return@map STMPredicate("\"$it\"")
+////                    }
+////                    subpredicates.add(STMPredicate("IN", STMPredicate("type"), STMPredicate(", ", logMessageSyncTypes)))
+////                    val date = Date()
+////                    date.time -= STMConstants.LOGMESSAGE_MAX_TIME_INTERVAL_TO_UPLOAD
+////                    subpredicates.add(STMPredicate(" > ", STMPredicate("deviceCts"), STMPredicate("\"${STMFunctions.stringFrom(date)}\"")))
+//
+//                    return@observeEntity false
+//
+//                }
+//
+//                if (obj["deviceTs"] != null && (obj["deviceTs"] as String > obj["lts"] as String || obj["lts"] == null)) {
+//                    return@observeEntity true
+//                }
+//
+//                return@observeEntity false
+//
+//            }, onlyLocalChanges, {
+//
+//                STMFunctions.debugLog("STMUnsyncedDataHelper", "observeEntity $entityName data count ${it.size}")
+//
+//                startHandleUnsyncedObjects()
+//
+//            })
+//
+//            subscriptions.add(sid)
+//
+//        }
 
     }
 
@@ -429,11 +429,11 @@ class STMUnsyncedDataHelper : STMDataSyncing {
 
     private fun checkUnsyncedObjects(){
 
-        val somethingToUpload = anyObjectToSend()
-
-        val notificationName = if (somethingToUpload != null) NOTIFICATION_SYNCER_HAVE_UNSYNCED_OBJECTS else NOTIFICATION_SYNCER_HAVE_NO_UNSYNCED_OBJECTS
-
-        WebViewActivity.webInterface?.postJSNotification(notificationName)
+//        val somethingToUpload = anyObjectToSend()
+//
+//        val notificationName = if (somethingToUpload != null) NOTIFICATION_SYNCER_HAVE_UNSYNCED_OBJECTS else NOTIFICATION_SYNCER_HAVE_NO_UNSYNCED_OBJECTS
+//
+//        WebViewActivity.webInterface?.postJSNotification(notificationName)
 
     }
 

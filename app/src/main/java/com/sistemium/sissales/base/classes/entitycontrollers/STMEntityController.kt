@@ -92,13 +92,13 @@ class STMEntityController private constructor() {
                 field = value
                 field?.observeEntity(STMConstants.STM_ENTITY_NAME, null, hashMapOf<Any, Any>()) {
 
-                    stcEntities = null
-                    entitiesArray = null
-                    uploadableEntitiesNames = null
-
-                    owner!!.entitiesChanged()
-
-                    STMFunctions.debugLog("STMEntityController", "checkStcEntities got called back with ${it.count()} items")
+//                    stcEntities = null
+//                    entitiesArray = null
+//                    uploadableEntitiesNames = null
+//
+//                    owner!!.entitiesChanged()
+//
+//                    STMFunctions.debugLog("STMEntityController", "checkStcEntities got called back with ${it.count()} items")
                 }
 
             }

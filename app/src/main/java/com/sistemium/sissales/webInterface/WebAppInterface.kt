@@ -24,14 +24,18 @@ import com.google.android.gms.location.LocationRequest.PRIORITY_HIGH_ACCURACY
 import com.google.android.gms.location.LocationResult
 import com.google.android.gms.location.LocationServices
 import com.sistemium.sissales.R
+import com.sistemium.sissales.activities.ProfileActivity
 import com.sistemium.sissales.activities.WebViewActivity
 import com.sistemium.sissales.base.*
 import com.sistemium.sissales.base.STMConstants.Companion.ISISTEMIUM_PREFIX
 import com.sistemium.sissales.base.STMFunctions.Companion.gson
 import com.sistemium.sissales.base.classes.entitycontrollers.STMCorePhotosController
 import com.sistemium.sissales.base.classes.entitycontrollers.STMCorePicturesController
+import com.sistemium.sissales.base.classes.entitycontrollers.STMEntityController
 import com.sistemium.sissales.base.session.STMCoreAuthController
+import com.sistemium.sissales.base.session.STMDownloadingOperation
 import com.sistemium.sissales.base.session.STMSession
+import com.sistemium.sissales.base.session.STMSyncer
 import com.sistemium.sissales.interfaces.STMFullStackPersisting
 import com.sistemium.sissales.persisting.STMPredicate
 import nl.komponents.kovenant.Promise
@@ -39,6 +43,8 @@ import nl.komponents.kovenant.deferred
 import nl.komponents.kovenant.task
 import nl.komponents.kovenant.then
 import java.util.*
+import java.util.concurrent.ExecutorService
+import java.util.concurrent.Executors
 import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
 
@@ -1033,6 +1039,40 @@ class WebAppInterface internal constructor(private var webViewActivity: WebViewA
             webViewActivity.webView?.evaluateJavascript(jsFunction) {
 
                 STMFunctions.debugLog("DEBUG", "Evaluate finish")
+
+                val socketTransport = STMSession.sharedSession!!.syncer!!.socketTransport
+
+                val dataDownloadingDelegate = STMSession.sharedSession!!.syncer!!.dataDownloadingDelegate
+
+                val entitiesNames = STMEntityController.sharedInstance!!.downloadableEntityNames()
+
+                for (entityName in entitiesNames) {
+
+                    val fetchLimit = STMConstants.fetchLimit
+
+                    val options = hashMapOf(
+                            STMConstants.STMPersistingOptionPageSize to fetchLimit,
+                            STMConstants.STMPersistingOptionOffset to "*"
+                    )
+
+                    socketTransport!!.findAllAsync(entityName, options, null)
+
+                            .then {
+
+                                STMFunctions.debugLog("receiveData", "receiveData success entityName $entityName")
+
+                                val responseOffset = it[STMConstants.STMPersistingOptionOffset] as? String
+
+                                val pageSize = (it[STMConstants.STMPersistingOptionPageSize] as Double).toInt()
+
+                                dataDownloadingDelegate!!.dataReceivedSuccessfully(entityName, it["data"] as ArrayList<*>, responseOffset, pageSize, null)
+
+                                STMFunctions.debugLog("____", entityName)
+                                STMFunctions.debugLog("____", "${(it["data"] as ArrayList<*>).size}")
+
+                            }
+
+                }
 
             }
 
