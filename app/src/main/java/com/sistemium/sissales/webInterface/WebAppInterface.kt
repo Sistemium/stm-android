@@ -1034,6 +1034,10 @@ class WebAppInterface internal constructor(private var webViewActivity: WebViewA
 
                 STMFunctions.debugLog("DEBUG", "Evaluate finish")
 
+                val test3 = "{\"xid\":null,\"data\":{\"id\":\"343cd18d-3379-445a-bde7-e36de3629ad7\",\"ts\":\"2021-10-01 00:10:57.465\",\"author\":601.0,\"name\":\"PickingOrderPositionPicked\",\"deviceUUID\":\"457C164F-E81E-4903-8926-FD731C95796E\",\"objectXid\":\"585c1e37-c982-47a4-b8f5-725cf55a2207\",\"deviceCts\":\"2021-10-01 00:10:57.250\",\"isRemoved\":true},\"entity\":\"RecordStatus\"}"
+                javascriptCallback(arrayListOf(gson.fromJson(test3, Map::class.java)), hashMapOf("reason" to "subscription"), "iosSocketsJsDataSubscribeData")
+
+
             }
 
         }
