@@ -68,6 +68,7 @@ class MyApplication : Application(), Application.ActivityLifecycleCallbacks {
     }
 
     override fun onActivityPaused(p0: Activity) {
+        inBackground = true
     }
 
     override fun onActivityStarted(p0: Activity) {
