@@ -1035,7 +1035,19 @@ class WebAppInterface internal constructor(private var webViewActivity: WebViewA
                 STMFunctions.debugLog("DEBUG", "Evaluate finish")
 
                 if (MyApplication.inBackground){
-                    javascriptCallback(hashMapOf<Any, Any>(), hashMapOf<Any, Any>(), "iosSocketsJsDataSubscribeData")
+                    val jsFunction = "window.iosSocketsJsDataSubscribeData && iosSocketsJsDataSubscribeData.apply(null,${gson.toJson(arrayOf<Any>())})"
+
+                    STMFunctions.debugLog("DEBUG", "EvaluateJS")
+
+                    webViewActivity.webView?.post {
+
+                        webViewActivity.webView?.evaluateJavascript(jsFunction) {
+
+                            STMFunctions.debugLog("DEBUG", "Evaluate finish")
+
+                        }
+
+                    }
                 }
 
             }
