@@ -4,16 +4,18 @@ package com.sistemium.sissales.webInterface
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.DownloadManager
+import android.app.Service
 import android.content.*
 import android.location.Location
+import android.media.MediaPlayer
 import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
+import android.os.IBinder
 import android.os.Looper
 import android.provider.ContactsContract
 import android.provider.MediaStore
 import android.speech.tts.TextToSpeech
-import android.util.Log
 import android.webkit.JavascriptInterface
 import android.widget.Toast
 import com.google.android.gms.common.ConnectionResult
@@ -26,7 +28,6 @@ import com.google.android.gms.location.LocationServices
 import com.sistemium.sissales.R
 import com.sistemium.sissales.activities.WebViewActivity
 import com.sistemium.sissales.base.*
-import com.sistemium.sissales.base.STMConstants.Companion.ISISTEMIUM_PREFIX
 import com.sistemium.sissales.base.STMFunctions.Companion.gson
 import com.sistemium.sissales.base.classes.entitycontrollers.STMCorePhotosController
 import com.sistemium.sissales.base.classes.entitycontrollers.STMCorePicturesController
@@ -36,18 +37,73 @@ import com.sistemium.sissales.interfaces.STMFullStackPersisting
 import com.sistemium.sissales.persisting.STMPredicate
 import nl.komponents.kovenant.Promise
 import nl.komponents.kovenant.deferred
-import nl.komponents.kovenant.task
 import nl.komponents.kovenant.then
 import java.util.*
-import kotlin.collections.ArrayList
-import kotlin.collections.HashMap
 
 
 /**
  * Created by edgarjanvuicik on 27/10/2017.
  */
 
+//this service was a failed attempt to make zebra working in background
+class BackgroundSoundService : Service() {
+    internal lateinit var player: MediaPlayer
+    override fun onBind(arg0: Intent): IBinder? {
+
+        return null
+    }
+
+    override fun onCreate() {
+        super.onCreate()
+        val afd = applicationContext.assets.openFd("silent.wav")
+        player = MediaPlayer()
+        player.setDataSource(afd.fileDescriptor)
+        player.isLooping = true
+        player.setVolume(0f, 0f)
+
+    }
+
+    override fun onStartCommand(intent: Intent, flags: Int, startId: Int): Int {
+        player.start()
+        return START_NOT_STICKY
+    }
+
+    override fun onStart(intent: Intent, startId: Int) {
+        // TO DO
+    }
+
+    fun onUnBind(arg0: Intent): IBinder? {
+        // TO DO Auto-generated method
+        return null
+    }
+
+    fun onStop() {
+
+    }
+
+    fun onPause() {
+
+    }
+
+    override fun onDestroy() {
+        player.stop()
+        player.release()
+    }
+
+    override fun onLowMemory() {
+
+    }
+
+    companion object {
+        private val TAG: String? = null
+    }
+}
+
 class WebAppInterface internal constructor(private var webViewActivity: WebViewActivity) {
+
+//    init {
+//        webViewActivity.startService(Intent(webViewActivity, BackgroundSoundService::class.java))
+//    }
 
     private val javascriptCallback = "iSistemiumIOSCallback"
 
@@ -1034,21 +1090,21 @@ class WebAppInterface internal constructor(private var webViewActivity: WebViewA
 
                 STMFunctions.debugLog("DEBUG", "Evaluate finish")
 
-                if (MyApplication.inBackground){
-                    val jsFunction = "window.iosSocketsJsDataSubscribeData && iosSocketsJsDataSubscribeData.apply(null,${gson.toJson(arrayOf<Any>())})"
-
-                    STMFunctions.debugLog("DEBUG", "EvaluateJS")
-
-                    webViewActivity.webView?.post {
-
-                        webViewActivity.webView?.evaluateJavascript(jsFunction) {
-
-                            STMFunctions.debugLog("DEBUG", "Evaluate finish")
-
-                        }
-
-                    }
-                }
+//                if (MyApplication.inBackground){
+//                    val jsFunction = "window.iosSocketsJsDataSubscribeData && iosSocketsJsDataSubscribeData.apply(null,${gson.toJson(arrayOf<Any>())})"
+//
+//                    STMFunctions.debugLog("DEBUG", "EvaluateJS")
+//
+//                    webViewActivity.webView?.post {
+//
+//                        webViewActivity.webView?.evaluateJavascript(jsFunction) {
+//
+//                            STMFunctions.debugLog("DEBUG", "Evaluate finish")
+//
+//                        }
+//
+//                    }
+//                }
 
             }
 
