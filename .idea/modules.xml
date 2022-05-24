@@ -5,6 +5,8 @@
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/stm-android.iml" filepath="$PROJECT_DIR$/.idea/modules/stm-android.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/BarcodeScannerLibrary/stm-android.BarcodeScannerLibrary.iml" filepath="$PROJECT_DIR$/.idea/modules/BarcodeScannerLibrary/stm-android.BarcodeScannerLibrary.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/stm-android.app.iml" filepath="$PROJECT_DIR$/.idea/modules/app/stm-android.app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/stm-android.app.main.iml" filepath="$PROJECT_DIR$/.idea/modules/app/stm-android.app.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/stm-android.app.unitTest.iml" filepath="$PROJECT_DIR$/.idea/modules/app/stm-android.app.unitTest.iml" />
     </modules>
   </component>
 </project>
