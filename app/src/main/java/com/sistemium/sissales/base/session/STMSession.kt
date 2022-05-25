@@ -1,5 +1,6 @@
 package com.sistemium.sissales.base.session
 
+import android.content.Intent
 import android.os.StrictMode
 import com.github.kittinunf.fuel.Fuel
 import com.github.kittinunf.fuel.android.extension.responseJson
@@ -26,6 +27,7 @@ import android.os.Build
 import android.util.Log
 import com.sistemium.sissales.BuildConfig
 import com.sistemium.sissales.base.MyApplication
+import com.sistemium.sissales.services.LocationService
 import java.io.InputStream
 import java.io.OutputStream
 import java.sql.SQLException
@@ -106,6 +108,8 @@ class STMSession {
         logger?.session = this
 
         applyPatches(adapter.database)
+
+        MyApplication.appContext!!.startService(Intent(MyApplication.appContext!!, LocationService::class.java))
 
     }
 

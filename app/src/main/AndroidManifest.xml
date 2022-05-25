@@ -55,6 +55,10 @@
             android:name=".webInterface.BackgroundSoundService"
             android:label="BackgroundSoundService" >
         </service>
+        <service
+            android:name=".services.LocationService"
+            android:label="LocationService" >
+        </service>
 
         <activity
             android:name=".activities.WebViewActivity"
