@@ -6,6 +6,7 @@ import android.app.Activity
 import android.app.AlertDialog
 import android.content.Context
 import android.content.DialogInterface
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
 import android.provider.Settings
@@ -17,6 +18,7 @@ import com.sistemium.sissales.BuildConfig
 import com.sistemium.sissales.R
 import com.sistemium.sissales.base.session.STMCoreAuthController
 import com.sistemium.sissales.base.session.STMSession
+import com.sistemium.sissales.services.LocationService
 import java.io.File
 import java.math.BigInteger
 import java.security.MessageDigest
@@ -221,6 +223,7 @@ class STMFunctions {
                 ActivityCompat.requestPermissions(activity,
                         permissions.toTypedArray(),
                         0)
+//                MyApplication.appContext!!.startService(Intent(MyApplication.appContext!!, LocationService::class.java))
 
             }
 

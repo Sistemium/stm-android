@@ -713,6 +713,24 @@ class WebAppInterface internal constructor(private var webViewActivity: WebViewA
     }
 
     @JavascriptInterface
+    fun share(parameters: String?) {
+        STMFunctions.debugLog("DEBUG", "downloadFile")
+
+        val mapParameters = gson.fromJson(parameters, Map::class.java)
+
+        val url = mapParameters["url"] as String
+//        val name = mapParameters["name"] as String
+//        val request = DownloadManager.Request(Uri.parse(url))
+        val uri = Uri.parse(url)
+        val intent = Intent(Intent.ACTION_SEND)
+        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+        intent.setType("*/*")
+        intent.putExtra(Intent.EXTRA_STREAM, uri)
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+        webViewActivity.startActivity(intent)
+    }
+
+    @JavascriptInterface
     fun unsyncedInfoService(parameters: String?) {
 
         STMFunctions.debugLog("DEBUG", "unsyncedInfoService")

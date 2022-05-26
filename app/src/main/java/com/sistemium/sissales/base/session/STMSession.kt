@@ -109,8 +109,6 @@ class STMSession {
 
         applyPatches(adapter.database)
 
-        MyApplication.appContext!!.startService(Intent(MyApplication.appContext!!, LocationService::class.java))
-
     }
 
     fun getModel() : String {
