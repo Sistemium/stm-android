@@ -18,6 +18,7 @@ import android.provider.MediaStore
 import android.speech.tts.TextToSpeech
 import android.webkit.JavascriptInterface
 import android.widget.Toast
+import com.github.kittinunf.fuel.Fuel
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.api.GoogleApiClient
 import com.google.android.gms.location.LocationCallback
@@ -38,6 +39,7 @@ import com.sistemium.sissales.persisting.STMPredicate
 import nl.komponents.kovenant.Promise
 import nl.komponents.kovenant.deferred
 import nl.komponents.kovenant.then
+import java.io.File
 import java.util.*
 
 
@@ -719,15 +721,34 @@ class WebAppInterface internal constructor(private var webViewActivity: WebViewA
         val mapParameters = gson.fromJson(parameters, Map::class.java)
 
         val url = mapParameters["url"] as String
-//        val name = mapParameters["name"] as String
-//        val request = DownloadManager.Request(Uri.parse(url))
-        val uri = Uri.parse(url)
-        val intent = Intent(Intent.ACTION_SEND)
-        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-        intent.setType("*/*")
-        intent.putExtra(Intent.EXTRA_STREAM, uri)
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-        webViewActivity.startActivity(intent)
+        val callback = mapParameters["callback"]
+        val name = mapParameters["name"] as String
+
+        val file = File(Environment.getExternalStorageDirectory().absolutePath + '/' + name)
+
+        Fuel.Companion.download(url).destination { response, Url ->
+            file
+        }.response { request, response, result ->
+            if (response.statusCode == 200) {
+                val intent = Intent(Intent.ACTION_SEND)
+                intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+                if (name.contains(".pdf")){
+                    intent.setType("application/pdf")
+                } else {
+                    intent.setType("*/*")
+                }
+                intent.putExtra(Intent.EXTRA_STREAM, Uri.parse("content://" + file.absolutePath))
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+
+                webViewActivity.startActivity(intent)
+
+                file.deleteOnExit()
+
+                javascriptCallback(arrayListOf<String>(), mapParameters, callback as String)
+            } else {
+                javascriptCallback("error", mapParameters)
+            }
+        }
     }
 
     @JavascriptInterface
