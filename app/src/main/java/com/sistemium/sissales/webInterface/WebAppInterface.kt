@@ -18,6 +18,7 @@ import android.provider.MediaStore
 import android.speech.tts.TextToSpeech
 import android.webkit.JavascriptInterface
 import android.widget.Toast
+import androidx.core.content.FileProvider
 import com.github.kittinunf.fuel.Fuel
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.api.GoogleApiClient
@@ -26,6 +27,7 @@ import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationRequest.PRIORITY_HIGH_ACCURACY
 import com.google.android.gms.location.LocationResult
 import com.google.android.gms.location.LocationServices
+import com.sistemium.sissales.BuildConfig
 import com.sistemium.sissales.R
 import com.sistemium.sissales.activities.WebViewActivity
 import com.sistemium.sissales.base.*
@@ -732,15 +734,16 @@ class WebAppInterface internal constructor(private var webViewActivity: WebViewA
             if (response.statusCode == 200) {
                 val intent = Intent(Intent.ACTION_SEND)
                 intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-                if (name.contains(".pdf")){
-                    intent.setType("application/pdf")
-                } else {
-                    intent.setType("*/*")
-                }
-                intent.putExtra(Intent.EXTRA_STREAM, Uri.parse("content://" + file.absolutePath))
+                intent.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION)
+                intent.setType(response.headers["Content-Type"]!!.first())
+                val uri = FileProvider.getUriForFile(
+                        webViewActivity,
+                        "${BuildConfig.APPLICATION_ID}.provider", //(use your app signature + ".provider" )
+                        file)
+                intent.putExtra(Intent.EXTRA_STREAM, uri)
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
 
-                webViewActivity.startActivity(intent)
+                webViewActivity.startActivity(Intent.createChooser(intent, ""))
 
                 file.deleteOnExit()
 

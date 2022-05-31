@@ -37,6 +37,7 @@
         tools:ignore="GoogleAppIndexingWarning"
         tools:replace="android:label,android:allowBackup"
         android:usesCleartextTraffic="true"
+        android:requestLegacyExternalStorage="true"
         android:label="${appName}" >
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_icon"
