@@ -6,6 +6,8 @@ import android.app.Activity
 import android.app.DownloadManager
 import android.app.Service
 import android.content.*
+import android.content.pm.PackageManager
+import android.content.pm.ResolveInfo
 import android.location.Location
 import android.media.MediaPlayer
 import android.net.Uri
@@ -742,8 +744,20 @@ class WebAppInterface internal constructor(private var webViewActivity: WebViewA
                         file)
                 intent.putExtra(Intent.EXTRA_STREAM, uri)
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                val chooser = Intent.createChooser(intent, "");
+                val resInfoList: List<ResolveInfo> = webViewActivity.packageManager
+                    .queryIntentActivities(chooser, PackageManager.MATCH_DEFAULT_ONLY)
 
-                webViewActivity.startActivity(Intent.createChooser(intent, ""))
+                for (resolveInfo in resInfoList) {
+                    val packageName = resolveInfo.activityInfo.packageName
+                    webViewActivity.grantUriPermission(
+                        packageName,
+                        uri,
+                        Intent.FLAG_GRANT_WRITE_URI_PERMISSION or Intent.FLAG_GRANT_READ_URI_PERMISSION
+                    )
+                }
+
+                webViewActivity.startActivity(chooser)
 
                 file.deleteOnExit()
 
