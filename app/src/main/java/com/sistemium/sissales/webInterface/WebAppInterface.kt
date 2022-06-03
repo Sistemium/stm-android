@@ -11,10 +11,7 @@ import android.content.pm.ResolveInfo
 import android.location.Location
 import android.media.MediaPlayer
 import android.net.Uri
-import android.os.Bundle
-import android.os.Environment
-import android.os.IBinder
-import android.os.Looper
+import android.os.*
 import android.provider.ContactsContract
 import android.provider.MediaStore
 import android.speech.tts.TextToSpeech
@@ -728,7 +725,11 @@ class WebAppInterface internal constructor(private var webViewActivity: WebViewA
         val callback = mapParameters["callback"]
         val name = mapParameters["name"] as String
 
-        val file = File(Environment.getExternalStorageDirectory().absolutePath + '/' + name)
+        var file = File(Environment.getExternalStorageDirectory().absolutePath + '/' + name)
+
+        if (Build.VERSION.SDK_INT >= 30) {
+            file= File(webViewActivity.getExternalFilesDir(Environment.DIRECTORY_DCIM)?.absolutePath + '/' + name)
+        }
 
         Fuel.Companion.download(url).destination { response, Url ->
             file
