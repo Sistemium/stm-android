@@ -302,7 +302,7 @@ class STMSession {
 
         try{
             database.execSQL(patch)
-        } catch (e: SQLException) {
+        } catch (e: RuntimeException) {
             return "Error while executing patch"
         }
 
