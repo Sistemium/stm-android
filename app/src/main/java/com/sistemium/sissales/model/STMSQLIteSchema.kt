@@ -52,6 +52,14 @@ class STMSQLIteSchema(private val database: SQLiteDatabase) {
 
         }
 
+        for (attribute in modelMapping.addedAttributes) {
+            val table = STMFunctions.removePrefixFromEntityName(attribute.key)
+
+            addColumns(attribute.value, table)
+
+        }
+
+
         //TODO rest of migration
 
 //        if (!modelMapping.removedProperties().isEmpty()){

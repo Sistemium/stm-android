@@ -114,7 +114,7 @@ class STMSyncerHelper : STMDefantomizing, STMDataDownloading {
 
         }
 
-        if (dataRecieved!!.count() == 0 && offset!! != currentEtag) {
+        if (dataRecieved!!.isEmpty() && offset!! != currentEtag) {
 
             STMClientEntityController.setEtag(entityName, offset)
 
@@ -224,7 +224,7 @@ class STMSyncerHelper : STMDefantomizing, STMDataDownloading {
 
                     STMFunctions.debugLog("defantomizedEntityName", "defantomizedEntityName not implemented")
 
-                    TODO("not implemented")
+//                    TODO("not implemented")
 //                @synchronized (self) {
 //                    [self.defantomizing.failToResolveIds addObject:identifier];
 //                }

@@ -63,7 +63,7 @@ class STMCoreAuthController {
 
         var modelEtag: String?
             get() {
-                
+
                 val prefStore = SecuredPreferenceStore.getSharedInstance()
                 return prefStore.getString("modelEtag", null)
 
@@ -75,6 +75,8 @@ class STMCoreAuthController {
                 prefStore.edit().putString("modelEtag", value).apply()
 
             }
+
+        var newModelEtag: String? = ""
 
         var tokenHash: String?
             get() {

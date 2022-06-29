@@ -42,7 +42,7 @@ class STMModelMapper(savedModel: STMManagedObjectModel?, override var destinatio
 
                             if (attribute != savedEntity.attributesByName[attribute.attributeName]){
 
-                                TODO("not implemented")
+//                                TODO("not implemented")
 
                             }
 
@@ -68,7 +68,7 @@ class STMModelMapper(savedModel: STMManagedObjectModel?, override var destinatio
 
                             if (relation != savedEntity.relationshipsByName[relation.relationshipName]){
 
-                                TODO("not implemented")
+//                                TODO("not implemented")
 
                             }
 
@@ -108,7 +108,7 @@ class STMModelMapper(savedModel: STMManagedObjectModel?, override var destinatio
 
                             if (attribute != savedEntity.attributesByName[attribute.attributeName]){
 
-                                TODO("not implemented")
+//                                TODO("not implemented")
 
                             }
 
@@ -134,7 +134,7 @@ class STMModelMapper(savedModel: STMManagedObjectModel?, override var destinatio
 
                             if (relation != savedEntity.relationshipsByName[relation.relationshipName]){
 
-                                TODO("not implemented")
+//                                TODO("not implemented")
 
                             }
 

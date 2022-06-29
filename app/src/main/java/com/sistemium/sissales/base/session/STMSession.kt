@@ -171,7 +171,7 @@ class STMSession {
 
                 newModel = result.get().content
 
-                STMCoreAuthController.modelEtag = response.headers["ETag"]?.first()
+                STMCoreAuthController.newModelEtag = response.headers["ETag"]?.first()
 
             }
 

@@ -61,7 +61,7 @@ class STMSQLiteDatabaseAdapter(private var dbPath: String) : STMAdapting {
 
         }
 
-        if (poolDatabases.count() == 0) {
+        if (poolDatabases.isEmpty()) {
 
             poolDatabases.add(database!!)
 
@@ -115,7 +115,7 @@ class STMSQLiteDatabaseAdapter(private var dbPath: String) : STMAdapting {
 
                 STMFunctions.debugLog("", "")
 
-                TODO("not implemented")
+//                TODO("not implemented")
 
             }
 
@@ -174,6 +174,8 @@ class STMSQLiteDatabaseAdapter(private var dbPath: String) : STMAdapting {
             schema.createTablesWithModelMapping(modelMapper, STMModelling.sharedModeler!!)
 
             modelMapper.destinationModel.saveToFile(savedModelPath)
+
+            STMCoreAuthController.modelEtag = STMCoreAuthController.newModelEtag
 
         }
 
