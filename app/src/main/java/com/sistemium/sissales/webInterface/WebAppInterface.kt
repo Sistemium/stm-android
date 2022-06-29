@@ -71,6 +71,7 @@ class BackgroundSoundService : Service() {
         return START_NOT_STICKY
     }
 
+    @Deprecated("Deprecated in Java")
     override fun onStart(intent: Intent, startId: Int) {
         // TO DO
     }
@@ -561,7 +562,7 @@ class WebAppInterface internal constructor(private var webViewActivity: WebViewA
                     override fun onLocationResult(p0: LocationResult) {
                         val location = p0.lastLocation
 
-                        if (location.time > startTime.time - 60000 && (bestLocation == null || bestLocation!!.accuracy > location.accuracy)) {
+                        if (location != null && location.time > startTime.time - 60000 && (bestLocation == null || bestLocation!!.accuracy > location.accuracy)) {
 
                             bestLocation = location
 

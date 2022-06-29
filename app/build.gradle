@@ -87,7 +87,7 @@ dependencies {
     implementation 'com.bandyer:socket.io-client:1.0.9'
     implementation 'com.github.EdgarJan:Secured-Preference-Store:-SNAPSHOT'
     implementation 'com.github.javiersantos:AppUpdater:master-SNAPSHOT'
-    implementation 'com.google.android.gms:play-services-location:19.0.1'
+    implementation 'com.google.android.gms:play-services-location:20.0.0'
     implementation project(path: ':BarcodeScannerLibrary')
     implementation platform('com.google.firebase:firebase-bom:29.0.1')
     implementation 'com.google.firebase:firebase-analytics-ktx:21.0.0'

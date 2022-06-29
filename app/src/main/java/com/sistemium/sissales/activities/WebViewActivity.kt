@@ -125,6 +125,7 @@ class WebViewActivity : Activity() {
             }
 
             //https://stackoverflow.com/questions/39979950/webviewclient-not-calling-shouldoverrideurlloading
+            @Deprecated("Deprecated in Java")
             override fun shouldOverrideUrlLoading(view: WebView?, url: String?): Boolean {
                 if (url?.contains("access-token=") == true && manifest == null) {
 

@@ -174,7 +174,8 @@ class STMSession {
                 STMCoreAuthController.newModelEtag = response.headers["ETag"]?.first()
 
             }
-
+            is Result.Failure -> {
+            }
         }
 
         if (newModel == ""){

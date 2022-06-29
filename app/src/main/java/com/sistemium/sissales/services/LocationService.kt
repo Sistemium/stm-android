@@ -36,6 +36,7 @@ class LocationService : Service() {
             Log.e(TAG, "onProviderEnabled: $provider")
         }
 
+        @Deprecated("Deprecated in Java")
         override fun onStatusChanged(provider: String, status: Int, extras: Bundle) {
             Log.e(TAG, "onStatusChanged: $provider")
         }
