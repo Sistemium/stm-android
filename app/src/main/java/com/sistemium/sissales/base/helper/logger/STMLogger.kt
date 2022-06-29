@@ -117,7 +117,14 @@ class STMLogger private constructor() {
 
     }
 
+    private var lastLog:String = ""
+    private var lastLogTimestamp:Date = Date()
+
     fun saveLogMessageWithText(text: String, numType: STMLogMessageType) {
+
+        if (text == lastLog && Date().time - 3600000 > lastLogTimestamp.time) {
+            return
+        }
 
         var type = numType.toString()
 
@@ -141,6 +148,10 @@ class STMLogger private constructor() {
             nsLogMessageWithType(type, text)
 
         }
+
+        lastLog = text
+
+        lastLogTimestamp = Date()
 
     }
 
