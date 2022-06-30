@@ -122,7 +122,7 @@ class STMLogger private constructor() {
 
     fun saveLogMessageWithText(text: String, numType: STMLogMessageType) {
 
-        if (text == lastLog && Date().time - 3600000 > lastLogTimestamp.time) {
+        if (text == lastLog && Date().time - 60000 > lastLogTimestamp.time) {
             return
         }
 
