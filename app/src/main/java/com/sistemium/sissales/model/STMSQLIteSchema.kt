@@ -118,7 +118,7 @@ class STMSQLIteSchema(private val database: SQLiteDatabase) {
 
         fillRecreatedTablesWithFantom()
         eTagReseting()
-        
+
         if (migrationSuccessful) {
 
             STMFunctions.debugLog("STMSQLiteSchema", "model migrating SUCCESS")
