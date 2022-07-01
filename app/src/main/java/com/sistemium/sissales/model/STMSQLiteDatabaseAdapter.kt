@@ -177,6 +177,7 @@ class STMSQLiteDatabaseAdapter(private var dbPath: String) : STMAdapting {
                 modelMapper.destinationModel.saveToFile(savedModelPath)
 
                 STMCoreAuthController.modelEtag = STMCoreAuthController.newModelEtag
+
             }
 
         }

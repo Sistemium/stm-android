@@ -87,7 +87,7 @@ class STMPersister(private val runner: STMPersistingRunning) : STMFullStackPersi
 
         }
 
-        val res = if (result.count() != 0) result else attributeArray
+        val res = result.ifEmpty { attributeArray }
 
         notifyObservingEntityName(STMFunctions.addPrefixToEntityName(entityName), res, options)
 

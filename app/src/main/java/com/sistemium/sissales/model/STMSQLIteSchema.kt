@@ -4,9 +4,12 @@ import android.content.ContentValues
 import android.database.sqlite.SQLiteDatabase
 import com.sistemium.sissales.base.STMConstants
 import com.sistemium.sissales.base.STMFunctions
+import com.sistemium.sissales.base.helper.logger.STMLogger
 import com.sistemium.sissales.interfaces.STMModelMapping
 import com.sistemium.sissales.interfaces.STMModelling
 import java.sql.SQLException
+import java.util.*
+import kotlin.collections.ArrayList
 
 /**
  * Created by edgarjanvuicik on 29/11/2017.
@@ -115,15 +118,14 @@ class STMSQLIteSchema(private val database: SQLiteDatabase) {
 
         fillRecreatedTablesWithFantom()
         eTagReseting()
-
-        return if (migrationSuccessful) {
+        
+        if (migrationSuccessful) {
 
             STMFunctions.debugLog("STMSQLiteSchema", "model migrating SUCCESS")
 
-
         } else {
 
-            STMFunctions.debugLog("STMSQLiteSchema", "model migrating NOT SUCCESS")
+            executeDDL(arrayListOf("INSERT INTO LogMessage (isFantom, id, type, deviceTs, text) VALUES (0, ${STMFunctions.uuidString()}, 'important', '${STMFunctions.stringFrom(Date())}', 'model migrating NOT SUCCESS' )"))
 
         }
 
@@ -490,7 +492,7 @@ class STMSQLIteSchema(private val database: SQLiteDatabase) {
 
     private fun eTagReseting() {
 
-        if (tablesToReload.count() == 0) {
+        if (tablesToReload.isEmpty()) {
 
             return
 
