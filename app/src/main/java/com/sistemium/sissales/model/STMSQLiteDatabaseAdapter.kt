@@ -173,9 +173,11 @@ class STMSQLiteDatabaseAdapter(private var dbPath: String) : STMAdapting {
 
             schema.createTablesWithModelMapping(modelMapper, STMModelling.sharedModeler!!)
 
-            modelMapper.destinationModel.saveToFile(savedModelPath)
+            if (schema.migrationSuccessful){
+                modelMapper.destinationModel.saveToFile(savedModelPath)
 
-            STMCoreAuthController.modelEtag = STMCoreAuthController.newModelEtag
+                STMCoreAuthController.modelEtag = STMCoreAuthController.newModelEtag
+            }
 
         }
 

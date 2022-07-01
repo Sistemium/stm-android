@@ -14,7 +14,7 @@ import java.sql.SQLException
 class STMSQLIteSchema(private val database: SQLiteDatabase) {
 
     private var modelMapping: STMModelMapping? = null
-    private var migrationSuccessful = false
+    var migrationSuccessful = false
     private val builtInAttributes = arrayListOf(
             STMConstants.DEFAULT_PERSISTING_PRIMARY_KEY,
             STMConstants.STMPersistingKeyCreationTimestamp,
@@ -193,7 +193,7 @@ class STMSQLIteSchema(private val database: SQLiteDatabase) {
             ddls
                     .filterNot { it.isEmpty() }
                     .forEach { database.execSQL(it) }
-        } catch (e: SQLException) {
+        } catch (e: RuntimeException) {
 
             return false
 
