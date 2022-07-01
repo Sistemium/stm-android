@@ -140,6 +140,8 @@ class STMSession {
             modelStream.close()
             dataStream.close()
 
+            return getSavedModel(savedModelPath) ?: "";
+
         }
 
         newModel = getSavedModel(savedModelPath) ?: ""
