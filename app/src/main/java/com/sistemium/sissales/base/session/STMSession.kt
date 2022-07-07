@@ -277,13 +277,13 @@ class STMSession {
                     val mMap = patch.toMutableMap()
                     mMap["isProcessed"] = true
 
-                    this.persistenceDelegate.mergeSync("STMSQLPatch", mMap, hashMapOf(STMConstants.STMPersistingOptionLts to STMFunctions.stringFrom(Date())))
+                    this.persistenceDelegate.mergeSync("STMSQLPatch", mMap, null)
 
                 } else {
                     val mMap = patch.toMutableMap()
                     mMap["isProcessed"] = false
 
-                    this.persistenceDelegate.mergeSync("STMSQLPatch", mMap, hashMapOf(STMConstants.STMPersistingOptionLts to STMFunctions.stringFrom(Date())))
+                    this.persistenceDelegate.mergeSync("STMSQLPatch", mMap, null)
                 }
 
                 STMFunctions.debugLog("STMSession", patchResult)
