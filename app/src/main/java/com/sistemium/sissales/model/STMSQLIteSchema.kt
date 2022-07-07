@@ -125,7 +125,7 @@ class STMSQLIteSchema(private val database: SQLiteDatabase) {
 
         } else {
 
-            executeDDL(arrayListOf("INSERT INTO LogMessage (isFantom, id, type, deviceTs, text) VALUES (0, ${STMFunctions.uuidString()}, 'important', '${STMFunctions.stringFrom(Date())}', 'model migrating NOT SUCCESS' )"))
+            executeDDL(arrayListOf("INSERT INTO LogMessage (isFantom, id, type, deviceTs, text) VALUES (0, '${STMFunctions.uuidString()}', 'important', '${STMFunctions.stringFrom(Date())}', 'model migrating NOT SUCCESS' )"))
 
         }
 
