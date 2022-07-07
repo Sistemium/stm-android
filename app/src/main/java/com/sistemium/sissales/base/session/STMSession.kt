@@ -298,15 +298,17 @@ class STMSession {
 
         if (database == null) return "Error, no database"
 
-        val result = database.rawQuery(condition, null)
+        try{
+            val result = database.rawQuery(condition, null)
+            if (result.count == 0){
 
-        if (result.count == 0){
+                return "Successfully skipped unnecessary patch: $patch"
 
-            return "Successfully skipped unnecessary patch: $patch"
-
+            }
+            result.close()
+        } catch (e: RuntimeException) {
+            return "Error while executing patch"
         }
-
-        result.close()
 
         try{
             database.execSQL(patch)
