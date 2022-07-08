@@ -4,6 +4,7 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="app/src/main/res/layout/activity_auth.xml" value="0.28020833333333334" />
+        <entry key="app/src/main/res/layout/activity_camera_preview.xml" value="0.34375" />
       </map>
     </option>
   </component>

@@ -3,6 +3,7 @@ package com.sistemium.sissales.webInterface
 
 import android.annotation.SuppressLint
 import android.app.Activity
+import android.app.ActivityOptions
 import android.app.DownloadManager
 import android.app.Service
 import android.content.*
@@ -15,6 +16,7 @@ import android.os.*
 import android.provider.ContactsContract
 import android.provider.MediaStore
 import android.speech.tts.TextToSpeech
+import android.view.View
 import android.webkit.JavascriptInterface
 import android.widget.Toast
 import androidx.core.content.FileProvider
@@ -28,6 +30,8 @@ import com.google.android.gms.location.LocationResult
 import com.google.android.gms.location.LocationServices
 import com.sistemium.sissales.BuildConfig
 import com.sistemium.sissales.R
+import com.sistemium.sissales.activities.CameraPreviewActivity
+import com.sistemium.sissales.activities.ProfileActivity
 import com.sistemium.sissales.activities.WebViewActivity
 import com.sistemium.sissales.base.*
 import com.sistemium.sissales.base.STMFunctions.Companion.gson
@@ -157,6 +161,13 @@ class WebAppInterface internal constructor(private var webViewActivity: WebViewA
     var scannerStatusJSFunction = ""
     var scannerScanJSFunction = ""
 
+    fun scannerType(): String {
+        if (STMCoreAuthController.configuration == "vfs"){
+            return "camera"
+        }
+        return "zebra"
+    }
+
     @JavascriptInterface
     fun barCodeScannerOn(parameters: String?) {
 
@@ -165,15 +176,26 @@ class WebAppInterface internal constructor(private var webViewActivity: WebViewA
         val mapParameters = gson.fromJson(parameters, Map::class.java)
 
         scannerScanJSFunction = mapParameters["scanCallback"] as String
-        var scannerPowerButtonJSFunction = mapParameters["powerButtonCallback"] as String
         scannerStatusJSFunction = mapParameters["statusCallback"] as String
 
-        STMBarCodeScanner.sharedScanner?.startBarcodeScanning(webViewActivity)
+        if (scannerType() == "zebra"){
+            STMBarCodeScanner.sharedScanner?.startBarcodeScanning(webViewActivity)
 
-        if (STMBarCodeScanner.sharedScanner!!.isDeviceConnected) {
+            if (STMBarCodeScanner.sharedScanner!!.isDeviceConnected) {
 
-            scannerConnected()
+                scannerConnected()
 
+            }
+        } else {
+            val myIntent = Intent(MyApplication.appContext, CameraPreviewActivity::class.java)
+
+            myIntent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+
+            val options = ActivityOptions.makeCustomAnimation(MyApplication.appContext, R.anim.abc_fade_in, R.anim.abc_fade_out)
+
+            webViewActivity.runOnUiThread{
+                MyApplication.appContext?.startActivity(myIntent, options.toBundle())
+            }
         }
 
     }

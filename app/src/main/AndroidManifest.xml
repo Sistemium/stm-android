@@ -2,6 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <uses-sdk tools:overrideLibrary="       androidx.camera.camera2, androidx.camera.core,       androidx.camera.view, androidx.camera.lifecycle" />
+
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.CAMERA" />
@@ -15,14 +17,16 @@
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
     <uses-permission android:name="android.permission.BLUETOOTH_SCAN" />
 
-    <uses-feature android:name="android.hardware.location.gps" android:required="true"/>
-    <uses-feature android:name="android.hardware.camera" android:required="true" />
+    <uses-feature
+        android:name="android.hardware.location.gps"
+        android:required="true" />
+    <uses-feature
+        android:name="android.hardware.camera"
+        android:required="true" />
 
     <queries>
         <intent>
-            <action
-                android:name="android.media.action.IMAGE_CAPTURE"
-                />
+            <action android:name="android.media.action.IMAGE_CAPTURE" />
         </intent>
     </queries>
 
@@ -30,21 +34,30 @@
         android:name=".base.MyApplication"
         android:allowBackup="false"
         android:fullBackupContent="@xml/backup_descriptor"
+        android:icon="@mipmap/ic_launcher"
+        android:label="${appName}"
+        android:requestLegacyExternalStorage="true"
+        android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
-        android:icon="@mipmap/ic_launcher"
-        android:roundIcon="@mipmap/ic_launcher_round"
-        tools:ignore="GoogleAppIndexingWarning"
-        tools:replace="android:label,android:allowBackup"
         android:usesCleartextTraffic="true"
-        android:requestLegacyExternalStorage="true"
-        android:label="${appName}" >
+        tools:ignore="GoogleAppIndexingWarning"
+        tools:replace="android:label,android:allowBackup">
+        <activity
+            android:name=".activities.CameraPreviewActivity"
+            android:exported="false"
+            android:theme="@style/AppTheme.NoActionBar" />
+
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_icon"
             android:resource="@mipmap/ic_launcher" />
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_color"
             android:resource="@color/colorAccent" />
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
+
         <service
             android:name=".base.STMFirebaseMessagingService"
             android:exported="false">
@@ -54,41 +67,39 @@
         </service>
         <service
             android:name=".webInterface.BackgroundSoundService"
-            android:label="BackgroundSoundService" >
-        </service>
+            android:label="BackgroundSoundService"></service>
         <service
             android:name=".services.LocationService"
-            android:label="LocationService" >
-        </service>
+            android:label="LocationService"></service>
 
         <activity
             android:name=".activities.WebViewActivity"
-            android:configChanges="orientation|screenSize"
-            />
+            android:configChanges="orientation|screenSize" />
         <activity
             android:name=".activities.AuthActivity"
+            android:exported="true"
             android:theme="@style/AppTheme.NoActionBar"
-            android:windowSoftInputMode="stateVisible"
-            android:exported="true">
+            android:windowSoftInputMode="stateVisible">
             <intent-filter>
-                 <action android:name="android.intent.action.MAIN"/>
-                 <category android:name="android.intent.category.LAUNCHER" />
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
             android:name=".activities.CodeConfirmActivity"
             android:label=""
+            android:parentActivityName=".activities.AuthActivity"
             android:theme="@style/AppTheme.NoActionBar"
-            android:windowSoftInputMode="stateVisible"
-            android:parentActivityName=".activities.AuthActivity">
+            android:windowSoftInputMode="stateVisible">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".activities.AuthActivity" />
         </activity>
         <activity
             android:name=".activities.ProfileActivity"
-            android:label=""
             android:configChanges="keyboardHidden|orientation|screenSize"
+            android:label=""
             android:theme="@style/AppTheme.NoActionBar" />
         <provider
             android:name="androidx.core.content.FileProvider"
