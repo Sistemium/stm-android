@@ -160,6 +160,10 @@ class STMSession {
 
         }
 
+        if (BuildConfig.DEBUG && STMCoreAuthController.configuration.contains("vfs")){
+            path = "https://api.sistemium.com/models/dev/${STMCoreAuthController.configuration}.json"
+        }
+
         //allow strict mode to fix network on main thread exception
         val policy = StrictMode.ThreadPolicy.Builder().permitAll().build()
         StrictMode.setThreadPolicy(policy)

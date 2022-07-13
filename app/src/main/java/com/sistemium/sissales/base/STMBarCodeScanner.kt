@@ -174,11 +174,11 @@ class STMBarCodeScanner:IDcsSdkApiDelegate {
 
     }
 
-    private fun barcodeTypeFromTypesDics(types:ArrayList<Map<*,*>>, barcode:String):STMBarCodeScannedType{
+    fun barcodeTypeFromTypesDics(barcode:String):STMBarCodeScannedType{
 
         var matchedType:STMBarCodeScannedType = STMBarCodeScannedType.STMBarCodeTypeUnknow
 
-        main@ for (barCodeType in types) {
+        main@ for (barCodeType in barCodeTypes) {
 
             val mask = barCodeType["mask"] as? String ?: continue
 
@@ -328,7 +328,7 @@ class STMBarCodeScanner:IDcsSdkApiDelegate {
 
         STMFunctions.debugLog("STMBarCodeScanner", "Got barcode: '$barcode' from scannerId: $p2")
 
-        val type = barcodeTypeFromTypesDics(barCodeTypes, barcode)
+        val type = barcodeTypeFromTypesDics(barcode)
 
         WebViewActivity.webInterface!!.receiveBarCode(barcode, type)
 

@@ -29,6 +29,8 @@ import com.sistemium.sissales.R
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.sistemium.sissales.base.STMBarCodeScannedType
+import com.sistemium.sissales.base.STMBarCodeScanner
 import java.util.concurrent.ExecutionException
 
 class CameraPreviewActivity : AppCompatActivity() {
@@ -160,7 +162,10 @@ class CameraPreviewActivity : AppCompatActivity() {
         barcodeScanner.process(inputImage)
                 .addOnSuccessListener { barcodes ->
                     barcodes.forEach {
-                        it.rawValue?.let { it1 -> Log.d(TAG, it1) }
+                        it.rawValue?.let(fun(it1: String) {
+                            val type = STMBarCodeScanner.sharedScanner!!.barcodeTypeFromTypesDics(it1)
+                            WebViewActivity.webInterface!!.receiveBarCode(it1, type)
+                        })
                     }
                 }
                 .addOnFailureListener {
