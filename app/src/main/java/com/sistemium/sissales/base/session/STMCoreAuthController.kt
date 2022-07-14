@@ -564,6 +564,11 @@ class STMCoreAuthController {
                     if (BuildConfig.APPLICATION_ID.contains("Debug")){
                         stcTabs = arrayListOf(hashMapOf(
                                 "name" to "STMWKWebView",
+                                "title" to "STW",
+                                "imageName" to "3colors-colorless.png",
+                                "url" to "https://stw.sistemium.com"
+                        ),hashMapOf(
+                                "name" to "STMWKWebView",
                                 "title" to "VFS Debug",
                                 "imageName" to "3colors-colorless.png",
                                 "appManifestURI" to "https://vfsm3.sistemium.com/app.manifest",

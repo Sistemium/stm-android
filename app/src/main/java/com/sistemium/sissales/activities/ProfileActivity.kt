@@ -124,7 +124,7 @@ class ProfileActivity : AppCompatActivity() {
 
         }
 
-        if (BuildConfig.APPLICATION_ID.contains(".vfs") && STMEntityController.downloadableEntityReady()){
+        if (BuildConfig.APPLICATION_ID.contains(".vfs")){
 
             openWeb()
 
