@@ -165,6 +165,7 @@ class CameraPreviewActivity : AppCompatActivity() {
                         it.rawValue?.let(fun(it1: String) {
                             val type = STMBarCodeScanner.sharedScanner!!.barcodeTypeFromTypesDics(it1)
                             WebViewActivity.webInterface!!.receiveBarCode(it1, type)
+                            finish()
                         })
                     }
                 }
