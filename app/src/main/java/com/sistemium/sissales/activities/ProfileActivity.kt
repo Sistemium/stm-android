@@ -124,12 +124,6 @@ class ProfileActivity : AppCompatActivity() {
 
         }
 
-        if (BuildConfig.APPLICATION_ID.contains(".vfs")){
-
-            openWeb()
-
-        }
-
     }
 
     var webOpened = false
