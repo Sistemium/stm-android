@@ -28,14 +28,6 @@ class ProfileActivityController(private var activity: ProfileActivity) {
 
             activity.gridView.visibility = if (STMEntityController.downloadableEntityReady()) View.VISIBLE else View.INVISIBLE
 
-            if (BuildConfig.APPLICATION_ID.contains(".vfs") && STMEntityController.downloadableEntityReady()){
-
-                if(!activity.webOpened){
-                    activity.openWeb()
-                }
-
-            }
-
             activity.progressBar!!.max = max
 
             activity.progressBar!!.progress = 0
@@ -79,14 +71,6 @@ class ProfileActivityController(private var activity: ProfileActivity) {
             if (info == -1) {
 
                 activity.gridView.visibility = if (STMEntityController.downloadableEntityReady()) View.VISIBLE else View.INVISIBLE
-
-                if (BuildConfig.APPLICATION_ID.contains(".vfs") && STMEntityController.downloadableEntityReady()){
-
-                    if(!activity.webOpened){
-                        activity.openWeb()
-                    }
-
-                }
 
                 got = 0
 
