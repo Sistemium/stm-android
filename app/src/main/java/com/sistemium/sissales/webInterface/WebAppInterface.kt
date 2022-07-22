@@ -40,6 +40,7 @@ import com.sistemium.sissales.base.classes.entitycontrollers.STMCorePicturesCont
 import com.sistemium.sissales.base.session.STMCoreAuthController
 import com.sistemium.sissales.base.session.STMSession
 import com.sistemium.sissales.interfaces.STMFullStackPersisting
+import com.sistemium.sissales.interfaces.STMModelling
 import com.sistemium.sissales.persisting.STMPredicate
 import nl.komponents.kovenant.Promise
 import nl.komponents.kovenant.deferred
@@ -919,7 +920,7 @@ class WebAppInterface internal constructor(private var webViewActivity: WebViewA
 
             val options = parameters["options"] as? Map<*, *>
 
-            if (options?.get("socketSource") as? Boolean == true) {
+            if (options?.get("socketSource") == "true") {
                 return STMSession.sharedSession!!.syncer!!.socketTransport!!.destroyAsync(STMFunctions.addPrefixToEntityName(entityName), null, xidString).then {
                     return@then arrayListOf(it)
                 }
@@ -955,7 +956,7 @@ class WebAppInterface internal constructor(private var webViewActivity: WebViewA
 
         if (xidString != null) {
 
-            if (options?.get("socketSource") as? Boolean == true) {
+            if (options?.get("socketSource") == "true") {
                 return findOneWithSocket(STMFunctions.addPrefixToEntityName(entityName), xidString, options)
             }
 
@@ -976,7 +977,7 @@ class WebAppInterface internal constructor(private var webViewActivity: WebViewA
 
         val predicate = STMPredicate.filterPredicate(filter, where, entityName)
 
-        if (options?.get("socketSource") as? Boolean == true) {
+        if (options?.get("socketSource") == "true") {
             return findWithSocket(parameters, STMFunctions.addPrefixToEntityName(entityName), predicate, options)
         }
 
@@ -1009,7 +1010,7 @@ class WebAppInterface internal constructor(private var webViewActivity: WebViewA
 
         val options = parameters["options"] as? Map<*, *>
 
-        if (options?.get("socketSource") as? Boolean == true) {
+        if (options?.get("socketSource") == "true") {
             val deferred = deferred<ArrayList<Map<*, *>>, Exception>()
 
             val response = arrayListOf<Map<*, *>>()
@@ -1209,14 +1210,18 @@ class WebAppInterface internal constructor(private var webViewActivity: WebViewA
     }
 
     private fun findWithSocket(scriptMessage: Map<*, *>, entityName: String, predicate: STMPredicate?, options: Map<*, *>?): Promise<ArrayList<Map<*, *>>, Exception> {
-        var checkUnsynced = STMPredicate("deviceTs > lts")
-        if (predicate != null) {
-            checkUnsynced = STMPredicate.combinePredicates(arrayListOf(checkUnsynced, predicate))!!
+
+        if (STMModelling.sharedModeler!!.isConcreteEntityName(entityName)){
+            var checkUnsynced = STMPredicate("deviceTs > lts")
+            if (predicate != null) {
+                checkUnsynced = STMPredicate.combinePredicates(arrayListOf(checkUnsynced, predicate))!!
+            }
+            val unsynced = persistenceDelegate.findAllSync(entityName, checkUnsynced, options)
+            if (unsynced.size > 0) {
+                throw Exception("Unsynced objects error")
+            }
         }
-        val unsynced = persistenceDelegate.findAllSync(entityName, checkUnsynced, options)
-        if (unsynced.size > 0) {
-            throw Exception("Unsynced objects error")
-        }
+
         val params = (scriptMessage["filter"] as? Map<*, *> ?: hashMapOf<Any, Any>()).toMutableMap()
 
         val where = scriptMessage["where"] as? Map<*, *>
