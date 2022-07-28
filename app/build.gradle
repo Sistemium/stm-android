@@ -104,7 +104,7 @@ dependencies {
     implementation 'com.google.android.gms:play-services-location:20.0.0'
     implementation project(path: ':BarcodeScannerLibrary')
     implementation platform('com.google.firebase:firebase-bom:29.0.1')
-    implementation 'com.google.firebase:firebase-analytics-ktx:21.0.0'
+    implementation 'com.google.firebase:firebase-analytics-ktx:21.1.0'
     implementation 'com.google.firebase:firebase-crashlytics:18.2.11'
     implementation 'com.google.firebase:firebase-messaging-ktx'
     implementation "androidx.lifecycle:lifecycle-livedata-ktx:2.5.0"
