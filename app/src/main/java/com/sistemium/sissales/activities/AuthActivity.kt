@@ -199,8 +199,8 @@ class AuthActivity : AppCompatActivity() {
 
                 runOnUiThread{
                     MyApplication.appContext?.startActivity(myIntent, options.toBundle())
-                    spinner.visibility = View.INVISIBLE
                     demo.isEnabled = true
+                    finish()
                 }
             }
 
