@@ -536,6 +536,8 @@ class STMSocketTransport(private var socketUrlString: String, private var owner:
 
     private fun emitAuthorization() {
 
+        STMClientDataController.checkClientData()
+
         var dataDic = STMClientDataController.clientData
 
         val authDic = hashMapOf(

@@ -107,9 +107,13 @@ class STMClientDataController {
 
             }
 
-        private var tokenHash:String? = ""
+        private var tokenHash:String = ""
             get() {
-                return STMCoreAuthController.tokenHash ?: STMFunctions.md5FromString(STMCoreAuthController.accessToken!!)
+                return if ((STMCoreAuthController.tokenHash?.length ?: 0) > 0){
+                    STMCoreAuthController.tokenHash!!
+                } else {
+                    STMFunctions.md5FromString(STMCoreAuthController.accessToken!!)
+                }
             }
 
         fun checkClientData(){
@@ -215,7 +219,7 @@ class STMClientDataController {
             }
 
             if (haveUpdates){
-
+                
                 persistenceDelegate!!.mergeSync("STMClientData", clientData, null)
 
             }
