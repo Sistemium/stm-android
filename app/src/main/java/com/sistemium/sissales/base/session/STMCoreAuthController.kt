@@ -47,11 +47,11 @@ class STMCoreAuthController {
                 val prefStore = SecuredPreferenceStore.getSharedInstance()
                 val property = prefStore.getString("accessToken", null)
 
-                if (property != value){
+                if (property != value) {
 
                     prefStore.edit().putString("accessToken", value).apply()
 
-                    if (value != null){
+                    if (value != null) {
                         lastAuth = STMFunctions.stringFrom(Date())
 
                         tokenHash = STMFunctions.md5FromString(value)
@@ -113,22 +113,22 @@ class STMCoreAuthController {
 
             }
 
-        val configuration:String
+        val configuration: String
             get() {
 
-                if (BuildConfig.APPLICATION_ID.contains(".sissales")){
+                if (BuildConfig.APPLICATION_ID.contains(".sissales")) {
 
                     return "SisSales"
 
                 }
 
-                if (BuildConfig.APPLICATION_ID.contains(".driver")){
+                if (BuildConfig.APPLICATION_ID.contains(".driver")) {
 
                     return "SisDriver"
 
                 }
 
-                if (BuildConfig.APPLICATION_ID.contains(".warehouse")){
+                if (BuildConfig.APPLICATION_ID.contains(".warehouse")) {
 
                     return "SisWarehouse"
 
@@ -138,7 +138,7 @@ class STMCoreAuthController {
 
             }
 
-        val userAgent:String
+        val userAgent: String
             get() {
 
                 return "i$configuration/${STMModelling.sharedModeler?.managedObjectModel?.userDefinedModelVersionIdentifier ?: "394"}"
@@ -332,7 +332,7 @@ class STMCoreAuthController {
 
             }
 
-        fun logout(){
+        fun logout() {
 
             STMSession.sharedSession!!.syncer?.prepareToDestroy()
             STMLogger.sharedLogger!!.saveLogMessageWithText("logout", STMLogMessageType.STMLogMessageTypeImportant)
@@ -353,7 +353,7 @@ class STMCoreAuthController {
             STMSession.sharedSession?.persistenceDelegate?.close()
             STMSession.sharedSession = null
             STMModelling.sharedModeler = null
-            STMEntityController.sharedInstance= null
+            STMEntityController.sharedInstance = null
             STMCorePicturesController.sharedInstance = null
             STMClientDataController.persistenceDelegate = null
             STMLogger.sharedLogger = null
@@ -521,7 +521,7 @@ class STMCoreAuthController {
 
         private fun requestRoles(): Promise<Map<*, *>, Exception> {
 
-            if (BuildConfig.APPLICATION_ID.contains(".vfs")){
+            if (BuildConfig.APPLICATION_ID.contains(".vfs")) {
 
                 return task {
 
@@ -549,7 +549,7 @@ class STMCoreAuthController {
                     userName = (roles["account"] as? Map<*, *>)?.get("name") as? String
 
                     isDemo = (roles?.get("roles") as? Map<String, *>)?.get("Demo") != null
-                    if (!isDemo){
+                    if (!isDemo) {
                         socketURL = "https://socket3.sistemium.com/socket.io-client"
                         entityResource = "$accountOrg/Entity"
                     }
@@ -560,21 +560,36 @@ class STMCoreAuthController {
                             "imageName" to "3colors-colorless.png",
                             "appManifestURI" to "https://vfsm2.sistemium.com/app.manifest",
                             "url" to "https://vfsm2.sistemium.com"
-                    ))
-                    if (BuildConfig.APPLICATION_ID.contains("Debug")){
-                        stcTabs = arrayListOf(hashMapOf(
-                                "name" to "STMWKWebView",
-                                "title" to "VFS Debug",
-                                "imageName" to "3colors-colorless.png",
-                                "appManifestURI" to "https://vfsm3.sistemium.com/app.manifest",
-                                "url" to "https://vfsm3.sistemium.com"
-                        ),hashMapOf(
-                                "name" to "STMWKWebView",
-                                "title" to "VFS",
-                                "imageName" to "3colors-colorless.png",
-                                "appManifestURI" to "https://vfsm2.sistemium.com/app.manifest",
-                                "url" to "https://vfsm2.sistemium.com"
-                        ))
+                    ),
+                            hashMapOf(
+                                    "name" to "STMWKWebView",
+                                    "title" to "STW",
+                                    "imageName" to "3colors-colorless.png",
+                                    "url" to "https://stw.sistemium.com"
+                            ))
+                    if (BuildConfig.APPLICATION_ID.contains("Debug")) {
+                        stcTabs = arrayListOf(
+                                hashMapOf(
+                                        "name" to "STMWKWebView",
+                                        "title" to "VFS Debug",
+                                        "imageName" to "3colors-colorless.png",
+                                        "appManifestURI" to "https://vfsm3.sistemium.com/app.manifest",
+                                        "url" to "https://vfsm3.sistemium.com"
+                                ),
+                                hashMapOf(
+                                        "name" to "STMWKWebView",
+                                        "title" to "VFS",
+                                        "imageName" to "3colors-colorless.png",
+                                        "appManifestURI" to "https://vfsm2.sistemium.com/app.manifest",
+                                        "url" to "https://vfsm2.sistemium.com"
+                                ),
+                                hashMapOf(
+                                        "name" to "STMWKWebView",
+                                        "title" to "STW",
+                                        "imageName" to "3colors-colorless.png",
+                                        "url" to "https://stw.sistemium.com"
+                                ),
+                        )
                     }
 
                     return@task roles
