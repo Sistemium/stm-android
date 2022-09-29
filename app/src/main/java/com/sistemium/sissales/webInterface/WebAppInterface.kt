@@ -179,25 +179,25 @@ class WebAppInterface internal constructor(private var webViewActivity: WebViewA
         scannerScanJSFunction = mapParameters["scanCallback"] as String
         scannerStatusJSFunction = mapParameters["statusCallback"] as String
 
-        if (scannerType() == "zebra"){
-            STMBarCodeScanner.sharedScanner?.startBarcodeScanning(webViewActivity)
-
-            if (STMBarCodeScanner.sharedScanner!!.isDeviceConnected) {
+//        if (scannerType() == "zebra"){
+//            STMBarCodeScanner.sharedScanner?.startBarcodeScanning(webViewActivity)
+//
+//            if (STMBarCodeScanner.sharedScanner!!.isDeviceConnected) {
 
                 scannerConnected()
 
-            }
-        } else {
-            val myIntent = Intent(MyApplication.appContext, CameraPreviewActivity::class.java)
-
-            myIntent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
-
-            val options = ActivityOptions.makeCustomAnimation(MyApplication.appContext, R.anim.abc_fade_in, R.anim.abc_fade_out)
-
-            webViewActivity.runOnUiThread{
-                MyApplication.appContext?.startActivity(myIntent, options.toBundle())
-            }
-        }
+//            }
+//        } else {
+//            val myIntent = Intent(MyApplication.appContext, CameraPreviewActivity::class.java)
+//
+//            myIntent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+//
+//            val options = ActivityOptions.makeCustomAnimation(MyApplication.appContext, R.anim.abc_fade_in, R.anim.abc_fade_out)
+//
+//            webViewActivity.runOnUiThread{
+//                MyApplication.appContext?.startActivity(myIntent, options.toBundle())
+//            }
+//        }
 
     }
 
@@ -239,7 +239,9 @@ class WebAppInterface internal constructor(private var webViewActivity: WebViewA
     @JavascriptInterface
     fun barCodeScannerOff(parameters: String?) {
 
-        STMBarCodeScanner.sharedScanner!!.disconnect()
+        receiveBarCode("01000000625210122000054366", STMBarCodeScannedType.STMBarCodeTypeArticle);
+
+//        STMBarCodeScanner.sharedScanner!!.disconnect()
 
     }
 
@@ -920,7 +922,7 @@ class WebAppInterface internal constructor(private var webViewActivity: WebViewA
 
             val options = parameters["options"] as? Map<*, *>
 
-            if (options?.get("socketSource") == "true") {
+            if (options?.get("socketSource") as? Boolean == true) {
                 return STMSession.sharedSession!!.syncer!!.socketTransport!!.destroyAsync(STMFunctions.addPrefixToEntityName(entityName), null, xidString).then {
                     return@then arrayListOf(it)
                 }
@@ -956,7 +958,7 @@ class WebAppInterface internal constructor(private var webViewActivity: WebViewA
 
         if (xidString != null) {
 
-            if (options?.get("socketSource") == "true") {
+            if (options?.get("socketSource") as? Boolean == true) {
                 return findOneWithSocket(STMFunctions.addPrefixToEntityName(entityName), xidString, options)
             }
 
@@ -977,7 +979,7 @@ class WebAppInterface internal constructor(private var webViewActivity: WebViewA
 
         val predicate = STMPredicate.filterPredicate(filter, where, entityName)
 
-        if (options?.get("socketSource") == "true") {
+        if (options?.get("socketSource") as? Boolean == true) {
             return findWithSocket(parameters, STMFunctions.addPrefixToEntityName(entityName), predicate, options)
         }
 
@@ -1010,7 +1012,7 @@ class WebAppInterface internal constructor(private var webViewActivity: WebViewA
 
         val options = parameters["options"] as? Map<*, *>
 
-        if (options?.get("socketSource") == "true") {
+        if (options?.get("socketSource") as? Boolean == true) {
             val deferred = deferred<ArrayList<Map<*, *>>, Exception>()
 
             val response = arrayListOf<Map<*, *>>()
