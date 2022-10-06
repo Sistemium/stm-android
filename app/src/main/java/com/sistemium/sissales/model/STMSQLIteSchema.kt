@@ -53,6 +53,7 @@ class STMSQLIteSchema(private val database: SQLiteDatabase) {
 
             executeDDL(arrayListOf("update clientEntity set eTag = '*' where name = '$table'"))
 
+            tablesToReload.add(table)
         }
 
         for (attribute in modelMapping.addedAttributes) {
@@ -60,6 +61,7 @@ class STMSQLIteSchema(private val database: SQLiteDatabase) {
 
             addColumns(attribute.value, table)
 
+            tablesToReload.add(table)
         }
 
 
