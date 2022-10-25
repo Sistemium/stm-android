@@ -10,14 +10,18 @@ apply plugin: 'com.google.firebase.crashlytics'
 
 
 android {
-    compileSdkVersion 32
+    compileSdkVersion 33
     defaultConfig {
         applicationId "com.sistemium"
         minSdkVersion 21
-        targetSdkVersion 32
+        targetSdkVersion 33
         versionCode 476
         versionName "1.1.90"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        ndk {
+            // Filter for architectures supported by Flutter.
+            abiFilters 'armeabi-v7a', 'arm64-v8a', 'x86_64'
+        }
     }
     buildTypes {
         debug {
@@ -60,6 +64,11 @@ android {
             applicationIdSuffix = '.vfs'
             manifestPlaceholders = [appName: 'VFS']
         }
+        //https://docs.flutter.dev/development/add-to-app/android/project-setup#option-a---depend-on-the-android-archive-aar
+        profile {
+            initWith debug
+        }
+
     }
     lint {
         checkReleaseBuilds false
@@ -78,10 +87,17 @@ android {
 
 }
 
+String storageUrl = System.env.FLUTTER_STORAGE_BASE_URL ?: "https://storage.googleapis.com"
 repositories {
     mavenCentral()
     maven { url "https://jitpack.io" }
     jcenter()
+    maven {
+        url '../../flutter_onboarding/build/host/outputs/repo'
+    }
+    maven {
+        url "$storageUrl/download.flutter.io"
+    }
 }
 
 configurations.all {
@@ -114,4 +130,8 @@ dependencies {
     implementation "androidx.camera:camera-camera2:1.2.0-alpha03"
     implementation "androidx.camera:camera-lifecycle:1.2.0-alpha03"
     implementation "androidx.camera:camera-view:1.2.0-alpha03"
+    debugImplementation 'com.sistemium.flutter_onboarding:flutter:1.0:debug@aar'
+    profileImplementation 'com.sistemium.flutter_onboarding:flutter:1.0:profile@aar'
+    releaseImplementation 'com.sistemium.flutter_onboarding:flutter:1.0:release@aar'
+
 }
