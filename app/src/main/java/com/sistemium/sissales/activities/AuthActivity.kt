@@ -26,32 +26,17 @@ import kotlinx.android.synthetic.main.activity_auth.*
 import nl.komponents.kovenant.task
 import nl.komponents.kovenant.then
 import java.util.*
+import io.flutter.embedding.android.FlutterActivity;
+
 
 class AuthActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        if (!isTaskRoot) {
-            finish()
-            return
-        }
-
-        window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN)
-
-        STMCoreAuthController.logIn() then {
-
-            finish()
-
-        } fail {
-
-            runOnUiThread {
-
-                setup()
-
-            }
-
-        }
+        startActivity(
+                FlutterActivity.createDefaultIntent(this)
+        )
     }
 
     @SuppressLint("PrivateResource")

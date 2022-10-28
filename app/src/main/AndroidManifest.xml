@@ -44,6 +44,13 @@
         tools:ignore="GoogleAppIndexingWarning"
         tools:replace="android:label,android:allowBackup">
         <activity
+            android:name="io.flutter.embedding.android.FlutterActivity"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:configChanges="orientation|keyboardHidden|keyboard|screenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode"
+            android:hardwareAccelerated="true"
+            android:windowSoftInputMode="adjustResize"
+            />
+        <activity
             android:name=".activities.CameraPreviewActivity"
             android:exported="false"
             android:theme="@style/AppTheme.NoActionBar" />
@@ -82,7 +89,6 @@
             android:windowSoftInputMode="stateVisible">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -101,6 +107,7 @@
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:label=""
             android:theme="@style/AppTheme.NoActionBar" />
+
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="${applicationId}.provider"
