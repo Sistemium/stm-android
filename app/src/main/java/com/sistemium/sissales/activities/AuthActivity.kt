@@ -18,25 +18,38 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import com.sistemium.sissales.BuildConfig
 import com.sistemium.sissales.R
 import com.sistemium.sissales.base.MyApplication
-import com.sistemium.sissales.base.STMCoreSessionFiler
 import com.sistemium.sissales.base.STMFunctions
 import com.sistemium.sissales.base.session.STMCoreAuthController
-import com.sistemium.sissales.base.session.STMSession
 import kotlinx.android.synthetic.main.activity_auth.*
 import nl.komponents.kovenant.task
 import nl.komponents.kovenant.then
 import java.util.*
-import io.flutter.embedding.android.FlutterActivity;
-
 
 class AuthActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        startActivity(
-                FlutterActivity.createDefaultIntent(this)
-        )
+        if (!isTaskRoot) {
+            finish()
+            return
+        }
+
+        window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN)
+
+        STMCoreAuthController.logIn() then {
+
+            finish()
+
+        } fail {
+
+            runOnUiThread {
+
+                setup()
+
+            }
+
+        }
     }
 
     @SuppressLint("PrivateResource")
