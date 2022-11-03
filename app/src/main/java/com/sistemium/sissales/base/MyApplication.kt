@@ -12,6 +12,9 @@ import com.sistemium.sissales.base.session.STMSyncer
 import com.sistemium.sissales.enums.STMSocketEvent
 import devliving.online.securedpreferencestore.DefaultRecoveryHandler
 import devliving.online.securedpreferencestore.SecuredPreferenceStore
+import io.flutter.embedding.engine.FlutterEngine
+import io.flutter.embedding.engine.FlutterEngineCache
+import io.flutter.embedding.engine.dart.DartExecutor
 
 /**
  * Created by edgarjanvuicik on 02/02/2018.
@@ -19,6 +22,8 @@ import devliving.online.securedpreferencestore.SecuredPreferenceStore
 class MyApplication : Application(), Application.ActivityLifecycleCallbacks {
 
     companion object {
+
+        lateinit var flutterEngine : FlutterEngine
 
         var syncer: STMSyncer? = null
             get() {
@@ -100,6 +105,19 @@ class MyApplication : Application(), Application.ActivityLifecycleCallbacks {
         SecuredPreferenceStore.init(applicationContext, null, null, seedKey, DefaultRecoveryHandler())
 
         this.registerActivityLifecycleCallbacks(this)
+
+        // Instantiate a FlutterEngine.
+        flutterEngine = FlutterEngine(this)
+
+        // Start executing Dart code to pre-warm the FlutterEngine.
+        flutterEngine.dartExecutor.executeDartEntrypoint(
+                DartExecutor.DartEntrypoint.createDefault()
+        )
+
+        // Cache the FlutterEngine to be used by FlutterActivity.
+        FlutterEngineCache
+                .getInstance()
+                .put("my flutter engine", flutterEngine)
 
     }
 

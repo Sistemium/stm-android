@@ -413,7 +413,7 @@ class STMSyncer : STMDefantomizingOwner, STMDataDownloadingOwner, STMDataSyncing
 
     }
 
-    private fun receiveData() {
+    fun receiveData() {
 
         if (!isRunning) return
 
