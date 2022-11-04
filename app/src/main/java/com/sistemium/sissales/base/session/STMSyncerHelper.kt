@@ -1,6 +1,7 @@
 package com.sistemium.sissales.base.session
 
 import com.sistemium.sissales.activities.ProfileActivity
+import com.sistemium.sissales.base.MyApplication
 import com.sistemium.sissales.base.STMConstants.Companion.STMPersistingOptionLts
 import com.sistemium.sissales.base.STMConstants.Companion.STM_ENTITY_NAME
 import com.sistemium.sissales.base.STMFunctions
@@ -26,6 +27,9 @@ class STMSyncerHelper : STMDefantomizing, STMDataDownloading {
     override var defantomizingOwner: STMDefantomizingOwner? = null
     private var downloadingOperations = ConcurrentHashMap<String, STMDownloadingOperation>()
     private var defantomizing: STMSyncerHelperDefantomizing? = null
+
+    private var totalEntityCount = 0
+    private var remainCount = 0
 
     override fun startDownloading(entitiesNames: ArrayList<String>?) {
 
@@ -55,6 +59,8 @@ class STMSyncerHelper : STMDefantomizing, STMDataDownloading {
         }
 
         ProfileActivity.profileActivityController?.setMaxProgress(_entitiesNames.size)
+        totalEntityCount = _entitiesNames.size
+        remainCount = totalEntityCount
 
         for (entityName in _entitiesNames) {
 
@@ -271,6 +277,8 @@ class STMSyncerHelper : STMDefantomizing, STMDataDownloading {
 
         ProfileActivity.profileActivityController?.addProgress(1)
 
+        remainCount -=1
+
         if (downloadingOperations.size > 0) {
 
             return
@@ -281,10 +289,8 @@ class STMSyncerHelper : STMDefantomizing, STMDataDownloading {
 
         dataDownloadingOwner!!.dataDownloadingFinished()
 
-//        [channel invokeMethod:@"setSetupProgress" arguments:[[NSNumber numberWithFloat:(totalEntityCount - remainCount) / totalEntityCount * 0.99] stringValue]];
-
+        MyApplication.channel.invokeMethod("setSetupProgress", (totalEntityCount - remainCount) / totalEntityCount * 0.99)
         
-
     }
 
     private fun findAllResultMergedWithSuccess(result: ArrayList<*>, entityName: String, offset: String, pageSize: Int) {
@@ -314,7 +320,6 @@ class STMSyncerHelper : STMDefantomizing, STMDataDownloading {
     }
 
     private fun doneWithEntityName(entityName: String, identifier: String) {
-
 
         defantomizing!!.operations[Pair(entityName, identifier)]!!.finish()
 
