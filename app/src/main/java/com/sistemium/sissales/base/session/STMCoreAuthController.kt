@@ -134,6 +134,12 @@ class STMCoreAuthController {
 
                 }
 
+                if (BuildConfig.APPLICATION_ID.contains(".vfsclient")) {
+
+                    return "vfsc"
+
+                }
+
                 return "vfs"
 
             }

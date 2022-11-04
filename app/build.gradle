@@ -56,13 +56,23 @@ android {
         }
         vfsDebug {
             initWith(buildTypes.debug)
-            applicationIdSuffix = '.vfsDebug'
+            applicationIdSuffix = '.vfsdebug'
             manifestPlaceholders = [appName: 'VFS-debug']
         }
         vfsRelease {
             initWith(buildTypes.release)
             applicationIdSuffix = '.vfs'
             manifestPlaceholders = [appName: 'VFS']
+        }
+        vfsClientDebug {
+            initWith(buildTypes.debug)
+            applicationIdSuffix = '.vfsclientdebug'
+            manifestPlaceholders = [appName: 'VFSClient-debug']
+        }
+        vfsClientRelease {
+            initWith(buildTypes.release)
+            applicationIdSuffix = '.vfsclient'
+            manifestPlaceholders = [appName: 'VFSClient']
         }
         //https://docs.flutter.dev/development/add-to-app/android/project-setup#option-a---depend-on-the-android-archive-aar
         profile {

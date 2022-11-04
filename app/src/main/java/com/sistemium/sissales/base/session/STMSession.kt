@@ -154,14 +154,24 @@ class STMSession {
             path = "https://api.sistemium.com/models/dev/i${STMCoreAuthController.configuration}.json"
         }
 
-        if (STMCoreAuthController.configuration.contains("vfs")){
+        if (STMCoreAuthController.configuration == "vfs"){
 
             path = "https://api.sistemium.com/models/${STMCoreAuthController.configuration}.json"
 
         }
 
-        if (BuildConfig.DEBUG && STMCoreAuthController.configuration.contains("vfs")){
+        if (BuildConfig.DEBUG && STMCoreAuthController.configuration == "vfs"){
             path = "https://api.sistemium.com/models/dev/${STMCoreAuthController.configuration}.json"
+        }
+
+        if (STMCoreAuthController.configuration == "vfsc"){
+
+            path = "https://api.sistemium.com/models/vfs.json"
+
+        }
+
+        if (BuildConfig.DEBUG && STMCoreAuthController.configuration == "vfsc"){
+            path = "https://api.sistemium.com/models/dev/vfs.json"
         }
 
         //allow strict mode to fix network on main thread exception

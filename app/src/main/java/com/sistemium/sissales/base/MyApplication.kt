@@ -106,8 +106,17 @@ class MyApplication : Application(), Application.ActivityLifecycleCallbacks {
 
         this.registerActivityLifecycleCallbacks(this)
 
-        // Instantiate a FlutterEngine.
-        flutterEngine = FlutterEngine(this)
+        flutterEngine = when (STMCoreAuthController.configuration) {
+            "vfs" -> {
+                FlutterEngine(this, arrayOf("vfs"))
+            }
+            "vfsc" -> {
+                FlutterEngine(this, arrayOf("vfsClient"))
+            }
+            else -> {
+                FlutterEngine(this, arrayOf("iSisSales"))
+            }
+        }
 
         // Start executing Dart code to pre-warm the FlutterEngine.
         flutterEngine.dartExecutor.executeDartEntrypoint(

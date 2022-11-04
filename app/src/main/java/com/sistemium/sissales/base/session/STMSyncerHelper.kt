@@ -281,6 +281,10 @@ class STMSyncerHelper : STMDefantomizing, STMDataDownloading {
 
         dataDownloadingOwner!!.dataDownloadingFinished()
 
+//        [channel invokeMethod:@"setSetupProgress" arguments:[[NSNumber numberWithFloat:(totalEntityCount - remainCount) / totalEntityCount * 0.99] stringValue]];
+
+        
+
     }
 
     private fun findAllResultMergedWithSuccess(result: ArrayList<*>, entityName: String, offset: String, pageSize: Int) {
