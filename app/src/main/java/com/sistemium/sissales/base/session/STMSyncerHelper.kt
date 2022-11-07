@@ -1,20 +1,22 @@
 package com.sistemium.sissales.base.session
 
+import android.os.Handler
+import android.os.Looper
 import com.sistemium.sissales.activities.ProfileActivity
 import com.sistemium.sissales.base.MyApplication
 import com.sistemium.sissales.base.STMConstants.Companion.STMPersistingOptionLts
 import com.sistemium.sissales.base.STMConstants.Companion.STM_ENTITY_NAME
 import com.sistemium.sissales.base.STMFunctions
-import com.sistemium.sissales.base.helper.logger.STMLogger
 import com.sistemium.sissales.base.classes.entitycontrollers.STMClientEntityController
 import com.sistemium.sissales.base.classes.entitycontrollers.STMEntityController
+import com.sistemium.sissales.base.helper.logger.STMLogger
 import com.sistemium.sissales.interfaces.*
 import nl.komponents.kovenant.then
 import java.util.*
 import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
-import kotlin.collections.ArrayList
+
 
 /**
  * Created by edgarjanvuicik on 09/02/2018.
@@ -279,6 +281,14 @@ class STMSyncerHelper : STMDefantomizing, STMDataDownloading {
 
         remainCount -=1
 
+        var progress = (totalEntityCount.toDouble() - remainCount.toDouble()) / totalEntityCount.toDouble()
+
+        if (progress > 1) progress = 1.0
+
+        Handler(Looper.getMainLooper()).post {
+            MyApplication.channel.invokeMethod("setSetupProgress", "${progress * 0.99}")
+        }
+
         if (downloadingOperations.size > 0) {
 
             return
@@ -289,8 +299,6 @@ class STMSyncerHelper : STMDefantomizing, STMDataDownloading {
 
         dataDownloadingOwner!!.dataDownloadingFinished()
 
-        MyApplication.channel.invokeMethod("setSetupProgress", (totalEntityCount - remainCount) / totalEntityCount * 0.99)
-        
     }
 
     private fun findAllResultMergedWithSuccess(result: ArrayList<*>, entityName: String, offset: String, pageSize: Int) {
