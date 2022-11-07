@@ -25,7 +25,9 @@ class MyApplication : Application(), Application.ActivityLifecycleCallbacks {
 
     companion object {
 
-        lateinit var flutterEngine : FlutterEngine
+        lateinit var flutterEngine: FlutterEngine
+        lateinit var channel: MethodChannel
+
 
         var syncer: STMSyncer? = null
             get() {
@@ -72,8 +74,6 @@ class MyApplication : Application(), Application.ActivityLifecycleCallbacks {
             }
 
         }
-
-        var channel = MethodChannel(flutterEngine.dartExecutor.binaryMessenger, "com.sistemium.flutterchanel")
     }
 
     override fun onActivityPaused(p0: Activity) {
@@ -131,6 +131,8 @@ class MyApplication : Application(), Application.ActivityLifecycleCallbacks {
         FlutterEngineCache
                 .getInstance()
                 .put("my flutter engine", flutterEngine)
+
+        channel = MethodChannel(flutterEngine.dartExecutor.binaryMessenger, "com.sistemium.flutterchanel")
 
         channel.setMethodCallHandler {
             call, _ ->
