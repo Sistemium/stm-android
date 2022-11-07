@@ -144,9 +144,9 @@ class MyApplication : Application(), Application.ActivityLifecycleCallbacks {
                 STMCoreAuthController.userName = arguments["userName"] as? String
                 STMCoreAuthController.phoneNumber = arguments["phoneNumber"] as? String
                 STMCoreAuthController.accessToken = arguments["accessToken"] as? String
-                STMCoreAuthController.userID = arguments["userID"] as? String
+                STMCoreAuthController.userID = arguments["id"] as? String
                 STMCoreAuthController.entityResource = arguments["redirectUri"] as? String
-                STMCoreAuthController.socketURL = arguments["socketURL"] as? String
+                STMCoreAuthController.socketURL = arguments["apiUrl"] as? String
                 STMCoreAuthController.accountOrg = arguments["accountOrg"] as? String
                 STMCoreAuthController.iSisDB = arguments["iSisDB"] as? String
                 STMCoreAuthController.stcTabs = arguments["stcTabs"] as? ArrayList<*>
