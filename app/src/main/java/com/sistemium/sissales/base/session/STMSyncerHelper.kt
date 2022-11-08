@@ -110,6 +110,10 @@ class STMSyncerHelper : STMDefantomizing, STMDataDownloading {
 
         if (error != null) {
 
+            Handler(Looper.getMainLooper()).post {
+                MyApplication.channel.invokeMethod("setupError", error.localizedMessage)
+            }
+
             return doneDownloadingEntityName(entityName, error.localizedMessage)
 
         }
@@ -163,7 +167,7 @@ class STMSyncerHelper : STMDefantomizing, STMDataDownloading {
 
         }
 
-        if (defantomizing.operations.count() != 0) return
+        if (defantomizing.operations.isNotEmpty()) return
 
         this.defantomizing = defantomizing
 
@@ -218,6 +222,10 @@ class STMSyncerHelper : STMDefantomizing, STMDataDownloading {
         if (error != null) {
 
             if (!error.localizedMessage.startsWith("socket is not ready")) {
+
+                Handler(Looper.getMainLooper()).post {
+                    MyApplication.channel.invokeMethod("setupError", error.localizedMessage)
+                }
 
                 STMFunctions.debugLog("STMSyncerHelper", "defantomize $entityName $identifier error: ${error.localizedMessage}")
 
@@ -319,6 +327,10 @@ class STMSyncerHelper : STMDefantomizing, STMDataDownloading {
     }
 
     private fun defantomizingFinished() {
+
+        Handler(Looper.getMainLooper()).post {
+            MyApplication.channel.invokeMethod("finishSetup", null)
+        }
 
         STMFunctions.debugLog("STMSyncedHelper", "DEFANTOMIZING_FINISHED")
         ProfileActivity.profileActivityController?.setProgressInfo(-1)
