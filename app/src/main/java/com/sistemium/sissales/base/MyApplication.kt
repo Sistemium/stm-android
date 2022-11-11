@@ -3,7 +3,9 @@ package com.sistemium.sissales.base
 import android.app.Activity
 import android.app.Application
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
+import com.sistemium.sissales.activities.WebViewActivity
 import com.sistemium.sissales.base.classes.entitycontrollers.STMCoreObjectsController
 import com.sistemium.sissales.base.classes.entitycontrollers.STMCorePicturesController
 import com.sistemium.sissales.base.helper.logger.STMLogger
@@ -163,13 +165,31 @@ class MyApplication : Application(), Application.ActivityLifecycleCallbacks {
             }
             if (call.method == "stopImageDownload"){
             }
+            if (call.method == "loadURL"){
 
-//            if ([call.method isEqual: @"loadURL"]){
-//            NSDictionary * arguments = [call arguments];
-//            STMStoryboard *storyboard = [STMStoryboard storyboardWithName:@"STMWKWebView" bundle:nil];
-//            storyboard.parameters = arguments;
-//            self.window.rootViewController = [storyboard instantiateInitialViewController];
-//        }
+                val currentTab = call.arguments as HashMap<*, *>
+
+                val intent = Intent(appContext, WebViewActivity::class.java)
+
+                var url = currentTab["url"] as? String
+
+                val manifest = currentTab["appManifestURI"] as? String
+
+                if (url == null && manifest != null){
+
+                    url = manifest.replace(manifest.split("/").last(), "")
+
+                }
+
+                if (url?.endsWith("/") != true){
+                    url += "/"
+                }
+
+                intent.putExtra("url", url)
+                intent.putExtra("manifest", manifest)
+                intent.putExtra("title", currentTab["title"] as String)
+                startActivity(intent)
+            }
         }
 
     }
