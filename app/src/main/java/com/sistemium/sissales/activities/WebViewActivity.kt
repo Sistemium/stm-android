@@ -163,7 +163,7 @@ class WebViewActivity : Activity() {
 
         if (STMCoreAuthController.isDemo) {
             val loader = FlutterInjector.instance().flutterLoader()
-            val key = loader.getLookupKeyForAsset("assets/demo/i${STMCoreAuthController.configuration.lowercase()}/${title!!}/localHTML/")
+            val key = loader.getLookupKeyForAsset("assets/demo/${STMCoreAuthController.configuration.lowercase()}/${title!!}/localHTML/")
 
             val assetManager = MyApplication.appContext!!.assets
             assetManager.copyAssetFolder(key, STMCoreSessionFiler.sharedSession!!.webPath(title!!))

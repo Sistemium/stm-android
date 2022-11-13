@@ -189,7 +189,8 @@ class MyApplication : Application(), Application.ActivityLifecycleCallbacks {
                 intent.putExtra("url", url)
                 intent.putExtra("manifest", manifest)
                 intent.putExtra("title", currentTab["title"] as String)
-                startActivity(intent)
+                intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK;
+                applicationContext.startActivity(intent)
             }
         }
 

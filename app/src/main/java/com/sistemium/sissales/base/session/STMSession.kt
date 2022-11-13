@@ -28,6 +28,7 @@ import android.util.Log
 import com.sistemium.sissales.BuildConfig
 import com.sistemium.sissales.base.MyApplication
 import com.sistemium.sissales.services.LocationService
+import io.flutter.FlutterInjector
 import java.io.InputStream
 import java.io.OutputStream
 import java.sql.SQLException
@@ -124,14 +125,18 @@ class STMSession {
         val savedModelPath = databasePath.replace(".db", ".json")
 
         if (STMCoreAuthController.isDemo) {
+            val loader = FlutterInjector.instance().flutterLoader()
+            var key = loader.getLookupKeyForAsset("assets/demo/${STMCoreAuthController.configuration.lowercase()}/model.json")
 
             val assetManager = MyApplication.appContext!!.assets
-            val assetModelStream = assetManager.open("demo/$dataModelName/$dataModelName.json")
+            val assetModelStream = assetManager.open(key)
+
             val modelStream = File(savedModelPath).outputStream()
 
             copyFile(assetModelStream, modelStream)
 
-            val assetDataStream = assetManager.open("demo/$dataModelName/DEMO.db")
+            key = loader.getLookupKeyForAsset("assets/demo/${STMCoreAuthController.configuration.lowercase()}/DEMO.db")
+            val assetDataStream = assetManager.open(key)
             val dataStream = File(databasePath).outputStream()
             copyFile(assetDataStream, dataStream)
 
