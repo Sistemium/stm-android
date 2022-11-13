@@ -5,6 +5,7 @@ import android.app.Activity
 import android.app.Application
 import android.content.Context
 import android.content.Intent
+import android.content.res.AssetManager
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.ConnectivityManager
@@ -14,12 +15,12 @@ import android.os.Bundle
 import android.os.Handler
 import android.view.WindowManager
 import android.webkit.*
-import android.webkit.WebView
 import com.github.javiersantos.appupdater.AppUpdater
 import com.github.javiersantos.appupdater.enums.UpdateFrom
 import com.github.kittinunf.fuel.Fuel
 import com.github.kittinunf.fuel.android.extension.responseJson
 import com.sistemium.sissales.BuildConfig
+import com.sistemium.sissales.R
 import com.sistemium.sissales.base.MyApplication
 import com.sistemium.sissales.base.STMCoreSessionFiler
 import com.sistemium.sissales.base.STMFunctions
@@ -28,16 +29,10 @@ import com.sistemium.sissales.base.helper.logger.STMLogger
 import com.sistemium.sissales.base.session.STMCoreAuthController
 import com.sistemium.sissales.base.session.STMSession
 import com.sistemium.sissales.webInterface.WebAppInterface
+import io.flutter.FlutterInjector
 import nl.komponents.kovenant.Promise
 import nl.komponents.kovenant.task
 import nl.komponents.kovenant.then
-import com.sistemium.sissales.R
-import android.webkit.DownloadListener
-import android.widget.Toast
-
-import android.app.DownloadManager
-import android.content.res.AssetManager
-import android.os.Environment
 import java.io.*
 
 
@@ -167,8 +162,11 @@ class WebViewActivity : Activity() {
         }
 
         if (STMCoreAuthController.isDemo) {
+            val loader = FlutterInjector.instance().flutterLoader()
+            val key = loader.getLookupKeyForAsset("assets/demo/i${STMCoreAuthController.configuration.lowercase()}/${title!!}/localHTML/")
+
             val assetManager = MyApplication.appContext!!.assets
-            assetManager.copyAssetFolder("demo/${STMCoreAuthController.dataModelName}/${title!!}/localHTML", STMCoreSessionFiler.sharedSession!!.webPath(title!!))
+            assetManager.copyAssetFolder(key, STMCoreSessionFiler.sharedSession!!.webPath(title!!))
             task {
                 runOnUiThread {
                     val webPath = "file:///" + STMCoreSessionFiler.sharedSession!!.webPath(title!!) + "/index.html"

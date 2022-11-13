@@ -153,6 +153,7 @@ class MyApplication : Application(), Application.ActivityLifecycleCallbacks {
                 STMCoreAuthController.iSisDB = arguments["iSisDB"] as? String
                 STMCoreAuthController.stcTabs = arguments["stcTabs"] as? ArrayList<*>
                 STMCoreAuthController.rolesResponse = arguments["rolesResponse"] as? Map<*,*>
+                STMCoreAuthController.isDemo = arguments["isDemo"] as Boolean
             }
             if (call.method == "logout"){
                 STMCoreAuthController.logout()
