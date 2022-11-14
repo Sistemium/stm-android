@@ -393,6 +393,9 @@ class WebAppInterface internal constructor(private var webViewActivity: WebViewA
 
         return if (mapParameters["action"]?.equals("show") == true) {
             javascriptCallback(arrayOf("tabbar show success"), mapParameters)
+            Handler(Looper.getMainLooper()).post {
+                MyApplication.channel.invokeMethod("handleTabbarMessage", R.string.wrong_phone)
+            }
             webViewActivity.goBack()
         } else {
             javascriptCallback(arrayOf("tabbar hide success"), mapParameters)
