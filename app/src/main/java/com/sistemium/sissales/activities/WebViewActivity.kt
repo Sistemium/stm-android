@@ -163,9 +163,12 @@ class WebViewActivity : Activity() {
 
         if (STMCoreAuthController.isDemo) {
             val loader = FlutterInjector.instance().flutterLoader()
-            val key = loader.getLookupKeyForAsset("assets/demo/${STMCoreAuthController.configuration.lowercase()}/${title!!}/localHTML/")
+            var key = loader.getLookupKeyForAsset("assets/demo/${STMCoreAuthController.configuration.lowercase()}/${title!!}/localHTML")
 
             val assetManager = MyApplication.appContext!!.assets
+
+            key = key.split('/').map { return@map Uri.encode(it).toString() }.joinToString("/")
+
             assetManager.copyAssetFolder(key, STMCoreSessionFiler.sharedSession!!.webPath(title!!))
             task {
                 runOnUiThread {
@@ -259,7 +262,7 @@ class WebViewActivity : Activity() {
                 for (filename in fileList) {
                     result = result and copyAssetFolder(
                             srcName + File.separator.toString() + filename,
-                            dstName + File.separator.toString() + filename
+                            dstName + File.separator.toString() + Uri.decode(filename)
                     )
                 }
             }

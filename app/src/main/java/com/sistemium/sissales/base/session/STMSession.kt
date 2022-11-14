@@ -244,6 +244,8 @@ class STMSession {
 
     fun setupSyncer() {
 
+        if (STMCoreAuthController.isDemo) return
+
         val syncer = STMSyncer()
         val syncerHelper = STMSyncerHelper()
         syncerHelper.persistenceFantomsDelegate = STMPersisterFantoms()
