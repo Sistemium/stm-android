@@ -26,4 +26,5 @@
     <string name="scanner_removal">Сканер штрих кодов отключён</string>
     <string name="downloading">Скачиваем файл</string>
     <string name="demo">DEMO</string>
+    <string name="initial_loading_errror">Соединение прервано</string>
 </resources>

@@ -26,4 +26,5 @@
     <string name="scanner_removal">Scanner device removal</string>
     <string name="downloading">Downloading File</string>
     <string name="demo">DEMO</string>
+    <string name="initial_loading_errror">Connection interupted</string>
 </resources>

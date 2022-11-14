@@ -2,6 +2,7 @@ package com.sistemium.sissales.base.session
 
 import android.os.Handler
 import android.os.Looper
+import com.sistemium.sissales.R
 import com.sistemium.sissales.activities.ProfileActivity
 import com.sistemium.sissales.base.MyApplication
 import com.sistemium.sissales.base.STMConstants.Companion.STMPersistingOptionLts
@@ -111,7 +112,7 @@ class STMSyncerHelper : STMDefantomizing, STMDataDownloading {
         if (error != null) {
 
             Handler(Looper.getMainLooper()).post {
-                MyApplication.channel.invokeMethod("setupError", error.localizedMessage)
+                MyApplication.channel.invokeMethod("setupError", R.string.wrong_phone)
             }
 
             return doneDownloadingEntityName(entityName, error.localizedMessage)
@@ -224,7 +225,7 @@ class STMSyncerHelper : STMDefantomizing, STMDataDownloading {
             if (!error.localizedMessage.startsWith("socket is not ready")) {
 
                 Handler(Looper.getMainLooper()).post {
-                    MyApplication.channel.invokeMethod("setupError", error.localizedMessage)
+                    MyApplication.channel.invokeMethod("setupError", R.string.wrong_phone)
                 }
 
                 STMFunctions.debugLog("STMSyncerHelper", "defantomize $entityName $identifier error: ${error.localizedMessage}")
