@@ -1,10 +1,12 @@
 package com.sistemium.sissales.base
 
 import android.app.Activity
+import android.app.ActivityOptions
 import android.app.Application
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import com.sistemium.sissales.R
 import com.sistemium.sissales.activities.WebViewActivity
 import com.sistemium.sissales.base.classes.entitycontrollers.STMCoreObjectsController
 import com.sistemium.sissales.base.classes.entitycontrollers.STMCorePicturesController
@@ -189,8 +191,10 @@ class MyApplication : Application(), Application.ActivityLifecycleCallbacks {
                 intent.putExtra("url", url)
                 intent.putExtra("manifest", manifest)
                 intent.putExtra("title", currentTab["title"] as String)
-                intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK;
-                applicationContext.startActivity(intent)
+                intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+                val options = ActivityOptions.makeCustomAnimation(MyApplication.appContext, R.anim.abc_fade_in, R.anim.abc_fade_out)
+
+                applicationContext.startActivity(intent, options.toBundle())
             }
         }
 
