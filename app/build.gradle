@@ -10,6 +10,14 @@ apply plugin: 'com.google.firebase.crashlytics'
 
 
 android {
+    signingConfigs {
+        release {
+            storeFile file('/Users/edgarjanvuicik/Developer/keystore')
+            storePassword 'xnH3jScMAFckufzB'
+            keyPassword 'xnH3jScMAFckufzB'
+            keyAlias 'key0'
+        }
+    }
     compileSdkVersion 33
     defaultConfig {
         applicationId "com.sistemium"
@@ -22,6 +30,7 @@ android {
             // Filter for architectures supported by Flutter.
             abiFilters 'armeabi-v7a', 'arm64-v8a', 'x86_64'
         }
+        signingConfig signingConfigs.release
     }
     buildTypes {
         debug {

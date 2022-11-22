@@ -44,40 +44,46 @@ class MyApplication : Application(), Application.ActivityLifecycleCallbacks {
             private set
 
         var inBackground: Boolean = false
-        set(value) {
+            set(value) {
 
-            if (STMCoreAuthController.accessToken == null) return
+                if (STMCoreAuthController.accessToken == null) return
 
-            if (field != value) {
+                if (field != value) {
 
-                field = value
+                    field = value
 
-                if (value) {
+                    if (value) {
 
-                    val logMessage = "application did enter background"
+                        val logMessage = "application did enter background"
 
-                    STMLogger.sharedLogger!!.infoMessage(logMessage)
+                        STMLogger.sharedLogger!!.infoMessage(logMessage)
 
-                    syncer?.sendEventViaSocket(STMSocketEvent.STMSocketEventStatusChange, logMessage)
+                        syncer?.sendEventViaSocket(
+                            STMSocketEvent.STMSocketEventStatusChange,
+                            logMessage
+                        )
 
-                    STMCoreObjectsController.checkObjectsForFlushing()
+                        STMCoreObjectsController.checkObjectsForFlushing()
 
-                    //TODO
-                    //[STMGarbageCollector.sharedInstance removeOutOfDateImages];
+                        //TODO
+                        //[STMGarbageCollector.sharedInstance removeOutOfDateImages];
 
-                } else {
+                    } else {
 
-                    val logMessage = "application will enter foreground"
+                        val logMessage = "application will enter foreground"
 
-                    STMLogger.sharedLogger!!.infoMessage(logMessage)
+                        STMLogger.sharedLogger!!.infoMessage(logMessage)
 
-                    syncer?.sendEventViaSocket(STMSocketEvent.STMSocketEventStatusChange, logMessage)
+                        syncer?.sendEventViaSocket(
+                            STMSocketEvent.STMSocketEventStatusChange,
+                            logMessage
+                        )
+
+                    }
 
                 }
 
             }
-
-        }
     }
 
     override fun onActivityPaused(p0: Activity) {
@@ -110,11 +116,17 @@ class MyApplication : Application(), Application.ActivityLifecycleCallbacks {
         appContext = applicationContext
 
         val seedKey = "SecuredSeedData".toByteArray()
-        SecuredPreferenceStore.init(applicationContext, null, null, seedKey, DefaultRecoveryHandler())
+        SecuredPreferenceStore.init(
+            applicationContext,
+            null,
+            null,
+            seedKey,
+            DefaultRecoveryHandler()
+        )
 
         this.registerActivityLifecycleCallbacks(this)
 
-        flutterEngine = FlutterEngine(this, arrayOf("vfs"))
+        flutterEngine = FlutterEngine(this)
 
         val entryPoints = when (STMCoreAuthController.configuration) {
             "vfs" -> {
@@ -130,23 +142,23 @@ class MyApplication : Application(), Application.ActivityLifecycleCallbacks {
 
         // Start executing Dart code to pre-warm the FlutterEngine.
         flutterEngine.dartExecutor.executeDartEntrypoint(
-                DartExecutor.DartEntrypoint.createDefault(),
-                entryPoints,
+            DartExecutor.DartEntrypoint.createDefault(),
+            entryPoints,
         )
 
         // Cache the FlutterEngine to be used by FlutterActivity.
         FlutterEngineCache
-                .getInstance()
-                .put("my flutter engine", flutterEngine)
+            .getInstance()
+            .put("my flutter engine", flutterEngine)
 
-        channel = MethodChannel(flutterEngine.dartExecutor.binaryMessenger, "com.sistemium.flutterchanel")
+        channel =
+            MethodChannel(flutterEngine.dartExecutor.binaryMessenger, "com.sistemium.flutterchanel")
 
-        channel.setMethodCallHandler {
-            call, _ ->
-            if (call.method == "startSyncer"){
+        channel.setMethodCallHandler { call, _ ->
+            if (call.method == "startSyncer") {
                 STMSession.sharedSession!!.setupSyncer()
             }
-            if (call.method == "completeAuth"){
+            if (call.method == "completeAuth") {
                 val arguments = call.arguments as HashMap<*, *>
                 STMCoreAuthController.userName = arguments["userName"] as? String
                 STMCoreAuthController.phoneNumber = arguments["phoneNumber"] as? String
@@ -157,21 +169,21 @@ class MyApplication : Application(), Application.ActivityLifecycleCallbacks {
                 STMCoreAuthController.accountOrg = arguments["accountOrg"] as? String
                 STMCoreAuthController.iSisDB = arguments["iSisDB"] as? String
                 STMCoreAuthController.stcTabs = arguments["stcTabs"] as? ArrayList<*>
-                STMCoreAuthController.rolesResponse = arguments["rolesResponse"] as? Map<*,*>
+                STMCoreAuthController.rolesResponse = arguments["rolesResponse"] as? Map<*, *>
                 STMCoreAuthController.isDemo = arguments["isDemo"] as Boolean
             }
-            if (call.method == "logout"){
+            if (call.method == "logout") {
                 STMCoreAuthController.logout()
             }
-            if (call.method == "syncData"){
+            if (call.method == "syncData") {
                 STMSession.sharedSession?.syncer?.receiveData()
             }
-            if (call.method == "startImageDownload"){
+            if (call.method == "startImageDownload") {
                 STMCorePicturesController.sharedInstance?.checkNotUploadedPhotos()
             }
-            if (call.method == "stopImageDownload"){
+            if (call.method == "stopImageDownload") {
             }
-            if (call.method == "loadURL"){
+            if (call.method == "loadURL") {
 
                 val currentTab = call.arguments as HashMap<*, *>
 
@@ -181,13 +193,13 @@ class MyApplication : Application(), Application.ActivityLifecycleCallbacks {
 
                 val manifest = currentTab["appManifestURI"] as? String
 
-                if (url == null && manifest != null){
+                if (url == null && manifest != null) {
 
                     url = manifest.replace(manifest.split("/").last(), "")
 
                 }
 
-                if (url?.endsWith("/") != true){
+                if (url?.endsWith("/") != true) {
                     url += "/"
                 }
 
@@ -195,14 +207,17 @@ class MyApplication : Application(), Application.ActivityLifecycleCallbacks {
                 intent.putExtra("manifest", manifest)
                 intent.putExtra("title", currentTab["title"] as String)
                 intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
-                val options = ActivityOptions.makeCustomAnimation(MyApplication.appContext, R.anim.abc_fade_in, R.anim.abc_fade_out)
+                val options = ActivityOptions.makeCustomAnimation(
+                    MyApplication.appContext,
+                    R.anim.abc_fade_in,
+                    R.anim.abc_fade_out
+                )
 
                 applicationContext.startActivity(intent, options.toBundle())
             }
         }
 
     }
-
 
 
 }
