@@ -154,6 +154,19 @@ class MyApplication : Application(), Application.ActivityLifecycleCallbacks {
         channel =
             MethodChannel(flutterEngine.dartExecutor.binaryMessenger, "com.sistemium.flutterchanel")
 
+        channel.invokeMethod("ensureUpgrade", hashMapOf(
+            "userName" to STMCoreAuthController.userName,
+            "phoneNumber" to STMCoreAuthController.phoneNumber,
+            "accessToken" to STMCoreAuthController.accessToken,
+            "id" to STMCoreAuthController.userID,
+            "redirectUri" to STMCoreAuthController.entityResource,
+            "apiUrl" to STMCoreAuthController.socketURL,
+            "accountOrg" to STMCoreAuthController.accountOrg,
+            "iSisDB" to STMCoreAuthController.iSisDB,
+            "stcTabs" to STMCoreAuthController.stcTabs,
+            "rolesResponse" to STMCoreAuthController.rolesResponse
+        ))
+
         channel.setMethodCallHandler { call, _ ->
             if (call.method == "startSyncer") {
                 STMSession.sharedSession!!.setupSyncer()
@@ -208,7 +221,7 @@ class MyApplication : Application(), Application.ActivityLifecycleCallbacks {
                 intent.putExtra("title", currentTab["title"] as String)
                 intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
                 val options = ActivityOptions.makeCustomAnimation(
-                    MyApplication.appContext,
+                    appContext,
                     R.anim.abc_fade_in,
                     R.anim.abc_fade_out
                 )
