@@ -1,5 +1,7 @@
 package com.sistemium.sissales.base.session
 
+import android.os.Handler
+import android.os.Looper
 import com.sistemium.sissales.base.MyApplication
 import com.sistemium.sissales.base.STMConstants
 import com.sistemium.sissales.base.STMFunctions
@@ -606,6 +608,10 @@ class STMSocketTransport(private var socketUrlString: String, private var owner:
         owner.socketReceiveAuthorization()
 
         checkAppState()
+
+        Handler(Looper.getMainLooper()).post {
+            MyApplication.channel.invokeMethod("syncerStarted", null)
+        }
 
     }
 

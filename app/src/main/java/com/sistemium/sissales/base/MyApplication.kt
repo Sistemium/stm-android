@@ -15,6 +15,7 @@ import com.sistemium.sissales.base.session.STMCoreAuthController
 import com.sistemium.sissales.base.session.STMSession
 import com.sistemium.sissales.base.session.STMSyncer
 import com.sistemium.sissales.enums.STMSocketEvent
+import com.sistemium.sissales.persisting.STMPredicate
 import devliving.online.securedpreferencestore.DefaultRecoveryHandler
 import devliving.online.securedpreferencestore.SecuredPreferenceStore
 import io.flutter.embedding.engine.FlutterEngine
@@ -231,6 +232,10 @@ class MyApplication : Application(), Application.ActivityLifecycleCallbacks {
                 )
 
                 applicationContext.startActivity(intent, options.toBundle())
+            }
+            if (call.method == "findWithSocket") {
+                val arguments = call.arguments as HashMap<*, *>
+                WebViewActivity.webInterface?.findWithSocket(hashMapOf<Any, Any>(), arguments["entity"] as String, STMPredicate(arguments["predicate"] as String), null)
             }
         }
 

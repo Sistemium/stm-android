@@ -1212,7 +1212,7 @@ class WebAppInterface internal constructor(private var webViewActivity: WebViewA
         }
     }
 
-    private fun findWithSocket(scriptMessage: Map<*, *>, entityName: String, predicate: STMPredicate?, options: Map<*, *>?): Promise<ArrayList<Map<*, *>>, Exception> {
+    fun findWithSocket(scriptMessage: Map<*, *>, entityName: String, predicate: STMPredicate?, options: Map<*, *>?): Promise<ArrayList<Map<*, *>>, Exception> {
 
         if (STMModelling.sharedModeler!!.isConcreteEntityName(entityName)){
             var checkUnsynced = STMPredicate("deviceTs > lts")
