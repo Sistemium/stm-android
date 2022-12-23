@@ -33,41 +33,49 @@ android {
             initWith(buildTypes.debug)
             applicationIdSuffix ".driverdebug"
             manifestPlaceholders = [appName: "SisDriver-debug"]
+            matchingFallbacks = ['debug']
         }
         driverRelease {
             initWith(buildTypes.release)
             applicationIdSuffix ".driver"
             manifestPlaceholders = [appName: "SisDriver"]
-        }
-        warehouseRealease {
-            initWith(buildTypes.release)
-            applicationIdSuffix ".warehouse"
-            manifestPlaceholders = [appName: "SisWarehouse"]
+            matchingFallbacks = ['release']
         }
         warehouseDebug {
             initWith(buildTypes.debug)
             applicationIdSuffix ".warehousedebug"
             manifestPlaceholders = [appName: "SisWarehouse-debug"]
+            matchingFallbacks = ['debug']
+        }
+        warehouseRealease {
+            initWith(buildTypes.release)
+            applicationIdSuffix ".warehouse"
+            manifestPlaceholders = [appName: "SisWarehouse"]
+            matchingFallbacks = ['release']
         }
         vfsDebug {
             initWith(buildTypes.debug)
             applicationIdSuffix = '.vfsdebug'
             manifestPlaceholders = [appName: 'VFS-debug']
+            matchingFallbacks = ['debug']
         }
         vfsRelease {
             initWith(buildTypes.release)
             applicationIdSuffix = '.vfs'
             manifestPlaceholders = [appName: 'VFS']
+            matchingFallbacks = ['release']
         }
         vfsClientDebug {
             initWith(buildTypes.debug)
             applicationIdSuffix = '.vfsclientdebug'
             manifestPlaceholders = [appName: 'VFSClient-debug']
+            matchingFallbacks = ['debug']
         }
         vfsClientRelease {
             initWith(buildTypes.release)
             applicationIdSuffix = '.vfsclient'
             manifestPlaceholders = [appName: 'VFSClient']
+            matchingFallbacks = ['release']
         }
         //https://docs.flutter.dev/development/add-to-app/android/project-setup#option-a---depend-on-the-android-archive-aar
         profile {
@@ -130,8 +138,5 @@ dependencies {
     implementation "androidx.camera:camera-camera2:1.2.0-alpha03"
     implementation "androidx.camera:camera-lifecycle:1.2.0-alpha03"
     implementation "androidx.camera:camera-view:1.2.0-alpha03"
-    debugImplementation 'com.sistemium.flutter_onboarding:flutter:1.0'
-    profileImplementation 'com.sistemium.flutter_onboarding:flutter:1.0'
-    releaseImplementation 'com.sistemium.flutter_onboarding:flutter:1.0'
-
+    implementation 'com.sistemium.flutter_onboarding:flutter:1.0'
 }
