@@ -4,11 +4,6 @@ apply plugin: 'kotlin-android'
 
 apply plugin: 'kotlin-android-extensions'
 
-apply plugin: 'com.google.gms.google-services'
-
-apply plugin: 'com.google.firebase.crashlytics'
-
-
 android {
     compileSdkVersion 33
     defaultConfig {
@@ -129,10 +124,6 @@ dependencies {
     implementation 'com.github.javiersantos:AppUpdater:master-SNAPSHOT'
     implementation 'com.google.android.gms:play-services-location:20.0.0'
     implementation project(path: ':BarcodeScannerLibrary')
-    implementation platform('com.google.firebase:firebase-bom:29.0.1')
-    implementation 'com.google.firebase:firebase-analytics-ktx:21.1.0'
-    implementation 'com.google.firebase:firebase-crashlytics:18.2.12'
-    implementation 'com.google.firebase:firebase-messaging-ktx'
     implementation "androidx.lifecycle:lifecycle-livedata-ktx:2.5.0"
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.0"
     implementation 'com.google.mlkit:barcode-scanning:17.0.2'
