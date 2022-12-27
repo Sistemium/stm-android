@@ -134,10 +134,10 @@ class MyApplication : Application(), Application.ActivityLifecycleCallbacks {
                 arrayOf("vfs")
             }
             "vfsc" -> {
-                arrayOf("vfsClient")
+                arrayOf("vfsc")
             }
             else -> {
-                arrayOf("SisSales")
+                arrayOf("sissales")
             }
         }.toList()
 
