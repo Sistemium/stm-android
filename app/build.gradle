@@ -10,8 +10,8 @@ android {
         applicationId "com.sistemium"
         minSdkVersion 21
         targetSdkVersion 33
-        versionCode 476
-        versionName "1.1.90"
+        versionCode 477
+        versionName "1.1.91"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         ndk {
             // Filter for architectures supported by Flutter.
