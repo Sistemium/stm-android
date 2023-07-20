@@ -47,7 +47,7 @@ android {
             manifestPlaceholders = [appName: "SisWarehouse-debug"]
             matchingFallbacks = ['debug']
         }
-        warehouseRealease {
+        warehouseRelease {
             initWith(buildTypes.release)
             applicationIdSuffix ".warehouse"
             manifestPlaceholders = [appName: "SisWarehouse"]
@@ -139,6 +139,7 @@ dependencies {
     implementation "androidx.camera:camera-lifecycle:1.2.0-alpha03"
     implementation "androidx.camera:camera-view:1.2.0-alpha03"
     debugImplementation 'com.sistemium.flutter_onboarding:flutter_debug:1.0'
-    profileImplementation 'com.sistemium.flutter_onboarding:flutter_profile:1.0'
     releaseImplementation 'com.sistemium.flutter_onboarding:flutter_release:1.0'
+    warehouseDebugImplementation 'com.sistemium.flutter_onboarding:flutter_debug:1.0'
+    warehouseReleaseImplementation 'com.sistemium.flutter_onboarding:flutter_release:1.0'
 }
