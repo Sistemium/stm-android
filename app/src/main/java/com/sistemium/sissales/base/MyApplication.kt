@@ -3,6 +3,7 @@ package com.sistemium.sissales.base
 import android.app.Activity
 import android.app.ActivityOptions
 import android.app.Application
+import android.bluetooth.BluetoothDevice
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -16,6 +17,7 @@ import com.sistemium.sissales.base.session.STMSession
 import com.sistemium.sissales.base.session.STMSyncer
 import com.sistemium.sissales.enums.STMSocketEvent
 import com.sistemium.sissales.persisting.STMPredicate
+import com.zebra.scannercontrol.IDcsScannerEventsOnReLaunch
 import devliving.online.securedpreferencestore.DefaultRecoveryHandler
 import devliving.online.securedpreferencestore.SecuredPreferenceStore
 import io.flutter.embedding.engine.FlutterEngine
@@ -26,7 +28,7 @@ import io.flutter.plugin.common.MethodChannel
 /**
  * Created by edgarjanvuicik on 02/02/2018.
  */
-class MyApplication : Application(), Application.ActivityLifecycleCallbacks {
+class MyApplication : Application(), Application.ActivityLifecycleCallbacks, IDcsScannerEventsOnReLaunch {
 
     companion object {
 
@@ -239,6 +241,16 @@ class MyApplication : Application(), Application.ActivityLifecycleCallbacks {
             }
         }
 
+    }
+
+    override fun onLastConnectedScannerDetect(p0: BluetoothDevice?): Boolean {
+        return true
+    }
+
+    override fun onConnectingToLastConnectedScanner(p0: BluetoothDevice?) {
+    }
+
+    override fun onScannerDisconnect() {
     }
 
 

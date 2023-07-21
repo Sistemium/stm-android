@@ -108,7 +108,7 @@ class BackgroundSoundService : Service() {
     }
 }
 
-class WebAppInterface internal constructor(private var webViewActivity: WebViewActivity) {
+class WebAppInterface internal constructor(var webViewActivity: WebViewActivity) {
 
 //    init {
 //        webViewActivity.startService(Intent(webViewActivity, BackgroundSoundService::class.java))
@@ -180,12 +180,14 @@ class WebAppInterface internal constructor(private var webViewActivity: WebViewA
         scannerStatusJSFunction = mapParameters["statusCallback"] as String
 
         if (scannerType() == "zebra"){
-            STMBarCodeScanner.sharedScanner?.startBarcodeScanning(webViewActivity)
+            Handler(Looper.getMainLooper()).post {
+                STMBarCodeScanner.sharedScanner?.startBarcodeScanning(webViewActivity)
 
-            if (STMBarCodeScanner.sharedScanner!!.isDeviceConnected) {
+                if (STMBarCodeScanner.sharedScanner!!.isDeviceConnected) {
 
-                scannerConnected()
+                    scannerConnected()
 
+                }
             }
         } else {
             val myIntent = Intent(MyApplication.appContext, CameraPreviewActivity::class.java)

@@ -18,6 +18,7 @@ import android.speech.tts.TextToSpeech
 import com.sistemium.sissales.activities.WebViewActivity
 import androidx.core.os.ConfigurationCompat
 import com.sistemium.sissales.base.session.STMSession
+import com.zebra.barcode.sdk.sms.ConfigurationUpdateEvent
 
 enum class STMBarCodeScannedType(val type:String) {
     STMBarCodeTypeUnknow(""),
@@ -28,7 +29,7 @@ enum class STMBarCodeScannedType(val type:String) {
 
 class STMBarCodeScanner:IDcsSdkApiDelegate {
 
-    val api = SDKHandler(MyApplication.appContext)
+    val api = SDKHandler(MyApplication.appContext, true)
 
     private var connectedId = 0
     private var dialogFwReconnectScanner: Dialog? = null
@@ -317,6 +318,9 @@ class STMBarCodeScanner:IDcsSdkApiDelegate {
     }
 
     override fun dcssdkEventAuxScannerAppeared(p0: DCSScannerInfo?, p1: DCSScannerInfo?) {
+    }
+
+    override fun dcssdkEventConfigurationUpdate(p0: ConfigurationUpdateEvent?) {
     }
 
     override fun dcssdkEventBinaryData(p0: ByteArray?, p1: Int) {

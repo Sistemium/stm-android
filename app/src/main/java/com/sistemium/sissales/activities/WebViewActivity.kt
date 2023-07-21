@@ -22,6 +22,7 @@ import com.github.kittinunf.fuel.android.extension.responseJson
 import com.sistemium.sissales.BuildConfig
 import com.sistemium.sissales.R
 import com.sistemium.sissales.base.MyApplication
+import com.sistemium.sissales.base.STMBarCodeScanner
 import com.sistemium.sissales.base.STMCoreSessionFiler
 import com.sistemium.sissales.base.STMFunctions
 import com.sistemium.sissales.base.classes.entitycontrollers.STMCorePhotosController
