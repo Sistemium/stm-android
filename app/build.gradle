@@ -142,4 +142,6 @@ dependencies {
     releaseImplementation 'com.sistemium.flutter_onboarding:flutter_release:1.0'
     warehouseDebugImplementation 'com.sistemium.flutter_onboarding:flutter_debug:1.0'
     warehouseReleaseImplementation 'com.sistemium.flutter_onboarding:flutter_release:1.0'
+    driverDebugImplementation 'com.sistemium.flutter_onboarding:flutter_debug:1.0'
+    driverReleaseImplementation 'com.sistemium.flutter_onboarding:flutter_release:1.0'
 }
