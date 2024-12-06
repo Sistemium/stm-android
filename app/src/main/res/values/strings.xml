@@ -1,6 +1,6 @@
 <resources>
-    <string name="app_name">Sistemium</string>
-    <string name="auth_toolbar_title">Enter to Sistemium</string>
+    <string name="app_name">Gradus Market</string>
+    <string name="auth_toolbar_title">Welcome</string>
     <string name="enter_code_from_sms">Enter code from SMS:</string>
     <string name="send">Send</string>
     <string name="_8xxxxxxxxxx">8XXXXXXXXXX</string>

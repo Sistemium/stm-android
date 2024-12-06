@@ -7,7 +7,7 @@ android {
         javaMaxHeapSize "4G"
     }
     defaultConfig {
-        applicationId "com.sistemium"
+        applicationId "place.gradus"
         minSdkVersion 21
         targetSdkVersion 34
         compileSdkVersion 34
