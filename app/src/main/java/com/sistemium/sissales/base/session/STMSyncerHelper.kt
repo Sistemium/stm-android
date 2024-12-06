@@ -61,7 +61,6 @@ class STMSyncerHelper : STMDefantomizing, STMDataDownloading {
 
         }
 
-        ProfileActivity.profileActivityController?.setMaxProgress(_entitiesNames.size)
         totalEntityCount = _entitiesNames.size
         remainCount = totalEntityCount
 
@@ -90,8 +89,6 @@ class STMSyncerHelper : STMDefantomizing, STMDataDownloading {
     override fun stopDownloading() {
 
         STMFunctions.debugLog("STMSyncerHelper", "stopDownloading")
-
-        ProfileActivity.profileActivityController?.setProgressInfo(-1)
 
         downloadingQueue?.shutdown()
 
@@ -198,8 +195,6 @@ class STMSyncerHelper : STMDefantomizing, STMDataDownloading {
 
         STMFunctions.debugLog("STMSyncerHelper", "DEFANTOMIZING_START with queue of $count")
 
-        ProfileActivity.profileActivityController?.setMaxProgress(count)
-
         if (count == 0) defantomizingFinished()
 
     }
@@ -286,8 +281,6 @@ class STMSyncerHelper : STMDefantomizing, STMDataDownloading {
 
         STMFunctions.debugLog("STMSyncerHelper", "doneWith $entityName remain ${downloadingOperations.size} to receive")
 
-        ProfileActivity.profileActivityController?.addProgress(1)
-
         remainCount -=1
 
         var progress = (totalEntityCount.toDouble() - remainCount.toDouble()) / totalEntityCount.toDouble()
@@ -314,8 +307,6 @@ class STMSyncerHelper : STMDefantomizing, STMDataDownloading {
 
         STMFunctions.debugLog("STMSyncerHelper", "    $entityName: got ${result.size} objects")
 
-        ProfileActivity.profileActivityController?.setProgressInfo(result.size)
-
         if (result.size < pageSize) {
 
             STMClientEntityController.setEtag(entityName, offset)
@@ -334,7 +325,6 @@ class STMSyncerHelper : STMDefantomizing, STMDataDownloading {
         }
 
         STMFunctions.debugLog("STMSyncedHelper", "DEFANTOMIZING_FINISHED")
-        ProfileActivity.profileActivityController?.setProgressInfo(-1)
         this.defantomizing = null
         defantomizingOwner!!.defantomizingFinished()
 
@@ -349,8 +339,6 @@ class STMSyncerHelper : STMDefantomizing, STMDataDownloading {
         val count = defantomizing!!.operations.size
 
         STMFunctions.debugLog("STMSyncerHelper", "doneWith $entityName $identifier ($count)")
-
-        ProfileActivity.profileActivityController?.addProgress(1)
 
         if (count == 0) {
 

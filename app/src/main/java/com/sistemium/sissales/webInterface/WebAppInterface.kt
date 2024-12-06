@@ -482,6 +482,7 @@ class WebAppInterface internal constructor(var webViewActivity: WebViewActivity)
 
     }
 
+    @SuppressLint("Range")
     @JavascriptInterface
     fun getContacts(parameters: String?) {
 
@@ -747,37 +748,32 @@ class WebAppInterface internal constructor(var webViewActivity: WebViewActivity)
     @JavascriptInterface
     fun share(parameters: String?) {
         STMFunctions.debugLog("DEBUG", "downloadFile")
-
         val mapParameters = gson.fromJson(parameters, Map::class.java)
-
         val url = mapParameters["url"] as String
         val callback = mapParameters["callback"]
         val name = mapParameters["name"] as String
-
         var file = File(Environment.getExternalStorageDirectory().absolutePath + '/' + name)
-
         if (Build.VERSION.SDK_INT >= 30) {
-            file= File(webViewActivity.getExternalFilesDir(Environment.DIRECTORY_DCIM)?.absolutePath + '/' + name)
+            file = File(webViewActivity.getExternalFilesDir(Environment.DIRECTORY_DCIM)?.absolutePath + '/' + name)
         }
-
-        Fuel.Companion.download(url).destination { response, Url ->
+        Fuel.download(url).destination { response, url ->
             file
         }.response { request, response, result ->
             if (response.statusCode == 200) {
                 val intent = Intent(Intent.ACTION_SEND)
                 intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
                 intent.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION)
-                intent.setType(response.headers["Content-Type"]!!.first())
+                intent.type = response.headers["Content-Type"]!!.first()
                 val uri = FileProvider.getUriForFile(
-                        webViewActivity,
-                        "${BuildConfig.APPLICATION_ID}.provider", //(use your app signature + ".provider" )
-                        file)
+                    webViewActivity,
+                    "${BuildConfig.APPLICATION_ID}.provider",
+                    file
+                )
                 intent.putExtra(Intent.EXTRA_STREAM, uri)
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                val chooser = Intent.createChooser(intent, "");
+                intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+                val chooser = Intent.createChooser(intent, "")
                 val resInfoList: List<ResolveInfo> = webViewActivity.packageManager
                     .queryIntentActivities(chooser, PackageManager.MATCH_DEFAULT_ONLY)
-
                 for (resolveInfo in resInfoList) {
                     val packageName = resolveInfo.activityInfo.packageName
                     webViewActivity.grantUriPermission(
@@ -786,11 +782,8 @@ class WebAppInterface internal constructor(var webViewActivity: WebViewActivity)
                         Intent.FLAG_GRANT_WRITE_URI_PERMISSION or Intent.FLAG_GRANT_READ_URI_PERMISSION
                     )
                 }
-
                 webViewActivity.startActivity(chooser)
-
                 file.deleteOnExit()
-
                 javascriptCallback(arrayListOf<String>(), mapParameters, callback as String)
             } else {
                 javascriptCallback("error", mapParameters)

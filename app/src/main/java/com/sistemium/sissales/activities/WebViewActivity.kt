@@ -18,7 +18,6 @@ import android.webkit.*
 import com.github.javiersantos.appupdater.AppUpdater
 import com.github.javiersantos.appupdater.enums.UpdateFrom
 import com.github.kittinunf.fuel.Fuel
-import com.github.kittinunf.fuel.android.extension.responseJson
 import com.sistemium.sissales.BuildConfig
 import com.sistemium.sissales.R
 import com.sistemium.sissales.base.MyApplication
@@ -488,70 +487,37 @@ class WebViewActivity : Activity() {
     }
 
     private fun loadFromManifest(manifest: String, title: String, url: String): Promise<String, Exception> {
-
         return task {
-
             val files = hashMapOf<String, ByteArray>()
-
             val webPath = STMCoreSessionFiler.sharedSession!!.tempWebPath(title)
-
-            val (_, response, result) = Fuel.get(manifest).responseJson()
-
+            val (_, response, _) = Fuel.get(manifest).response()
             val etag = response.headers["ETag"]?.first()
-
             val prefStore = MyApplication.appContext?.getSharedPreferences("Sistemium", Context.MODE_PRIVATE)
-
             val savedTag = prefStore?.getString("${title}ETag", null)
-
             if (etag != savedTag && etag != null) {
-
                 STMFunctions.debugLog("STMCoreAuthController", "update available")
-
-                val filePaths = filePathsToLoadFromAppManifest(result.get().content)
-
+                val jsonString = String(response.data)
+                val filePaths = filePathsToLoadFromAppManifest(jsonString)
                 for (file in filePaths) {
-
                     val (_, _, res) = Fuel.download("$url$file").destination { _, _ ->
-
                         File.createTempFile("temp-${file.replace(".", "").replace("/", "")}", ".tmp")
-
                     }.response()
-
                     val path = "$webPath/$file"
-
                     if (res.component1()?.isNotEmpty() == true) {
-
                         files[path] = res.component1()!!
-
                     } else {
-
                         throw Exception("did not received any bytes of file $file, aborting load")
-
                     }
-
                 }
-
                 for ((path, file) in files) {
-
                     File(path.removeSuffix("/" + path.split("/").last())).mkdirs()
-
                     STMFunctions.debugLog("WebViewActivity", "finished downloading file saved to $path")
-
                     File(path).writeBytes(file)
-
                 }
-
                 prefStore?.edit()?.putString("${title}ETag", etag)?.apply()
-
                 return@task webPath
-
             }
-
             throw Exception("no update")
-
         }
-
-
     }
-
 }

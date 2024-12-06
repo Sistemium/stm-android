@@ -84,26 +84,18 @@ class STMCoreSessionFiler(org: String, uid: String, var context:Context? = MyApp
 
     }
 
-    override fun saveImage(bitmap: Bitmap, folderName: String, fileName:String):String {
-
+    override fun saveImage(bitmap: Bitmap, folderName: String, fileName: String): String {
         val folder = File(picturePath, folderName)
-
         folder.mkdirs()
-
         val file = File(folder.absolutePath, fileName)
-
         val fOut = FileOutputStream(file)
-
         bitmap.compress(Bitmap.CompressFormat.PNG, 100, fOut)
         fOut.flush()
         fOut.close()
-//        MediaStore.Images.Media.insertImage(context!!.contentResolver, file.absolutePath, file.name, file.name)
-        context?.openFileOutput(file.name, Context.MODE_PRIVATE).use { fos ->
+        context?.openFileOutput(file.name, Context.MODE_PRIVATE)?.use { fos ->
             bitmap.compress(Bitmap.CompressFormat.PNG, 25, fos)
         }
-
         return "$folderName/$fileName"
-
     }
 
     override fun getImage(localPath: String): Bitmap? {
