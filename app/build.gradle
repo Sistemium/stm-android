@@ -22,13 +22,13 @@ android {
     buildTypes {
         debug {
             applicationIdSuffix ".sissalesdebug"
-            manifestPlaceholders = [appName: "SisSales-debug"]
+            manifestPlaceholders = [appName: "Градус ТП-debug"]
             debuggable = true
         }
         release {
             applicationIdSuffix ".sissales"
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-            manifestPlaceholders = [appName: "SisSales"]
+            manifestPlaceholders = [appName: "Градус ТП"]
         }
         driverDebug {
             initWith(buildTypes.debug)
