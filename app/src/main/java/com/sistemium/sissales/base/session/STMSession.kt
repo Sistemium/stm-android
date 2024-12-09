@@ -133,8 +133,10 @@ class STMSession {
             .responseString()
         when (result) {
             is Result.Success -> {
-                newModel = result.get()
-                STMCoreAuthController.newModelEtag = response.headers["ETag"]?.firstOrNull()
+                if (response.statusCode == 200){
+                    newModel = result.get()
+                    STMCoreAuthController.newModelEtag = response.headers["ETag"]?.firstOrNull()
+                }
             }
             is Result.Failure -> {
             }
