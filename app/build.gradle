@@ -12,7 +12,7 @@ android {
         targetSdkVersion 34
         compileSdkVersion 34
         versionCode 479
-        versionName "1.1.93"
+        versionName "1.1.94"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         ndk {
             // Filter for architectures supported by Flutter.
@@ -21,14 +21,14 @@ android {
     }
     buildTypes {
         debug {
-            applicationIdSuffix ".sissalesdebug"
-            manifestPlaceholders = [appName: "Градус ТП-debug"]
+            applicationIdSuffix ".tpdebug"
+            manifestPlaceholders = [appName: "ТП Градус d"]
             debuggable = true
         }
         release {
-            applicationIdSuffix ".sissales"
+            applicationIdSuffix ".tp"
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-            manifestPlaceholders = [appName: "Градус ТП"]
+            manifestPlaceholders = [appName: "ТП Градус"]
         }
         driverDebug {
             initWith(buildTypes.debug)
