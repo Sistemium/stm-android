@@ -82,7 +82,7 @@ class STMCoreAuthController {
             }
         val configuration: String
             get() {
-                if (BuildConfig.APPLICATION_ID.contains("selvis.tp")) {
+                if (BuildConfig.APPLICATION_ID.contains("selvis.sales")) {
                     return "SisSales"
                 }
                 if (BuildConfig.APPLICATION_ID.contains(".driver")) {
