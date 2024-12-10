@@ -7,12 +7,12 @@ android {
         javaMaxHeapSize "4G"
     }
     defaultConfig {
-        applicationId "place.gradus"
+        applicationId "com.selvis"
         minSdkVersion 21
         targetSdkVersion 34
         compileSdkVersion 34
-        versionCode 479
-        versionName "1.1.94"
+        versionCode 480
+        versionName "1.1.95"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         ndk {
             // Filter for architectures supported by Flutter.
