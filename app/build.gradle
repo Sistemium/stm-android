@@ -11,8 +11,8 @@ android {
         minSdkVersion 21
         targetSdkVersion 34
         compileSdkVersion 34
-        versionCode 481
-        versionName "1.1.96"
+        versionCode 482
+        versionName "1.1.97"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         ndk {
             // Filter for architectures supported by Flutter.
@@ -33,25 +33,25 @@ android {
         driverDebug {
             initWith(buildTypes.debug)
             applicationIdSuffix ".driverdebug"
-            manifestPlaceholders = [appName: "SisDriver-debug"]
+            manifestPlaceholders = [appName: "Маршрут Градус d"]
             matchingFallbacks = ['debug']
         }
         driverRelease {
             initWith(buildTypes.release)
             applicationIdSuffix ".driver"
-            manifestPlaceholders = [appName: "SisDriver"]
+            manifestPlaceholders = [appName: "Маршрут Градус"]
             matchingFallbacks = ['release']
         }
         warehouseDebug {
             initWith(buildTypes.debug)
             applicationIdSuffix ".warehousedebug"
-            manifestPlaceholders = [appName: "SisWarehouse-debug"]
+            manifestPlaceholders = [appName: "Склад Градус d"]
             matchingFallbacks = ['debug']
         }
         warehouseRelease {
             initWith(buildTypes.release)
             applicationIdSuffix ".warehouse"
-            manifestPlaceholders = [appName: "SisWarehouse"]
+            manifestPlaceholders = [appName: "Склад Градус"]
             matchingFallbacks = ['release']
         }
         vfsDebug {
