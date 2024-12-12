@@ -131,12 +131,20 @@ class MyApplication : Application(), Application.ActivityLifecycleCallbacks, IDc
 
         flutterEngine = FlutterEngine(this)
 
+
+
         val entryPoints = when (STMCoreAuthController.configuration) {
             "vfs" -> {
                 arrayOf("vfs")
             }
             "vfsc" -> {
                 arrayOf("vfsc")
+            }
+            "SisDriver" -> {
+                arrayOf("sisdriver")
+            }
+            "SisWarehouse" -> {
+                arrayOf("siswarehouse")
             }
             else -> {
                 arrayOf("sissales")
